@@ -1,0 +1,18 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+# Persisted vector stores / indexes generated while working
+**/faiss_index/
+**/chroma_db/
+*.faiss
+*.pkl
+.DS_Store
+
+# Week 2 additions
+*.mp4
+eval_results.json
+.ruff_cache/
+.pytest_cache/

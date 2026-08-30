@@ -1,0 +1,109 @@
+# Task 7 — CI skeleton.
+# Copy to `.github/workflows/ci.yml` and fill in the TODOs.
+#
+# Two jobs with very different economics:
+#   fast-checks  — every PR, < 60s, no API key, free.
+#   eval-gate    — nightly + on demand, costs real money, blocks on regression.
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 3 * * *"      # nightly eval, 03:00 UTC
+  workflow_dispatch:          # so you can trigger the eval by hand
+
+jobs:
+  # =========================================================================
+  # Runs on EVERY pull request. Keep it under a minute and free.
+  # This is the job that would have caught last week's import bug.
+  # =========================================================================
+  fast-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      # TODO 1: install dependencies. Cache them — a 3-minute install on every
+      #         PR is how people learn to ignore CI.
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Fast tests
+        # No API key in the environment on purpose. If a test needs one, it
+        # belongs in the live tier, not here.
+        run: pytest tests -m "not live" -q
+
+      # TODO 2: fail the job if this step takes more than 60s. A fast gate that
+      #         slowly becomes a slow gate stops being a gate.
+
+  # =========================================================================
+  # Nightly + on demand. Costs money. Blocks on quality regression.
+  # =========================================================================
+  eval-gate:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      # TODO 3: install dependencies.
+
+      - name: Run evaluation
+        env:
+          # Secrets live in the repo's Settings → Secrets, never in this file.
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          LANGCHAIN_API_KEY: ${{ secrets.LANGCHAIN_API_KEY }}
+          LANGCHAIN_TRACING_V2: "true"
+        # TODO 4: run the eval and write results to eval_results.json.
+        #         Make sure it BYPASSES the Task 6 cache — a cached run would
+        #         pass this gate without ever calling the generate node.
+        run: python scripts/run_eval.py --out eval_results.json --no-cache
+
+      - name: Compare against baseline
+        # TODO 5: load eval_baseline.json and eval_results.json.
+        #
+        #   Fail if correctness or groundedness dropped by more than the
+        #   committed tolerance. Exit non-zero — that's what makes it a gate
+        #   rather than a report.
+        #
+        #   Print the CATEGORY SPLIT, not just the blended score. A blended 0.85
+        #   hides a multi-hop score of 0.4, and the split is the roadmap.
+        run: python scripts/check_baseline.py
+
+      - name: Post regression report
+        if: always()
+        # TODO 6: comment on the PR (or open an issue on a scheduled run) listing
+        #         WHICH examples changed verdict versus baseline.
+        #
+        #         "0.90 → 0.85" is not actionable.
+        #         "Examples 7 and 22 flipped correct → incorrect" is.
+        run: echo "TODO"
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: eval_results.json
+
+# ---------------------------------------------------------------------------
+# Prove the gate works before you call this done:
+#   1. Open a PR that deletes the refusal instruction from the generate prompt.
+#   2. Trigger eval-gate by hand (workflow_dispatch).
+#   3. Watch it go red. Screenshot it into your PR description.
+#   4. Revert.
+#
+# A gate nobody has ever seen fire is decoration.
+# ---------------------------------------------------------------------------
