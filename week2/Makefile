@@ -1,5 +1,6 @@
 # Week 2 — one-command entry points.
-# Task 2 asks you to make `make check` real. The other targets fill in as you go.
+# Copy this to the REPO ROOT: the paths below (tests/, app/, scripts/) are relative
+# to it. Task 2 asks you to make `make check` real. The other targets fill in as you go.
 
 .PHONY: help check check-live run run-ui eval cost fmt
 

@@ -8,7 +8,13 @@
 
 ## Task 1 — Week 1 closeout
 
-### Task 6 retrieval benchmark (the one that never got run)
+### Week 1 review findings — closed and verified
+
+| # | Finding | What I changed | How I verified it in the running app |
+|---|---|---|---|
+| 1 | | | |
+
+### Task 6 retrieval benchmark
 
 | Strategy | Hit rate |
 |---|---:|
@@ -46,7 +52,7 @@
 | Fast (`make check`) | | | $0.00 |
 | Live (`make check-live`) | | | |
 
-**The regression test:** which test fails if the Task 1 import fix is reverted?
+**The regression test:** which test fails if the app is wired to the wrong graph?
 
 > `tests/___::___`
 
@@ -95,7 +101,7 @@
 | …with 2 rewrite loops | | |
 | route→direct→END | | |
 
-**Does the rewrite→retry loop fire in practice?** (Week 1 never established this.)
+**Does the rewrite→retry loop fire in practice?**
 
 >
 
@@ -135,6 +141,7 @@
 | Multi-part answers | | | |
 | Refusal / out-of-scope | | | |
 | Follow-up (needs history) | | | |
+| Keyword-precise | | | |
 
 **The 10 new adversarial examples** — what each is designed to break:
 

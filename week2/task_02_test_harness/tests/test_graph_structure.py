@@ -14,12 +14,13 @@ import pytest
 # ===========================================================================
 # THE REGRESSION TEST
 #
-# This is the most important test you will write this week. Week 1's capstone
-# imported build_graph from the Task 8 module instead of its own Graph.py, so
-# the running app had no `contextualize` node — multi-turn memory was silently
-# dead and the persisted index was bypassed.
+# This is the most important test you will write this week. A classic capstone
+# bug: the app imports build_graph from the Task 8 module instead of the
+# capstone's own graph. The app still runs and still answers, but it has no
+# history node, so multi-turn memory is silently dead, and the Task 8 retriever
+# rebuilds the index instead of loading the persisted one.
 #
-# Write this so that reverting the Task 1 fix turns it RED.
+# Write this so that pointing the app at the wrong graph turns it RED.
 # ===========================================================================
 
 def test_app_graph_has_contextualize_node():
@@ -28,7 +29,8 @@ def test_app_graph_has_contextualize_node():
     TODO 1: import build_graph exactly the way app.py imports it — not the way
             you know is correct. The point is to test what the app really does.
 
-            Then assert "contextualize" is in the compiled graph's nodes.
+            Then assert your history-aware node (e.g. "contextualize") is in
+            the compiled graph's nodes.
             Look at: graph.get_graph().nodes
     """
     raise NotImplementedError
@@ -106,7 +108,7 @@ def test_generate_refuses_when_no_documents_survive(fake_llm):
 
 
 # ===========================================================================
-# INDEX PERSISTENCE  (the other half of the Week 1 bug)
+# INDEX PERSISTENCE  (the other half of the wrong-graph bug)
 # ===========================================================================
 
 def test_vectorstore_loads_from_disk_when_index_exists(temp_index_dir, monkeypatch):

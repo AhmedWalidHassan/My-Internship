@@ -10,96 +10,100 @@
 ## Why this task
 
 Shipping new features on top of a broken integration is how a small bug becomes an
-architectural one. Your capstone has one blocking defect and three unfinished
-measurements. All four are minutes of work.
+architectural one. Before Week 2 builds on your capstone, it has to actually do
+what Week 1 said it does — in the **running app**, not just in the code.
 
-What this task actually tests is whether you can take a review and close it
-**completely** rather than partially — which is most of what code review is, for
-the rest of your career.
+You'll also have a Week 1 review from your mentor. This task tests whether you can
+close a review **completely** rather than partially. That's most of what code
+review involves, for the rest of your career.
 
 ---
 
-## What to fix
+## What to do
 
-### 1. The app is wired to the wrong graph — this is the blocker
+### 1. Close every finding in your Week 1 review
 
-`capstone_internal_docs_assistant/app_skeleton.py:21` imports `build_graph` from
-`week1.task_08_langgraph_agentic_rag.starter` instead of from your own `Graph.py`.
+Work through your review one finding at a time. For each one: fix it, **verify
+the fix in the running system**, and record what you did. "Changed the code"
+doesn't close a finding. "Changed the code, ran the app, and saw the behaviour
+change" does.
 
-Two things break as a result, and both are required capabilities:
+### 2. Verify the capstone's must-haves in the running app
 
-- **Multi-turn memory doesn't work.** You build a per-session `history` list and
-  pass it in with a comment saying it's "used by the `contextualize` node" — but
-  the Task 8 graph has no `contextualize` node and no `history` field in its
-  state. Every follow-up is treated as a fresh question.
-- **The persisted index is bypassed.** The Task 8 retriever calls
-  `FAISS.from_documents(...)` unconditionally, so `ingest.py` — your best module —
-  is dead code, and the corpus re-embeds on every app start.
+Whatever your review says, check each of these yourself by running the app:
 
-Fix the import. Then **run the app and check**, because the point of this task is
-the checking.
+- **The app runs the graph you think it runs.** Open the file the UI imports its
+  graph from and follow the import. Integration bugs hide here: an app that
+  imports an earlier task's graph instead of the capstone's will still run and
+  answer, with features quietly switched off.
+- **Multi-turn memory works.** Ask *"How much PTO do I get?"*, then *"Can I carry
+  it over?"*. The second answer must resolve "it" without you repeating "PTO".
+  Then check that a different session doesn't see the first one's history.
+- **The index is persisted.** Restart the app twice. The second start must
+  **load** the index from disk, not embed the corpus again. Add a startup log line
+  that says which happened.
+- **Refusal works.** An out-of-scope question gets the standard refusal.
 
-### 2. Make it runnable by someone else
+### 3. Make it runnable by someone else
 
-- Rename `app_skeleton.py` → `app.py`.
-- Add a **How to run** section to `capstone_internal_docs_assistant/README.md`:
-  required env vars, the ingest step, the run command. That file is currently
-  byte-identical to the brief you were handed.
+- The app's entry point is named as the capstone brief says (`app.py`, not a
+  skeleton file).
+- The capstone README has a **How to run** section: required environment
+  variables, the ingest step, and the run command.
+- Every file path is built from `Path(__file__)`, not hardcoded. A path that only
+  works from one directory on one operating system will fail in Task 4's container.
+- Configuration (model, provider, base URL) comes from the environment, not from
+  string literals in the code.
 
-### 3. Fix the hardcoded path
+### 4. Run any measurement you didn't run
 
-`capstone_internal_docs_assistant/eval.py:26` sets the dataset path to a relative
-Windows string with an invalid `\c` escape (Python emits a SyntaxWarning for it).
-It only resolves when run from the repo root, on Windows. Use
-`Path(__file__).resolve().parent / "eval_dataset.jsonl"` — the pattern you used
-correctly in every other module.
+Week 1 asked for several numbers. If any are missing, produce them now:
 
-### 4. Run the two measurements you never ran
-
-- **Task 6 benchmark.** The harness prints a hit-rate table. Run it, commit the
-  table to `week2/RESULTS.md`, and write two sentences naming the winner and *why* —
-  tie it to how the questions are phrased.
-- **Capstone eval.** Your dataset has 20 examples but `EVAL_RESULTS.md` reports
-  scores from the old 10-example run. Re-run over all 20 and update the file.
+- **Task 6 benchmark:** the hit-rate table for every strategy, plus two
+  sentences naming the winner and *why*, tied to how the questions are phrased.
+- **Capstone eval:** correctness and groundedness over your full dataset (at least
+  20 examples), dated, with the LangSmith experiment link.
+- **Task 8 node paths:** proof that the rewrite → retry loop fires on an awkward
+  query — or a written finding that it doesn't.
 
 ### 5. Clean the repo
 
-Add to `.gitignore`: `__pycache__/`, `**/faiss_index/`, `*.mp4`, `*.pyc`.
-Then remove the 33 MB `project.mp4`, both index folders, and the `__pycache__`
-directories from tracking (`git rm -r --cached`). Keep the video somewhere it
-belongs — a shared drive, a release asset — and link to it from the README.
+Build artefacts, indexes and large binaries don't belong in git. Add
+`__pycache__/`, `*.pyc`, `**/faiss_index/` and media files to `.gitignore`, and
+remove anything already committed with `git rm -r --cached`. If you recorded a
+demo video, link to it from the README rather than committing it.
 
 ---
 
 ## Done when…
 
-- [ ] The app answers *"How much PTO do I get?"*, then *"Can I carry it over?"*, and
-      the second answer resolves "it" correctly **without you repeating the word
-      PTO**. Screenshot committed.
-- [ ] Restarting the app twice does not re-embed. Prove it with a startup log line
-      that says whether the index was **loaded** or **built** — and paste both
-      lines into `week2/RESULTS.md`.
-- [ ] `week2/RESULTS.md` contains the Task 6 hit-rate table plus your two-sentence
-      explanation of the winner.
-- [ ] `EVAL_RESULTS.md` reports correctness and groundedness over **20** examples,
-      dated, with the LangSmith experiment link.
-- [ ] `python capstone_internal_docs_assistant/eval.py` runs from any directory.
-- [ ] `git ls-files` shows no `.mp4`, no `__pycache__`, no index files.
+- [ ] Every Week 1 review finding is closed, and `RESULTS.md` lists each one with
+      how you verified it.
+- [ ] The app answers *"How much PTO do I get?"*, then *"Can I carry it over?"*,
+      and the second answer resolves "it" correctly. Screenshot committed.
+- [ ] Restarting the app twice doesn't re-embed. Both startup log lines (one
+      **built**, one **loaded**) are pasted into `RESULTS.md`.
+- [ ] `RESULTS.md` has the Task 6 hit-rate table and your two-sentence explanation
+      of the winner.
+- [ ] The capstone eval results report correctness and groundedness over ≥20
+      examples, dated, with the LangSmith experiment link.
+- [ ] Every script runs from any working directory.
+- [ ] `git ls-files` shows no `__pycache__`, no index files and no media files.
 - [ ] One PR, reviewed and merged, before you start Task 2.
 
 ---
 
 ## A question to answer in the PR description
 
-Why did the import bug survive all week? Write one honest sentence. It's not a
-trick question and there's no wrong answer — but the answer is the reason Task 2
-exists, and rule 2 of this week's standing rules.
+For the most serious finding you closed: why did it survive Week 1? Write one
+honest sentence. It isn't a trick question and there's no wrong answer, but the
+answer is usually the reason Task 2 exists, and the reason for this week's rule 2.
 
 ---
 
 ## Stretch
 
-- Your Task 6 harness rebuilds the FAISS index inside every `build_*_retriever`
-  call, so running it embeds the corpus **four times**. Build it once and pass it
-  in. Note the time saved in `week2/RESULTS.md` — it's your first cost measurement
-  of the week.
+- If your Task 6 harness builds a separate FAISS index inside every
+  `build_*_retriever` call, running it embeds the corpus several times. Build it
+  once and pass it in, then record the time saved in `RESULTS.md`. That's your
+  first cost measurement of the week.

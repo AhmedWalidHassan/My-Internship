@@ -9,14 +9,14 @@
 
 ## Why this task
 
-"It works on my machine" was a named red flag in the Week 1 mentor guide, and
-your `eval.py` shipped a hardcoded Windows path that only resolved from one
-directory on one OS. A container is the forcing function: it either runs
+"It works on my machine" is the classic failure here: a hardcoded Windows path
+that only resolves from one directory on one OS, or a script that only runs from
+the repo root. A container is the forcing function: it either runs
 somewhere else or it doesn't, and there's no arguing with it.
 
-There's a second lesson here. Right now `common/utils.py` hardcodes
-`base_url="https://openrouter.ai/api/v1"` into the OpenAI branch. That silently
-breaks for anyone holding a real OpenAI key. **Configuration is not code.**
+There's a second lesson here. A provider URL or model name hardcoded into
+`common/utils.py` (say, an OpenRouter `base_url` in the OpenAI branch) silently
+breaks for anyone holding a different key. **Configuration is not code.**
 
 ---
 
@@ -33,7 +33,7 @@ breaks for anyone holding a real OpenAI key. **Configuration is not code.**
 
 - `docker-compose.yml` bringing up API and UI together with one command.
 - The FAISS index mounted as a **named volume**. Without this, every image rebuild
-  discards the index and silently re-embeds — the Week 1 habit wearing a new hat.
+  discards the index and silently re-embeds — the most common Week 1 cost mistake, in a new place.
 
 ### The configuration
 
@@ -43,7 +43,7 @@ in this list may remain a literal in the source:
 | Setting | Currently |
 |---|---|
 | Model / provider | env ✓ |
-| `base_url` | **hardcoded to OpenRouter** in `common/utils.py` |
+| `base_url` | Wherever your provider code sets it (often hardcoded) |
 | Retriever `k` | hardcoded `4` in several places |
 | Chunk size / overlap | hardcoded `600` / `80` |
 | Index path | derived from `__file__` |

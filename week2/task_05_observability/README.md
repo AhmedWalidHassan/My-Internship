@@ -14,13 +14,13 @@ question, depending on which path it takes — and right now nobody knows which,
 including you. `grade_documents` alone calls the model once *per retrieved
 document*.
 
-This task is the direct antidote to the cost blindness that showed up three times
-in Week 1 (Tasks 3, 6 and 8 all re-embedded the corpus on every run). You can't
-manage what you never look at.
+This task is the antidote to cost blindness. The most common Week 1 example is a
+script that re-embeds the whole corpus on every run because nobody measured it.
+You can't manage what you never look at.
 
-It also quietly settles something Week 1 left open. Your Task 8 acceptance
-criteria required demonstrating that the rewrite→retry loop fires, and that never
-got captured. Here it falls out of the instrumentation as a **statistic**.
+It also settles something a demo can't. Week 1's Task 8 required showing that
+the rewrite→retry loop fires on one awkward query. Here you find out how often it
+fires on real traffic, as a **statistic**.
 
 ---
 
@@ -91,7 +91,7 @@ retrieval, and the self-correction machinery you built is decorative. Write that
 up honestly in `RESULTS.md`. Reporting it is worth more than a passing checkbox,
 and Task 7's adversarial examples are where you'd fix it.
 
-Last week's `EVAL_RESULTS.md` showed you can do this kind of honest diagnosis.
+This is the same kind of honest diagnosis Week 1's `EVAL_RESULTS.md` asked for.
 Do it again here.
 
 ---

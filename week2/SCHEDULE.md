@@ -5,7 +5,7 @@ per day, so most slots are half a day and Tuesday is a full one.
 
 | Day | AM | PM | Milestone |
 |-----|----|----|-----------|
-| **Mon** | Task 1 · Close Week 1 | Task 2 · Test harness | ✅ **Hard gate:** app works, memory works, tests catch the old bug |
+| **Mon** | Task 1 · Close Week 1 | Task 2 · Test harness | ✅ **Hard gate:** app works, memory works, tests guard the app's wiring |
 | **Tue** | Task 3 · Service API | Task 3 continued | Assistant reachable over HTTP, streaming |
 | **Wed** | Task 4 · Containerize | Task 5 · Observability | ✅ **Halfway:** runs in a container, first cost numbers on the board |
 | **Thu** | Task 6 · Caching | Task 7 · Eval gate in CI | ✅ **Keystone:** CI blocks a regression |
@@ -15,7 +15,7 @@ per day, so most slots are half a day and Tuesday is a full one.
 
 - **09:00 — standup, 15 minutes.** Yesterday / today / one blocker.
 - **Mid-afternoon — PR review, same day.** Short, focused on the decision rather
-  than style. This is the change from Week 1 and it isn't optional.
+  than style. Same-day review isn't optional.
 - **17:00 — the number.** Before you stop, whatever you measured today goes into
   `RESULTS.md` or `COST.md`. Two minutes. This is the habit the week exists to build.
 

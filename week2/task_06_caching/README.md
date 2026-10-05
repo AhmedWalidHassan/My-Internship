@@ -46,14 +46,15 @@ PTO do I get"*.
 **Implement it, or write two paragraphs arguing why it's wrong here.** Both are
 acceptable answers. An unargued default is not. Things worth weighing: the
 similarity threshold's false-positive risk on a corpus where HR topics cluster
-tightly (you found this exact problem in Task 3 of Week 1 — related-but-wrong
-chunks), and the fact that a semantic cache lookup costs an embedding call, so
+tightly (the same problem as Week 1 Task 3's related-but-wrong chunks, where a PTO
+question can retrieve the expense policy), and the fact that a semantic cache lookup costs an embedding call, so
 it isn't free.
 
 ### Invalidation
 
-What happens to cached answers when a document changes? `ingest.add_document`
-already exists. Wire the two together so a stale answer cannot be served after
+What happens to cached answers when a document changes? Your capstone's ingestion
+step can already add documents (or should — the capstone brief asked for it). Wire
+the two together so a stale answer cannot be served after
 the corpus changes.
 
 ---

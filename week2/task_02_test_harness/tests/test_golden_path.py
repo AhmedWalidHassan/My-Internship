@@ -61,14 +61,14 @@ def test_plausible_sounding_out_of_scope_is_refused():
 # ===========================================================================
 
 def test_two_turn_follow_up_resolves_pronoun():
-    """The behaviour that was broken all of Week 1.
+    """The behaviour most likely to break silently when the app is mis-wired.
 
     TODO 4: in ONE session, ask:
               1. "How much PTO do I get?"
               2. "Can I carry it over to next year?"
 
     Assert the second answer mentions the 5-day carry-over cap, without the
-    word "PTO" appearing in the second question. If contextualize isn't wired,
+    word "PTO" appearing in the second question. If the history node isn't wired,
     this fails — which is the point.
     """
     raise NotImplementedError
@@ -81,7 +81,7 @@ def test_sessions_are_isolated():
     Assert session B does NOT resolve the pronoun — it should refuse, ask for
     clarification, or answer something unrelated. It must not inherit A's context.
 
-    Week 1 claimed this and never demonstrated it. Demonstrate it.
+    Claiming isolation isn't enough. Demonstrate it.
     """
     raise NotImplementedError
 
@@ -105,7 +105,7 @@ def test_warm_start_does_not_reembed(tmp_path):
 # ===========================================================================
 
 def test_awkward_query_triggers_rewrite_loop():
-    """Week 1's Task 8 acceptance criteria required proving this and never did.
+    """Week 1's Task 8 asked you to show this once. Make it a repeatable test.
 
     TODO 7: ask the deliberately awkward "time off carry rules?" and capture the
             node path.

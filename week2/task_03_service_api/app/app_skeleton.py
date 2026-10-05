@@ -37,7 +37,7 @@ STATE: dict[str, Any] = {"graph": None}
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # TODO 1: compile the graph ONCE here.
-    #   from Graph import build_graph
+    #   from <your capstone graph module> import build_graph
     #   STATE["graph"] = build_graph()
     #
     # Log a line saying whether the index was loaded from disk or built from
@@ -123,7 +123,7 @@ def run_graph(question: str, session_id: str) -> dict:
       * `sources` is the deduplicated set of source filenames from the SURVIVING
         documents — the ones that passed grading, not everything retrieved.
       * `node_path` needs graph.stream(..., stream_mode="updates"), the same
-        technique as your Task 8 run_and_trace(). Reuse it.
+        technique you used in Task 8 to print each question's node path. Reuse it.
     """
     raise NotImplementedError("TODO 3")
 
