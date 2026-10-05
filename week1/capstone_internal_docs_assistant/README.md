@@ -69,7 +69,7 @@ what it doesn't know.
 5. A short architecture diagram (Mermaid is fine).
 
 ## How you'll be graded
-See `../MENTOR_GUIDE.md` for the full rubric. Headline weighting:
+Your mentor holds the full rubric. Headline weighting:
 correctness & grounding (30%), retrieval quality (20%), agentic design (20%),
 evaluation rigor (15%), code quality & UX (15%).
 

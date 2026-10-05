@@ -12,9 +12,9 @@
 **This is the keystone of the week.** If everything else slips, this is the task
 that stays.
 
-Last week you built a measuring instrument — two LLM judges, an idempotent
-dataset, a clean target adapter — and never reported a measurement. Task 7 makes
-the measurement mandatory and automatic, and hands enforcement to something that
+In Week 1 you built a measuring instrument: LLM judges, a dataset and a target
+adapter. A measurement that runs only when someone remembers to run it isn't a
+safeguard. Task 7 makes the measurement mandatory and automatic, and hands enforcement to something that
 doesn't forget on a Friday afternoon.
 
 ---
@@ -24,13 +24,15 @@ doesn't forget on a Friday afternoon.
 ### 1. CI on every PR
 
 GitHub Actions running `ruff` + the fast test tier. Under a minute, no API key,
-no cost. This is the gate that would have caught last week's import bug.
+no cost. This is the gate that catches wiring bugs, like an app importing the wrong graph, the day they're introduced.
 
 ### 2. An eval job
 
 Runs the LangSmith suite and publishes correctness and groundedness. Nightly on a
-schedule, plus `workflow_dispatch` so you can trigger it by hand. Not on every PR —
-it costs real money and takes minutes.
+schedule, `workflow_dispatch` to trigger it by hand, and on any PR labelled
+**`run-eval`**. It doesn't run on every PR, because it costs real money and takes
+minutes. Label the PRs that touch prompts, retrieval or the graph, and make the
+job a required check, so that a red eval blocks the merge.
 
 ### 3. The threshold gate
 
@@ -49,7 +51,7 @@ Ten new ones, adversarial on purpose. At least two of each:
 | Category | What it's designed to break |
 |---|---|
 | **Multi-hop** | The answer needs facts from *two* documents combined |
-| **Multi-part** | Like the password-policy case you already found failing — "requirements", plural, where the model answers with the first one and stops |
+| **Multi-part** | E.g. "What are the password requirements?" — plural, where the model tends to answer with the first one and stop |
 | **Near-miss out-of-scope** | Sounds internal, isn't in the corpus. Must refuse, not improvise from adjacent chunks |
 | **Follow-up** | Only answerable with conversation history |
 | **Keyword-precise** | An error code or part number where dense retrieval alone misses |
@@ -97,8 +99,8 @@ to incorrect" is.
 
 ## The thing to be honest about
 
-Your judge is currently the same model as your generator (`get_llm()` in both).
-Self-grading inflates scores — a model is a soft touch on its own output.
+If your judge is the same model as your generator (the Week 1 starter uses
+`get_llm()` for both), self-grading inflates scores — a model is a soft touch on its own output.
 
 You don't have to change it this week. You **do** have to name it as a limitation
 in `EVAL_RESULTS.md`, and ideally spend twenty minutes checking: run five examples
@@ -109,9 +111,9 @@ that number belongs in the write-up.
 
 ## Stretch
 
-- Run the improvement experiment you already designed and logged as "planned" in
-  `EVAL_RESULTS.md` — strengthening the `generate` prompt to enumerate *every*
-  relevant fact when a question has multiple parts. You wrote the hypothesis last
-  week. Test it, and put the before/after in the experiment log.
+- Run the improvement experiment from your Week 1 `EVAL_RESULTS.md` failure
+  analysis: you named a failure and a fix, so test it now. (A common one:
+  strengthen the `generate` prompt to list *every* relevant fact when a question
+  has several parts.) Put the before/after in the experiment log.
 - Fail the gate on **cost** as well as quality: if mean cost per question rises
   more than 20% against baseline, that's a regression too.

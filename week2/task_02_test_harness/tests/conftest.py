@@ -109,12 +109,12 @@ def sample_docs():
             metadata={"source": "employee_handbook.md"},
         ),
         Document(
-            page_content="If your laptop is lost or stolen, report it to IT "
-                         "within 24 hours via the helpdesk portal.",
+            page_content="If your laptop is lost or stolen, immediately report "
+                         "it to the Security team and file a ticket marked URGENT.",
             metadata={"source": "it_faq.md"},
         ),
         Document(
-            page_content="The Warehouse Rover R2 has a maximum payload of 45 kg.",
+            page_content="The Warehouse Rover R2 has a maximum payload of 80 kg.",
             metadata={"source": "product_specs.md"},
         ),
     ]

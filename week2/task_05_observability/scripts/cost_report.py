@@ -25,7 +25,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 COST_PER_1K_IN = float(os.getenv("COST_PER_1K_INPUT_TOKENS", "0.00015"))
 COST_PER_1K_OUT = float(os.getenv("COST_PER_1K_OUTPUT_TOKENS", "0.0006"))
 
-DATASET_PATH = Path(__file__).resolve().parents[1] / "eval_dataset.jsonl"
+# The eval set lives with your capstone, not next to this script. Set
+# EVAL_DATASET_PATH in .env if yours is somewhere else (relative to the repo root).
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DATASET_PATH = REPO_ROOT / os.getenv(
+    "EVAL_DATASET_PATH", "week1/capstone_internal_docs_assistant/eval_dataset.jsonl")
 
 
 def load_questions() -> list[dict]:

@@ -15,9 +15,12 @@ WORKDIR /build
 
 # Dependencies FIRST, source code LAST. Docker caches layers in order, so a code
 # edit should not reinstall faiss.
-COPY week1/requirements.txt week2/requirements.txt ./
+# Two files with the same name, so give each its own name (copying both to ./
+# would make the second silently overwrite the first).
+COPY week1/requirements.txt ./requirements-week1.txt
+COPY week2/requirements.txt ./requirements-week2.txt
 # TODO 2: build wheels into /build/wheels
-#         pip wheel --no-cache-dir --wheel-dir /build/wheels -r requirements.txt ...
+#         pip wheel --no-cache-dir --wheel-dir /build/wheels #             -r requirements-week1.txt -r requirements-week2.txt
 
 
 # ---------------------------------------------------------------------------
@@ -34,7 +37,8 @@ WORKDIR /app
 # TODO 4: copy the wheels from the builder stage and install them, then delete
 #         the wheels in the same layer.
 
-# TODO 5: copy only what the service needs — app/, common/, Graph.py, ingest.py.
+# TODO 5: copy only what the service needs — app/, common/, and your graph and
+#         ingestion modules.
 #         NOT the whole repo. Use .dockerignore to enforce it.
 
 # Where the persisted FAISS index lives. docker-compose mounts a named volume

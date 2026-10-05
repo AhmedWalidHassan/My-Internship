@@ -16,3 +16,7 @@ __pycache__/
 eval_results.json
 .ruff_cache/
 .pytest_cache/
+
+# Mentor-only material lives outside this repo (aug-26/mentor-private/). Belt and braces:
+MENTOR_GUIDE*
+*PRIVATE*

@@ -27,7 +27,7 @@ Which node is actually spending the money? `grade_documents` calls the LLM once
 
 | Node | Calls per question | Tokens | Cost | % of total |
 |---|---:|---:|---:|---:|
-| `contextualize` | | | | |
+| `contextualize` (or your history node) | | | | |
 | `route_question` | | | | |
 | `grade_documents` | | | | |
 | `rewrite_query` | | | | |
@@ -67,6 +67,35 @@ the wrong answer:
 |---|---:|---:|---|
 | `POST /chat` | n/a | | |
 | `POST /chat/stream` | | | |
+
+---
+
+## Task 2 — Cold vs warm start
+
+| | Wall clock | Embedding calls |
+|---|---:|---:|
+| Cold start (index built) | | |
+| Warm start (index loaded) | | 0 |
+
+---
+
+## Task 8 — Worst case for a single request
+
+Logical retries (`MAX_RETRIES`) × transport retries (`LLM_MAX_RETRIES`) × LLM calls per path.
+
+| | Value |
+|---|---:|
+| Max LLM calls in one request (show the arithmetic) | |
+| Worst-case cost of one request | |
+| Worst-case latency (with timeouts) | |
+
+---
+
+## Task 8 stretch — Load test (50 requests over 30 s)
+
+| p50 | p95 | Error rate | Point where it degrades |
+|---:|---:|---:|---|
+| | | | |
 
 ---
 

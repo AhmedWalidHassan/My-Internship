@@ -1,6 +1,6 @@
 # Task 2 — The Golden-Path Test Harness
 
-**Focus:** regression safety. Making last week's bug impossible to repeat.
+**Focus:** regression safety. Making integration bugs impossible to repeat.
 **Scaffolding:** 🟡 Mixed — pytest layout and fixtures given, the tests are yours.
 **Time budget:** half a day (Monday PM).
 **Branch:** `week2/task-02-tests`
@@ -9,13 +9,15 @@
 
 ## Why this task
 
-Your Week 1 components were strong and the **joints between them** were untested.
-That is exactly the class of bug automated tests exist to catch, and it is why
+Week 1 tested components one at a time; the **joints between them** were never
+tested. A capstone can have a perfect graph and still run the wrong one, because
+the app imports it from the wrong module. That is exactly the class of bug
+automated tests exist to catch, and it is why
 this task comes before any new feature: from here on, everything you build has
 something that fails loudly when you break it.
 
 The single most valuable test you will write this week is the one that goes red
-if someone reverts the Task 1 import fix.
+if the app is ever wired to the wrong graph.
 
 ---
 
@@ -30,7 +32,7 @@ Mock the LLM (there's a `fake_llm` fixture in `conftest.py`) and assert on
 **structure and wiring**, not on model output:
 
 - The graph compiles.
-- The graph the **app imports** contains a `contextualize` node. ← the regression test
+- The graph the **app imports** contains your history-aware node (e.g. `contextualize`). ← the regression test
 - Every node named in a conditional-edge mapping actually exists in the graph.
 - `format_docs` emits a `[source]` tag for every document it's given.
 - The generate prompt contains the exact refusal string.
@@ -69,11 +71,14 @@ folder — tests belong with the project).
 
 - [ ] `make check` runs green in **under 5 seconds** with no API key set in the
       environment. Time it and record the number in `week2/RESULTS.md`.
-- [ ] **The regression test works.** Revert the Task 1 import fix, run `make check`,
-      and show it **failing**. Then restore the fix and show it passing. Put the
+- [ ] **The regression test works.** Point the app's import at a graph without the
+      history node (e.g. your Task 8 graph), run `make check`, and show it
+      **failing**. Then restore the correct import and show it passing. Put the
       failing output in your PR description.
-- [ ] Four live golden-path tests pass. Record their total wall-clock time and API
-      cost in `week2/RESULTS.md`.
+- [ ] The live golden-path tests pass — at minimum the four must-haves (grounded
+      answer with citation, refusal, two-turn follow-up, session isolation). The
+      other stubs in `test_golden_path.py` are encouraged. Record total wall-clock
+      time and API cost in `week2/RESULTS.md`.
 - [ ] `week2/RESULTS.md` names which test file and function is the regression guard.
 - [ ] The repo README documents both commands.
 

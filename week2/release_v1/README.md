@@ -46,7 +46,7 @@ down.
 ### 4. `RESULTS.md` and `COST.md` complete
 
 Every number the week asked for, in one place. This is the deliverable that
-Week 1 was missing, and it's the one that shows most.
+reviewers open first, and it's the one that shows most.
 
 ### 5. A 10-minute demo
 
@@ -60,7 +60,7 @@ second attempt is a demo that failed.
 1. **`docker compose up` from a clean checkout.** Binary: it comes up or it doesn't.
 2. **A grounded question, streaming.** Tokens arriving; citation visible.
 3. **An out-of-scope question**, then a prompt-injection attempt. Both refused.
-4. **A two-turn follow-up.** The thing that was broken all of last week.
+4. **A two-turn follow-up.** Memory works across turns and is isolated per session.
 5. **Open a log line, then the LangSmith trace it points to.** Narrate the node
    path — including *why* the graph took that path for that question.
 6. **Show the cost report.** Be ready for: *what's the most expensive node, and
@@ -76,10 +76,9 @@ The last one. The best possible answer is **specific and slightly
 uncomfortable** — a real weakness, with a real number attached, and a plan you
 actually believe in.
 
-Last week your `EVAL_RESULTS.md` failure analysis did exactly this: you found a
-genuine miss, diagnosed it correctly as a generation problem rather than a
-retrieval one, and proposed a specific fix. That was the strongest piece of
-writing in the whole repo.
+Your Week 1 `EVAL_RESULTS.md` asked for exactly this kind of failure analysis:
+find a genuine miss, diagnose whether it's a retrieval or a generation problem,
+and propose a specific fix.
 
 Do that again, out loud, about a system ten times bigger.
 
