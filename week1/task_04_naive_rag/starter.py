@@ -1,7 +1,7 @@
 """
-Task 4 — Naive RAG pipeline
+Task 3 — Embeddings & Vector Stores (FAISS)
 
-Fill in each TODO. Run with:  python task_04_naive_rag/starter.py
+Fill in each TODO. Run with:  python task_03_embeddings_vectorstores/starter.py
 """
 
 import sys
@@ -9,64 +9,69 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from common.utils import get_llm, get_embeddings, DATA_DIR
+from common.utils import get_embeddings, DATA_DIR
+
+INDEX_DIR = Path(__file__).resolve().parent / "faiss_index"
 
 
-def build_retriever(k=4):
+def build_chunks():
+    """Load + split the corpus (same idea as Task 2)."""
     from langchain_community.document_loaders import TextLoader
     from langchain_text_splitters import RecursiveCharacterTextSplitter
-    from langchain_community.vectorstores import FAISS
 
     docs = []
     for md in sorted(DATA_DIR.glob("*.md")):
         docs.extend(TextLoader(md, encoding="utf-8").load())
-    chunks = RecursiveCharacterTextSplitter(
-        chunk_size=800, chunk_overlap=100).split_documents(docs)
-    store = FAISS.from_documents(chunks, get_embeddings())
-
-    # TODO 1: Return a retriever from the store: store.as_retriever(search_kwargs={"k": k})
-    return ...
+    splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=100)
+    return splitter.split_documents(docs)
 
 
-def format_docs(docs):
-    """Turn retrieved Documents into a single context string with source tags."""
-    # TODO 2: Join each doc as "[source] content". Include metadata['source'].
-    return ...
+def build_index(chunks):
+    from langchain_community.vectorstores import FAISS
+
+    embeddings = get_embeddings()
+    # TODO 1: Build a FAISS index from the chunks with FAISS.from_documents(...).
+    vectorstore = FAISS.from_documents(chunks, embeddings)
+    return vectorstore
 
 
-def build_rag_chain(retriever):
-    from langchain_core.prompts import ChatPromptTemplate
-    from langchain_core.output_parsers import StrOutputParser
-    from langchain_core.runnables import RunnableParallel, RunnablePassthrough
+def save_index(vectorstore):
+    # TODO 2: Persist the store to INDEX_DIR with vectorstore.save_local(...).
+    vectorstore.save_local(str(INDEX_DIR))
 
-    llm = get_llm()
 
-    system = (
-        "You are Northwind Robotics' internal assistant. Answer ONLY using the "
-        "context below. If the answer is not in the context, say: "
-        "'I don't know based on the provided documents.' "
-        "After your answer, list the source files you used.\n\n"
-        "Context:\n{context}"
+def load_index():
+    from langchain_community.vectorstores import FAISS
+
+    embeddings = get_embeddings()
+    # TODO 3: Load the store from INDEX_DIR. FAISS.load_local needs
+    #         allow_dangerous_deserialization=True because it unpickles.
+    return FAISS.load_local(
+        str(INDEX_DIR),
+        embeddings,
+        allow_dangerous_deserialization=True,
     )
-    prompt = ChatPromptTemplate.from_messages(
-        [("system", system), ("human", "{question}")]
-    )
-
-    # TODO 3: Build the LCEL chain. A common shape is:
-    #   {"context": retriever | format_docs, "question": RunnablePassthrough()}
-    #       | prompt | llm | StrOutputParser()
-    chain = ...
-    return chain
 
 
 if __name__ == "__main__":
-    retriever = build_retriever(k=4)
-    rag = build_rag_chain(retriever)
+    if (INDEX_DIR / "index.faiss").exists():
+        print("Loading existing index...")
+        store = load_index()
+    else:
+        chunks = build_chunks()
+        print(f"{len(chunks)} chunks to embed.")
+        store = build_index(chunks)
+        save_index(store)
+        print(f"Index saved to {INDEX_DIR}")
 
-    questions = [
-        "How many sick days do I get per year?",
-        "What is the max payload of the Warehouse Rover R2?",
-        "What is the CEO's home address?",   # not in the docs -> should say I don't know
-    ]
-    for q in questions:
-        print(f"\nQ: {q}\nA: {rag.invoke(q)}")
+    store = load_index()  # prove it round-trips from disk
+
+    for query in [
+        "How much PTO do I get?",
+        "What should I do if my laptop is stolen?",
+        "What is the payload capacity of the rover?",
+    ]:
+        print(f"\nQ: {query}")
+        results = store.similarity_search(query, k=3)
+        for r in results:
+            print(f"   [{r.metadata.get('source')}] {r.page_content[:90].strip()}...")
