@@ -9,7 +9,6 @@ Implement the build_*_retriever functions, then run:
 
 import sys
 from pathlib import Path
-
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from common.utils import get_llm, get_embeddings, DATA_DIR
@@ -19,16 +18,13 @@ from common.utils import get_llm, get_embeddings, DATA_DIR
 def load_chunks():
     from langchain_community.document_loaders import TextLoader
     from langchain_text_splitters import RecursiveCharacterTextSplitter
-
     docs = []
     for md in sorted(DATA_DIR.glob("*.md")):
         docs.extend(TextLoader(md, encoding="utf-8").load())
     return RecursiveCharacterTextSplitter(
         chunk_size=600, chunk_overlap=80).split_documents(docs)
 
-
 CHUNKS = load_chunks()
-
 
 def build_baseline_retriever(k=4):
     from langchain_community.vectorstores import FAISS
@@ -39,19 +35,26 @@ def build_baseline_retriever(k=4):
 # --- YOUR WORK: implement these ----------------------------------------------
 def build_mmr_retriever(k=4):
     # TODO: same FAISS store but search_type="mmr".
-    raise NotImplementedError
+    from langchain_community.vectorstores import FAISS
+    store = FAISS.from_documents(CHUNKS, get_embeddings())
+    return store.as_retriever(search_type="mmr", search_kwargs={"k": k, "fetch_k": 20})
 
 
 def build_multiquery_retriever(k=4):
     # TODO: wrap the baseline in MultiQueryRetriever.from_llm(retriever, llm=get_llm()).
-    raise NotImplementedError
-
+    from langchain_classic.retrievers.multi_query import MultiQueryRetriever
+    return MultiQueryRetriever.from_llm(retriever=build_baseline_retriever(k), llm=get_llm())
 
 def build_hybrid_retriever(k=4):
     # TODO: EnsembleRetriever([bm25, dense], weights=[0.5, 0.5]).
     #       BM25Retriever.from_documents(CHUNKS) + the baseline dense retriever.
-    raise NotImplementedError
-
+    from langchain_classic.retrievers.ensemble import EnsembleRetriever
+    from langchain_community.retrievers import BM25Retriever   # needs: pip install rank_bm25
+    bm25 = BM25Retriever.from_documents(CHUNKS)
+    bm25.k = k
+    dense = build_baseline_retriever(k)
+    return EnsembleRetriever(retrievers=[bm25, dense], weights=[0.5, 0.5])
+ 
 
 # --- provided: evaluation ----------------------------------------------------
 # Each question is labeled with the file that SHOULD be retrieved.
