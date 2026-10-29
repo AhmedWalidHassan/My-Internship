@@ -1,39 +1,31 @@
-# Task 6 — Advanced Retrieval
+# Task 6 NOTES
 
-**Course topic:** Improving retrieval quality — multi-query, MMR, hybrid
-(dense + BM25), and re-ranking / contextual compression.
-**Scaffolding:** 🟡 Mixed — a benchmark harness is provided; you implement the
-retrievers.
-**Time budget:** ~one day.
+## Results (hit-rate on the 6 provided questions)
+| strategy   | hit_rate |
+|------------|----------|
+| baseline   | 1.00     |
+| mmr        | 1.00     |
+| multiquery | 1.00     |
+| hybrid     | 1.00     |
 
-## Why this task
-Naive top-k similarity is a floor, not a ceiling. When users phrase things
-differently from the docs, or when the answer needs keyword precision (an error
-code, a part number), plain dense retrieval misses. This task is about
-**measuring** retrieval and then **improving** it deliberately.
+## Which strategy won?
+None. All four strategies scored 1.00, so this benchmark cannot separate them.
 
-## Goal
-Implement and compare at least **three** retrieval strategies against the baseline:
-1. **Baseline** — plain vector `similarity` search (given).
-2. **MMR** — maximal marginal relevance for diversity.
-3. **Multi-Query** — `MultiQueryRetriever` (LLM rewrites the query several ways).
-4. **Hybrid** — `EnsembleRetriever` combining dense + `BM25Retriever`.
-5. *(stretch)* **Compression / re-rank** — `ContextualCompressionRetriever`.
+## Hypothesis: why?
+1. The corpus is tiny (4 files, roughly 15-20 chunks) and k=4, so each
+   retriever returns about a quarter of the whole corpus. Finding the right
+   file is easy even for plain similarity search.
+2. hit_rate is lenient: it counts a hit if ANY of the 4 chunks comes from the
+   gold file (file-level, not chunk-level), and it doesn't measure ranking.
+3. The questions are paraphrased ("vacation days" vs "PTO"), but dense
+   embeddings capture meaning, so the baseline already handles paraphrase.
+   Hybrid's advantage (exact keywords like error codes) and multi-query's
+   advantage (very different phrasing) don't show up with these questions.
 
-Then evaluate them on the provided mini question set and report hit-rate
-(did the retrieved chunks contain the gold source file?).
-
-## What's provided
-`starter.py` gives you the corpus loader, the baseline retriever, a small labeled
-question set (`QUESTIONS`), and a `hit_rate()` scorer. You implement the
-`build_*_retriever` functions and fill the results table.
-
-## Done when…
-- [ ] At least 3 strategies are implemented and run through the harness.
-- [ ] You print a comparison table of hit-rate per strategy.
-- [ ] In `NOTES.md`, you state which strategy won on this corpus and give a
-      hypothesis for *why* (tie it to how the questions are phrased).
-
-## Stretch
-- Add a cross-encoder re-ranker (e.g. `sentence-transformers` cross-encoder or
-  Cohere rerank) via `ContextualCompressionRetriever` and see if precision improves.
+## Next step
+Addin harder questions like 
+("time off carry rules?", "employee_handbook.md"),
+("what does ISO 3691-4 mean?", "product_specs.md"),
+("is alcohol reimbursable?", "hr_policies.md"),
+("IP54 rating?", "product_specs.md")
+gave me the same result because of the tiny corpus
