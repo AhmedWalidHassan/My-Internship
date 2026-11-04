@@ -46,66 +46,10 @@ def build_base_retriever(k=4):
 #   - history must be isolated per session_id
 #   - out-of-scope questions must still be refused
 # ---------------------------------------------------------------------------
-def format_docs(docs):
-    return "\n\n".join(
-        f"[{Path(d.metadata.get('source', 'unknown')).name}] {d.page_content}"
-        for d in docs
-    )
-
 
 def build_conversational_rag(retriever, llm):
-    from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-    from langchain_core.output_parsers import StrOutputParser
-    from langchain_core.runnables import RunnablePassthrough, RunnableLambda
-    from langchain_core.runnables.history import RunnableWithMessageHistory
-    from langchain_core.chat_history import InMemoryChatMessageHistory
+    raise NotImplementedError("Implement me — see the README for building blocks.")
 
-    rewrite_prompt = ChatPromptTemplate.from_messages([
-        ("system",
-         "Given the chat history and the latest user question, rewrite the "
-         "question so it can be understood WITHOUT the chat history. "
-         "Do NOT answer it. If it is already standalone, return it unchanged."),
-        MessagesPlaceholder("chat_history"),
-        ("human", "{input}"),
-    ])
-    rewrite_chain = rewrite_prompt | llm | StrOutputParser()
-
-    def contextualize(inputs):
-        if inputs["chat_history"]:
-            return rewrite_chain.invoke(inputs)
-        return inputs["input"]
-
-    qa_prompt = ChatPromptTemplate.from_messages([
-        ("system",
-         "You are Northwind Robotics' internal assistant. Answer ONLY using the "
-         "context below. If the answer is not in the context, say: "
-         "'I don't know based on the provided documents.'\n\n"
-         "Context:\n{context}"),
-        MessagesPlaceholder("chat_history"),
-        ("human", "{input}"),
-    ])
-
-    rag_chain = (
-        RunnablePassthrough.assign(standalone_question=RunnableLambda(contextualize))
-        | RunnablePassthrough.assign(
-            context=lambda x: format_docs(retriever.invoke(x["standalone_question"])))
-        | RunnablePassthrough.assign(answer=qa_prompt | llm | StrOutputParser())
-    )
-
-    store = {}
-
-    def get_session_history(session_id):
-        if session_id not in store:
-            store[session_id] = InMemoryChatMessageHistory()
-        return store[session_id]
-
-    return RunnableWithMessageHistory(
-        rag_chain,
-        get_session_history,
-        input_messages_key="input",
-        history_messages_key="chat_history",
-        output_messages_key="answer",
-    )
 
 if __name__ == "__main__":
     retriever = build_base_retriever()
