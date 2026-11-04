@@ -20,7 +20,8 @@ def load_documents():
     for md_file in sorted(DATA_DIR.glob("*.md")):
         # TODO 1: Use TextLoader(md_file, encoding="utf-8").load() and extend `docs`.
         #         Each loader returns a list of Document objects.
-        ...
+        loaded = TextLoader(md_file, encoding="utf-8").load()
+        docs.extend(loaded)
     return docs
 
 
@@ -30,8 +31,11 @@ def split_documents(docs, chunk_size=800, chunk_overlap=100):
 
     # TODO 2: Create a RecursiveCharacterTextSplitter with the given chunk_size
     #         and chunk_overlap, then call .split_documents(docs).
-    splitter = ...
-    chunks = ...
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+    )
+    chunks = splitter.split_documents(docs)
     return chunks
 
 
