@@ -31,13 +31,13 @@ def build_index(chunks):
 
     embeddings = get_embeddings()
     # TODO 1: Build a FAISS index from the chunks with FAISS.from_documents(...).
-    vectorstore = ...
+    vectorstore = FAISS.from_documents(chunks, embeddings)
     return vectorstore
 
 
 def save_index(vectorstore):
     # TODO 2: Persist the store to INDEX_DIR with vectorstore.save_local(...).
-    ...
+    vectorstore.save_local(str(INDEX_DIR))
 
 
 def load_index():
@@ -46,7 +46,11 @@ def load_index():
     embeddings = get_embeddings()
     # TODO 3: Load the store from INDEX_DIR. FAISS.load_local needs
     #         allow_dangerous_deserialization=True because it unpickles.
-    return ...
+    return FAISS.load_local(
+        str(INDEX_DIR),
+        embeddings,
+        allow_dangerous_deserialization=True,
+    )
 
 
 if __name__ == "__main__":
