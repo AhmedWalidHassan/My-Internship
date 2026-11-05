@@ -48,7 +48,72 @@ def build_base_retriever(k=4):
 # ---------------------------------------------------------------------------
 
 def build_conversational_rag(retriever, llm):
-    raise NotImplementedError("Implement me — see the README for building blocks.")
+    from langchain_core.chat_history import InMemoryChatMessageHistory
+    from langchain_core.output_parsers import StrOutputParser
+    from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+    from langchain_core.runnables import RunnableLambda, RunnablePassthrough
+    from langchain_core.runnables.history import RunnableWithMessageHistory
+
+    # --- Step 1: rewrite follow-ups into standalone questions ---------------
+    contextualize_prompt = ChatPromptTemplate.from_messages([
+        ("system",
+         "Given the chat history and the latest user question, rewrite the "
+         "question so it can be understood WITHOUT the chat history. Replace "
+         "pronouns like 'it' or 'that' with what they refer to. Do NOT answer "
+         "the question. If it is already standalone, return it unchanged. "
+         "Output only the question."),
+        MessagesPlaceholder("chat_history"),
+        ("human", "{input}"),
+    ])
+    contextualize_chain = contextualize_prompt | llm | StrOutputParser()
+
+    def standalone_question(x):
+        # First turn: no history, so skip the extra LLM call.
+        if x.get("chat_history"):
+            return contextualize_chain.invoke(x)
+        return x["input"]
+
+    def format_docs(docs):
+        return "\n\n".join(
+            f"[{Path(d.metadata.get('source', 'unknown')).name}] {d.page_content}"
+            for d in docs
+        )
+
+    # --- Step 2: answer from retrieved context + conversation ---------------
+    qa_prompt = ChatPromptTemplate.from_messages([
+        ("system",
+         "You are Northwind Robotics' internal assistant. Answer ONLY using the "
+         "context below. Use the chat history only to understand the question, "
+         "never as a source of facts. If the answer is not in the context, reply "
+         "only with: 'I don't know based on the provided documents.' and do not "
+         "list any sources. Otherwise, after your answer, list the source files "
+         "you used.\n\nContext:\n{context}"),
+        MessagesPlaceholder("chat_history"),
+        ("human", "{input}"),
+    ])
+
+    rag_chain = (
+        RunnablePassthrough.assign(standalone=RunnableLambda(standalone_question))
+        .assign(docs=lambda x: retriever.invoke(x["standalone"]))
+        .assign(context=lambda x: format_docs(x["docs"]))
+        .assign(answer=qa_prompt | llm | StrOutputParser())
+    )
+
+    # --- Step 3: per-session memory -----------------------------------------
+    sessions = {}
+
+    def get_session_history(session_id: str):
+        if session_id not in sessions:
+            sessions[session_id] = InMemoryChatMessageHistory()
+        return sessions[session_id]
+
+    return RunnableWithMessageHistory(
+        rag_chain,
+        get_session_history,
+        input_messages_key="input",
+        history_messages_key="chat_history",
+        output_messages_key="answer",
+    )
 
 
 if __name__ == "__main__":
