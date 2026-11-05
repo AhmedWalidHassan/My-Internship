@@ -42,13 +42,21 @@ def build_rag_chain(retriever):
     from langchain_core.output_parsers import StrOutputParser
     from langchain_core.runnables import RunnableParallel, RunnablePassthrough
 
-    llm = get_llm()
+    llm = get_llm(reasoning=False)
 
     system = (
         "You are Northwind Robotics' internal assistant. Answer ONLY using the "
-        "context below. If the answer is not in the context, say: "
+        "context below.\n\n"
+        "Rules:\n"
+        "1. Be complete but concise. Include the numbers, limits, deadlines, "
+        "conditions and exceptions that the context gives for the question, but "
+        "do not add unrelated details.\n"
+        "2. If the answer is not in the context, reply only with: "
         "'I don't know based on the provided documents.' "
-        "After your answer, list the source files you used.\n\n"
+        "Do not list any sources in that case.\n"
+        "3. Otherwise, end with one line in this format: Sources: followed by the "
+        "names of the context files you used, separated by commas. Use the file "
+        "names shown in square brackets in the context.\n\n"
         "Context:\n{context}"
     )
     prompt = ChatPromptTemplate.from_messages(
