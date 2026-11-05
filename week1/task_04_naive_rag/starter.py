@@ -25,13 +25,16 @@ def build_retriever(k=4):
     store = FAISS.from_documents(chunks, get_embeddings())
 
     # TODO 1: Return a retriever from the store: store.as_retriever(search_kwargs={"k": k})
-    return ...
+    return store.as_retriever(search_kwargs={"k": k})
 
 
 def format_docs(docs):
     """Turn retrieved Documents into a single context string with source tags."""
     # TODO 2: Join each doc as "[source] content". Include metadata['source'].
-    return ...
+    return "\n\n".join(
+        f"[{Path(d.metadata.get('source', 'unknown')).name}] {d.page_content}"
+        for d in docs
+    )
 
 
 def build_rag_chain(retriever):
@@ -55,7 +58,12 @@ def build_rag_chain(retriever):
     # TODO 3: Build the LCEL chain. A common shape is:
     #   {"context": retriever | format_docs, "question": RunnablePassthrough()}
     #       | prompt | llm | StrOutputParser()
-    chain = ...
+    chain = (
+        {"context": retriever | format_docs, "question": RunnablePassthrough()}
+        | prompt
+        | llm
+        | StrOutputParser()
+    )
     return chain
 
 
