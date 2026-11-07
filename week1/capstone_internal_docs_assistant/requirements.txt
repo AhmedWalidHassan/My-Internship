@@ -1,0 +1,14 @@
+# Capstone additions on top of the Week-1 requirements.txt
+langchain-core
+langchain-community        # FAISS vector store
+langchain-text-splitters
+langchain-huggingface      # local sentence-transformers embeddings
+langchain-ollama           # local LLM (default provider)
+langgraph
+langsmith
+faiss-cpu
+rank_bm25                  # keyword side of hybrid retrieval
+sentence-transformers
+streamlit>=1.37            # st.feedback thumbs widget
+python-dotenv
+pytest

@@ -1,0 +1,402 @@
+{
+  "How many rovers can a single Fleet Manager instance handle, and which version is it?": {
+    "answer": "A single Fleet Manager instance can handle up to 50 rovers [product_specs.md]. The specific version number is not mentioned in the provided context.",
+    "refused": false,
+    "retrieved": [
+      "product_specs.md"
+    ],
+    "sources": [
+      "product_specs.md › Key Specifications"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "How many paid sick days do I get and when do I need a doctor's note?": {
+    "answer": "You receive 10 paid sick days per year [employee_handbook.md]. A doctor's note is required for absences longer than 3 consecutive days [employee_handbook.md].",
+    "refused": false,
+    "retrieved": [
+      "employee_handbook.md",
+      "hr_policies.md"
+    ],
+    "sources": [
+      "employee_handbook.md › 3. Sick Leave"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "What is the response SLA for standard versus premium support?": {
+    "answer": "Standard support has a 4-hour response SLA, while Premium support has a 1-hour response SLA [product_specs.md].",
+    "refused": false,
+    "retrieved": [
+      "hr_policies.md",
+      "it_faq.md",
+      "product_specs.md"
+    ],
+    "sources": [
+      "product_specs.md › Support & SLA"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "How much payload can the Warehouse Rover R2 carry?": {
+    "answer": "The Warehouse Rover R2 has a payload capacity of 80 kg [product_specs.md].",
+    "refused": false,
+    "retrieved": [
+      "product_specs.md"
+    ],
+    "sources": [
+      "product_specs.md › Key Specifications"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "When are performance reviews held and when are promotions decided?": {
+    "answer": "Performance reviews are held twice per year, in June and December [hr_policies.md]. Promotions are decided in the December cycle [hr_policies.md].",
+    "refused": false,
+    "retrieved": [
+      "employee_handbook.md",
+      "hr_policies.md"
+    ],
+    "sources": [
+      "hr_policies.md › Performance Reviews"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "What is my annual learning budget and does it carry over?": {
+    "answer": "Your annual learning budget is $1,500 for courses, books, and conferences [hr_policies.md]. The unused budget does not carry over to the next year [hr_policies.md].",
+    "refused": false,
+    "retrieved": [
+      "employee_handbook.md",
+      "hr_policies.md"
+    ],
+    "sources": [
+      "hr_policies.md › Training & Development"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "Does Northwind match 401(k) contributions?": {
+    "answer": "I couldn't find a reliable answer to that in the Northwind internal documents, so I won't guess. Try rephrasing, or ask HR / IT directly.",
+    "refused": true,
+    "retrieved": [
+      "employee_handbook.md",
+      "hr_policies.md",
+      "it_faq.md"
+    ],
+    "sources": [],
+    "correctness": 1,
+    "groundedness": 1
+  },
+  "What are the daily meal reimbursement limits for domestic and international travel?": {
+    "answer": "Domestic meals during travel are reimbursed up to $75/day, and international meals are reimbursed up to $110/day [hr_policies.md].",
+    "refused": false,
+    "retrieved": [
+      "hr_policies.md"
+    ],
+    "sources": [
+      "hr_policies.md › Expense Reimbursement"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "What is the rate limit of the Fleet Manager REST API?": {
+    "answer": "I couldn't find a reliable answer to that in the Northwind internal documents, so I won't guess. Try rephrasing, or ask HR / IT directly.",
+    "refused": true,
+    "retrieved": [
+      "employee_handbook.md",
+      "hr_policies.md",
+      "product_specs.md"
+    ],
+    "sources": [],
+    "correctness": 1,
+    "groundedness": 1
+  },
+  "How do I connect to the VPN?": {
+    "answer": "Install the GlobalConnect client from the Self-Service app catalog. Authenticate with your corporate SSO and approve the MFA push [it_faq.md].",
+    "refused": false,
+    "retrieved": [
+      "it_faq.md"
+    ],
+    "sources": [
+      "it_faq.md › VPN & Security"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "How many days per week can I work remotely by default?": {
+    "answer": "You may work remotely up to 3 days per week by default [employee_handbook.md | 4. Remote Work Policy].",
+    "refused": false,
+    "retrieved": [
+      "employee_handbook.md",
+      "hr_policies.md"
+    ],
+    "sources": [
+      "employee_handbook.md › 4. Remote Work Policy"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "Can I check my work email on my personal phone?": {
+    "answer": "Yes, you can check your work email on your personal phone, as personal devices may access email and calendar only [it_faq.md]. However, the device must have encryption enabled and a screen lock turned on. Access to source code or customer data from such devices is prohibited.",
+    "refused": false,
+    "retrieved": [
+      "it_faq.md"
+    ],
+    "sources": [
+      "it_faq.md › VPN & Security"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "Can I bring my dog to the office?": {
+    "answer": "I couldn't find a reliable answer to that in the Northwind internal documents, so I won't guess. Try rephrasing, or ask HR / IT directly.",
+    "refused": true,
+    "retrieved": [
+      "employee_handbook.md",
+      "hr_policies.md",
+      "it_faq.md"
+    ],
+    "sources": [],
+    "correctness": 1,
+    "groundedness": 1
+  },
+  "How long does a request for access to a new system usually take?": {
+    "answer": "The standard turnaround time for a request for access to a new system is 2 business days [it_faq.md].",
+    "refused": false,
+    "retrieved": [
+      "it_faq.md"
+    ],
+    "sources": [
+      "it_faq.md › Accounts & Access"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "Can I take PTO during my first month at the company?": {
+    "answer": "No, you cannot take PTO during your first month because PTO cannot be used during the first 90 days of employment [employee_handbook.md | 2. Paid Time Off (PTO)].",
+    "refused": false,
+    "retrieved": [
+      "employee_handbook.md",
+      "hr_policies.md"
+    ],
+    "sources": [
+      "employee_handbook.md › 2. Paid Time Off (PTO)"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "My laptop was stolen, what should I do?": {
+    "answer": "Immediately report it to the Security team at security@northwind.example and file a ticket marked URGENT. Security will remotely wipe the device. Do not wait until the next business day [it_faq.md].",
+    "refused": false,
+    "retrieved": [
+      "it_faq.md"
+    ],
+    "sources": [
+      "it_faq.md › Hardware"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "How fast does the R2 move when loaded and unloaded?": {
+    "answer": "The R2 moves at a maximum speed of 1.8 m/s when loaded and 2.2 m/s when unloaded [product_specs.md].",
+    "refused": false,
+    "retrieved": [
+      "product_specs.md"
+    ],
+    "sources": [
+      "product_specs.md › Key Specifications"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "How much parental leave do adoptive parents get?": {
+    "answer": "Adoptive parents receive 10 weeks of fully paid leave [employee_handbook.md].",
+    "refused": false,
+    "retrieved": [
+      "employee_handbook.md",
+      "hr_policies.md"
+    ],
+    "sources": [
+      "employee_handbook.md › 6. Parental Leave"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "How long is my account locked after too many failed login attempts?": {
+    "answer": "Your account locks for 30 minutes after 5 failed login attempts [it_faq.md].",
+    "refused": false,
+    "retrieved": [
+      "it_faq.md"
+    ],
+    "sources": [
+      "it_faq.md › Accounts & Access"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "How long does the R2 battery last and how quickly does it charge?": {
+    "answer": "The R2 battery provides approximately 8 hours of continuous operation [product_specs.md]. It charges from 0% to 80% in 45 minutes using auto-docking [product_specs.md].",
+    "refused": false,
+    "retrieved": [
+      "product_specs.md"
+    ],
+    "sources": [
+      "product_specs.md › Key Specifications"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "What are the core collaboration hours?": {
+    "answer": "The core collaboration hours are 10:00–16:00 local time [employee_handbook.md | 1. Working Hours & Flexibility].",
+    "refused": false,
+    "retrieved": [
+      "employee_handbook.md",
+      "hr_policies.md"
+    ],
+    "sources": [
+      "employee_handbook.md › 1. Working Hours & Flexibility"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "How many unused PTO days can I carry into next year, and when is the rest forfeited?": {
+    "answer": "You can carry up to 5 unused PTO days into the next calendar year; any amount above 5 days is forfeited on December 31 [employee_handbook.md].",
+    "refused": false,
+    "retrieved": [
+      "employee_handbook.md",
+      "hr_policies.md"
+    ],
+    "sources": [
+      "employee_handbook.md › 2. Paid Time Off (PTO)"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "What is the price of the Warehouse Rover R2?": {
+    "answer": "I couldn't find a reliable answer to that in the Northwind internal documents, so I won't guess. Try rephrasing, or ask HR / IT directly.",
+    "refused": true,
+    "retrieved": [
+      "hr_policies.md",
+      "it_faq.md",
+      "product_specs.md"
+    ],
+    "sources": [],
+    "correctness": 1,
+    "groundedness": 1
+  },
+  "Fully remote employees must overlap with their team for how many hours?": {
+    "answer": "Fully remote employees must overlap with their team's core hours for at least 4 hours [employee_handbook.md | 1. Working Hours & Flexibility].",
+    "refused": false,
+    "retrieved": [
+      "employee_handbook.md",
+      "hr_policies.md"
+    ],
+    "sources": [
+      "employee_handbook.md › 1. Working Hours & Flexibility"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "How far in advance do I have to submit a PTO request?": {
+    "answer": "You must submit a PTO request at least 5 business days in advance [employee_handbook.md | 2. Paid Time Off (PTO)].",
+    "refused": false,
+    "retrieved": [
+      "employee_handbook.md",
+      "hr_policies.md"
+    ],
+    "sources": [
+      "employee_handbook.md › 2. Paid Time Off (PTO)"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "What is the deadline for submitting business expenses?": {
+    "answer": "Business expenses must be submitted within 30 days via the Finance portal [hr_policies.md].",
+    "refused": false,
+    "retrieved": [
+      "employee_handbook.md",
+      "hr_policies.md"
+    ],
+    "sources": [
+      "hr_policies.md › Expense Reimbursement"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "How big is the home-office stipend?": {
+    "answer": "The home-office stipend is $500 per year [employee_handbook.md].",
+    "refused": false,
+    "retrieved": [
+      "employee_handbook.md",
+      "hr_policies.md"
+    ],
+    "sources": [
+      "employee_handbook.md › 4. Remote Work Policy"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "How do I cook spaghetti carbonara?": {
+    "answer": "I couldn't find a reliable answer to that in the Northwind internal documents, so I won't guess. Try rephrasing, or ask HR / IT directly.",
+    "refused": true,
+    "retrieved": [
+      "hr_policies.md",
+      "it_faq.md",
+      "product_specs.md"
+    ],
+    "sources": [],
+    "correctness": 1,
+    "groundedness": 1
+  },
+  "What are the password requirements and how often do I have to change my password?": {
+    "answer": "Password requirements include being at least 14 characters long [it_faq.md]. Passwords must be rotated every 180 days [it_faq.md].",
+    "refused": false,
+    "retrieved": [
+      "it_faq.md"
+    ],
+    "sources": [
+      "it_faq.md › Accounts & Access"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  },
+  "How much is the employee referral bonus and when is it paid?": {
+    "answer": "The employee referral bonus is $3,000 [hr_policies.md], and it is paid after the new hire completes 90 days [hr_policies.md].",
+    "refused": false,
+    "retrieved": [
+      "employee_handbook.md",
+      "hr_policies.md"
+    ],
+    "sources": [
+      "hr_policies.md › Referral Bonus"
+    ],
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+  }
+}

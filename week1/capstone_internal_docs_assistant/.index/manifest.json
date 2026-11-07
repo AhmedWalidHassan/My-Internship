@@ -1,0 +1,45 @@
+{
+  "fingerprint": "hf:sentence-transformers/all-MiniLM-L6-v2:800:100",
+  "files": {
+    "employee_handbook.md": {
+      "hash": "ef7cfb0858d2b3fbb8231e4d8d1dbb41a110e28a05ad6c7ac0397a4feb3109bd",
+      "ids": [
+        "employee_handbook.md::0",
+        "employee_handbook.md::1",
+        "employee_handbook.md::2",
+        "employee_handbook.md::3",
+        "employee_handbook.md::4",
+        "employee_handbook.md::5"
+      ]
+    },
+    "hr_policies.md": {
+      "hash": "cb4d281d28a40dea2a6b91ed79b3b6fb24315ac0f46a7438504056fde39b93b4",
+      "ids": [
+        "hr_policies.md::0",
+        "hr_policies.md::1",
+        "hr_policies.md::2",
+        "hr_policies.md::3",
+        "hr_policies.md::4"
+      ]
+    },
+    "it_faq.md": {
+      "hash": "1a4914aac4a811a172469f3eeeb192de212c474bcd785cf6f78d97f361680700",
+      "ids": [
+        "it_faq.md::0",
+        "it_faq.md::1",
+        "it_faq.md::2",
+        "it_faq.md::3"
+      ]
+    },
+    "product_specs.md": {
+      "hash": "9ae5f6b93a0f8e181bb7be11132d69e36405898a2f96abae7febe915db5e7c61",
+      "ids": [
+        "product_specs.md::0",
+        "product_specs.md::1",
+        "product_specs.md::2",
+        "product_specs.md::3",
+        "product_specs.md::4"
+      ]
+    }
+  }
+}
