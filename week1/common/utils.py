@@ -42,7 +42,7 @@ def get_llm(temperature: float = 0.0, **kwargs):
     if provider == "ollama":
         from langchain_ollama import ChatOllama
         return ChatOllama(model=os.getenv("OLLAMA_MODEL", "llama3.1"),
-                          temperature=temperature, **kwargs)
+                          temperature=temperature, reasoning=False, **kwargs)
     if provider == "huggingface":
         from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
         endpoint = HuggingFaceEndpoint(
