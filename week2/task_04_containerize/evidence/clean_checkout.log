@@ -1,0 +1,26 @@
+# Clean checkout: docker compose up with only week1/.env supplied (2026-11-16)
+$ git clone --branch week2/task-04-docker <repo> fresh && cp <my>/week1/.env fresh/week1/.env && cd fresh
+$ git status --short --ignored        # the ONLY file not from git:
+!! week1/.env
+$ docker volume ls | grep northwind    # (none: no index exists anywhere yet)
+$ docker compose -f week2/task_04_containerize/docker-compose.yml build --no-cache && docker compose ... up -d --wait
+naming to docker.io/library/northwind-ui:latest
+naming to docker.io/library/northwind-ui:latest done
+naming to docker.io/library/northwind-api:full done
+ Volume northwind_index_full Creating 
+ Volume northwind_index_full Creating 
+ Volume northwind_index_full Created 
+ Volume northwind_index_full Created 
+ Container northwind-api-1 Created 
+ Container northwind-ui-1 Created 
+ Container northwind-api-1 Healthy 
+ Container northwind-api-1 Healthy 
+ Container northwind-ui-1 Healthy 
+# exit=0 seconds=157
+$ docker compose logs api | grep -E "Index|READY"
+2026-11-16 08:29:59,618 INFO northwind: Index BUILT: embedded 20 chunks from 4 files in 0.34s, saved to /data/faiss_index
+2026-11-16 08:29:59,722 INFO northwind.api: API READY in 10.18s: index BUILT, 20 chunks from 4 documents, hybrid (BM25 + dense) retriever
+$ curl -s localhost:8000/readyz
+{"status":"ready","graph_compiled":true,"index":"built","chunks":20,"documents":4,"retriever":"hybrid (BM25 + dense)","active_sessions":0,"startup_seconds":10.18}
+# (Questions over HTTP: see provider_switch.log step 1; the UI container: ui_in_container.txt.
+#  The first try hit a host firewall (ufw dropping container->host traffic to Ollama); see DEPLOY.md.)

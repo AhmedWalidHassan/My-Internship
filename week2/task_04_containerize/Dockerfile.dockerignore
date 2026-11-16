@@ -1,0 +1,23 @@
+# Build-context rules for week2/task_04_containerize/Dockerfile (BuildKit reads
+# <Dockerfile>.dockerignore next to the Dockerfile, so the repo root needs none).
+#
+# An ALLOWLIST: ignore everything, then re-include only what the images COPY.
+# Anything new in the repo (a .env, an index, a dataset) stays out by default.
+*
+
+!app/
+!week1/common/
+!week1/capstone_internal_docs_assistant/app.py
+!week1/data/
+!week2/task_04_containerize/constraints.txt
+!week2/task_04_containerize/requirements-api.txt
+!week2/task_04_containerize/requirements-api-slim.txt
+!week2/task_04_containerize/requirements-ui.txt
+
+# ...and never these, even inside the allowed folders.
+**/.env
+**/.env.*
+**/__pycache__
+**/*.pyc
+**/faiss_index
+app/README.md

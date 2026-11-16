@@ -273,13 +273,33 @@ fresh session, after one warm-up request. Raw rows:
 
 ## Task 4 — Containerize
 
+Verified 2026-11-16 from a fresh `git clone` with only `week1/.env` supplied. How to run it,
+the design and all evidence: [`task_04_containerize/DEPLOY.md`](task_04_containerize/DEPLOY.md).
+
 | | Value |
 |---|---|
-| Image size | |
-| Biggest contributor to size | |
-| Runs as non-root | ☐ |
-| Cold-checkout `docker compose up` works | ☐ |
-| Provider switchable by `.env` alone | ☐ |
+| Image size | API **1.50 GB** on disk / 489 MB download (`docker images` "disk usage" 2.07 GB, which is files + compressed layers). Stretch: `API_VARIANT=slim` **575 MB** / 241 MB download. UI image 513 MB |
+| Biggest contributor to size | **PyTorch (CPU build): 747 MB of the API's 1.29 GB of packages, there only to run the 90 MB MiniLM embedding model.** The default PyPI torch is the CUDA build (+3.0 GB nvidia, +1.0 GB triton), so the image installs the CPU wheel. The slim variant runs the same model on ONNX Runtime instead: identical embeddings (cosine 1.000000) and top-4 retrieval for 28/28 eval questions, ready in 1.2 s instead of 9–10 s |
+| Runs as non-root | ☑ `docker compose exec api whoami` → `app` (uid 10001), same for `ui`; code read-only, only `/data` writable ([evidence](task_04_containerize/evidence/non_root_and_contents.txt)) |
+| Cold-checkout `docker compose up` works | ☑ `build --no-cache` + `up --wait`: both healthy in 157 s. Cited answers over HTTP, and a two-turn conversation driven from the UI container through `http://api:8000` ([evidence](task_04_containerize/evidence/clean_checkout.log)) |
+| Provider switchable by `.env` alone | ☑ same image, `.env` edit + `up -d`: Ollama native → OpenAI client against Ollama's `/v1` (same answer) → OpenRouter → Groq (clients built in the container; no keys here, so no calls) → back ([evidence](task_04_containerize/evidence/provider_switch.log)) |
+| No API key in any layer | ☑ the key's **value** was searched in `docker history --no-trunc`, `docker image inspect` and the whole exported filesystem of both images: not found ([evidence](task_04_containerize/evidence/no_secrets_in_layers.md)) |
+| Restart does not re-embed | ☑ embedded once on a new volume; `LOADED … 0 chunks embedded` after `restart`, `down`/`up` and an image rebuild ([evidence](task_04_containerize/evidence/volume_persistence.log)) |
+
+**Found on the way (and fixed):**
+
+- **A thinking model behind an OpenAI-compatible API "thinks" on every call.** qwen3.5 via
+  Ollama's `/v1` generated 400–1,200+ hidden tokens for each one-word grader reply, so a single
+  question took minutes. The native Ollama client disables thinking; the OpenAI one couldn't.
+  Fixed with a setting, `OPENAI_REASONING_EFFORT=none` (2 tokens instead of 400+).
+- **A venv isn't relocatable.** Building it at `/opt/venv-ui` and copying it to `/opt/venv` broke
+  the `streamlit` launcher's shebang. The UI container crash-looped on the first clean-checkout
+  run. Venvs are now built at their final path.
+- **pytorch.org's CPU index doesn't mirror every version of torch's dependencies.** The torch wheel
+  now comes from there with `--no-deps`, everything else from PyPI, and `pip check` gates the build.
+- **Host setup, not repo:** containers reach the host's Ollama only if Ollama listens beyond
+  loopback **and** the firewall allows it. This host runs ufw, which silently dropped the traffic.
+  Both steps are documented in DEPLOY.md.
 
 ---
 

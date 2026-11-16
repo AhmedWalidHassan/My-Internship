@@ -1,0 +1,32 @@
+$ docker compose exec api whoami
+app
+$ docker compose exec api id
+uid=10001(app) gid=10001(app) groups=10001(app)
+$ docker compose exec ui whoami
+app
+$ docker run --rm northwind-api:full whoami
+app
+$ docker compose exec api sh -c "ls -ld /data /data/faiss_index /app; touch /app/x"
+drwxr-xr-x 1 root root 4096 Nov 16 08:29 /app
+drwxr-xr-x 3 app  app  4096 Nov 16 08:29 /data
+drwxr-xr-x 2 app  app  4096 Nov 16 08:29 /data/faiss_index
+touch: cannot touch '/app/x': Permission denied
+$ docker compose exec api sh -c "find /app -type f | sort"
+/app/app/__init__.py
+/app/app/__main__.py
+/app/app/capstone.py
+/app/app/config.py
+/app/app/main.py
+/app/app/schemas.py
+/app/app/service.py
+/app/app/sessions.py
+/app/app/ui.py
+/app/week1/capstone_internal_docs_assistant/app.py
+/app/week1/common/settings.py
+/app/week1/common/utils.py
+/app/week1/data/employee_handbook.md
+/app/week1/data/hr_policies.md
+/app/week1/data/it_faq.md
+/app/week1/data/product_specs.md
+# the key reaches the container at RUNTIME (env_file), never via the image:
+LANGSMITH_API_KEY is set in the running container (value not shown)

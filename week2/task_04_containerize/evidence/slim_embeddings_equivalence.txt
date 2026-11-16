@@ -1,0 +1,5 @@
+# full image: HuggingFaceEmbeddings (index signature 'sentence-transformers/all-MiniLM-L6-v2')  vs  slim image: FastEmbedEmbeddings ('fastembed:sentence-transformers/all-MiniLM-L6-v2')
+# all-MiniLM-L6-v2, 20 corpus chunks + 28 eval questions, embedded inside each image
+cosine(full, slim) per chunk:    min 1.000000  mean 1.000000
+cosine(full, slim) per question: min 1.000000  mean 1.000000
+dense top-1 identical: 28/28;  top-4 identical (same chunks, same order): 28/28

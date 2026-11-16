@@ -40,6 +40,7 @@ from starlette.datastructures import MutableHeaders
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.capstone import load_capstone
+from app.config import get_settings
 from app.schemas import (
     SESSION_ID_PATTERN,
     ChatRequest,
@@ -168,8 +169,8 @@ def default_backend_factory():
     """The capstone Backend (loads or builds the FAISS index, compiles the graph),
     with conversation memory in a TTL'd store."""
     capstone = load_capstone()
-    sessions = SessionStore(ttl_seconds=float(os.getenv("SESSION_TTL_SECONDS", "3600")),
-                            max_sessions=int(os.getenv("MAX_SESSIONS", "10000")))
+    settings = get_settings()
+    sessions = SessionStore(ttl_seconds=settings.session_ttl_seconds, max_sessions=settings.max_sessions)
     return capstone.Backend(sessions=sessions)
 
 
@@ -185,6 +186,7 @@ def _load(runtime: Runtime, backend_factory: Callable) -> None:
     """Runs in a worker thread at startup. Any failure leaves the process alive but
     not ready, so /readyz can say why instead of the process crash-looping."""
     load_capstone().setup_logging()              # the capstone's "Index BUILT / LOADED" line
+    log.info("config: %s", get_settings().summary())
     t0 = time.perf_counter()
     try:
         backend = backend_factory()
@@ -203,6 +205,7 @@ def _load(runtime: Runtime, backend_factory: Callable) -> None:
 def create_app(backend_factory: Callable | None = None,
                feedback_client_factory: Callable | None = None) -> FastAPI:
     """Factories are injectable so the fast tests can run the real app with a fake model."""
+    get_settings()          # validate the configuration now: a bad .env stops startup with a clear error
     backend_factory = backend_factory or default_backend_factory
     feedback_client_factory = feedback_client_factory or default_feedback_client
 
@@ -342,6 +345,6 @@ app = create_app()
 
 
 if __name__ == "__main__":
-    import uvicorn
+    from app.__main__ import main
 
-    uvicorn.run(app, host=os.getenv("API_HOST", "127.0.0.1"), port=int(os.getenv("API_PORT", "8000")))
+    main()

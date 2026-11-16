@@ -1,0 +1,4 @@
+# The UI container: app/ui.py is a pure HTTP client of the API, so this is all it needs.
+# Versions come from constraints.txt.
+streamlit
+httpx

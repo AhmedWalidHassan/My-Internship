@@ -1,40 +1,73 @@
-# Task 4 — compose skeleton.
-# Copy to the repo root as `docker-compose.yml`.
+# Northwind assistant: API + UI with one command (Week 2, Task 4).
 #
-# Goal: `docker compose up` from a clean checkout, with only .env supplied,
-# gives a working assistant.
+#   cp week1/.env.example week1/.env      # the ONLY file you supply; pick a provider in it
+#   make up                               # = docker compose -f week2/task_04_containerize/docker-compose.yml up --build -d
+#   open http://localhost:8501            # UI      (API: http://localhost:8000/docs)
+#   make down                             # stop; the index volume is kept
+#
+# Paths below are relative to THIS file; the build context is the repo root.
+
+name: northwind
+
+x-env: &env
+  # Later files win. container.env holds container-only defaults (e.g. where the host's
+  # Ollama is); week1/.env is yours: provider, model, base_url, keys, k, chunking.
+  # Passed at RUNTIME: neither file is ever copied into an image (see Dockerfile.dockerignore).
+  env_file:
+    - path: ./container.env
+    - path: ../../week1/.env
+      required: true
 
 services:
   api:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../..
+      dockerfile: week2/task_04_containerize/Dockerfile
+      target: api
+      args:
+        # full = PyTorch embeddings (default, what the evals ran on); slim = ONNX, no torch.
+        API_VARIANT: ${API_VARIANT:-full}
+    image: northwind-api:${API_VARIANT:-full}
+    <<: *env
+    environment:
+      # Fixed by the image layout, so not overridable from .env (a laptop path in .env
+      # would otherwise break the container).
+      INDEX_PATH: /data/faiss_index
+      DATA_DIR: /app/week1/data
+      API_HOST: 0.0.0.0
+      API_PORT: "8000"
     ports:
-      - "8000:8000"
-    env_file:
-      - .env          # passed at RUNTIME — never COPY'd into the image
+      - "${API_PUBLISH:-127.0.0.1:8000}:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"     # lets the container reach the host's Ollama (Linux)
     volumes:
-      # TODO 1: mount a named volume at the container's INDEX_PATH so the FAISS
-      #         index survives image rebuilds. Without this, every rebuild
-      #         silently re-embeds the whole corpus.
+      # The FAISS index lives in a named volume: it survives `down`/`up`, restarts and
+      # image rebuilds, so the corpus is embedded once, not on every rebuild.
       - index_data:/data
-    # TODO 2: add a healthcheck hitting /healthz, so `depends_on: condition:
-    #         service_healthy` below actually means something.
+    healthcheck:
+      # Readiness, not just liveness: "healthy" = the index is loaded and the graph
+      # compiled, so the UI below starts only when the API can actually answer.
+      # (The image's own HEALTHCHECK is /healthz; this replaces it for compose.)
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/readyz', timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 180s       # first start on a new volume embeds the corpus
+    stop_grace_period: 15s
     restart: unless-stopped
 
   ui:
     build:
-      context: .
-      dockerfile: Dockerfile
-    # TODO 3: override the command to run Streamlit instead of uvicorn.
-    ports:
-      - "8501:8501"
-    env_file:
-      - .env
+      context: ../..
+      dockerfile: week2/task_04_containerize/Dockerfile
+      target: ui
+    image: northwind-ui:latest
+    # The UI only needs to know where the API is. By SERVICE NAME on the compose
+    # network: inside a container, localhost is the container itself.
     environment:
-      # The UI talks to the API by SERVICE NAME on the compose network —
-      # not localhost, which inside a container means the container itself.
-      - API_URL=http://api:8000
+      API_URL: http://api:8000
+    ports:
+      - "${UI_PUBLISH:-127.0.0.1:8501}:8501"
     depends_on:
       api:
         condition: service_healthy
@@ -42,11 +75,6 @@ services:
 
 volumes:
   index_data:
-
-# ---------------------------------------------------------------------------
-# Verify before the PR:
-#   git clone <repo> /tmp/fresh && cd /tmp/fresh && cp ~/.env . && docker compose up
-#
-# If that doesn't produce a working assistant, the task isn't done — regardless
-# of how well it runs in your own directory.
-# ---------------------------------------------------------------------------
+    # One index volume per image variant: full (PyTorch) and slim (ONNX) embeddings
+    # differ slightly, so switching variants must not re-embed over the other's index.
+    name: northwind_index_${API_VARIANT:-full}
