@@ -1,0 +1,16 @@
+# Service killed (SIGTERM) and restarted with 'make run'. Both starts LOAD the saved
+# index: '0 chunks embedded'. (The ~10 s startup is the embedding model loading, not embedding.)
+# --- first start (before the benchmark) ---
+INFO:     Started server process [7652]
+INFO:     Application startup complete.
+2026-11-16 09:46:33,911 INFO northwind: Index LOADED from /mnt/games/coding/My-Internship/week1/capstone_internal_docs_assistant/faiss_index in 0.02s: 20 chunks from 4 files, 0 chunks embedded
+2026-11-16 09:46:33,958 INFO northwind.api: API READY in 10.73s: index LOADED, 20 chunks from 4 documents, hybrid (BM25 + dense) retriever
+2026-11-16 09:51:27,608 INFO northwind.api: feedback trace_id=af1299e1-fe4e-4a41-832f-970b449fae8b rating=+1
+INFO:     Finished server process [7652]
+# --- killed, then restarted ---
+INFO:     Started server process [9118]
+INFO:     Application startup complete.
+2026-11-16 09:51:58,381 INFO northwind: Index LOADED from /mnt/games/coding/My-Internship/week1/capstone_internal_docs_assistant/faiss_index in 0.08s: 20 chunks from 4 files, 0 chunks embedded
+2026-11-16 09:51:58,447 INFO northwind.api: API READY in 7.89s: index LOADED, 20 chunks from 4 documents, hybrid (BM25 + dense) retriever
+# --- GET /readyz after restart ---
+{"status":"ready","graph_compiled":true,"index":"loaded","chunks":20,"documents":4,"retriever":"hybrid (BM25 + dense)","active_sessions":0,"startup_seconds":7.89}

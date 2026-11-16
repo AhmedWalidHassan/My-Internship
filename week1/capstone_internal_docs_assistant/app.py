@@ -600,19 +600,38 @@ class Assistant:
     def reset(self, session_id: str) -> None:
         self.sessions.pop(session_id, None)
 
-    def stream(self, question: str, session_id: str) -> Iterator[dict]:
-        """Yield {"event": "node", ...} per graph step, then one {"event": "final", ...}."""
+    def stream(self, question: str, session_id: str, *, run_id=None, tokens: bool = False,
+               metadata: dict = None) -> Iterator[dict]:
+        """Yield {"event": "node", ...} per graph step, then one {"event": "final", ...}.
+
+        tokens=True also yields {"event": "token", "text": ...} for every token the
+        `generate` node produces, as it is produced. Those tokens are a DRAFT: the
+        fact-check runs after them and may reject the draft (a later `generate` then
+        starts a new one). The answer in the final event is the authoritative one.
+
+        run_id becomes the id of the LangSmith root run, so a caller can attach
+        feedback to the trace without searching for it.
+        """
         inputs = {"raw_question": question, "history": self.history(session_id), "path": []}
         config = {
             "recursion_limit": 25,                       # safety net on top of MAX_RETRIES
             "run_name": "northwind_assistant",
             "tags": ["capstone"],
-            "metadata": {"session_id": session_id},
+            "metadata": {"session_id": session_id, **(metadata or {})},
         }
+        if run_id is not None:
+            config["run_id"] = uuid.UUID(str(run_id))
         docs, generation, path, retrieved, attempts = [], "", [], [], []
         standalone, retries = question, 0
 
-        for step in self.graph.stream(inputs, config=config, stream_mode="updates"):
+        modes = ["updates", "messages"] if tokens else ["updates"]
+        for mode, step in self.graph.stream(inputs, config=config, stream_mode=modes):
+            if mode == "messages":                       # (message chunk, metadata) from an LLM call
+                chunk, meta = step
+                text = getattr(chunk, "content", "")
+                if meta.get("langgraph_node") == "generate" and isinstance(text, str) and text:
+                    yield {"event": "token", "text": text}
+                continue
             for node, upd in step.items():
                 upd = upd or {}
                 path += upd.get("path", [])
@@ -665,19 +684,23 @@ class Assistant:
 class Backend:
     """Everything the UI / CLI needs, built once: index + retriever + graph + memory."""
 
-    def __init__(self, force_rebuild: bool = False):
+    def __init__(self, force_rebuild: bool = False, sessions=None):
+        """`sessions`: where conversation memory lives (any dict-like). Default: a plain
+        dict in this process. The HTTP service passes a store with a TTL."""
         from common.utils import get_llm, get_embeddings, DATA_DIR
 
         self.data_dir = Path(DATA_DIR)
         self.embeddings = get_embeddings()
         self.llm = get_llm()
         self.assistant = None
+        self._initial_sessions = sessions
         self.refresh(force=force_rebuild)
 
     def refresh(self, force: bool = False) -> None:
         self.store, self.ingest_stats = ingest(self.embeddings, self.data_dir, force=force)
         self.retriever, self.retriever_name = build_retriever(self.store)
-        sessions = self.assistant.sessions if self.assistant else None   # keep chats when docs change
+        # keep chats when docs change
+        sessions = self.assistant.sessions if self.assistant else self._initial_sessions
         self.assistant = Assistant(self.retriever, self.llm, sessions)
 
     @property
@@ -1032,7 +1055,7 @@ def run_ui():
                     for ev in backend.assistant.stream(prompt, st.session_state.session_id):
                         if ev["event"] == "node":
                             status.write(describe_step(ev["node"], ev["update"]))
-                        else:
+                        elif ev["event"] == "final":
                             final = ev
                     status.update(label="Done", state="complete", expanded=False)
                 answer = st.write_stream(_word_stream(final["answer"]))

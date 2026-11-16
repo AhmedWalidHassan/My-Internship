@@ -1,0 +1,92 @@
+# POST /chat/stream, raw SSE as received by `curl -N`. Each line is prefixed with the
+# wall-clock time it ARRIVED at the client (added by a `while read` loop after curl),
+# so incremental delivery is visible. Session "demo-curl" already asked about sick days,
+# so this follow-up also shows memory: "it" is resolved before the search.
+# Recorded 2026-11-16T09:46:59+02:00, local Ollama qwen3.5:4b, hybrid retriever.
+$ curl -N -s -X POST http://127.0.0.1:8000/chat/stream -H "content-type: application/json" \
+    -d '{"question": "When do I need a doctor's note for it?", "session_id": "demo-curl"}'
+
+09:46:59.861  event: status
+09:46:59.862  data: {"node":"contextualize","label":"✓ Understanding the question: “When do I need a doctor's note for the sick days?”","elapsed_ms":524}
+09:46:59.863  
+09:47:00.043  event: status
+09:47:00.043  data: {"node":"route_question","label":"✓ Deciding where to look: retrieve","elapsed_ms":705}
+09:47:00.044  
+09:47:00.053  event: status
+09:47:00.054  data: {"node":"retrieve","label":"✓ Searching the documents: 7 passages","elapsed_ms":716}
+09:47:00.055  
+09:47:00.843  event: status
+09:47:00.844  data: {"node":"grade_documents","label":"✓ Checking the results are relevant: kept 1","elapsed_ms":1506}
+09:47:00.845  
+09:47:00.993  event: token
+09:47:00.994  data: {"text":"You"}
+09:47:00.995  
+09:47:01.009  event: token
+09:47:01.009  data: {"text":" need"}
+09:47:01.010  
+09:47:01.023  event: token
+09:47:01.024  data: {"text":" a"}
+09:47:01.025  
+09:47:01.037  event: token
+09:47:01.038  data: {"text":" doctor"}
+09:47:01.038  
+09:47:01.054  event: token
+09:47:01.054  data: {"text":"'s"}
+09:47:01.055  
+09:47:01.069  event: token
+09:47:01.070  data: {"text":" note"}
+09:47:01.070  
+09:47:01.082  event: token
+09:47:01.083  data: {"text":" for"}
+09:47:01.084  
+09:47:01.097  event: token
+09:47:01.097  data: {"text":" abs"}
+09:47:01.098  
+09:47:01.111  event: token
+09:47:01.112  data: {"text":"ences"}
+09:47:01.112  
+09:47:01.126  event: token
+09:47:01.126  data: {"text":" longer"}
+09:47:01.127  
+09:47:01.140  event: token
+09:47:01.141  data: {"text":" than"}
+09:47:01.141  
+09:47:01.169  event: token
+09:47:01.170  data: {"text":" 3"}
+09:47:01.171  
+09:47:01.184  event: token
+09:47:01.185  data: {"text":" consecutive"}
+09:47:01.185  
+09:47:01.198  event: token
+09:47:01.199  data: {"text":" days"}
+09:47:01.200  
+09:47:01.213  event: token
+09:47:01.214  data: {"text":"."}
+09:47:01.214  
+09:47:01.242  event: token
+09:47:01.243  data: {"text":"\n\nSources"}
+09:47:01.244  
+09:47:01.257  event: token
+09:47:01.257  data: {"text":":"}
+09:47:01.258  
+09:47:01.271  event: token
+09:47:01.272  data: {"text":" employee"}
+09:47:01.273  
+09:47:01.286  event: token
+09:47:01.287  data: {"text":"_hand"}
+09:47:01.288  
+09:47:01.301  event: token
+09:47:01.301  data: {"text":"book"}
+09:47:01.302  
+09:47:01.315  event: token
+09:47:01.316  data: {"text":".md"}
+09:47:01.317  
+09:47:01.332  event: status
+09:47:01.332  data: {"node":"generate","label":"✓ Writing the answer","elapsed_ms":1994}
+09:47:01.333  
+09:47:02.027  event: status
+09:47:02.028  data: {"node":"grade_generation","label":"✓ Fact-checking the answer: passed","elapsed_ms":2690}
+09:47:02.028  
+09:47:02.029  event: done
+09:47:02.030  data: {"answer":"You need a doctor's note for absences longer than 3 consecutive days.","sources":["employee_handbook.md › 3. Sick Leave"],"node_path":["contextualize","route_question","retrieve","grade_documents","generate","grade_generation"],"session_id":"demo-curl","trace_id":"af1299e1-fe4e-4a41-832f-970b449fae8b","standalone_question":"When do I need a doctor's note for the sick days?","retries":0,"elapsed_ms":2691}
+09:47:02.031  

@@ -14,7 +14,6 @@ Streamlit runs it as a script, not as a package. So the tests load it the same
 way: from its file path (see `load_app`).
 """
 
-import importlib.util
 import os
 import socket
 import sys
@@ -58,17 +57,16 @@ def _fast_tier_is_offline(request, monkeypatch):
 # ---------------------------------------------------------------------------
 # The app module, loaded exactly the way `streamlit run app.py` loads it.
 # ---------------------------------------------------------------------------
-_APP_CACHE = {}
-
-
 def load_app():
-    """Import week1/capstone_internal_docs_assistant/app.py from its path (once)."""
-    if "app" not in _APP_CACHE:
-        spec = importlib.util.spec_from_file_location("capstone_app", APP_PATH)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        _APP_CACHE["app"] = module
-    return _APP_CACHE["app"]
+    """Import week1/capstone_internal_docs_assistant/app.py from its path (once).
+
+    Same loader as the HTTP service (app/capstone.py), so tests and service share
+    one module object: monkeypatching it in a test changes what the service runs.
+    """
+    from app.capstone import CAPSTONE_PATH, load_capstone
+
+    assert CAPSTONE_PATH == APP_PATH
+    return load_capstone()
 
 
 @pytest.fixture(scope="session")
@@ -248,24 +246,33 @@ def fake_embeddings():
 # The graph the APP actually uses.
 # ---------------------------------------------------------------------------
 @pytest.fixture
-def app_backend(app, temp_index_dir, fake_embeddings, monkeypatch):
-    """`Backend()` exactly as the Streamlit UI and CLI create it, with the model
-    and embeddings swapped for offline fakes.
+def make_backend(app, temp_index_dir, fake_embeddings, monkeypatch):
+    """Build `Backend()` exactly as the UI, CLI and API create it, with the model
+    (default: `scripted_llm`) and embeddings swapped for offline fakes.
 
     Backend imports get_llm / get_embeddings / DATA_DIR from `common.utils` when it
     is constructed, so a stand-in `common.utils` module is installed for the test.
     (The real one also loads week1/.env, which would put API keys back into the
     environment of a test that must not have any.)
     """
-    llm = scripted_llm(app)
-    fake_utils = types.ModuleType("common.utils")
-    fake_utils.get_llm = lambda *a, **k: llm
-    fake_utils.get_embeddings = lambda *a, **k: fake_embeddings
-    fake_utils.DATA_DIR = DATA_DIR
-    monkeypatch.setitem(sys.modules, "common.utils", fake_utils)
-    backend = app.Backend()
-    backend.fake_llm = llm
-    return backend
+    def build(llm=None, **backend_kwargs):
+        llm = llm if llm is not None else scripted_llm(app)
+        fake_utils = types.ModuleType("common.utils")
+        fake_utils.get_llm = lambda *a, **k: llm
+        fake_utils.get_embeddings = lambda *a, **k: fake_embeddings
+        fake_utils.DATA_DIR = DATA_DIR
+        monkeypatch.setitem(sys.modules, "common.utils", fake_utils)
+        backend = app.Backend(**backend_kwargs)
+        backend.fake_llm = llm
+        return backend
+
+    return build
+
+
+@pytest.fixture
+def app_backend(make_backend):
+    """`Backend()` as the app creates it, with the scripted fake model."""
+    return make_backend()
 
 
 @pytest.fixture

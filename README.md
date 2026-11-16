@@ -6,7 +6,9 @@ don't contain the answer, and it remembers the conversation.
 
 | Folder | What's in it |
 |---|---|
-| [`week1/`](week1/) | Tasks 1–8 and the capstone: [`week1/capstone_internal_docs_assistant/`](week1/capstone_internal_docs_assistant/) (see its README for **how to run the app**) |
+| [`app/`](app/) | The **HTTP service** (FastAPI, streaming, sessions) and the Streamlit UI that calls it. See [`app/README.md`](app/README.md) for endpoints and the streaming protocol |
+| [`scripts/`](scripts/) | Clients of the service, e.g. the latency benchmark |
+| [`week1/`](week1/) | Tasks 1–8 and the capstone: [`week1/capstone_internal_docs_assistant/`](week1/capstone_internal_docs_assistant/), where the RAG logic (index, graph, memory) lives |
 | [`week2/`](week2/) | Week 2 briefs, plus [`RESULTS.md`](week2/RESULTS.md) and [`COST.md`](week2/COST.md), where every measurement goes |
 | [`tests/`](tests/) | The test suite (fast tier and live tier) |
 | `week3/` | Week 3 briefs and corpus |
@@ -27,9 +29,12 @@ The Makefile uses `week1/.venv` automatically when it exists (override with `mak
 
 | Command | What it does | Needs |
 |---|---|---|
-| `make check` | Lint (ruff) plus the **fast** tests: graph wiring, prompts, memory wiring and index persistence, with a fake model. Under 5 s. Run before every PR. | Nothing: no API key, no network (the tests block both) |
-| `make check-live` | The **live** golden-path tests through the real app: cited answer, refusals, two-turn follow-up, session isolation, warm start, rewrite loop. About 70 s on local Ollama. | `week1/.env` and the model server running (e.g. `ollama serve`) |
-| `make run-ui` | Start the Streamlit chat UI | same as live |
+| `make check` | Lint (ruff) plus the **fast** tests: graph wiring, prompts, memory wiring, index persistence and the HTTP API (all endpoints, streaming, session isolation, error shape), with a fake model. Under 5 s. Run before every PR. | Nothing: no API key, no network (the tests block both) |
+| `make check-live` | The **live** golden-path tests through the real app: cited answer, refusals, two-turn follow-up, session isolation, warm start, rewrite loop, real token streaming through the API. About 60 s on local Ollama. | `week1/.env` and the model server running (e.g. `ollama serve`) |
+| `make run` | Start the API on http://127.0.0.1:8000 (OpenAPI docs at `/docs`) | same as live |
+| `make run-ui` | Start the Streamlit chat UI, which talks to the API over HTTP (start `make run` first) | a running API |
+| `make bench-api` | p50/p95 latency of `/chat` and `/chat/stream` over 20 questions | a running API |
+| `make run-ui-capstone` | The Week 1 Streamlit UI that runs the graph in-process (kept for reference) | same as live |
 | `make eval` | Run the LangSmith evaluation and update `EVAL_RESULTS.md` | same as live, plus a LangSmith key |
 | `make test-durations` | The fast tier with its 5 slowest tests listed | nothing |
 

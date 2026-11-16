@@ -5,12 +5,14 @@
 PY ?= $(if $(wildcard week1/.venv/bin/python),week1/.venv/bin/python,python)
 APP := week1/capstone_internal_docs_assistant/app.py
 
-.PHONY: help check check-live test-durations run run-ui eval cost fmt
+.PHONY: help check check-live test-durations run run-dev run-ui run-ui-capstone bench-api eval cost fmt
 
 help:
 	@echo "make check       lint + fast tests   (no API key, no network, < 5s)"
 	@echo "make check-live  live golden-path tests (real model calls; needs week1/.env + model server)"
-	@echo "make run-ui      start the Streamlit UI"
+	@echo "make run         start the API on http://127.0.0.1:8000  (docs at /docs)"
+	@echo "make run-ui      start the Streamlit UI (talks to the API over HTTP)"
+	@echo "make bench-api   p50/p95 latency of /chat and /chat/stream against a running API"
 	@echo "make eval        run the LangSmith eval suite"
 	@echo "make fmt         autofix lint"
 
@@ -28,16 +30,27 @@ test-durations:
 fmt:
 	$(PY) -m ruff check --fix .
 
-# --- Capstone (Week 1) ----------------------------------------------------
+# --- Task 3: the service --------------------------------------------------
+# 127.0.0.1 by default: the API has no auth yet. The container (Task 4) sets API_HOST=0.0.0.0.
+run:
+	$(PY) -m uvicorn app.main:app --host $${API_HOST:-127.0.0.1} --port $${API_PORT:-8000}
+
+run-dev:
+	$(PY) -m uvicorn app.main:app --reload --reload-dir app --host $${API_HOST:-127.0.0.1} --port $${API_PORT:-8000}
+
 run-ui:
+	$(PY) -m streamlit run app/ui.py
+
+bench-api:
+	$(PY) scripts/bench_api.py
+
+# --- Capstone (Week 1) ----------------------------------------------------
+run-ui-capstone:
 	$(PY) -m streamlit run $(APP)
 
 eval:
 	$(PY) $(APP) eval
 
-# --- Task 3 / Task 5 (not built yet) --------------------------------------
-run:
-	$(PY) -m uvicorn app.main:app --reload --host $${API_HOST:-0.0.0.0} --port $${API_PORT:-8000}
-
+# --- Task 5 (not built yet) -----------------------------------------------
 cost:
 	$(PY) scripts/cost_report.py
