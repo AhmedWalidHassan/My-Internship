@@ -1,2 +1,31 @@
-config.bat
-node_modules
+# Secrets and environments
+.env
+.venv/
+venv/
+
+# Python build artefacts
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.ruff_cache/
+.pytest_cache/
+
+# Generated vector indexes (rebuilt by `app.py ingest`)
+**/faiss_index/
+**/chroma_db/
+*.faiss
+*.pkl
+
+# Media: link demo recordings from the README instead of committing them
+*.mp4
+*.mov
+*.webm
+*.mkv
+*.avi
+*.mp3
+*.wav
+*.m4a
+
+# Tooling / OS
+node_modules/
+.DS_Store

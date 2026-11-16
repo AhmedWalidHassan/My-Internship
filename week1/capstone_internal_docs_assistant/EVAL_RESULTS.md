@@ -2,8 +2,8 @@
 
 <!-- AUTO:START -->
 ## Latest experiment
-- **Date:** 2026-11-08
-- **LangSmith experiment name/link:** capstone-91743e16 (dataset `northwind-capstone-eval`, smith.langchain.com → Datasets & Experiments)
+- **Date:** 2026-11-16
+- **LangSmith experiment:** [capstone-47ff55d7](https://smith.langchain.com/o/d25a7522-0a1b-46db-9753-429d87a65bfc/datasets/24ab974a-10a4-4542-ae66-c91e12f6390c/compare?selectedSessions=c7c7d723-29c5-486d-af5f-a92c6f88ba35) (dataset `northwind-capstone-eval`)
 - **Dataset size:** 28 examples (24 answerable + 4 out-of-scope)
 - **Retriever used:** hybrid (BM25 + dense)
 - **Model:** qwen3.5:4b
@@ -25,11 +25,18 @@ ANSWER: NO)
 <!-- AUTO:END -->
 
 ## Failure analysis
-- **Biggest failure mode observed:** (write this yourself from the list above and the LangSmith traces)
-- **Root cause (retrieval vs. generation vs. prompt):**
-- **What I would change next to fix it:**
 
-## Experiment log (optional but encouraged)
-| # | Change made | Correctness | Groundedness | Notes |
-|---|-------------|-------------|--------------|-------|
-| 1 | baseline | 0.75 | 1.00 | |
+The full analysis (the three examples that matter, root cause, and the prioritized fix list) is in
+[`FAILURE_ANALYSIS.md`](FAILURE_ANALYSIS.md). In short, the biggest failure mode is the
+**verification stage**, not retrieval: the same 4B model is relevance grader, in-graph fact-check
+and eval judge, and it is unreliable in both directions (it rejects supported answers and passes
+an invented one).
+
+## Experiment log
+
+| # | Date | Experiment | Change made | Correctness | Groundedness | Retrieval hit |
+|---|---|---|---|---:|---:|---:|
+| 1 | 2026-11-08 | `capstone-ffca2dcf` | baseline | 0.75 | 1.00 | 0.89 |
+| 2 | 2026-11-08 | `capstone-3c9b18b0` | router bias, inline-sources fix, fairer references and judge, strict grounding | 0.79 | 1.00 | 1.00 |
+| 3 | 2026-11-08 | `capstone-91743e16` | grader fallback, lenient grader, softer grounding | 0.96 | 0.96 | 1.00 |
+| 4 | 2026-11-16 | [`capstone-47ff55d7`](https://smith.langchain.com/o/d25a7522-0a1b-46db-9753-429d87a65bfc/datasets/24ab974a-10a4-4542-ae66-c91e12f6390c/compare?selectedSessions=c7c7d723-29c5-486d-af5f-a92c6f88ba35) | Week 2 Task 1 re-run (logging/config only, no behaviour change) | 0.96 | 0.96 | 1.00 |

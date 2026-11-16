@@ -33,7 +33,10 @@ def get_llm(temperature: float = 0.0, **kwargs):
 
     if provider == "openai":
         from langchain_openai import ChatOpenAI
+        # OPENAI_BASE_URL is a setting, not a constant: unset = the official API,
+        # or point it at any OpenAI-compatible server (Azure proxy, vLLM, LiteLLM...).
         return ChatOpenAI(model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
+                          base_url=os.getenv("OPENAI_BASE_URL") or None,
                           temperature=temperature, **kwargs)
     if provider == "groq":
         from langchain_groq import ChatGroq
@@ -41,7 +44,10 @@ def get_llm(temperature: float = 0.0, **kwargs):
                         temperature=temperature, **kwargs)
     if provider == "ollama":
         from langchain_ollama import ChatOllama
+        # OLLAMA_BASE_URL lets a container reach the host's Ollama
+        # (e.g. http://host.docker.internal:11434); unset = http://localhost:11434.
         return ChatOllama(model=os.getenv("OLLAMA_MODEL", "llama3.1"),
+                          base_url=os.getenv("OLLAMA_BASE_URL") or None,
                           temperature=temperature, reasoning=False, **kwargs)
     if provider == "huggingface":
         from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
@@ -61,7 +67,8 @@ def get_embeddings(**kwargs):
     if provider == "openai":
         from langchain_openai import OpenAIEmbeddings
         return OpenAIEmbeddings(
-            model=os.getenv("OPENAI_EMBED_MODEL", "text-embedding-3-small"), **kwargs)
+            model=os.getenv("OPENAI_EMBED_MODEL", "text-embedding-3-small"),
+            base_url=os.getenv("OPENAI_BASE_URL") or None, **kwargs)
     if provider in ("huggingface", "ollama", "groq"):
         # Groq has no embeddings API — fall back to a free local HF model.
         from langchain_huggingface import HuggingFaceEmbeddings

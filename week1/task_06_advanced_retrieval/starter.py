@@ -7,7 +7,9 @@ Implement the build_*_retriever functions, then run:
     python task_06_advanced_retrieval/starter.py
 """
 
+import functools
 import sys
+import time
 from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
@@ -26,18 +28,24 @@ def load_chunks():
 
 CHUNKS = load_chunks()
 
-def build_baseline_retriever(k=4):
+@functools.cache
+def get_store():
+    """Embed the corpus ONCE and share the FAISS store between every strategy.
+
+    Before (Week 2 Task 1 stretch), each build_*_retriever call built its own index,
+    so one benchmark run embedded the whole corpus 4 times."""
     from langchain_community.vectorstores import FAISS
-    store = FAISS.from_documents(CHUNKS, get_embeddings())
-    return store.as_retriever(search_kwargs={"k": k})
+    return FAISS.from_documents(CHUNKS, get_embeddings())
+
+
+def build_baseline_retriever(k=4):
+    return get_store().as_retriever(search_kwargs={"k": k})
 
 
 # --- YOUR WORK: implement these ----------------------------------------------
 def build_mmr_retriever(k=4):
     # TODO: same FAISS store but search_type="mmr".
-    from langchain_community.vectorstores import FAISS
-    store = FAISS.from_documents(CHUNKS, get_embeddings())
-    return store.as_retriever(search_type="mmr", search_kwargs={"k": k, "fetch_k": 20})
+    return get_store().as_retriever(search_type="mmr", search_kwargs={"k": k, "fetch_k": 20})
 
 
 def build_multiquery_retriever(k=4):
@@ -70,14 +78,24 @@ QUESTIONS = [
 
 def hit_rate(retriever):
     """Fraction of questions where a retrieved chunk came from a gold source file."""
-    hits = 0
+    return score(retriever)[0]
+
+
+def score(retriever):
+    """(hit_rate, MRR). MRR = mean of 1/rank of the first chunk from a gold file
+    (0 if none). Hit-rate ignores order; MRR rewards putting the right file FIRST.
+    Caveat: MultiQueryRetriever returns a de-duplicated union in query order, not a
+    ranking, so its MRR is only a rough signal."""
+    hits, rr = 0, 0.0
     for question, gold in QUESTIONS:
         gold_files = set(gold.split(","))
         docs = retriever.invoke(question)
-        sources = {Path(d.metadata.get("source", "")).name for d in docs}
-        if sources & gold_files:
+        ranks = [i for i, d in enumerate(docs, 1)
+                 if Path(d.metadata.get("source", "")).name in gold_files]
+        if ranks:
             hits += 1
-    return hits / len(QUESTIONS)
+            rr += 1 / ranks[0]
+    return hits / len(QUESTIONS), rr / len(QUESTIONS)
 
 
 if __name__ == "__main__":
@@ -87,11 +105,16 @@ if __name__ == "__main__":
         "multiquery": build_multiquery_retriever,
         "hybrid": build_hybrid_retriever,
     }
-    print(f"{'strategy':<14} hit_rate")
-    print("-" * 26)
+    t0 = time.perf_counter()
+    get_store()                                   # the only embedding pass of the corpus
+    print(f"index built once in {time.perf_counter() - t0:.2f}s ({len(CHUNKS)} chunks)\n")
+    print(f"{'strategy':<14} hit_rate   MRR   seconds")
+    print("-" * 40)
     for name, builder in strategies.items():
         try:
-            score = hit_rate(builder())
-            print(f"{name:<14} {score:.2f}")
+            t = time.perf_counter()
+            hr, mrr = score(builder())
+            print(f"{name:<14} {hr:8.2f} {mrr:5.2f} {time.perf_counter() - t:9.2f}")
         except NotImplementedError:
             print(f"{name:<14} (not implemented yet)")
+    print(f"\ntotal {time.perf_counter() - t0:.2f}s")
