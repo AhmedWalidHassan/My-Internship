@@ -186,19 +186,88 @@ live: 28.57s call   test_grounded_answer_with_citation   (includes Ollama loadin
 
 ## Task 3 — Service API
 
+Measured 2026-11-16 against `make run` (one uvicorn worker, local Ollama `qwen3.5:4b`,
+`OLLAMA_NUM_PARALLEL=1`, hybrid retriever) with `make bench-api`. The questions are the
+first 20 answerable questions of the capstone eval set, sent one at a time, each in a
+fresh session, after one warm-up request. Raw rows:
+[`evidence/task03/bench_sequential.json`](evidence/task03/bench_sequential.json).
+
 | Endpoint | p50 latency | p95 latency | n |
 |---|---:|---:|---:|
-| `POST /chat` | | | 20 |
-| `POST /chat/stream` (time to first token) | | | 20 |
-| `POST /chat/stream` (time to last token) | | | 20 |
+| `POST /chat` | 3.00 s | 7.93 s | 20 |
+| `POST /chat/stream` (time to first token) | 1.22 s | 3.29 s | 20 |
+| `POST /chat/stream` (time to last token) | 1.75 s | 6.46 s | 20 |
+| `POST /chat/stream` (time to `done`: fact-checked, final) | 3.02 s | 7.95 s | 20 |
+| `POST /chat/stream` (first `status` event) | 3 ms | 4 ms | 20 |
+
+- **Streaming doesn't make the answer faster: it makes it start sooner.** `done` takes
+  as long as `/chat` (3.02 s vs 3.00 s p50, mean 3.62 s vs 3.58 s), but the first words
+  appear 2.5× sooner, and the first status line appears after 3 ms instead of 3 s of
+  silence.
+- **The gap between the last token and `done` (median 1.0 s, range 0.6–2.5 s) is the fact-check.** It runs after
+  generation, so streamed tokens are a *draft*. When the check rejects one, the stream
+  sends a `retract` event (protocol: [`app/README.md`](../app/README.md)). This happened
+  4 times in 20 requests: once on "Can I take time off in my first months?" (the second draft
+  passed) and 3 times on "Do I need approval for a Figma license?". There the user watched
+  three drafts appear and vanish before the refusal. That's the known Figma fact-check
+  false negative (Task 1), and with streaming it is now **visible to the user**. Holding tokens
+  until the fact-check passes would remove it, but then time to first token equals time to
+  `done` and streaming would gain nothing.
+- **p95 is set by the rewrite loop.** 5/20 questions took a rewrite (the same 5 on both
+  endpoints). The 3 where only `grade_documents` rejected the documents have a time to first
+  token of 2.2–3.4 s: no token can flow until a search survives grading.
+- **Restart does not re-embed.** Killed with SIGTERM and restarted: both starts log
+  `Index LOADED … 0 chunks embedded` ([`evidence/task03/restart_no_reembed.log`](evidence/task03/restart_no_reembed.log)).
+  Startup is 8–11 s, and almost all of it is loading the embedding model. `/healthz` answers
+  during that time and `/readyz` returns 503.
+- **`/healthz`:** p50 0.40 ms, p95 0.83 ms, max 1.05 ms over 200 calls; no model call
+  (asserted by `tests/test_api.py::test_healthz_is_fast_and_never_calls_the_model`).
+  [`evidence/task03/healthz_timing.txt`](evidence/task03/healthz_timing.txt)
+- **Incremental streaming:** [`evidence/task03/curl_stream_transcript.txt`](evidence/task03/curl_stream_transcript.txt),
+  the raw `curl -N` output with each line's arrival time. Status lines arrive at 0.5 / 0.7 / 0.7 /
+  1.5 s, then 21 token events, about 16 ms apart, from 1.66 s to 1.98 s, then the `done` event at 2.69 s.
+- **trace_id = LangSmith root run.** Verified with the LangSmith client: the run
+  `af1299e1-…` from the transcript is a root `northwind_assistant` run carrying the
+  `session_id` and `request_id` in its metadata. The 👍 sent through `POST /feedback` is attached to it as
+  `user_rating = 1`.
+- **UI over HTTP only:** `grep -r "build_graph" app/ui.py` finds nothing, and
+  `test_ui_talks_to_the_api_only` pins its imports to `streamlit`, `httpx` and the stdlib. I drove
+  it headlessly (Streamlit `AppTest`) against the live API: a PTO question and the follow-up
+  "Can I carry it over to next year?" were answered with sources, the node path and 👍/👎 buttons.
+  After a simulated page refresh (same `?session=` in the URL), the conversation was redrawn from
+  `GET /session/{id}`.
 
 **Session isolation** — the test that proves it:
 
-> `tests/___::___`
+> `tests/test_api.py::test_two_sessions_hold_independent_conversations`
+>
+> Over HTTP, two interleaved sessions: B's first question ("Can I carry it over?") is
+> not rewritten (no contextualize call at all). A's follow-up is resolved using A's turn
+> only, and B's question does not appear in A's prompt. `GET /session/{id}` shows each its
+> own turns. `DELETE` of A clears only A, and a second `DELETE` is still a 200. (The
+> live tier's `test_sessions_are_isolated` checks the same thing with the real model.)
 
 **Concurrency (stretch):** 5 simultaneous requests — did latency degrade, and where?
 
->
+> Yes, badly per request, not at all in throughput. The same 5 questions took 20.0 s one
+> at a time and 18.9 s all at once. Per-request p50 went from 2.5 s to 14.2 s, and time to first
+> token from 1.2 s to 6.0 s. The per-node timings (from the stream's `status` events) show where:
+> every **LLM** node slowed 2.6–10× (`grade_documents` 0.79 → 3.14 s, `grade_generation`
+> 1.45 → 6.11 s, `rewrite_query` 0.37 → 3.71 s), while `retrieve`, which includes the
+> query embedding and the FAISS + BM25 search, stayed at 0.01–0.02 s. The session store
+> doesn't show up at all. So the bottleneck is the **LLM provider**: Ollama runs with
+> `OLLAMA_NUM_PARALLEL=1` and queues requests for the one loaded model. The service
+> adds no lock of its own (sync endpoints run in a 40-thread pool). With a hosted provider, the
+> same place would show up as rate-limit 429s instead of queueing. That's what Task 8's retry
+> and backoff are for. [`evidence/task03/bench_concurrency.json`](evidence/task03/bench_concurrency.json)
+
+**Found while doing this, not fixed (carried forward):**
+
+- **Conversations don't survive a restart** (and wouldn't be shared by two workers):
+  sessions live in the API process. See "two questions" in [`app/README.md`](../app/README.md).
+- **Open finding B from Task 1 still reproduces through the UI:** the follow-up was
+  understood as "Can unused PTO **up to 5 days** be carried into the next calendar year?",
+  so the contextualizer still copies facts from the previous answer into the question.
 
 ---
 

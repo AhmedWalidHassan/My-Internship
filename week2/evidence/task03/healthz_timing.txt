@@ -1,0 +1,4 @@
+GET /healthz x200 (httpx keep-alive, local): p50 0.40 ms, p95 0.83 ms, max 1.05 ms, mean 0.47 ms
+curl (new connection each time): 0.000732s
+curl (new connection each time): 0.000676s
+curl (new connection each time): 0.000641s

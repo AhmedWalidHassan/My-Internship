@@ -1,0 +1,521 @@
+{
+  "url": "http://127.0.0.1:8000",
+  "date": "2026-11-16 09:50:37",
+  "n": 20,
+  "concurrency": {
+    "sequential": [
+      {
+        "question": "How many vacation days do I get a year?",
+        "first_status_s": 0.003247325000074852,
+        "ttft_s": 1.1724717640001927,
+        "ttlt_s": 1.4629315199999837,
+        "done_s": 2.3230864920001295,
+        "tokens": 20,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            1
+          ],
+          [
+            "route_question",
+            179
+          ],
+          [
+            "retrieve",
+            186
+          ],
+          [
+            "grade_documents",
+            993
+          ],
+          [
+            "generate",
+            1479
+          ],
+          [
+            "grade_generation",
+            2320
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "time off carry rules?",
+        "first_status_s": 0.003692222999916339,
+        "ttft_s": 1.1790478819998498,
+        "ttlt_s": 2.0543492659999174,
+        "done_s": 4.058612642999833,
+        "tokens": 53,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            2
+          ],
+          [
+            "route_question",
+            177
+          ],
+          [
+            "retrieve",
+            184
+          ],
+          [
+            "grade_documents",
+            964
+          ],
+          [
+            "generate",
+            2068
+          ],
+          [
+            "grade_generation",
+            4055
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "Can I take time off in my first months?",
+        "first_status_s": 0.0035312009999870497,
+        "ttft_s": 1.2650492410000425,
+        "ttlt_s": 6.393585212000062,
+        "done_s": 8.89963302000001,
+        "tokens": 132,
+        "retracts": 1,
+        "nodes": [
+          [
+            "contextualize",
+            2
+          ],
+          [
+            "route_question",
+            178
+          ],
+          [
+            "retrieve",
+            185
+          ],
+          [
+            "grade_documents",
+            1043
+          ],
+          [
+            "generate",
+            2204
+          ],
+          [
+            "grade_generation",
+            3937
+          ],
+          [
+            "rewrite_query",
+            4308
+          ],
+          [
+            "retrieve",
+            4316
+          ],
+          [
+            "grade_documents",
+            5052
+          ],
+          [
+            "generate",
+            6407
+          ],
+          [
+            "grade_generation",
+            8896
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How far ahead do I have to ask for PTO?",
+        "first_status_s": 0.0031346200000825775,
+        "ttft_s": 1.3032714329999635,
+        "ttlt_s": 1.6949704769999698,
+        "done_s": 2.5388492080001015,
+        "tokens": 25,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            1
+          ],
+          [
+            "route_question",
+            179
+          ],
+          [
+            "retrieve",
+            189
+          ],
+          [
+            "grade_documents",
+            1101
+          ],
+          [
+            "generate",
+            1710
+          ],
+          [
+            "grade_generation",
+            2535
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How many sick days are there per year?",
+        "first_status_s": 0.0032318329999725393,
+        "ttft_s": 1.0838807860000088,
+        "ttlt_s": 1.333819806000065,
+        "done_s": 2.1569043480001255,
+        "tokens": 16,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            2
+          ],
+          [
+            "route_question",
+            198
+          ],
+          [
+            "retrieve",
+            208
+          ],
+          [
+            "grade_documents",
+            872
+          ],
+          [
+            "generate",
+            1348
+          ],
+          [
+            "grade_generation",
+            2154
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      }
+    ],
+    "parallel": [
+      {
+        "question": "How many vacation days do I get a year?",
+        "first_status_s": 0.013807557000063753,
+        "ttft_s": 7.653220960999988,
+        "ttlt_s": 7.948346141999991,
+        "done_s": 14.330697581999857,
+        "tokens": 20,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            7
+          ],
+          [
+            "route_question",
+            666
+          ],
+          [
+            "retrieve",
+            681
+          ],
+          [
+            "grade_documents",
+            4357
+          ],
+          [
+            "generate",
+            7959
+          ],
+          [
+            "grade_generation",
+            14322
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "time off carry rules?",
+        "first_status_s": 0.010584819000087009,
+        "ttft_s": 6.584807990999934,
+        "ttlt_s": 7.445726943999944,
+        "done_s": 14.217602213999953,
+        "tokens": 53,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            6
+          ],
+          [
+            "route_question",
+            511
+          ],
+          [
+            "retrieve",
+            530
+          ],
+          [
+            "grade_documents",
+            4217
+          ],
+          [
+            "generate",
+            7458
+          ],
+          [
+            "grade_generation",
+            14211
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "Can I take time off in my first months?",
+        "first_status_s": 0.01016534599989427,
+        "ttft_s": 4.905730995999875,
+        "ttlt_s": 16.390203806999807,
+        "done_s": 18.866491564999933,
+        "tokens": 132,
+        "retracts": 1,
+        "nodes": [
+          [
+            "contextualize",
+            6
+          ],
+          [
+            "route_question",
+            193
+          ],
+          [
+            "retrieve",
+            211
+          ],
+          [
+            "grade_documents",
+            3955
+          ],
+          [
+            "generate",
+            5851
+          ],
+          [
+            "grade_generation",
+            10274
+          ],
+          [
+            "rewrite_query",
+            13988
+          ],
+          [
+            "retrieve",
+            13999
+          ],
+          [
+            "grade_documents",
+            15040
+          ],
+          [
+            "generate",
+            16402
+          ],
+          [
+            "grade_generation",
+            18860
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How far ahead do I have to ask for PTO?",
+        "first_status_s": 0.0116988479999236,
+        "ttft_s": 6.007870568999806,
+        "ttlt_s": 6.398999437999919,
+        "done_s": 14.100989353999921,
+        "tokens": 25,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            4
+          ],
+          [
+            "route_question",
+            350
+          ],
+          [
+            "retrieve",
+            372
+          ],
+          [
+            "grade_documents",
+            4084
+          ],
+          [
+            "generate",
+            6407
+          ],
+          [
+            "grade_generation",
+            14092
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How many sick days are there per year?",
+        "first_status_s": 0.01693095800010269,
+        "ttft_s": 4.4275121440000476,
+        "ttlt_s": 4.677846748000093,
+        "done_s": 13.668301166999981,
+        "tokens": 16,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            11
+          ],
+          [
+            "route_question",
+            827
+          ],
+          [
+            "retrieve",
+            833
+          ],
+          [
+            "grade_documents",
+            3811
+          ],
+          [
+            "generate",
+            4688
+          ],
+          [
+            "grade_generation",
+            13660
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      }
+    ],
+    "wall_s": 18.870799480000187,
+    "errors": [],
+    "table": [
+      "| | one at a time (x5) | 5 at once |",
+      "|---|---:|---:|",
+      "| wall clock for all 5 | 20.0 s | 18.9 s |",
+      "| per-request latency p50 (to `done`) | 2.5 s | 14.2 s |",
+      "| per-request latency max | 8.9 s | 18.9 s |",
+      "| time to first token p50 | 1.2 s | 6.0 s |",
+      "",
+      "| node (mean seconds per call) | one at a time | at once | slowdown |",
+      "|---|---:|---:|---:|",
+      "| `contextualize` | 0.00 | 0.01 | nanx |",
+      "| `route_question` | 0.18 | 0.50 | 2.8x |",
+      "| `retrieve` | 0.01 | 0.02 | 1.9x |",
+      "| `grade_documents` | 0.79 | 3.14 | 4.0x |",
+      "| `generate` | 0.87 | 2.22 | 2.6x |",
+      "| `grade_generation` | 1.45 | 6.11 | 4.2x |",
+      "| `rewrite_query` | 0.37 | 3.71 | 10.0x |"
+    ]
+  }
+}

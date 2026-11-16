@@ -1,0 +1,1374 @@
+{
+  "url": "http://127.0.0.1:8000",
+  "date": "2026-11-16 09:47:55",
+  "n": 20,
+  "sequential": {
+    "chat": [
+      {
+        "question": "How many vacation days do I get a year?",
+        "total_s": 2.308053534999999,
+        "server_ms": 2306,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "time off carry rules?",
+        "total_s": 3.978296580999995,
+        "server_ms": 3976,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "Can I take time off in my first months?",
+        "total_s": 8.743799407000097,
+        "server_ms": 8742,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How far ahead do I have to ask for PTO?",
+        "total_s": 2.376669277000019,
+        "server_ms": 2374,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How many sick days are there per year?",
+        "total_s": 2.052945536999914,
+        "server_ms": 2050,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "When do I need a doctor's note?",
+        "total_s": 2.1874421590000566,
+        "server_ms": 2185,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How many days a week can I work from home?",
+        "total_s": 2.805496342999959,
+        "server_ms": 2803,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "What is the home-office stipend?",
+        "total_s": 2.1689460299999155,
+        "server_ms": 2167,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How long is paid leave for an adoptive parent?",
+        "total_s": 3.1222828039999513,
+        "server_ms": 3120,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "What is the daily meal limit when travelling abroad?",
+        "total_s": 3.048797853999986,
+        "server_ms": 3046,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "Is alcohol reimbursable?",
+        "total_s": 4.4371273860001565,
+        "server_ms": 4435,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How long do I have to file an expense report?",
+        "total_s": 2.429665378999971,
+        "server_ms": 2427,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How much is the referral bonus and when is it paid?",
+        "total_s": 2.6723437919999924,
+        "server_ms": 2670,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How often are performance reviews held?",
+        "total_s": 2.52698465200001,
+        "server_ms": 2525,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "What is my annual learning budget?",
+        "total_s": 3.1659080150000136,
+        "server_ms": 3164,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "My laptop got stolen, what do I do?",
+        "total_s": 3.034909396999865,
+        "server_ms": 3033,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "What are the password rules?",
+        "total_s": 2.959868436000079,
+        "server_ms": 2958,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How do I get on the VPN from home?",
+        "total_s": 4.3880448899999465,
+        "server_ms": 4386,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "Can I open our source code on my personal phone?",
+        "total_s": 5.304665877999923,
+        "server_ms": 5302,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "Do I need approval for a Figma license?",
+        "total_s": 7.8824012850000145,
+        "server_ms": 7877,
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation",
+          "refuse"
+        ],
+        "refused": true
+      }
+    ],
+    "stream": [
+      {
+        "question": "How many vacation days do I get a year?",
+        "first_status_s": 0.008992442999897321,
+        "ttft_s": 1.2284417439998379,
+        "ttlt_s": 1.5238152039999022,
+        "done_s": 2.410207423999964,
+        "tokens": 20,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            3
+          ],
+          [
+            "route_question",
+            186
+          ],
+          [
+            "retrieve",
+            192
+          ],
+          [
+            "grade_documents",
+            1034
+          ],
+          [
+            "generate",
+            1534
+          ],
+          [
+            "grade_generation",
+            2402
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "time off carry rules?",
+        "first_status_s": 0.004031376999819258,
+        "ttft_s": 1.1538451279998299,
+        "ttlt_s": 2.0305614549999973,
+        "done_s": 4.065331085000025,
+        "tokens": 53,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            2
+          ],
+          [
+            "route_question",
+            180
+          ],
+          [
+            "retrieve",
+            186
+          ],
+          [
+            "grade_documents",
+            960
+          ],
+          [
+            "generate",
+            2044
+          ],
+          [
+            "grade_generation",
+            4061
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "Can I take time off in my first months?",
+        "first_status_s": 0.003850972999998703,
+        "ttft_s": 1.278214010000056,
+        "ttlt_s": 6.440826052000148,
+        "done_s": 8.97525957500011,
+        "tokens": 132,
+        "retracts": 1,
+        "nodes": [
+          [
+            "contextualize",
+            2
+          ],
+          [
+            "route_question",
+            180
+          ],
+          [
+            "retrieve",
+            186
+          ],
+          [
+            "grade_documents",
+            1037
+          ],
+          [
+            "generate",
+            2230
+          ],
+          [
+            "grade_generation",
+            3974
+          ],
+          [
+            "rewrite_query",
+            4347
+          ],
+          [
+            "retrieve",
+            4354
+          ],
+          [
+            "grade_documents",
+            5094
+          ],
+          [
+            "generate",
+            6455
+          ],
+          [
+            "grade_generation",
+            8972
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How far ahead do I have to ask for PTO?",
+        "first_status_s": 0.002861159000076441,
+        "ttft_s": 1.1938423940000575,
+        "ttlt_s": 1.5933769490000032,
+        "done_s": 2.4214586040000086,
+        "tokens": 25,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            1
+          ],
+          [
+            "route_question",
+            181
+          ],
+          [
+            "retrieve",
+            186
+          ],
+          [
+            "grade_documents",
+            1016
+          ],
+          [
+            "generate",
+            1608
+          ],
+          [
+            "grade_generation",
+            2418
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How many sick days are there per year?",
+        "first_status_s": 0.0030089970000517496,
+        "ttft_s": 1.0261715459998868,
+        "ttlt_s": 1.2815023819998714,
+        "done_s": 2.0980536519998623,
+        "tokens": 16,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            1
+          ],
+          [
+            "route_question",
+            181
+          ],
+          [
+            "retrieve",
+            187
+          ],
+          [
+            "grade_documents",
+            831
+          ],
+          [
+            "generate",
+            1295
+          ],
+          [
+            "grade_generation",
+            2095
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "When do I need a doctor's note?",
+        "first_status_s": 0.0032168579998597124,
+        "ttft_s": 1.235391047999883,
+        "ttlt_s": 1.5624150819999159,
+        "done_s": 2.297731876999933,
+        "tokens": 21,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            1
+          ],
+          [
+            "route_question",
+            178
+          ],
+          [
+            "retrieve",
+            185
+          ],
+          [
+            "grade_documents",
+            1054
+          ],
+          [
+            "generate",
+            1577
+          ],
+          [
+            "grade_generation",
+            2294
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How many days a week can I work from home?",
+        "first_status_s": 0.0031318569999712054,
+        "ttft_s": 1.258238130999871,
+        "ttlt_s": 1.7513099509999392,
+        "done_s": 2.8847297769998477,
+        "tokens": 32,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            1
+          ],
+          [
+            "route_question",
+            180
+          ],
+          [
+            "retrieve",
+            187
+          ],
+          [
+            "grade_documents",
+            1048
+          ],
+          [
+            "generate",
+            1765
+          ],
+          [
+            "grade_generation",
+            2881
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "What is the home-office stipend?",
+        "first_status_s": 0.003201643000011245,
+        "ttft_s": 1.199893647999943,
+        "ttlt_s": 1.5918144469999334,
+        "done_s": 2.2450257859998146,
+        "tokens": 26,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            1
+          ],
+          [
+            "route_question",
+            180
+          ],
+          [
+            "retrieve",
+            186
+          ],
+          [
+            "grade_documents",
+            1022
+          ],
+          [
+            "generate",
+            1607
+          ],
+          [
+            "grade_generation",
+            2242
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How long is paid leave for an adoptive parent?",
+        "first_status_s": 0.004054338999821994,
+        "ttft_s": 1.213221441999849,
+        "ttlt_s": 1.7417789759999778,
+        "done_s": 3.215847106999945,
+        "tokens": 34,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            2
+          ],
+          [
+            "route_question",
+            187
+          ],
+          [
+            "retrieve",
+            194
+          ],
+          [
+            "grade_documents",
+            1056
+          ],
+          [
+            "generate",
+            1756
+          ],
+          [
+            "grade_generation",
+            3212
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "What is the daily meal limit when travelling abroad?",
+        "first_status_s": 0.003428816999985429,
+        "ttft_s": 2.2039581689998613,
+        "ttlt_s": 2.5253639779998593,
+        "done_s": 3.1280154339999626,
+        "tokens": 22,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            2
+          ],
+          [
+            "route_question",
+            182
+          ],
+          [
+            "retrieve",
+            189
+          ],
+          [
+            "grade_documents",
+            1049
+          ],
+          [
+            "rewrite_query",
+            1295
+          ],
+          [
+            "retrieve",
+            1301
+          ],
+          [
+            "grade_documents",
+            2029
+          ],
+          [
+            "generate",
+            2539
+          ],
+          [
+            "grade_generation",
+            3124
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "Is alcohol reimbursable?",
+        "first_status_s": 0.0033520779998070793,
+        "ttft_s": 3.285752309999907,
+        "ttlt_s": 3.5110096819998944,
+        "done_s": 4.465603500999805,
+        "tokens": 15,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            1
+          ],
+          [
+            "route_question",
+            181
+          ],
+          [
+            "retrieve",
+            187
+          ],
+          [
+            "grade_documents",
+            1044
+          ],
+          [
+            "rewrite_query",
+            1308
+          ],
+          [
+            "retrieve",
+            1314
+          ],
+          [
+            "grade_documents",
+            2134
+          ],
+          [
+            "rewrite_query",
+            2440
+          ],
+          [
+            "retrieve",
+            2446
+          ],
+          [
+            "grade_documents",
+            3062
+          ],
+          [
+            "generate",
+            3527
+          ],
+          [
+            "grade_generation",
+            4462
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How long do I have to file an expense report?",
+        "first_status_s": 0.0027852749999510706,
+        "ttft_s": 1.280383860000029,
+        "ttlt_s": 1.6416314000000511,
+        "done_s": 2.4309506980000606,
+        "tokens": 24,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            1
+          ],
+          [
+            "route_question",
+            183
+          ],
+          [
+            "retrieve",
+            189
+          ],
+          [
+            "grade_documents",
+            1112
+          ],
+          [
+            "generate",
+            1657
+          ],
+          [
+            "grade_generation",
+            2428
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How much is the referral bonus and when is it paid?",
+        "first_status_s": 0.0029026679999333282,
+        "ttft_s": 1.1485523719998127,
+        "ttlt_s": 1.7294823089998772,
+        "done_s": 2.6477567319998343,
+        "tokens": 38,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            1
+          ],
+          [
+            "route_question",
+            183
+          ],
+          [
+            "retrieve",
+            189
+          ],
+          [
+            "grade_documents",
+            991
+          ],
+          [
+            "generate",
+            1747
+          ],
+          [
+            "grade_generation",
+            2645
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How often are performance reviews held?",
+        "first_status_s": 0.003917712999964351,
+        "ttft_s": 1.2018110980000074,
+        "ttlt_s": 1.4875218409999889,
+        "done_s": 2.4947217530000216,
+        "tokens": 19,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            2
+          ],
+          [
+            "route_question",
+            179
+          ],
+          [
+            "retrieve",
+            185
+          ],
+          [
+            "grade_documents",
+            1047
+          ],
+          [
+            "generate",
+            1503
+          ],
+          [
+            "grade_generation",
+            2491
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "What is my annual learning budget?",
+        "first_status_s": 0.0033533690000240313,
+        "ttft_s": 1.2130568709999352,
+        "ttlt_s": 1.9897436430001108,
+        "done_s": 3.151742330000161,
+        "tokens": 50,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            2
+          ],
+          [
+            "route_question",
+            178
+          ],
+          [
+            "retrieve",
+            184
+          ],
+          [
+            "grade_documents",
+            1049
+          ],
+          [
+            "generate",
+            2006
+          ],
+          [
+            "grade_generation",
+            3149
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "My laptop got stolen, what do I do?",
+        "first_status_s": 0.0035402590001467615,
+        "ttft_s": 0.9664476150001065,
+        "ttlt_s": 1.6923136150001028,
+        "done_s": 3.064014694999969,
+        "tokens": 47,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            2
+          ],
+          [
+            "route_question",
+            184
+          ],
+          [
+            "retrieve",
+            191
+          ],
+          [
+            "grade_documents",
+            784
+          ],
+          [
+            "generate",
+            1708
+          ],
+          [
+            "grade_generation",
+            3061
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "What are the password rules?",
+        "first_status_s": 0.003170877999991717,
+        "ttft_s": 1.3276667200000247,
+        "ttlt_s": 1.9807936120000704,
+        "done_s": 2.9681086410000717,
+        "tokens": 39,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            1
+          ],
+          [
+            "route_question",
+            178
+          ],
+          [
+            "retrieve",
+            184
+          ],
+          [
+            "grade_documents",
+            1122
+          ],
+          [
+            "generate",
+            1995
+          ],
+          [
+            "grade_generation",
+            2964
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "How do I get on the VPN from home?",
+        "first_status_s": 0.0036250820000987005,
+        "ttft_s": 1.0763990360001117,
+        "ttlt_s": 1.9602308770001855,
+        "done_s": 4.362219806000212,
+        "tokens": 57,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            2
+          ],
+          [
+            "route_question",
+            181
+          ],
+          [
+            "retrieve",
+            189
+          ],
+          [
+            "grade_documents",
+            898
+          ],
+          [
+            "generate",
+            1975
+          ],
+          [
+            "grade_generation",
+            4359
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "Can I open our source code on my personal phone?",
+        "first_status_s": 0.0030197190001217677,
+        "ttft_s": 3.3770343090000097,
+        "ttlt_s": 3.975607337999918,
+        "done_s": 5.194519521000075,
+        "tokens": 40,
+        "retracts": 0,
+        "nodes": [
+          [
+            "contextualize",
+            1
+          ],
+          [
+            "route_question",
+            180
+          ],
+          [
+            "retrieve",
+            186
+          ],
+          [
+            "grade_documents",
+            1000
+          ],
+          [
+            "rewrite_query",
+            1294
+          ],
+          [
+            "retrieve",
+            1301
+          ],
+          [
+            "grade_documents",
+            2104
+          ],
+          [
+            "rewrite_query",
+            2412
+          ],
+          [
+            "retrieve",
+            2418
+          ],
+          [
+            "grade_documents",
+            3133
+          ],
+          [
+            "generate",
+            3990
+          ],
+          [
+            "grade_generation",
+            5191
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation"
+        ],
+        "refused": false
+      },
+      {
+        "question": "Do I need approval for a Figma license?",
+        "first_status_s": 0.003518871000096624,
+        "ttft_s": 1.2332206490000317,
+        "ttlt_s": 6.858768122000129,
+        "done_s": 7.893899576000194,
+        "tokens": 111,
+        "retracts": 3,
+        "nodes": [
+          [
+            "contextualize",
+            2
+          ],
+          [
+            "route_question",
+            179
+          ],
+          [
+            "retrieve",
+            185
+          ],
+          [
+            "grade_documents",
+            1080
+          ],
+          [
+            "generate",
+            1806
+          ],
+          [
+            "grade_generation",
+            2895
+          ],
+          [
+            "rewrite_query",
+            3113
+          ],
+          [
+            "retrieve",
+            3119
+          ],
+          [
+            "grade_documents",
+            3794
+          ],
+          [
+            "generate",
+            4415
+          ],
+          [
+            "grade_generation",
+            5431
+          ],
+          [
+            "rewrite_query",
+            5663
+          ],
+          [
+            "retrieve",
+            5669
+          ],
+          [
+            "grade_documents",
+            6271
+          ],
+          [
+            "generate",
+            6874
+          ],
+          [
+            "grade_generation",
+            7889
+          ],
+          [
+            "refuse",
+            7890
+          ]
+        ],
+        "path": [
+          "contextualize",
+          "route_question",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation",
+          "rewrite_query",
+          "retrieve",
+          "grade_documents",
+          "generate",
+          "grade_generation",
+          "refuse"
+        ],
+        "refused": true
+      }
+    ],
+    "table": [
+      "| Endpoint | p50 latency | p95 latency | n |",
+      "|---|---:|---:|---:|",
+      "| `POST /chat` | 2,997 ms | 7,925 ms | 20 |",
+      "| `POST /chat/stream` (time to first token) | 1,221 ms | 3,290 ms | 20 |",
+      "| `POST /chat/stream` (time to last token) | 1,747 ms | 6,462 ms | 20 |",
+      "| `POST /chat/stream` (time to `done`, answer final) | 3,016 ms | 7,948 ms | 20 |",
+      "| `POST /chat/stream` (first status event) | 3 ms | 4 ms | 20 |"
+    ],
+    "extra": {
+      "chat_mean_s": 3.579732431849993,
+      "stream_done_mean_s": 3.6207598786999937,
+      "stream_without_tokens": [],
+      "stream_retracts": 4,
+      "chat_paths_with_rewrite": 5,
+      "stream_paths_with_rewrite": 5
+    }
+  }
+}
