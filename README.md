@@ -42,6 +42,7 @@ chunking, index path, API host and port. Switching provider is an `.env` edit; s
 | `make bench-api` | p50/p95 latency of `/chat` and `/chat/stream` over 20 questions | a running API |
 | `make cost` | Runs the eval set through the service code and prints latency, LLM calls, tokens and cost per question, per graph node and per node path, plus the monthly projection ([Task 5](week2/task_05_observability/OBSERVABILITY.md)) | same as live |
 | `make find-trace RID=<request_id>` | The LangSmith trace of a request, from the `request_id` in its log line | a LangSmith key |
+| `make cache-bench MODE=cold-warm\|workload\|prewarm` | Proves the answer cache's savings: cold vs warm, hit rate on a defined workload, startup pre-warm ([Task 6](week2/task_06_caching/CACHING.md)) | same as live |
 | `make run-ui-capstone` | The Week 1 Streamlit UI that runs the graph in-process (kept for reference) | same as live |
 | `make eval` | Run the LangSmith evaluation and update `EVAL_RESULTS.md` | same as live, plus a LangSmith key |
 | `make test-durations` | The fast tier with its 5 slowest tests listed | nothing |

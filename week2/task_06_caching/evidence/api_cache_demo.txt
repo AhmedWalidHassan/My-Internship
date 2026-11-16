@@ -1,0 +1,26 @@
+# API demo 2026-11-16T12:13:44+02:00: same question twice (2nd as a trivial variant, other session), then a follow-up
+cache-demo-1: 200 3.160715s
+cache-demo-2: 200 0.001824s
+cache-demo-3: 200 2.595571s
+# request log lines (selected fields):
+{"request_id": "cache-demo-1", "session_id": "alice", "cache_hit": false, "route": "retrieve", "node_path": ["contextualize", "route_question", "retrieve", "grade_documents", "generate", "grade_generation"], "latency_ms": 3143, "llm_calls": 10, "estimated_cost_usd": 0.000339, "cached_from_trace_id": null}
+{"request_id": "cache-demo-2", "session_id": "bob", "cache_hit": true, "route": "cache", "node_path": ["cache"], "latency_ms": 0, "llm_calls": 0, "estimated_cost_usd": 0.0, "cached_from_trace_id": "edf932a8-a969-4f3a-a997-3e5a20005a13"}
+{"request_id": "cache-demo-3", "session_id": "bob", "cache_hit": false, "route": "retrieve", "node_path": ["contextualize", "route_question", "retrieve", "grade_documents", "generate", "grade_generation"], "latency_ms": 2593, "llm_calls": 11, "estimated_cost_usd": 0.000337, "cached_from_trace_id": null}
+# GET /metrics (cache lines):
+northwind_requests_total{endpoint="chat",status="ok"} 3.0
+northwind_cache_hits_total 1.0
+northwind_cache_hits_created 1.794824011932342e+09
+northwind_cache_hit_rate 0.3333333333333333
+northwind_cache_entries 1.0
+northwind_cache_invalidations 0.0
+northwind_cache_enabled 1.0
+northwind_embedding_cache_hits 0.0
+northwind_embedding_cache_misses 2.0
+# startup: 2026-11-16 12:13:32,806 INFO northwind.api: config: llm=ollama:qwen3.5:4b base_url=http://172.17.0.1:11434 embeddings=ollama k=4 chunks=800/100 index=/mnt/games/coding/My-Internship/week1/capstone_internal_doc
+found in 2.09 s via request_id metadata search
+  run:        northwind_assistant  (root: True)  status: success
+  trace_id:   c67bf422-9b0c-4c97-a945-ffcdc7d68e6d
+  request_id: cache-demo-2   session_id: bob
+  started:    2026-11-16 10:13:48.069443+00:00
+  url:        https://smith.langchain.com/o/d25a7522-0a1b-46db-9753-429d87a65bfc/projects/p/d9b175d7-527e-45d2-bf7f-84e3376a8f76/r/c67bf422-9b0c-4c97-a945-ffcdc7d68e6d?poll=true
+  cache-hit run: tags=['cache_hit', 'capstone'] cache_hit=True cached_from_trace_id=edf932a8-a969-4f3a-a997-3e5a20005a13

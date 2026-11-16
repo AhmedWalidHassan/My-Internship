@@ -5,7 +5,7 @@
 PY ?= $(if $(wildcard week1/.venv/bin/python),week1/.venv/bin/python,python)
 APP := week1/capstone_internal_docs_assistant/app.py
 
-.PHONY: help check check-live test-durations run run-dev run-ui run-ui-capstone bench-api up down logs eval cost find-trace fmt
+.PHONY: help check check-live test-durations run run-dev run-ui run-ui-capstone bench-api up down logs eval cost find-trace cache-bench fmt
 
 help:
 	@echo "make check       lint + fast tests   (no API key, no network, < 5s)"
@@ -16,6 +16,7 @@ help:
 	@echo "make up / down   API + UI in docker compose (week2/task_04_containerize/), logs: make logs"
 	@echo "make cost        cost/latency per question, per node and per path over the eval set"
 	@echo "make find-trace RID=<request_id>   LangSmith trace URL for a request log line"
+	@echo "make cache-bench MODE=cold-warm|workload|prewarm   prove the cache's savings"
 	@echo "make eval        run the LangSmith eval suite"
 	@echo "make fmt         autofix lint"
 
@@ -74,3 +75,7 @@ cost:          ## run the eval questions and print cost/latency per question, no
 
 find-trace:    ## make find-trace RID=<request_id>  ->  the LangSmith trace URL
 	$(PY) week2/task_05_observability/scripts/find_trace.py $(RID)
+
+# --- Task 6: caching (files in week2/task_06_caching/) --------------------
+cache-bench:   ## make cache-bench MODE=cold-warm|workload|prewarm
+	$(PY) week2/task_06_caching/scripts/cache_benchmark.py $(or $(MODE),cold-warm)

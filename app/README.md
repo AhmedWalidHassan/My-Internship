@@ -62,6 +62,12 @@ Model and LangSmith settings are unchanged: `week1/.env` (see the capstone READM
 `/chat` and `done` also report what the answer cost: `llm_calls`, `tokens_in`, `tokens_out`,
 `estimated_cost_usd` (tokens × `COST_PER_1K_*_TOKENS`).
 
+**Answer cache** ([`cache.py`](cache.py), Task 6): a session's *first* question is looked up by
+normalised text + corpus version + config fingerprint. A hit returns `cache_hit: true`,
+`node_path: ["cache"]`, `llm_calls: 0` and `cached_from_trace_id`, in under 1 ms. Follow-ups always
+run the graph. Adding or changing a document invalidates every entry. Refusals expire after 5 min.
+`CACHE_ENABLED=false` turns it off. Design and numbers: [`week2/task_06_caching/CACHING.md`](../week2/task_06_caching/CACHING.md).
+
 ### One log line per request
 
 Every request (ok, error, or a stream the client abandoned) writes **one** JSON line to stdout

@@ -70,18 +70,51 @@ real conversation, a follow-up adds one call of ~150 tokens. The rows sum to 12.
 
 Same 20 examples, cold cache vs warm cache.
 
+Measured 2026-11-16 with `make cache-bench MODE=cold-warm`: the first 20 answerable eval
+questions, each in a fresh session, through the service code path (`ChatService`) on local
+`qwen3.5:4b`, priced at gpt-4o-mini rates. Pass 1 started with an empty answer cache and a fresh
+embedding cache; pass 2 reused what pass 1 left. Write-up:
+[`task_06_caching/CACHING.md`](task_06_caching/CACHING.md).
+
 | | Mean latency | p95 latency | Mean cost / question | Total run cost |
 |---|---:|---:|---:|---:|
-| Cold cache (no reuse) | | | | |
-| Warm cache (second run) | | | | |
-| **Delta** | | | | |
+| Cold cache (no reuse) | 3.64 s | 7.89 s | $0.000444 | $0.008886 (255 LLM calls) |
+| Warm cache (second run) | <1 ms (1.8 ms over HTTP) | <1 ms | $0 | $0 (0 LLM calls) |
+| **Delta** | **−3.64 s (−100%)** | **−7.89 s** | **−$0.000444** | **−$0.008886** |
 
-**Cache hit rate:** `___`
+**Cache hit rate:** **72%** (87 of 120) on a repeated-question workload I defined: Zipf-like
+popularity over the 28 eval questions; 60% exact wording, 25% trivial variants, 15% paraphrases;
+10% follow-ups. Every miss is explained:
+- first time a question was asked: 15%;
+- follow-ups, which are never cached by design: 9%;
+- paraphrases, which only a semantic cache could catch: 3%.
+
+LLM spend on that workload: **$0.0181 with the cache vs $0.0657 without (−72%)**. Applied to the
+Task 5 projection, $12.99/month at 1,000 questions/day would become about **$3.60/month**, *if*
+real traffic repeats as much as this workload does ([`evidence/workload_hit_rate.md`](task_06_caching/evidence/workload_hit_rate.md)).
 
 **Was it worth it?** One honest paragraph — including the cases where caching is
 the wrong answer:
 
+> **Yes, the answer cache, because what it saves is the whole pipeline.** A hit replaces 9–25 LLM
+> calls and 2–8 s with a sub-millisecond lookup, so savings track the hit rate almost one to one
+> (72% → −72% spend). The pipeline is so expensive that even modest repetition pays. But the number
+> is only as good as the workload: 28 questions repeated 120 times is kinder than 200 employees
+> phrasing things their own way, and **paraphrases and follow-ups never hit**. Caching is the
+> **wrong answer** in three places:
+> 1. **Follow-ups.** "Can I carry it over?" means something different in every conversation, so
+>    only a session's first question is cacheable.
+> 2. **False refusals.** In the cold/warm run the Figma question's false refusal (a 4B fact-check
+>    error) was cached and re-served. Refusals therefore get a 5-minute TTL instead of an hour, and
+>    any document change invalidates everything.
+> 3. **Semantic matching on this corpus.** "rover speed *with* a load" vs "*without* a load" scores
+>    0.977 cosine (1.8 vs 2.2 m/s), higher than every true paraphrase. "vacation days" vs "PTO"
+>    scores 0.186.
 >
+> The **embedding cache** is a different story. Locally it barely matters: queries rarely repeat
+> once the answer cache absorbs repeats (5 hits / 52 misses), and the index is already persisted.
+> Its job is rebuilds: a full `--rebuild` went from 20 embeddings (0.68 s) to **0** (0.004 s).
+> With a paid embedding API, that's every rebuild's embedding bill.
 
 ---
 
@@ -145,7 +178,7 @@ Fill one row per merged PR. "No change" is a valid and useful entry.
 | #3 | Task 3 service API | per question: none (`/chat` p50 3.00 s, `/chat/stream` `done` p50 3.02 s; HTTP layer ≈ 0.4 ms, see `/healthz`). Time to first token 1.22 s instead of 3.00 s. Startup 8–11 s, still no re-embed on restart. 5 concurrent requests: per-request p50 2.5 s → 14.2 s (the Ollama queue) | none: same graph, same LLM calls per question ($0 locally, unchanged with a paid provider). Benchmark runs: 41 questions + 11 for the concurrency test, $0 on local Ollama | timed with `make bench-api`; per-node timing comes from the stream's `status` events |
 | #4 | Task 4 containerize | per question: none (same graph; 2.2–2.3 s for "sick days" in the container vs 2.05 s for the same question in Task 3's local benchmark). Startup: full image ready in 9–10 s (torch import), slim image 1.2 s. First `up` on a new volume embeds 20 chunks once (0.34 s) | none per question. Same LLM calls; settings defaults equal the old hardcoded values, so the index wasn't invalidated. Gotcha: a thinking model behind an OpenAI-compatible URL costs ~1,000 extra hidden tokens per call unless `OPENAI_REASONING_EFFORT=none` | images: 489 MB download (full), 241 MB (slim). Clean build 157 s; code-only rebuild 3.6 s. Verification run: ~10 questions on local Ollama, $0 |
 | #5 | Task 5 observability | **+0.43 ms per request** (callbacks on every node and LLM call + one log line + metrics; median over 400 runs with an instant fake model, so ≈0.01% of a 3.3 s answer). Startup: one extra LangSmith call to build trace links | none: no extra LLM calls. Now **measured**: $0.000433/question, $12.99/month at 1,000/day (gpt-4o-mini prices) | verification: 2 × 28-question cost reports, 2 × 28-example evals (judge included) and ~6 demo requests, all on local Ollama, $0 |
-| #6 | Task 6 caching | | | |
+| #6 | Task 6 caching | **hit: <1 ms in-process / 1.8 ms over HTTP instead of 3.6 s mean (7.9 s p95)**. Miss: unchanged (one hash + dict lookup). Index rebuild with a warm embedding cache: 0.68 s → 0.004 s | **hit: $0 instead of $0.000444**. Workload: −72% spend at a 72% hit rate (~$3.60/month instead of $12.99 at 1,000/day, if traffic repeats like the workload). Optional pre-warm costs ~32 s of LLM work per restart for 10 questions | verification: cold/warm (40 requests), workload (120), pre-warm (30), API demo (3); local Ollama, $0 |
 | #7 | Task 7 eval gate | n/a | | CI run cost per PR |
 | #8 | Task 8 resilience | | | retries add cost on failure paths |
 
