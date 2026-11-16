@@ -13,7 +13,8 @@ What this file contains (top to bottom):
   6. Streamlit UI   chat box, streamed answers, sources, reset button, add-a-document.
   7. CLI            ingest | ask | chat | demo | eval | diagram
 
-Run it (from the repo root, venv active):
+Run it (paths below are relative to week1/, but every path inside this file is built
+from Path(__file__), so it works from any working directory; see README.md "How to run"):
     streamlit run capstone_internal_docs_assistant/app.py
 
     python capstone_internal_docs_assistant/app.py ingest [--rebuild]
@@ -32,6 +33,7 @@ import hashlib
 import json
 import logging
 import operator
+import os
 import re
 import sys
 import time
@@ -46,6 +48,18 @@ from langchain_core.documents import Document
 from langgraph.graph import END, START, StateGraph
 
 log = logging.getLogger("northwind")
+
+
+def setup_logging() -> None:
+    """Send this app's log lines to stderr (once). Only the "northwind" logger is
+    configured, so library chatter (httpx, faiss, ...) stays at its own level."""
+    if log.handlers:
+        return
+    handler = logging.StreamHandler()
+    handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s"))
+    log.addHandler(handler)
+    log.setLevel(os.getenv("LOG_LEVEL", "INFO").upper())
+    log.propagate = False
 
 # ---------------------------------------------------------------------------
 # Settings
@@ -123,6 +137,7 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
     """
     from langchain_community.vectorstores import FAISS
 
+    t0 = time.perf_counter()
     files = sorted(p for p in Path(data_dir).iterdir() if p.suffix.lower() in SUPPORTED_EXT)
     current = {p.name: p for p in files}
     signature = f"{CHUNK_SIZE}/{CHUNK_OVERLAP}/{_embedding_id(embeddings)}"
@@ -136,7 +151,8 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
         else:
             log.warning("Index settings changed (%s -> %s): rebuilding.", saved.get("signature"), signature)
 
-    stats = {"added": [], "updated": [], "removed": [], "reused": [], "rebuilt": store is None}
+    stats = {"added": [], "updated": [], "removed": [], "reused": [], "rebuilt": store is None,
+             "embedded_chunks": 0}
 
     # removed files
     for name in [n for n in manifest["files"] if n not in current]:
@@ -160,6 +176,7 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
             stats["added"].append(name)
         chunks = chunk_file(path)
         ids = [f"{name}::{i}" for i in range(len(chunks))]
+        stats["embedded_chunks"] += len(chunks)
         if chunks:
             if store is None:
                 store = FAISS.from_documents(chunks, embeddings, ids=ids)
@@ -174,6 +191,21 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
         INDEX_DIR.mkdir(parents=True, exist_ok=True)
         store.save_local(str(INDEX_DIR))
         MANIFEST_PATH.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+
+    # The startup line Week 2 Task 1 asks for: did this start BUILD the index or LOAD it?
+    stats["seconds"] = round(time.perf_counter() - t0, 2)
+    n_chunks, n_files = len(store.docstore._dict), len(manifest["files"])
+    if stats["rebuilt"]:
+        log.info("Index BUILT: embedded %d chunks from %d files in %.2fs, saved to %s",
+                 stats["embedded_chunks"], n_files, stats["seconds"], INDEX_DIR)
+    elif stats["added"] or stats["updated"] or stats["removed"]:
+        log.info("Index LOADED from %s and UPDATED in %.2fs: added %s, updated %s, removed %s "
+                 "(%d chunks re-embedded, %d unchanged files reused)", INDEX_DIR, stats["seconds"],
+                 stats["added"], stats["updated"], stats["removed"], stats["embedded_chunks"],
+                 len(stats["reused"]))
+    else:
+        log.info("Index LOADED from %s in %.2fs: %d chunks from %d files, 0 chunks embedded",
+                 INDEX_DIR, stats["seconds"], n_chunks, n_files)
     return store, stats
 
 
@@ -864,7 +896,9 @@ def write_eval_results(path: Path, info: dict) -> Path:
         _AUTO_START,
         "## Latest experiment",
         f"- **Date:** {info['date']}",
-        f"- **LangSmith experiment name/link:** {info['experiment']} (dataset `{DATASET_NAME}`, smith.langchain.com → Datasets & Experiments)",
+        f"- **LangSmith experiment:** [{info['experiment']}]({info['url']}) (dataset `{DATASET_NAME}`)"
+        if info.get("url") else
+        f"- **LangSmith experiment:** {info['experiment']} (dataset `{DATASET_NAME}`, smith.langchain.com → Datasets & Experiments)",
         f"- **Dataset size:** {info['n']} examples ({info['n_answerable']} answerable + {info['n'] - info['n_answerable']} out-of-scope)",
         f"- **Retriever used:** {info['retriever']}",
         f"- **Model:** {info['model']}",
@@ -923,6 +957,7 @@ def _word_stream(text: str, delay: float = 0.015):
 def run_ui():
     import streamlit as st
 
+    setup_logging()
     st.set_page_config(page_title="Northwind Internal Assistant", page_icon="🤖")
     st.title("🤖 Northwind Internal Docs Assistant")
     st.caption("Ask about HR policies, IT procedures, and product specs.")
@@ -1104,6 +1139,18 @@ def cmd_diagram(_args):
         print(f"(PNG skipped: {type(e).__name__}; paste the .mmd files into a Mermaid viewer)")
 
 
+def _experiment_url(results):
+    """Link to the experiment in LangSmith, or None if the SDK can't build one."""
+    for attr in ("comparison_url", "url"):
+        try:
+            url = getattr(results, attr, None)
+            if url:
+                return url
+        except Exception:                          # property may need a network call
+            pass
+    return None
+
+
 def cmd_eval(args):
     from langsmith import Client, evaluate
 
@@ -1141,6 +1188,7 @@ def cmd_eval(args):
     out = write_eval_results(EVAL_RESULTS_PATH, {
         "date": date.today().isoformat(),
         "experiment": getattr(results, "experiment_name", "capstone-…"),
+        "url": _experiment_url(results),
         "n": len(EVAL_EXAMPLES),
         "n_answerable": sum(1 for e in EVAL_EXAMPLES if e[2]),
         "retriever": backend.retriever_name,
@@ -1166,6 +1214,7 @@ def cli(argv=None) -> int:
     s.set_defaults(fn=cmd_eval)
     sub.add_parser("diagram", help="write the Mermaid diagrams").set_defaults(fn=cmd_diagram)
     args = p.parse_args(argv)
+    setup_logging()
     args.fn(args)
     return 0
 
