@@ -95,7 +95,7 @@ def _embedding_id(embeddings) -> str:
 
 def _meaningful(text: str) -> bool:
     """Skip header-only fragments such as a lone '# Title' line."""
-    body = "\n".join(l for l in text.splitlines() if not l.lstrip().startswith("#"))
+    body = "\n".join(line for line in text.splitlines() if not line.lstrip().startswith("#"))
     return len(body.strip()) >= 20
 
 
