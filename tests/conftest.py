@@ -255,12 +255,15 @@ def make_backend(app, temp_index_dir, fake_embeddings, monkeypatch):
     (The real one also loads week1/.env, which would put API keys back into the
     environment of a test that must not have any.)
     """
-    def build(llm=None, **backend_kwargs):
+    def build(llm=None, data_dir=None, embeddings=None, **backend_kwargs):
+        """data_dir: a corpus folder (default: the real week1/data, read-only use);
+        pass a temp copy for anything that calls add_document."""
         llm = llm if llm is not None else scripted_llm(app)
+        emb = embeddings if embeddings is not None else fake_embeddings
         fake_utils = types.ModuleType("common.utils")
         fake_utils.get_llm = lambda *a, **k: llm
-        fake_utils.get_embeddings = lambda *a, **k: fake_embeddings
-        fake_utils.DATA_DIR = DATA_DIR
+        fake_utils.get_embeddings = lambda *a, **k: emb
+        fake_utils.DATA_DIR = data_dir or DATA_DIR
         monkeypatch.setitem(sys.modules, "common.utils", fake_utils)
         backend = app.Backend(**backend_kwargs)
         backend.fake_llm = llm

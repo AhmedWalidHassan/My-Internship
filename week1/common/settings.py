@@ -86,6 +86,32 @@ class Settings(BaseSettings):
     max_question_chars: int = Field(2000, ge=1)
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
 
+    # ---- caching (Task 6) ------------------------------------------------------------
+    cache_enabled: bool = Field(True, description="false = no answer cache AND no embedding cache")
+    cache_ttl_seconds: float = Field(3600, gt=0, description="how long a cached ANSWER is served")
+    cache_refusal_ttl_seconds: float = Field(
+        300, ge=0, description="how long a cached REFUSAL is served (0 = never cache refusals)")
+    cache_max_entries: int = Field(1000, ge=1)
+    embedding_cache_path: Path | None = Field(
+        None, description="file store for embeddings; default: next to INDEX_PATH (embedding_cache/)")
+    cache_prewarm: int = Field(0, ge=0, le=50, description="answer the first N eval questions at "
+                               "startup so the first users hit a warm cache")
+    semantic_cache_enabled: bool = Field(
+        False, description="deliberately NOT implemented: see week2/task_06_caching/CACHING.md")
+
+    @field_validator("semantic_cache_enabled")
+    @classmethod
+    def _semantic_cache_is_a_decision(cls, v):
+        if v:
+            raise ValueError("SEMANTIC_CACHE_ENABLED=true: there is no semantic cache, by decision. On this "
+                             "corpus near-duplicate questions have different answers; see "
+                             "week2/task_06_caching/CACHING.md")
+        return v
+
+    @property
+    def embedding_cache_dir(self) -> Path:
+        return self.embedding_cache_path or Path(self.index_path).parent / "embedding_cache"
+
     # ---- cost accounting (Task 5): price per 1K tokens of the model you run. ------
     # Defaults are gpt-4o-mini's list price, so a local model still gets a projection
     # of what the same traffic would cost on a hosted one.

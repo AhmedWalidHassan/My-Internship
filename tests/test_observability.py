@@ -210,7 +210,9 @@ def test_metrics_endpoint_returns_live_counters(start_api, make_backend, app):
     assert metric(text, "northwind_requests_total", '{endpoint="chat",status="ok"}') == 3
     assert metric(text, "northwind_refusals_total") == 1
     assert metric(text, "northwind_refusal_rate") == pytest.approx(1 / 3)
-    assert metric(text, "northwind_cache_hit_rate") == 0
+    # the repeated first question was served from the answer cache (Task 6)
+    assert metric(text, "northwind_cache_hits_total") == 1
+    assert metric(text, "northwind_cache_hit_rate") == pytest.approx(1 / 3)
     assert metric(text, "northwind_mean_retries") == 0
     assert metric(text, "northwind_recent_window_requests") == 3
     assert metric(text, "northwind_latency_p50_seconds") >= 0

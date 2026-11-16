@@ -60,6 +60,9 @@ class ChatResponse(BaseModel):
     tokens_in: int = 0
     tokens_out: int = 0
     estimated_cost_usd: float = Field(0.0, description="tokens x COST_PER_1K_*_TOKENS (an estimate).")
+    cache_hit: bool = Field(False, description="Served from the answer cache (no LLM call).")
+    cached_from_trace_id: str | None = Field(None, description="On a cache hit: the trace of the run "
+                                                               "that produced the answer.")
 
 
 class ErrorResponse(BaseModel):

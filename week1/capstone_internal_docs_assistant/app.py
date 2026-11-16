@@ -92,6 +92,9 @@ def _file_hash(path: Path) -> str:
 
 
 def _embedding_id(embeddings) -> str:
+    # The embedding cache (CacheBackedEmbeddings) is transparent: identify the model behind it,
+    # so turning the cache on or off never invalidates the index.
+    embeddings = getattr(embeddings, "underlying_embeddings", embeddings)
     name = str(getattr(embeddings, "model_name", None)
                or getattr(embeddings, "model", None)
                or type(embeddings).__name__)
@@ -201,6 +204,12 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
         INDEX_DIR.mkdir(parents=True, exist_ok=True)
         store.save_local(str(INDEX_DIR))
         MANIFEST_PATH.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+
+    # Identifies exactly what is indexed (settings + every file's hash). It changes whenever a
+    # document is added, changed or removed, so answer caches key on it (Week 2 Task 6).
+    stats["corpus_version"] = hashlib.sha256(json.dumps(
+        [manifest["signature"], sorted((n, f["hash"]) for n, f in manifest["files"].items())]
+    ).encode()).hexdigest()[:16]
 
     # The startup line Week 2 Task 1 asks for: did this start BUILD the index or LOAD it?
     stats["seconds"] = round(time.perf_counter() - t0, 2)
@@ -615,6 +624,13 @@ class Assistant:
     def reset(self, session_id: str) -> None:
         self.sessions.pop(session_id, None)
 
+    def remember(self, session_id: str, question: str, answer: str) -> None:
+        """Append a turn to this session's memory (bounded). Also used when the API answers
+        from its cache, so a follow-up to a cached answer still has its context."""
+        turns = self.sessions.setdefault(session_id, [])
+        turns.append((question, answer))
+        del turns[:-20]                                  # keep memory bounded
+
     def stream(self, question: str, session_id: str, *, run_id=None, tokens: bool = False,
                metadata: dict = None, callbacks: list = None) -> Iterator[dict]:
         """Yield {"event": "node", ...} per graph step, then one {"event": "final", ...}.
@@ -674,9 +690,7 @@ class Assistant:
         answered = bool(path) and path[-1] not in ("refuse", "direct_answer")
         sources = pick_sources(docs, cited) if answered else []
 
-        turns = self.sessions.setdefault(session_id, [])
-        turns.append((question, answer))
-        del turns[:-20]                                  # keep memory bounded
+        self.remember(session_id, question, answer)
 
         yield {
             "event": "final",

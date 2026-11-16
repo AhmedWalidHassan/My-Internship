@@ -41,6 +41,7 @@ from sse_starlette.sse import EventSourceResponse
 from starlette.datastructures import MutableHeaders
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from app.cache import AnswerCache
 from app.capstone import load_capstone
 from app.config import get_settings
 from app.schemas import (
@@ -185,17 +186,44 @@ def default_feedback_client():
     return Client()
 
 
-def _load(runtime: Runtime, backend_factory: Callable, observer: Observer) -> None:
+def build_cache(settings) -> AnswerCache | None:
+    """The answer cache, or None with CACHE_ENABLED=false."""
+    if not settings.cache_enabled:
+        return None
+    return AnswerCache(ttl_seconds=settings.cache_ttl_seconds,
+                       refusal_ttl_seconds=settings.cache_refusal_ttl_seconds,
+                       max_entries=settings.cache_max_entries)
+
+
+def prewarm(service: ChatService, n: int) -> None:
+    """Answer the first N answerable eval questions so the first users hit a warm cache
+    (Task 6 stretch). Runs after the API is ready; each is an ordinary logged request."""
+    questions = [q for q, _a, src, _f in load_capstone().EVAL_EXAMPLES if src][:n]
+    t0 = time.perf_counter()
+    for i, q in enumerate(questions, 1):
+        try:
+            service.ask(q, f"prewarm-{uuid.uuid4()}", trace_id=str(uuid.uuid4()),
+                        request_id=f"prewarm-{i:02d}", endpoint="prewarm")
+        except Exception as exc:
+            log.warning("prewarm question %d failed: %s: %s", i, type(exc).__name__, exc)
+    log.info("cache PREWARMED with %d questions in %.1fs", len(questions), time.perf_counter() - t0)
+
+
+def _load(runtime: Runtime, backend_factory: Callable, observer: Observer,
+          cache: AnswerCache | None) -> None:
     """Runs in a worker thread at startup. Any failure leaves the process alive but
     not ready, so /readyz can say why instead of the process crash-looping."""
     load_capstone().setup_logging()              # the capstone's "Index BUILT / LOADED" line
-    log.info("config: %s", get_settings().summary())
+    settings = get_settings()
+    log.info("config: %s | cache: %s", settings.summary(),
+             f"on (ttl {settings.cache_ttl_seconds:.0f}s, refusals {settings.cache_refusal_ttl_seconds:.0f}s)"
+             if cache is not None else "OFF")
     t0 = time.perf_counter()
     try:
         backend = backend_factory()
         # after the backend: building it loads week1/.env, which holds the LangSmith key
         observer.linker.resolve()
-        runtime.service = ChatService(backend, observer)
+        runtime.service = ChatService(backend, observer, cache)
         runtime.startup_seconds = round(time.perf_counter() - t0, 2)
         runtime.status = "ready"
         log.info("API READY in %.2fs: index %s, %d chunks from %d documents, %s retriever",
@@ -205,6 +233,9 @@ def _load(runtime: Runtime, backend_factory: Callable, observer: Observer) -> No
         runtime.status = "failed"
         runtime.error = f"startup failed: {type(exc).__name__}: {exc}"
         log.exception("API startup FAILED; /readyz will return 503")
+        return
+    if cache is not None and settings.cache_prewarm:
+        prewarm(runtime.service, settings.cache_prewarm)
 
 
 def create_app(backend_factory: Callable | None = None,
@@ -215,13 +246,16 @@ def create_app(backend_factory: Callable | None = None,
     feedback_client_factory = feedback_client_factory or default_feedback_client
     configure_structlog()
     observer = Observer()   # one per app: the request log line + the /metrics registry
+    cache = build_cache(get_settings())
+    observer.metrics.bind_cache(cache)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         app.state.runtime = Runtime()
         app.state.feedback_client = None
+        app.state.cache = cache
         app.state.loader = asyncio.create_task(
-            asyncio.to_thread(_load, app.state.runtime, backend_factory, observer))
+            asyncio.to_thread(_load, app.state.runtime, backend_factory, observer, cache))
         yield
         # Nothing to flush: sessions are in memory (see app/sessions.py), and LangSmith
         # traces are sent by the SDK's own background thread.

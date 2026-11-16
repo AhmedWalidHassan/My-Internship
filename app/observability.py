@@ -196,6 +196,7 @@ class Metrics:
                                  buckets=LATENCY_BUCKETS, registry=r)
         self._lock = threading.Lock()
         self._recent: deque = deque(maxlen=window)        # (latency_s, refused, retries, cache_hit)
+        self._cache = None
         for name, doc, fn in [
             ("northwind_latency_p50_seconds", "p50 latency over the recent window", lambda: self._pct(50)),
             ("northwind_latency_p95_seconds", "p95 latency over the recent window", lambda: self._pct(95)),
@@ -203,8 +204,21 @@ class Metrics:
             ("northwind_mean_retries", "Mean query rewrites per recent request", lambda: self._mean(2)),
             ("northwind_cache_hit_rate", "Share of recent answers served from cache", lambda: self._mean(3)),
             ("northwind_recent_window_requests", "Requests in the rolling window", lambda: len(self._recent)),
+            # Task 6: the answer cache and the embedding cache
+            ("northwind_cache_entries", "Answers currently in the answer cache",
+             lambda: len(self._cache) if self._cache is not None else 0),
+            ("northwind_cache_invalidations", "Times the answer cache was emptied because documents changed",
+             lambda: self._cache.invalidations if self._cache is not None else 0),
+            ("northwind_cache_enabled", "1 if the answer cache is on", lambda: int(self._cache is not None)),
+            ("northwind_embedding_cache_hits", "Texts whose embedding came from the cache",
+             lambda: _embedding_cache_stats().get("hits", 0)),
+            ("northwind_embedding_cache_misses", "Texts that had to be embedded",
+             lambda: _embedding_cache_stats().get("misses", 0)),
         ]:
             Gauge(name, doc, registry=r).set_function(fn)
+
+    def bind_cache(self, cache) -> None:
+        self._cache = cache
 
     def _pct(self, p: float) -> float:
         with self._lock:
@@ -238,6 +252,14 @@ class Metrics:
 
     def render(self) -> bytes:
         return generate_latest(self.registry)
+
+
+def _embedding_cache_stats() -> dict:
+    try:
+        from common.embedding_cache import stats
+        return stats()
+    except Exception:
+        return {}
 
 
 def percentile(values: list[float], p: float) -> float:

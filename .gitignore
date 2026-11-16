@@ -12,6 +12,7 @@ __pycache__/
 
 # Generated vector indexes (rebuilt by `app.py ingest`)
 **/faiss_index/
+**/embedding_cache/
 **/chroma_db/
 *.faiss
 *.pkl

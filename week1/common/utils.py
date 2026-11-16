@@ -66,8 +66,17 @@ def get_llm(temperature: float | None = None, **kwargs):
 
 
 def get_embeddings(**kwargs):
-    """Return an embeddings object for EMBEDDING_PROVIDER (default: openai)."""
+    """Return an embeddings object for EMBEDDING_PROVIDER (default: openai), behind the
+    on-disk embedding cache unless CACHE_ENABLED=false (Task 6)."""
     s = get_settings()
+    base = _base_embeddings(s, **kwargs)
+    if not s.cache_enabled:
+        return base
+    from common.embedding_cache import with_cache
+    return with_cache(base, s.embedding_cache_dir)
+
+
+def _base_embeddings(s, **kwargs):
     if s.embedding_provider == "openai":
         from langchain_openai import OpenAIEmbeddings
         return OpenAIEmbeddings(model=s.openai_embed_model, base_url=s.openai_base_url, **kwargs)

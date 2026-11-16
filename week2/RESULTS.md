@@ -363,15 +363,71 @@ built and all evidence: [`task_05_observability/OBSERVABILITY.md`](task_05_obser
 
 *(Before/after cost table lives in `COST.md`.)*
 
+Measured 2026-11-16 on local `qwen3.5:4b`. Design, key decisions and all evidence:
+[`task_06_caching/CACHING.md`](task_06_caching/CACHING.md).
+
 | | Value |
 |---|---|
-| Cache hit rate on defined workload | |
-| Workload used (describe it) | |
-| Invalidation test | `tests/___::___` |
+| Cache hit rate on defined workload | **72% (87/120)**. Misses: first time asked 18, follow-ups 11 (never cached, by design), paraphrases 4. By how a question was asked: exact 82%, trivial variant 84%, paraphrase 50% (only repeats of the same paraphrase), follow-up 0% |
+| Workload used (describe it) | 120 requests (seed 7). The 28 eval questions with Zipf popularity (1/rank^1.1). Each first question: 60% exact wording, 25% a trivial variant (case, punctuation, spacing), 15% a hand-written paraphrase (for the 10 questions that have one). 10% of requests are a second turn in an earlier session. [`evidence/workload_hit_rate.md`](task_06_caching/evidence/workload_hit_rate.md) |
+| Invalidation test | `tests/test_cache.py::test_add_document_invalidates_cached_answers` |
+
+The invalidation test: a question the documents can't answer is refused, and the refusal is
+cached (a repeat is a hit). Then `backend.add_document("benefits.md", …)` adds the answer. The
+next request **runs the real pipeline and returns the new answer**, not the stale refusal;
+`/metrics` shows `northwind_cache_invalidations 1`; the new answer is then cached.
+`test_changing_a_document_also_invalidates` covers editing an existing file.
+
+How the invalidation works: the key includes the **corpus version**, a hash of every indexed
+file's hash, recomputed by `ingest()`, so an old entry can no longer match. The cache is also
+emptied the moment the version changes.
+
+The other Done-when items are each pinned by a test in `tests/test_cache.py` (18 tests):
+- `cache_hit` is in the log line and `/metrics`: `test_repeated_first_question_is_served_from_cache`;
+- `CACHE_ENABLED=false` runs the real pipeline every time, with the embedding cache off too:
+  `test_cache_disabled_runs_the_real_pipeline_every_time`, `test_cache_disabled_also_turns_off_the_embedding_cache`;
+- refusals get a short TTL: `test_refusals_expire_much_sooner_than_answers`;
+- the eval gate can't be fooled: `test_eval_path_never_sees_the_answer_cache`.
 
 **Semantic cache — implemented, or argued against?** Two paragraphs either way:
 
+> **Argued against, with measurements** ([`evidence/semantic_cache_analysis.md`](task_06_caching/evidence/semantic_cache_analysis.md)).
+> A semantic cache is only safe if a similarity threshold separates paraphrases (same answer) from
+> near-misses (similar wording, different answer). On this corpus no threshold does. I embedded 10
+> paraphrase pairs and 10 near-miss pairs (each checked against `week1/data`) with the
+> assistant's own model:
+> - The most dangerous near-miss, "How fast does the rover go **with** a load?" vs "…**without**
+>   a load?" (1.8 vs 2.2 m/s), scores **0.977**, higher than every true paraphrase.
+> - The meal limit abroad vs domestic ($110 vs $75) scores 0.912; adoptive vs birth-parent leave
+>   (10 vs 16 weeks) 0.827.
+> - Meanwhile the brief's own example, "how many vacation days" vs "how much PTO do I get", scores
+>   **0.186**.
 >
+> At 0.95, zero paraphrases would hit and one wrong answer would still be served; at 0.80, 4/10
+> hit but 3/10 near-misses get the wrong answer. HR and product facts here come in tightly
+> clustered pairs that differ by one word: exactly Week 1 Task 3's related-but-wrong-chunk
+> problem, except a cache would *serve* the wrong answer with no retrieval, grading or fact-check
+> to catch it.
+>
+> The upside is small and the cost isn't zero. On the workload, paraphrases were **3% of
+> requests** (4 misses of 120), so even a perfect semantic cache would add at most ~3 points of
+> hit rate. Each lookup costs a query embedding, and every miss pays it on top of retrieval. On a
+> 4B pipeline whose main weakness is already over-cautious graders, adding a component that
+> confidently returns a *different* question's answer is the wrong trade. So
+> `SEMANTIC_CACHE_ENABLED=true` is **rejected at startup** with a pointer to this reasoning,
+> rather than silently ignored. What would change my mind: a much larger corpus with genuinely
+> redundant questions, or a cross-encoder check on candidate hits (which costs a model call, so
+> it's no longer a cheap cache).
+
+**Stretch:**
+- *Cache retrieval separately?* Not built, and the data says why: in Task 5, `retrieve` was
+  0.01 s and $0 per question (0.3% of time, LLM-free), while the answer cache saves the 3.6 s and
+  $0.000444 of everything after it. The answer cache carries the whole saving; a retrieval cache
+  would save ~10 ms.
+- *Pre-warm at startup* (`CACHE_PREWARM=10`): a cold-start user asking the top 10 questions went
+  from **p95 6.83 s → <1 ms** (10/10 hits), for 32 s of LLM work at every startup
+  ([`evidence/prewarm.md`](task_06_caching/evidence/prewarm.md)). It's off by default, since restarts
+  would each pay for it.
 
 ---
 

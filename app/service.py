@@ -7,10 +7,14 @@ about HTTP: it turns the capstone Assistant's events into the API's typed events
 
 from __future__ import annotations
 
+import logging
+import re
 import time
+import uuid
 from collections.abc import Iterator
 
-from app.capstone import load_capstone
+from app.cache import AnswerCache, CachedAnswer, config_fingerprint
+from app.capstone import CAPSTONE_PATH, load_capstone
 from app.config import get_settings
 from app.observability import Observer, RunTelemetry
 from app.schemas import (
@@ -24,21 +28,78 @@ from app.schemas import (
 
 RETRACT_REASON = ("The fact-check could not find this draft in the documents, "
                   "so it was discarded.")
+log = logging.getLogger("northwind.api")
+
+
+def _trace_cache_hit(trace_id, question, hit, request_id, session_id) -> None:
+    """A cache hit gets its own small LangSmith run under the response's trace_id, so
+    "log line -> trace" and /feedback still work, and it points at the original run."""
+    try:
+        from langsmith import trace
+        from langsmith.utils import tracing_is_enabled
+
+        if not tracing_is_enabled():
+            return
+        with trace("northwind_assistant", run_type="chain", run_id=uuid.UUID(str(trace_id)),
+                   inputs={"raw_question": question}, tags=["capstone", "cache_hit"],
+                   metadata={"request_id": request_id, "session_id": session_id, "cache_hit": True,
+                             "cached_from_trace_id": hit.trace_id}) as run:
+            run.end(outputs={"answer": hit.answer, "sources": hit.sources})
+    except Exception as exc:                         # tracing must never fail a request
+        log.debug("cache-hit trace not recorded: %s", exc)
+
+
+CACHE_LABEL = "✓ Answered from cache (asked before, documents unchanged)"
 
 
 class ChatService:
-    def __init__(self, backend, observer: Observer | None = None):
+    def __init__(self, backend, observer: Observer | None = None, cache: AnswerCache | None = None):
         self.backend = backend                  # capstone Backend: index + retriever + graph + memory
         self.observer = observer or Observer()  # request log line + metrics
+        self.cache = cache                      # None = no answer cache (CACHE_ENABLED=false)
         self._capstone = load_capstone()
+        self._fingerprint = config_fingerprint(get_settings(), CAPSTONE_PATH.read_bytes())
 
     @property
     def assistant(self):
         # read through the backend every time: Backend.refresh() replaces the Assistant
         return self.backend.assistant
 
+    # -- answer cache -----------------------------------------------------------
+    def _cache_key(self, question: str, session_id: str) -> str | None:
+        """The cache key, or None when this request must not use the cache: no cache, or a
+        follow-up (the session has history, so the answer depends on the conversation)."""
+        if self.cache is None or self.assistant.history(session_id):
+            return None
+        version = self.backend.ingest_stats.get("corpus_version", "")
+        if self.cache.sync_corpus(version):
+            log.info("documents changed (corpus %s): answer cache emptied", version)
+        return self.cache.key(question, corpus_version=version, fingerprint=self._fingerprint)
+
+    def _serve_from_cache(self, hit: CachedAnswer, question, session_id, *, trace_id, request_id,
+                          tokens, endpoint):
+        t0 = time.perf_counter()
+        self.assistant.remember(session_id, question, hit.answer)   # follow-ups keep their context
+        _trace_cache_hit(trace_id, question, hit, request_id, session_id)
+        yield StatusEvent(node="cache", label=CACHE_LABEL, elapsed_ms=int((time.perf_counter() - t0) * 1000))
+        if tokens:                              # same protocol as a live answer (already fact-checked)
+            for piece in re.findall(r"\S+\s*", hit.answer):
+                yield TokenEvent(text=piece)
+        latency_ms = int((time.perf_counter() - t0) * 1000)
+        yield DoneEvent(answer=hit.answer, sources=hit.sources, node_path=["cache"], session_id=session_id,
+                        trace_id=str(trace_id), standalone_question=question, retries=0,
+                        elapsed_ms=latency_ms, cache_hit=True, cached_from_trace_id=hit.trace_id)
+        self.observer.request_finished({
+            "request_id": request_id, "session_id": session_id, "trace_id": str(trace_id),
+            "endpoint": endpoint, "status": "ok", "route": "cache", "node_path": ["cache"], "retries": 0,
+            "latency_ms": latency_ms, "tokens_in": 0, "tokens_out": 0, "estimated_cost_usd": 0.0,
+            "refused": hit.refused, "cache_hit": True, "llm_calls": 0, "model": get_settings().llm_label,
+            "per_node": {}, "retrieved_ids": [], "kept_ids": [], "cached_from_trace_id": hit.trace_id,
+            "cache_age_s": round(time.time() - hit.created, 1)})
+
+    # -- the one place the graph runs ---------------------------------------------
     def events(self, question: str, session_id: str, *, trace_id: str, request_id: str | None = None,
-               tokens: bool = True, endpoint: str = "chat/stream",
+               tokens: bool = True, endpoint: str = "chat/stream", use_cache: bool = True,
                ) -> Iterator[StatusEvent | TokenEvent | RetractEvent | DoneEvent]:
         """Run the graph once, yielding status / token / retract events and a final DoneEvent.
 
@@ -49,7 +110,19 @@ class ChatService:
 
         Every run reports exactly ONE record to the observer when it ends (ok, error,
         or cancelled by a client disconnect): the request's log line and metrics.
+
+        A session's first question is looked up in the answer cache first (see
+        app/cache.py); `use_cache=False` always runs the real pipeline (cost report,
+        benchmarks).
         """
+        key = self._cache_key(question, session_id) if use_cache else None
+        if key is not None:
+            hit = self.cache.get(key)
+            if hit is not None:
+                yield from self._serve_from_cache(hit, question, session_id, trace_id=trace_id,
+                                                  request_id=request_id, tokens=tokens, endpoint=endpoint)
+                return
+
         t0 = time.perf_counter()
 
         def ms() -> int:
@@ -80,6 +153,12 @@ class ChatService:
                 elif kind == "final":
                     final, status = ev, "ok"
                     usage = telemetry.totals()
+                    if key is not None and ev["answer"].strip():
+                        self.cache.put(key, CachedAnswer(
+                            answer=ev["answer"], sources=list(ev["sources"]), node_path=list(ev["path"]),
+                            retries=ev["retries"], refused=self._capstone.is_refusal(ev["answer"]),
+                            trace_id=str(trace_id), tokens_in=usage["tokens_in"],
+                            tokens_out=usage["tokens_out"], llm_calls=usage["llm_calls"]))
                     yield DoneEvent(
                         answer=ev["answer"], sources=ev["sources"], node_path=ev["path"],
                         session_id=session_id, trace_id=str(trace_id),
@@ -128,12 +207,12 @@ class ChatService:
             rec["error"] = error
         return rec
 
-    def ask(self, question: str, session_id: str, *, trace_id: str,
-            request_id: str | None = None) -> ChatResponse:
+    def ask(self, question: str, session_id: str, *, trace_id: str, request_id: str | None = None,
+            use_cache: bool = True, endpoint: str = "chat") -> ChatResponse:
         """Non-streaming: the same run, keeping only the final event."""
         done = None
         for ev in self.events(question, session_id, trace_id=trace_id, request_id=request_id,
-                              tokens=False, endpoint="chat"):
+                              tokens=False, endpoint=endpoint, use_cache=use_cache):
             if isinstance(ev, DoneEvent):
                 done = ev
         if done is None:                                        # the graph ended without a final event
