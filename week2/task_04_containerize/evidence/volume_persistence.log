@@ -1,0 +1,14 @@
+# Fresh clone, only week1/.env supplied. Volume: northwind_index_full
+## 1. first 'docker compose up' (new, empty volume) -> the corpus is embedded once
+2026-11-16 08:29:59,618 INFO northwind: Index BUILT: embedded 20 chunks from 4 files in 0.34s, saved to /data/faiss_index
+2026-11-16 08:29:59,722 INFO northwind.api: API READY in 10.18s: index BUILT, 20 chunks from 4 documents, hybrid (BM25 + dense) retriever
+## 2. docker compose restart api
+2026-11-16 08:36:45,739 INFO northwind: Index LOADED from /data/faiss_index in 0.11s: 20 chunks from 4 files, 0 chunks embedded
+2026-11-16 08:36:45,846 INFO northwind.api: API READY in 9.50s: index LOADED, 20 chunks from 4 documents, hybrid (BM25 + dense) retriever
+## 3. docker compose down && docker compose up -d   (containers deleted and recreated)
+2026-11-16 08:37:04,317 INFO northwind: Index LOADED from /data/faiss_index in 0.10s: 20 chunks from 4 files, 0 chunks embedded
+2026-11-16 08:37:04,420 INFO northwind.api: API READY in 8.98s: index LOADED, 20 chunks from 4 documents, hybrid (BM25 + dense) retriever
+## 4. code edit + image rebuild + up   (new image, same volume)
+rebuild after a code edit: 3.6 s (dependency layers cached)
+2026-11-16 08:37:31,348 INFO northwind: Index LOADED from /data/faiss_index in 0.10s: 20 chunks from 4 files, 0 chunks embedded
+2026-11-16 08:37:31,453 INFO northwind.api: API READY in 8.95s: index LOADED, 20 chunks from 4 documents, hybrid (BM25 + dense) retriever

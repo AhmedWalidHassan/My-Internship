@@ -1,0 +1,71 @@
+# Provider switch by editing week1/.env ONLY: no code change, no image rebuild.
+# Fresh clone of week2/task-04-docker, 2026-11-16T10:53:02+02:00. One API image throughout: sha256:27555121bba0
+==================================================================
+## 1. Ollama, native API (the .env as supplied)
+# .env edit (appended; later lines win; keys shown as <dummy> or omitted):
+#   (none: the original .env, LLM_PROVIDER=ollama)
+$ docker compose up -d --wait
+ Container northwind-api-1 Recreate 
+ Container northwind-api-1 Recreated 
+ Container northwind-api-1 Started 
+2026-11-16 08:53:06,482 INFO northwind.api: config: llm=ollama:qwen3.5:4b base_url=http://host.docker.internal:11434 embeddings=ollama k=4 chunks=800/100 index=/data/faiss_index
+# provider client built inside the running container (no call made):
+ChatOllama | model: qwen3.5:4b | base_url: http://host.docker.internal:11434
+$ curl -X POST localhost:8000/chat -d {"question": "How many sick days do I get per year?"}
+{"answer": "You receive 10 paid sick days per year.", "sources": ["employee_handbook.md › 3. Sick Leave", "employee_handbook.md › 2. Paid Time Off (PTO)"], "node_path": ["contextualize", "route_question", "retrieve", "grade_documents", "generate", "grade_generation"], "elapsed_ms": 2321, "error": null, "detail": null}
+==================================================================
+## 2. OpenAI code path -> Ollama's OpenAI-compatible endpoint (same mechanism as OpenRouter/vLLM/LiteLLM)
+# .env edit (appended; later lines win; keys shown as <dummy> or omitted):
+#   LLM_PROVIDER=openai
+#   OPENAI_BASE_URL=http://host.docker.internal:11434/v1
+#   OPENAI_MODEL=qwen3.5:4b
+#   OPENAI_API_KEY=<dummy>
+#   OPENAI_REASONING_EFFORT=none
+$ docker compose up -d --wait
+ Container northwind-api-1 Recreate 
+ Container northwind-api-1 Recreated 
+ Container northwind-api-1 Started 
+2026-11-16 08:53:29,378 INFO northwind.api: config: llm=openai:qwen3.5:4b base_url=http://host.docker.internal:11434/v1 embeddings=ollama k=4 chunks=800/100 index=/data/faiss_index
+# provider client built inside the running container (no call made):
+ChatOpenAI | model: qwen3.5:4b | base_url: http://host.docker.internal:11434/v1
+$ curl -X POST localhost:8000/chat -d {"question": "How many sick days do I get per year?"}
+{"answer": "You receive 10 paid sick days per year.", "sources": ["employee_handbook.md › 3. Sick Leave", "employee_handbook.md › 2. Paid Time Off (PTO)"], "node_path": ["contextualize", "route_question", "retrieve", "grade_documents", "generate", "grade_generation"], "elapsed_ms": 2229, "error": null, "detail": null}
+==================================================================
+## 3. OpenRouter (no key on this machine: client built in the container, no question asked)
+# .env edit (appended; later lines win; keys shown as <dummy> or omitted):
+#   LLM_PROVIDER=openai
+#   OPENAI_BASE_URL=https://openrouter.ai/api/v1
+#   OPENAI_MODEL=meta-llama/llama-3.3-70b-instruct
+#   OPENAI_API_KEY=<dummy>
+$ docker compose up -d --wait
+ Container northwind-api-1 Recreate 
+ Container northwind-api-1 Recreated 
+ Container northwind-api-1 Started 
+2026-11-16 08:53:52,808 INFO northwind.api: config: llm=openai:meta-llama/llama-3.3-70b-instruct base_url=https://openrouter.ai/api/v1 embeddings=ollama k=4 chunks=800/100 index=/data/faiss_index
+# provider client built inside the running container (no call made):
+ChatOpenAI | model: meta-llama/llama-3.3-70b-instruct | base_url: https://openrouter.ai/api/v1
+==================================================================
+## 4. Groq (no key on this machine: client built in the container, no question asked)
+# .env edit (appended; later lines win; keys shown as <dummy> or omitted):
+#   LLM_PROVIDER=groq
+#   GROQ_MODEL=llama-3.3-70b-versatile
+#   GROQ_API_KEY=<dummy>
+$ docker compose up -d --wait
+ Container northwind-api-1 Recreate 
+ Container northwind-api-1 Recreated 
+ Container northwind-api-1 Started 
+2026-11-16 08:54:13,682 INFO northwind.api: config: llm=groq:llama-3.3-70b-versatile base_url=default embeddings=ollama k=4 chunks=800/100 index=/data/faiss_index
+# provider client built inside the running container (no call made):
+ChatGroq | model: llama-3.3-70b-versatile | base_url: provider default
+==================================================================
+## 5. back to the original .env
+# .env edit (appended; later lines win; keys shown as <dummy> or omitted):
+#   (none: the original .env, LLM_PROVIDER=ollama)
+$ docker compose up -d --wait
+ Container northwind-api-1 Recreate 
+ Container northwind-api-1 Recreated 
+ Container northwind-api-1 Started 
+2026-11-16 08:54:33,936 INFO northwind.api: config: llm=ollama:qwen3.5:4b base_url=http://host.docker.internal:11434 embeddings=ollama k=4 chunks=800/100 index=/data/faiss_index
+# provider client built inside the running container (no call made):
+ChatOllama | model: qwen3.5:4b | base_url: http://host.docker.internal:11434
+exit=0

@@ -1,0 +1,19 @@
+$ API_VARIANT=slim docker compose up -d --wait   (image northwind-api:slim, volume northwind_index_slim)
+ Volume northwind_index_slim Creating 
+ Volume northwind_index_slim Creating 
+ Volume northwind_index_slim Created 
+ Volume northwind_index_slim Created 
+2026-11-16 08:56:58,513 INFO northwind.api: config: llm=ollama:qwen3.5:4b base_url=http://host.docker.internal:11434 embeddings=ollama k=4 chunks=800/100 index=/data/faiss_index
+2026-11-16 08:56:59,681 INFO northwind: Index BUILT: embedded 20 chunks from 4 files in 0.26s, saved to /data/faiss_index
+2026-11-16 08:56:59,794 INFO northwind.api: API READY in 1.28s: index BUILT, 20 chunks from 4 documents, hybrid (BM25 + dense) retriever
+$ docker compose restart api
+2026-11-16 08:57:06,513 INFO northwind: Index LOADED from /data/faiss_index in 0.13s: 20 chunks from 4 files, 0 chunks embedded
+2026-11-16 08:57:06,616 INFO northwind.api: API READY in 1.17s: index LOADED, 20 chunks from 4 documents, hybrid (BM25 + dense) retriever
+$ POST /chat {"question": "How many sick days do I get per year?"}
+{"answer": "You receive 10 paid sick days per year.", "sources": ["employee_handbook.md › 3. Sick Leave", "employee_handbook.md › 2. Paid Time Off (PTO)"], "elapsed_ms": 2194}
+$ POST /chat {"question": "How fast does the rover go with a load?"}
+{"answer": "The rover travels at a maximum speed of 1.8 m/s when loaded.", "sources": ["product_specs.md › Key Specifications"], "elapsed_ms": 2149}
+$ POST /chat {"question": "What is the CEO's home address?"}
+{"answer": "I don't know based on the provided documents.", "sources": [], "elapsed_ms": 4117}
+ModuleNotFoundError: No module named 'torch'
+app

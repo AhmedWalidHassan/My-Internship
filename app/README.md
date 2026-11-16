@@ -33,9 +33,12 @@ INFO northwind: Index LOADED from .../faiss_index in 0.02s: 20 chunks from 4 fil
 INFO northwind.api: API READY in 10.73s: index LOADED, 20 chunks from 4 documents, hybrid (BM25 + dense) retriever
 ```
 
+Settings come from the environment or `week1/.env`, through the typed settings object in
+[`week1/common/settings.py`](../week1/common/settings.py) (`app/config.py` re-exports it).
+
 | Setting (env) | Default | Meaning |
 |---|---|---|
-| `API_HOST` / `API_PORT` | `127.0.0.1` / `8000` | bind address (`make run`). Localhost by default: there is no auth yet |
+| `API_HOST` / `API_PORT` | `127.0.0.1` / `8000` | bind address (`make run` = `python -m app`). Localhost by default: there is no auth yet |
 | `SESSION_TTL_SECONDS` | `3600` | a conversation is forgotten after this long without activity |
 | `MAX_SESSIONS` | `10000` | least recently used sessions are dropped beyond this |
 | `MAX_QUESTION_CHARS` | `2000` | longer questions get a 422 |

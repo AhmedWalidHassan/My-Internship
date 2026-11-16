@@ -6,13 +6,14 @@ event's `data` is one of them, serialised as JSON.
 
 from __future__ import annotations
 
-import os
 from typing import Literal
 from uuid import UUID
 
 from pydantic import BaseModel, Field, field_validator
 
-MAX_QUESTION_CHARS = int(os.getenv("MAX_QUESTION_CHARS", "2000"))
+from app.config import get_settings
+
+MAX_QUESTION_CHARS = get_settings().max_question_chars
 SESSION_ID_PATTERN = r"^[A-Za-z0-9._:\-]{1,128}$"
 
 

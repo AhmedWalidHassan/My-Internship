@@ -1,0 +1,6 @@
+UI container, API_URL = http://api:8000
+sidebar: ['✅ ready · 20 passages · 4 documents · hybrid (BM25 + dense)', 'index loaded at startup · 0 active sessions']
+[user] 'How much PTO do I get?'
+[assistant] 'Full-time employees accrue 1.67 days of PTO per month, which equals 20 days per year. PTO begins accruing on the first day of employment but cannot be used duri'  📎 Sources: employee_handbook.md › 2. Paid Time Off (PTO)
+[user] 'Can I carry it over to next year?'
+[assistant] '✓ Understanding the question: “Can unused PTO up to 5 days be carried into the next calendar year?”'  📎 Sources: employee_handbook.md › 2. Paid Time Off (PTO)

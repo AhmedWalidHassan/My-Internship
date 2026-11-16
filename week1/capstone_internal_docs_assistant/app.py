@@ -33,7 +33,6 @@ import hashlib
 import json
 import logging
 import operator
-import os
 import re
 import sys
 import time
@@ -44,10 +43,12 @@ from typing import Annotated, Iterator, TypedDict
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
+from common.settings import get_settings  # noqa: E402  (needs the sys.path line above)
 from langchain_core.documents import Document
 from langgraph.graph import END, START, StateGraph
 
 log = logging.getLogger("northwind")
+SETTINGS = get_settings()        # env vars / week1/.env, validated once (common/settings.py)
 
 
 def setup_logging() -> None:
@@ -58,19 +59,22 @@ def setup_logging() -> None:
     handler = logging.StreamHandler()
     handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s"))
     log.addHandler(handler)
-    log.setLevel(os.getenv("LOG_LEVEL", "INFO").upper())
+    log.setLevel(SETTINGS.log_level)
     log.propagate = False
 
 # ---------------------------------------------------------------------------
 # Settings
 # ---------------------------------------------------------------------------
+# Deployment settings come from SETTINGS (INDEX_PATH, CHUNK_SIZE, CHUNK_OVERLAP,
+# RETRIEVER_K, ...). The constants below them are algorithm choices, not deployment
+# config, and stay in code.
 APP_DIR = Path(__file__).resolve().parent
-INDEX_DIR = APP_DIR / "faiss_index"            # generated: keep it out of git
+INDEX_DIR = Path(SETTINGS.index_path)          # generated: keep it out of git (a volume in docker)
 MANIFEST_PATH = INDEX_DIR / "manifest.json"
 EVAL_RESULTS_PATH = APP_DIR / "EVAL_RESULTS.md"
 
-CHUNK_SIZE, CHUNK_OVERLAP = 800, 100
-TOP_K = 4                    # per retriever (BM25 and dense)
+CHUNK_SIZE, CHUNK_OVERLAP = SETTINGS.chunk_size, SETTINGS.chunk_overlap
+TOP_K = SETTINGS.retriever_k  # per retriever (BM25 and dense)
 MAX_DOCS_TO_GRADE = 6        # cap LLM grading calls per retrieval
 FALLBACK_DOCS = 3            # last resort: if grading rejects everything, try the best N anyway
 MAX_RETRIES = 2              # rewrite attempts per question
@@ -88,9 +92,15 @@ def _file_hash(path: Path) -> str:
 
 
 def _embedding_id(embeddings) -> str:
-    return str(getattr(embeddings, "model_name", None)
+    name = str(getattr(embeddings, "model_name", None)
                or getattr(embeddings, "model", None)
                or type(embeddings).__name__)
+    # The same model run by ONNX Runtime (fastembed) instead of PyTorch gives close but
+    # not bit-identical vectors: give it its own index signature. (PyTorch keeps the bare
+    # name, so existing indexes stay valid.)
+    if type(embeddings).__name__ == "FastEmbedEmbeddings":
+        return f"fastembed:{name}"
+    return name
 
 
 def _meaningful(text: str) -> bool:

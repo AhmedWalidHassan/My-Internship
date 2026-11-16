@@ -1,0 +1,35 @@
+# The slim API image (`--build-arg API_VARIANT=slim`, or `API_VARIANT=slim make up`;
+# stretch goal: under 1 GB).
+# Same service, but the local embedding model (all-MiniLM-L6-v2) runs on ONNX Runtime
+# via fastembed instead of PyTorch, so torch (~750 MB), sentence-transformers,
+# transformers, scipy and scikit-learn are dropped. LOCAL_EMBEDDINGS_BACKEND=fastembed
+# is set in the image. Versions come from constraints.txt, plus a pin for fastembed, the one
+# package the local venv does not have (resolved for Python 3.14 on 2026-11-16).
+
+# --- service ---
+fastapi
+uvicorn
+sse-starlette
+pydantic
+pydantic-settings
+python-dotenv
+httpx
+
+# --- RAG ---
+langchain-core
+langchain-community        # FAISS, BM25, FastEmbedEmbeddings
+langchain-classic
+langchain-text-splitters
+langgraph
+langsmith
+faiss-cpu
+rank-bm25
+
+# --- providers (langchain-huggingface is left out: it needs sentence-transformers/torch) ---
+langchain-openai
+langchain-groq
+langchain-ollama
+
+# --- local embeddings without torch ---
+fastembed==0.9.1
+onnxruntime                # 1.31.1 via constraints.txt (already in the tested venv)

@@ -1,0 +1,36 @@
+# What the API container needs at runtime: only packages the service imports.
+# Versions come from constraints.txt (frozen from the tested venv).
+#
+# Deliberately NOT here (they're in week1/requirements.txt for the Week 1 tasks):
+#   unstructured, pypdf, beautifulsoup4  - document parsing; the corpus is .md/.txt
+#   chromadb, langchain-chroma           - the service uses FAISS
+#   tiktoken, langchain                  - not imported by the service
+#   streamlit                            - the UI has its own image (requirements-ui.txt)
+#   pytest, ruff                         - dev tooling
+# torch is installed separately, from the CPU-only index (see the Dockerfile).
+
+# --- service ---
+fastapi
+uvicorn
+sse-starlette
+pydantic
+pydantic-settings
+python-dotenv
+httpx
+
+# --- RAG: index, retriever, graph, tracing ---
+langchain-core
+langchain-community        # FAISS vector store, BM25 retriever
+langchain-classic          # EnsembleRetriever (hybrid search)
+langchain-text-splitters
+langgraph
+langsmith
+faiss-cpu
+rank-bm25
+
+# --- providers (switchable by .env, so all of them are installed) ---
+langchain-openai           # OpenAI and every OpenAI-compatible server (OpenRouter, vLLM, Ollama /v1)
+langchain-groq
+langchain-ollama
+langchain-huggingface      # local embeddings (all-MiniLM-L6-v2) + HF inference endpoints
+sentence-transformers

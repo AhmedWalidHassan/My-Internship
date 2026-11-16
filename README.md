@@ -25,13 +25,19 @@ cd ..
 
 The Makefile uses `week1/.venv` automatically when it exists (override with `make check PY=python3`).
 
+**Configuration** is one file, `week1/.env`, read into a typed, validated settings object
+([`week1/common/settings.py`](week1/common/settings.py)): provider, model, base URL, retriever `k`,
+chunking, index path, API host and port. Switching provider is an `.env` edit; see
+[`week1/.env.example`](week1/.env.example) for every setting and a block per provider.
+
 ## Commands (run from the repo root)
 
 | Command | What it does | Needs |
 |---|---|---|
 | `make check` | Lint (ruff) plus the **fast** tests: graph wiring, prompts, memory wiring, index persistence and the HTTP API (all endpoints, streaming, session isolation, error shape), with a fake model. Under 5 s. Run before every PR. | Nothing: no API key, no network (the tests block both) |
 | `make check-live` | The **live** golden-path tests through the real app: cited answer, refusals, two-turn follow-up, session isolation, warm start, rewrite loop, real token streaming through the API. About 60 s on local Ollama. | `week1/.env` and the model server running (e.g. `ollama serve`) |
-| `make run` | Start the API on http://127.0.0.1:8000 (OpenAPI docs at `/docs`) | same as live |
+| `make up` / `make down` | **API + UI in Docker** (one command, from a clean checkout; the index lives in a named volume). `API_VARIANT=slim make up` for the 575 MB image. See [`week2/task_04_containerize/DEPLOY.md`](week2/task_04_containerize/DEPLOY.md) | Docker and `week1/.env` |
+| `make run` | Start the API on http://127.0.0.1:8000 (OpenAPI docs at `/docs`). Host and port come from `API_HOST` / `API_PORT` | same as live |
 | `make run-ui` | Start the Streamlit chat UI, which talks to the API over HTTP (start `make run` first) | a running API |
 | `make bench-api` | p50/p95 latency of `/chat` and `/chat/stream` over 20 questions | a running API |
 | `make run-ui-capstone` | The Week 1 Streamlit UI that runs the graph in-process (kept for reference) | same as live |
