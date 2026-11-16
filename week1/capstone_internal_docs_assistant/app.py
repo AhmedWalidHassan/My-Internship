@@ -75,7 +75,7 @@ EVAL_RESULTS_PATH = APP_DIR / "EVAL_RESULTS.md"
 
 CHUNK_SIZE, CHUNK_OVERLAP = SETTINGS.chunk_size, SETTINGS.chunk_overlap
 TOP_K = SETTINGS.retriever_k  # per retriever (BM25 and dense)
-MAX_DOCS_TO_GRADE = 6        # cap LLM grading calls per retrieval
+MAX_DOCS_TO_GRADE = SETTINGS.max_docs_to_grade   # cap LLM grading calls per retrieval
 FALLBACK_DOCS = 3            # last resort: if grading rejects everything, try the best N anyway
 MAX_RETRIES = 2              # rewrite attempts per question
 MAX_HISTORY_TURNS = 6        # memory window sent to the contextualizer
@@ -553,6 +553,11 @@ def _section_label(d: Document) -> str:
     return f"{src} › {sec}" if sec else src
 
 
+def _chunk_id(d: Document) -> str:
+    """The index id of a chunk ("file.md::3"); a content hash for docs that have none."""
+    return d.id or f"{d.metadata.get('source', '?')}#{hashlib.sha1(d.page_content.encode()).hexdigest()[:8]}"
+
+
 def pick_sources(docs, cited: list) -> list:
     """Citation labels ('file.md › Section') for the docs the answer actually used."""
     chosen = [d for d in docs if d.metadata.get("source") in cited] if cited else list(docs)
@@ -611,7 +616,7 @@ class Assistant:
         self.sessions.pop(session_id, None)
 
     def stream(self, question: str, session_id: str, *, run_id=None, tokens: bool = False,
-               metadata: dict = None) -> Iterator[dict]:
+               metadata: dict = None, callbacks: list = None) -> Iterator[dict]:
         """Yield {"event": "node", ...} per graph step, then one {"event": "final", ...}.
 
         tokens=True also yields {"event": "token", "text": ...} for every token the
@@ -620,7 +625,8 @@ class Assistant:
         starts a new one). The answer in the final event is the authoritative one.
 
         run_id becomes the id of the LangSmith root run, so a caller can attach
-        feedback to the trace without searching for it.
+        feedback to the trace without searching for it. `callbacks` are LangChain
+        callback handlers for this run only (the API's per-node cost/latency telemetry).
         """
         inputs = {"raw_question": question, "history": self.history(session_id), "path": []}
         config = {
@@ -631,6 +637,8 @@ class Assistant:
         }
         if run_id is not None:
             config["run_id"] = uuid.UUID(str(run_id))
+        if callbacks:
+            config["callbacks"] = list(callbacks)
         docs, generation, path, retrieved, attempts = [], "", [], [], []
         standalone, retries = question, 0
 
@@ -681,6 +689,9 @@ class Assistant:
             "retrieved": format_docs(retrieved),     # raw search results, even if the answer was a refusal
             "kept": format_docs(docs),               # passages that survived grading, even if the answer was a refusal
             "attempts": attempts,                    # every answer the fact-check saw, with its notes
+            # chunk ids ("file.md::3"): tell RETRIEVAL drift from GENERATION drift when a score moves
+            "retrieved_ids": [_chunk_id(d) for d in retrieved],
+            "kept_ids": [_chunk_id(d) for d in docs],
         }
 
     def ask(self, question: str, session_id: str) -> dict:

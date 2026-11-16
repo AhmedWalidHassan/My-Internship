@@ -16,7 +16,7 @@ import time
 import uuid
 
 import pytest
-from conftest import REPO_ROOT, FakeRetriever, prefix, scripted_llm
+from conftest import REPO_ROOT, FakeRetriever, prefix, scripted_llm, wait_until_ready
 from fastapi.testclient import TestClient
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import AIMessage, AIMessageChunk
@@ -78,16 +78,6 @@ def streaming_llm(app, **overrides):
     return StreamingScriptedLLM(rules=script)
 
 
-def wait_until_ready(client, timeout=5.0):
-    deadline = time.monotonic() + timeout
-    while time.monotonic() < deadline:
-        r = client.get("/readyz")
-        if r.status_code == 200:
-            return r
-        time.sleep(0.01)
-    raise AssertionError(f"service never became ready: {r.json()}")
-
-
 def sse(response):
     """[(event, data), ...] from a text/event-stream response."""
     events, event, data = [], "message", []
@@ -123,25 +113,6 @@ def assert_error_shape(response, status, error):
     assert body["request_id"] == response.headers["x-request-id"]
     assert "Traceback" not in response.text
     return body
-
-
-@pytest.fixture
-def start_api():
-    """start_api(backend_factory, ...) -> a TestClient with the lifespan running."""
-    clients = []
-
-    def start(backend_factory, *, feedback_client_factory=lambda: None, wait=True):
-        api = create_app(backend_factory=backend_factory, feedback_client_factory=feedback_client_factory)
-        client = TestClient(api)
-        client.__enter__()
-        clients.append(client)
-        if wait:
-            wait_until_ready(client)
-        return client
-
-    yield start
-    for c in clients:
-        c.__exit__(None, None, None)
 
 
 @pytest.fixture

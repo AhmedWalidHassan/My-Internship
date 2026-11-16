@@ -56,6 +56,10 @@ class ChatResponse(BaseModel):
                                                  "earlier turns (what was actually searched for).")
     retries: int = Field(description="How many times the search query was rewritten.")
     elapsed_ms: int
+    llm_calls: int = Field(0, description="LLM calls this answer took (graders included).")
+    tokens_in: int = 0
+    tokens_out: int = 0
+    estimated_cost_usd: float = Field(0.0, description="tokens x COST_PER_1K_*_TOKENS (an estimate).")
 
 
 class ErrorResponse(BaseModel):

@@ -12,6 +12,7 @@ Endpoints
     POST   /feedback              {trace_id, rating, comment} -> LangSmith feedback on that trace
     GET    /session/{session_id}  the conversation so far (lets a UI redraw after a page refresh)
     DELETE /session/{session_id}  forget that conversation (idempotent)
+    GET    /metrics               Prometheus counters: requests, refusals, retries, tokens, cost, p50/p95
 
 The index and graph are built ONCE, at startup, in a background thread started by
 the lifespan handler: the process answers /healthz immediately, and /readyz turns
@@ -34,7 +35,8 @@ from typing import Annotated
 from fastapi import FastAPI, Request
 from fastapi import Path as PathParam
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, PlainTextResponse
+from prometheus_client import CONTENT_TYPE_LATEST
 from sse_starlette.sse import EventSourceResponse
 from starlette.datastructures import MutableHeaders
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -57,6 +59,7 @@ from app.schemas import (
     StatusEvent,
     TokenEvent,
 )
+from app.observability import Observer, configure_structlog
 from app.service import ChatService
 from app.sessions import SessionStore
 
@@ -182,7 +185,7 @@ def default_feedback_client():
     return Client()
 
 
-def _load(runtime: Runtime, backend_factory: Callable) -> None:
+def _load(runtime: Runtime, backend_factory: Callable, observer: Observer) -> None:
     """Runs in a worker thread at startup. Any failure leaves the process alive but
     not ready, so /readyz can say why instead of the process crash-looping."""
     load_capstone().setup_logging()              # the capstone's "Index BUILT / LOADED" line
@@ -190,7 +193,9 @@ def _load(runtime: Runtime, backend_factory: Callable) -> None:
     t0 = time.perf_counter()
     try:
         backend = backend_factory()
-        runtime.service = ChatService(backend)
+        # after the backend: building it loads week1/.env, which holds the LangSmith key
+        observer.linker.resolve()
+        runtime.service = ChatService(backend, observer)
         runtime.startup_seconds = round(time.perf_counter() - t0, 2)
         runtime.status = "ready"
         log.info("API READY in %.2fs: index %s, %d chunks from %d documents, %s retriever",
@@ -208,12 +213,15 @@ def create_app(backend_factory: Callable | None = None,
     get_settings()          # validate the configuration now: a bad .env stops startup with a clear error
     backend_factory = backend_factory or default_backend_factory
     feedback_client_factory = feedback_client_factory or default_feedback_client
+    configure_structlog()
+    observer = Observer()   # one per app: the request log line + the /metrics registry
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         app.state.runtime = Runtime()
         app.state.feedback_client = None
-        app.state.loader = asyncio.create_task(asyncio.to_thread(_load, app.state.runtime, backend_factory))
+        app.state.loader = asyncio.create_task(
+            asyncio.to_thread(_load, app.state.runtime, backend_factory, observer))
         yield
         # Nothing to flush: sessions are in memory (see app/sessions.py), and LangSmith
         # traces are sent by the SDK's own background thread.
@@ -280,6 +288,16 @@ def create_app(backend_factory: Callable | None = None,
         # A sync generator: sse-starlette pulls it in a worker thread, so the graph's
         # blocking model calls never block the event loop.
         return EventSourceResponse(events(), ping=15)
+
+    # -- metrics --------------------------------------------------------------
+    @app.get("/metrics", tags=["ops"], response_class=PlainTextResponse, responses={
+        200: {"content": {"text/plain": {}}, "description": "Prometheus text format"}})
+    async def metrics() -> PlainTextResponse:
+        """Live counters (Prometheus text format): requests by endpoint and status,
+        refusals, rewrite retries, cache hits, LLM calls by node, tokens, estimated
+        cost, time per node, a latency histogram, and rolling p50/p95 latency,
+        refusal rate, mean retries and cache-hit rate. Never calls the model."""
+        return PlainTextResponse(observer.metrics.render(), media_type=CONTENT_TYPE_LATEST)
 
     # -- probes ---------------------------------------------------------------
     @app.get("/healthz", response_model=HealthResponse, tags=["ops"])

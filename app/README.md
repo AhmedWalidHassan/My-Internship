@@ -57,6 +57,27 @@ Model and LangSmith settings are unchanged: `week1/.env` (see the capstone READM
 | `POST` | `/feedback` | `{trace_id, rating: -1\|0\|1, comment?}` → LangSmith feedback `user_rating` on that trace |
 | `GET` | `/session/{session_id}` | the turns this session remembers (lets the UI redraw after a refresh) |
 | `DELETE` | `/session/{session_id}` | `{session_id, cleared}`. Idempotent: an unknown session is still 200 |
+| `GET` | `/metrics` | Prometheus text: requests by endpoint/status, refusals, retries, cache hits, LLM calls by node, tokens, estimated cost, time per node, latency histogram, and rolling p50/p95, refusal rate, mean retries, cache-hit rate. Never calls the model |
+
+`/chat` and `done` also report what the answer cost: `llm_calls`, `tokens_in`, `tokens_out`,
+`estimated_cost_usd` (tokens × `COST_PER_1K_*_TOKENS`).
+
+### One log line per request
+
+Every request (ok, error, or a stream the client abandoned) writes **one** JSON line to stdout
+([`observability.py`](observability.py), structlog). It holds:
+- **The ids:** `request_id`, `session_id`, `trace_id`, `trace_url`.
+- **What happened:** `endpoint`, `status`, `route`, `node_path`, `retries`, `refused`, `cache_hit`.
+- **The cost:** `latency_ms` (`ttft_ms` when streaming), `llm_calls`, `tokens_in`, `tokens_out`,
+  `estimated_cost_usd`, `model`.
+- **Per node:** `per_node` (runs, ms, LLM calls, LLM ms and tokens for each graph node).
+- **Retrieval:** `retrieved_ids` and `kept_ids`, the chunk ids (`file.md::3`), to tell retrieval
+  drift from generation drift.
+
+`trace_id` is the LangSmith root-run id and `trace_url` links straight to it. The trace also
+carries `request_id` and `session_id` as metadata. The per-node figures come from a LangChain
+callback handler attached to each run, so the graph code itself isn't wrapped. Write-up and
+measurements: [`week2/task_05_observability/`](../week2/task_05_observability/OBSERVABILITY.md).
 
 Omit `session_id` to start a conversation; the response carries the id to send
 next time. `trace_id` is the id of the LangSmith root run of that answer, so

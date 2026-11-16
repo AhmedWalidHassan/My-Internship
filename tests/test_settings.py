@@ -107,7 +107,9 @@ def test_settings_hold_no_secrets(clean_env):
     clean_env.setenv("OPENAI_API_KEY", "sk-should-not-appear")
     s = settings()
     assert "sk-should-not-appear" not in s.model_dump_json() + s.summary()
-    assert not [f for f in Settings.model_fields if "key" in f or "token" in f or "secret" in f]
+    secret_like = [f for f in Settings.model_fields
+                   if f.endswith(("_key", "_token", "_secret")) or "password" in f or "api_key" in f]
+    assert not secret_like, secret_like
 
 
 # ---------------------------------------------------------------------------
