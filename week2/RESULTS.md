@@ -106,14 +106,81 @@ judge (see `FAILURE_ANALYSIS.md`).
 
 ## Task 2 — Test harness
 
+Measured 2026-11-16 from the repo root. Fast tier run with an **empty environment**
+(`env -i PATH=$PATH HOME=$HOME make check`): no API keys at all. The fast tier also
+removes keys and blocks network connections itself (`tests/conftest.py`), so a test
+that tries to reach a model fails instead of costing money.
+
 | Tier | Tests | Wall clock | API cost |
 |---|---:|---:|---:|
-| Fast (`make check`) | | | $0.00 |
-| Live (`make check-live`) | | | |
+| Fast (`make check`, ruff + pytest) | 23 passed | **1.3–1.9 s** (4 runs; pytest alone 0.55–0.82 s) | $0.00 |
+| Live (`make check-live`) | 7 passed, 1 xfail | **71 s** (pytest 68.5 s) | $0.00 (local Ollama `qwen3.5:4b`); 9 questions through the full graph |
 
 **The regression test:** which test fails if the app is wired to the wrong graph?
 
-> `tests/___::___`
+> `tests/test_graph_structure.py::test_app_graph_has_contextualize_node`
+>
+> Its `app_graph` fixture builds the graph through the app's real path, `Backend()` → `Assistant` → `.graph`,
+> with only the model and embeddings faked. It inspects the graph the app actually runs, not a graph
+> the test builds the "right" way.
+
+**Proof it goes red.** I changed `Assistant.__init__` in `app.py` to build its graph from
+Task 8 (`from task_08_langgraph_agentic_rag.starter import build_graph as build_agentic_graph`,
+an aliased import that ruff can't flag), then ran `make check`:
+
+```
+FAILED tests/test_graph_structure.py::test_app_graph_has_contextualize_node
+FAILED tests/test_graph_structure.py::test_app_graph_state_accepts_history - ...
+FAILED tests/test_graph_structure.py::test_app_graph_starts_by_resolving_history
+FAILED tests/test_graph_structure.py::test_follow_up_is_resolved_against_history_before_retrieval
+FAILED tests/test_graph_structure.py::test_sessions_do_not_share_history - Ke...
+FAILED tests/test_graph_structure.py::test_reset_clears_only_that_session - K...
+6 failed, 17 passed, 8 deselected in 0.79s
+
+E  AssertionError: The app's graph has no `contextualize` node, so follow-up questions are never
+   resolved against the conversation. Is app.py building its Assistant from the wrong build_graph
+   (e.g. Task 8's)? Nodes found: ['__end__', '__start__', 'direct_answer', 'generate', ...]
+```
+
+Import restored: `23 passed, 8 deselected in 0.56s`. (The plain, non-aliased version of the
+bug, `from task_08… import build_graph`, is caught even earlier: ruff fails `make check` with
+`F811 Redefinition of unused build_graph`.)
+
+**What each tier covers**
+
+- **Fast (23):**
+  - Wiring: the app's graph has `contextualize`, its state has `history`, and `contextualize` runs first.
+  - Graph shape: every edge target exists, every node is reachable from START, and every node can reach END.
+  - Prompts and output: `format_docs` tags every source, the refusal string is pinned in the generate prompt, and the `Sources:` line is parsed.
+  - Behaviour with a scripted model: no generation call when nothing is retrieved; a rejected answer is never shown; smalltalk doesn't retrieve; out-of-domain questions are refused.
+  - Memory: turn 2 is rewritten from turn 1 before retrieval, sessions don't share history, and reset clears one session only.
+  - Index: build when missing, **load (not embed) when present**, re-embed only a changed file, and rebuild when the embedding model changes.
+  - Stretch: the graph terminates at `MAX_RETRIES` on both worst-case paths.
+- **Live (8):**
+  - A cited fact (10 sick days, `employee_handbook.md`).
+  - Refusals: the CEO's address, and the plausible-sounding "remote work from abroad", which correctly refused.
+  - The two-turn PTO follow-up (resolves to PTO, mentions 5 days).
+  - Session isolation.
+  - Warm start with the real embedding model (cold 0.059 s, 20 chunks embedded; warm 0.000 s, 0 embedded).
+  - The rewrite loop: `test_awkward_query_triggers_rewrite_loop` is **xfail**, and `test_unanswerable_question_exhausts_rewrites` passes.
+
+**Rewrite loop finding (xfail, kept rather than deleted).** With the production hybrid retriever,
+"time off carry rules?" finds the PTO section on the first search, so the grader keeps it and no
+rewrite happens. This confirms the Task 1 finding. The loop does fire, and is bounded, on an
+unanswerable question:
+`… retrieve → grade_documents → rewrite_query → retrieve → grade_documents → rewrite_query → retrieve → grade_documents → generate → grade_generation → refuse`.
+
+**`--durations=5`**
+
+```
+fast:  0.44s setup  test_app_graph_has_contextualize_node    (first Backend() build: imports FAISS + BM25)
+       0.01s call   test_unsupported_answer_is_never_returned   (every other fast test is ≤ 0.01 s)
+live: 28.57s call   test_grounded_answer_with_citation   (includes Ollama loading the model on first use)
+       8.37s call   test_sessions_are_isolated
+       7.56s call   test_two_turn_follow_up_resolves_pronoun
+       6.14s setup  test_grounded_answer_with_citation   (Backend(): embedding model + index load)
+       5.05s call   test_plausible_sounding_out_of_scope_is_refused
+```
 
 ---
 

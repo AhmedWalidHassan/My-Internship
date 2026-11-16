@@ -114,7 +114,7 @@ Fill one row per merged PR. "No change" is a valid and useful entry.
 | PR | Change | Latency impact | Cost impact | Notes |
 |---|---|---|---|---|
 | #1 | Task 1 closeout | none per question (one log line at startup); warm start 6.7 s vs cold 15.5 s | none (Task 6 harness now embeds the corpus 1× instead of 4×: 34.9 s → 35.1 s locally, i.e. no measurable saving with local embeddings; 3 fewer embedding passes per run with a paid API) | timed by hand |
-| #2 | Task 2 test harness | n/a | n/a | tests only |
+| #2 | Task 2 test harness | n/a (no app behaviour change) | n/a | `make check` 1.3–1.9 s, $0, runs on every PR; `make check-live` 71 s, 9 questions, $0 on local Ollama |
 | #3 | Task 3 service API | | | |
 | #4 | Task 4 containerize | | | |
 | #5 | Task 5 observability | | | instrumentation overhead? |

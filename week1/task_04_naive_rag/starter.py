@@ -40,7 +40,7 @@ def format_docs(docs):
 def build_rag_chain(retriever):
     from langchain_core.prompts import ChatPromptTemplate
     from langchain_core.output_parsers import StrOutputParser
-    from langchain_core.runnables import RunnableParallel, RunnablePassthrough
+    from langchain_core.runnables import RunnablePassthrough
 
     llm = get_llm(reasoning=False)
 

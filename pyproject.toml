@@ -1,0 +1,26 @@
+# Repo-wide tool settings. `make check` = ruff + the fast pytest tier.
+
+[tool.ruff]
+target-version = "py310"
+# Task briefs/skeletons and the Week 3 corpus are provided material, not our code.
+extend-exclude = [
+    "week1/.venv",
+    "week2/task_0*",
+    "week3",
+]
+
+[tool.ruff.lint]
+# Ruff's defaults: real errors (syntax, undefined names, unused imports), not style.
+# Pinned here so a personal ~/.config/ruff config can't change what CI checks.
+select = ["E4", "E7", "E9", "F"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "live: test makes real model/API calls (slow, may cost money, needs keys)",
+]
+filterwarnings = [
+    # langchain_community / langchain_classic deprecation chatter, not ours to fix here
+    "ignore::DeprecationWarning",
+    "ignore:.*LangChain.*:UserWarning",
+]
