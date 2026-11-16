@@ -263,9 +263,12 @@ def test_session_memory_survives_across_requests_and_clients(api):
     continues it with just the session_id."""
     sid = str(uuid.uuid4())
     api.post("/chat", json={"question": "How much PTO do I get?", "session_id": sid})
-    with TestClient(api.app) as fresh_tab:      # same app, new client
-        turns = fresh_tab.get(f"/session/{sid}").json()["turns"]
-    assert [t["question"] for t in turns] == ["How much PTO do I get?"]
+    # A new client on the SAME running app (a refreshed tab). Not `with TestClient(...)`: that
+    # would re-run the startup lifespan, and its request could race the background load (503).
+    fresh_tab = TestClient(api.app)
+    r = fresh_tab.get(f"/session/{sid}")
+    assert r.status_code == 200, r.text
+    assert [t["question"] for t in r.json()["turns"]] == ["How much PTO do I get?"]
 
 
 # ===========================================================================

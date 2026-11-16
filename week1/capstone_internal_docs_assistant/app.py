@@ -902,14 +902,20 @@ def make_evaluators(judge):
             ok = not outputs.get("sources")
             return {"key": "retrieval_hit", "score": int(ok),
                     "comment": "no citations shown" if ok else "showed citations for an out-of-scope question"}
-        fact = _norm(reference_outputs.get("fact", ""))
+        # "facts" (a list: multi-hop answers need one fact from EACH document) or "fact"
+        facts = [_norm(f) for f in (reference_outputs.get("facts") or [reference_outputs.get("fact", "")]) if f]
         kept = _norm(outputs.get("kept") or outputs.get("context", ""))   # passages that survived grading
         retrieved = _norm(outputs.get("retrieved") or outputs.get("context", ""))   # raw search results
         path = outputs.get("path")
         if path and "retrieve" not in str(path).split(" -> "):
             return {"key": "retrieval_hit", "score": 0, "comment": "never searched: the router sent it to DIRECT"}
-        if fact and fact in retrieved:
-            if fact not in kept:
+        missing = [f for f in facts if f not in retrieved]
+        if facts and len(facts) > 1 and missing:
+            return {"key": "retrieval_hit", "score": 0,
+                    "comment": f"only {len(facts) - len(missing)}/{len(facts)} key facts were in the search results"}
+        fact = facts[0] if facts and not missing else ""
+        if fact and all(f in retrieved for f in facts):
+            if not all(f in kept for f in facts):
                 note = " (but the relevance grader dropped it)"
             elif is_refusal(outputs.get("answer", "")):
                 note = " and kept, yet the answer was still refused (generation or fact-check)"

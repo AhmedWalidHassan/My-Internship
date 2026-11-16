@@ -1,0 +1,171 @@
+# Week 2 Task 7 — CI: two gates with very different economics.
+#   fast-checks  every PR and push: ruff + the fast tests. No secrets, no model, < 60 s.
+#   eval-gate    nightly, on demand, and on PRs labelled `run-eval`: the 38-example eval on
+#                the real model (qwen3.5:4b on Ollama, CPU), compared with the committed
+#                baseline; red on a regression beyond the tolerance; posts which examples flipped.
+# Scripts, dataset, baseline and write-up: week2/task_07_eval_gate/ (see EVAL_GATE.md there).
+
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]   # `labeled`: adding run-eval triggers the eval
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 3 * * *"                               # nightly eval, 03:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CONSTRAINTS: week2/task_04_containerize/constraints.txt   # exact versions of the tested venv
+  PYTHON_VERSION: "3.14"
+
+jobs:
+  # ===========================================================================
+  # Every PR. Free, no secrets, under a minute. Catches wiring bugs the day they
+  # land (an app importing the wrong graph, a weakened refusal prompt, ...).
+  # ===========================================================================
+  fast-checks:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-dependency-glob: |
+            week2/task_04_containerize/constraints.txt
+            week2/task_07_eval_gate/requirements-ci.txt
+
+      - name: Install (cached)
+        run: |
+          uv venv
+          uv pip install -c "$CONSTRAINTS" -r week2/task_07_eval_gate/requirements-ci.txt
+
+      - name: Lint
+        run: .venv/bin/ruff check .
+
+      - name: Fast tests
+        # No API key in the environment on purpose: tests/conftest.py also blocks the network.
+        # The step fails if it takes more than a minute: a fast gate that slowly becomes a
+        # slow gate stops being a gate.
+        timeout-minutes: 1
+        run: .venv/bin/python -m pytest -m "not live" -q --durations=5
+
+  # ===========================================================================
+  # Nightly, on demand, or on a PR labelled `run-eval`. Runs the real model, so it
+  # takes minutes; red when quality drops below the committed baseline.
+  # Independent of fast-checks on purpose: a broken PR shows BOTH gates red.
+  # ===========================================================================
+  eval-gate:
+    if: >-
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' &&
+       contains(github.event.pull_request.labels.*.name, 'run-eval'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    permissions:
+      contents: read
+      pull-requests: write      # the regression report comment
+      issues: write             # a nightly regression opens an issue
+    concurrency:
+      group: eval-gate-${{ github.ref }}
+      cancel-in-progress: true
+    env:
+      # The same model as every local number and the baseline. Ollama on the runner's CPU.
+      LLM_PROVIDER: ollama
+      OLLAMA_MODEL: qwen3.5:4b
+      OLLAMA_BASE_URL: http://127.0.0.1:11434
+      OLLAMA_VERSION: v0.40.16
+      # all-MiniLM-L6-v2 on ONNX Runtime: identical vectors to the PyTorch path (Task 4:
+      # cosine 1.000000, same top-4 on 28/28 questions) without installing torch.
+      EMBEDDING_PROVIDER: ollama
+      LOCAL_EMBEDDINGS_BACKEND: fastembed
+      FASTEMBED_CACHE_PATH: ${{ github.workspace }}/.cache/fastembed
+      INDEX_PATH: ${{ runner.temp }}/faiss_index
+      EMBEDDING_CACHE_PATH: ${{ runner.temp }}/embedding_cache
+      CACHE_ENABLED: "false"    # belt and braces: run_eval.py never goes through the answer cache
+      # LangSmith: publish the run as an experiment and trace it (only if the secret exists).
+      LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}
+      LANGSMITH_TRACING: ${{ secrets.LANGSMITH_API_KEY != '' && 'true' || 'false' }}
+      LANGSMITH_PROJECT: northwind-ci
+      EVAL_DATASET_NAME: northwind-eval-v2
+      EVAL_EXPERIMENT_PREFIX: ci-${{ github.event_name }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-dependency-glob: |
+            week2/task_04_containerize/constraints.txt
+            week2/task_04_containerize/requirements-api-slim.txt
+
+      - name: Install the service (slim, no torch)
+        run: |
+          uv venv
+          uv pip install -c "$CONSTRAINTS" -r week2/task_04_containerize/requirements-api-slim.txt
+
+      - name: Cache Ollama and the model weights
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/ollama
+            ~/.ollama/models
+            .cache/fastembed
+          key: models-ollama-${{ env.OLLAMA_VERSION }}-${{ env.OLLAMA_MODEL }}-minilm-onnx-v1
+
+      - name: Install Ollama ${{ env.OLLAMA_VERSION }} (pinned, checksum-verified) and start it
+        run: |
+          if [ ! -x "$HOME/ollama/bin/ollama" ]; then
+            base="https://github.com/ollama/ollama/releases/download/${OLLAMA_VERSION}"
+            curl -fsSL -o ollama-linux-amd64.tar.zst "$base/ollama-linux-amd64.tar.zst"
+            curl -fsSL -o sha256sum.txt "$base/sha256sum.txt"
+            grep " ./ollama-linux-amd64.tar.zst$" sha256sum.txt | sed 's# \./# #' | sha256sum -c -
+            mkdir -p "$HOME/ollama" && tar --use-compress-program=unzstd -xf ollama-linux-amd64.tar.zst -C "$HOME/ollama"
+            rm ollama-linux-amd64.tar.zst
+          fi
+          nohup "$HOME/ollama/bin/ollama" serve > ollama.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf "$OLLAMA_BASE_URL/api/version" && break; sleep 1; done
+          "$HOME/ollama/bin/ollama" pull "$OLLAMA_MODEL"
+          nproc; free -g
+
+      - name: Run evaluation (real pipeline, no cache)
+        run: .venv/bin/python week2/task_07_eval_gate/scripts/run_eval.py --out eval_results.json --no-cache
+
+      - name: Compare against baseline
+        id: gate
+        run: .venv/bin/python week2/task_07_eval_gate/scripts/check_baseline.py --results eval_results.json --report regression_report.md
+
+      - name: Post regression report on the PR
+        if: always() && github.event_name == 'pull_request' && hashFiles('regression_report.md') != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --edit-last --body-file regression_report.md \
+            || gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file regression_report.md
+
+      - name: Open an issue when the nightly eval regresses
+        if: failure() && github.event_name == 'schedule' && hashFiles('regression_report.md') != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue create --repo "$GITHUB_REPOSITORY" --title "Nightly eval gate failed ($(date -u +%F))" --body-file regression_report.md
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: |
+            eval_results.json
+            regression_report.md
+            ollama.log
