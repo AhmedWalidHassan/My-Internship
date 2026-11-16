@@ -89,8 +89,6 @@ jobs:
       EMBEDDING_PROVIDER: ollama
       LOCAL_EMBEDDINGS_BACKEND: fastembed
       FASTEMBED_CACHE_PATH: ${{ github.workspace }}/.cache/fastembed
-      INDEX_PATH: ${{ runner.temp }}/faiss_index
-      EMBEDDING_CACHE_PATH: ${{ runner.temp }}/embedding_cache
       CACHE_ENABLED: "false"    # belt and braces: run_eval.py never goes through the answer cache
       # LangSmith: publish the run as an experiment and trace it (only if the secret exists).
       LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}
@@ -139,6 +137,9 @@ jobs:
           nproc; free -g
 
       - name: Run evaluation (real pipeline, no cache)
+        env:
+          INDEX_PATH: ${{ runner.temp }}/faiss_index          # built fresh on the runner (20 chunks)
+          EMBEDDING_CACHE_PATH: ${{ runner.temp }}/embedding_cache
         run: .venv/bin/python week2/task_07_eval_gate/scripts/run_eval.py --out eval_results.json --no-cache
 
       - name: Compare against baseline
