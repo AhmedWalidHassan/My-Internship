@@ -71,6 +71,8 @@ class Settings(BaseSettings):
 
     # ---- retrieval & index (changing chunking or the embedding model rebuilds the index) ----
     retriever_k: int = Field(4, ge=1, le=50, description="passages per retriever (BM25 and dense)")
+    max_docs_to_grade: int = Field(6, ge=1, le=50, description="retrieved passages the relevance "
+                                   "grader checks per search (one LLM call each)")
     chunk_size: int = Field(800, ge=100, le=8000)
     chunk_overlap: int = Field(100, ge=0)
     index_path: Path = Field(CAPSTONE_DIR / "faiss_index", description="where the FAISS index is persisted")
@@ -83,6 +85,16 @@ class Settings(BaseSettings):
     max_sessions: int = Field(10_000, ge=1)
     max_question_chars: int = Field(2000, ge=1)
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
+
+    # ---- cost accounting (Task 5): price per 1K tokens of the model you run. ------
+    # Defaults are gpt-4o-mini's list price, so a local model still gets a projection
+    # of what the same traffic would cost on a hosted one.
+    cost_per_1k_input_tokens: float = Field(0.00015, ge=0)
+    cost_per_1k_output_tokens: float = Field(0.0006, ge=0)
+
+    def cost_usd(self, tokens_in: int, tokens_out: int) -> float:
+        return (tokens_in / 1000) * self.cost_per_1k_input_tokens + \
+               (tokens_out / 1000) * self.cost_per_1k_output_tokens
 
     @field_validator("llm_provider", "embedding_provider", mode="before")
     @classmethod
@@ -108,13 +120,18 @@ class Settings(BaseSettings):
                              f"CHUNK_SIZE ({self.chunk_size})")
         return self
 
-    def summary(self) -> str:
-        """One line for the startup log. No secrets live on this object."""
+    @property
+    def llm_label(self) -> str:
+        """"provider:model", e.g. "ollama:qwen3.5:4b" (goes into every request log line)."""
         model = {"openai": self.openai_model, "groq": self.groq_model, "ollama": self.ollama_model,
                  "huggingface": self.hf_model}[self.llm_provider]
+        return f"{self.llm_provider}:{model}"
+
+    def summary(self) -> str:
+        """One line for the startup log. No secrets live on this object."""
         base = {"openai": self.openai_base_url, "groq": self.groq_base_url,
                 "ollama": self.ollama_base_url}.get(self.llm_provider)
-        return (f"llm={self.llm_provider}:{model} base_url={base or 'default'} "
+        return (f"llm={self.llm_label} base_url={base or 'default'} "
                 f"embeddings={self.embedding_provider} k={self.retriever_k} "
                 f"chunks={self.chunk_size}/{self.chunk_overlap} index={self.index_path}")
 

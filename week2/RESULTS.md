@@ -307,18 +307,55 @@ the design and all evidence: [`task_04_containerize/DEPLOY.md`](task_04_containe
 
 *(Latency and cost figures live in `COST.md`. This section is for behaviour.)*
 
+Measured 2026-11-16 with `make cost` over the 28-example eval set (24 answerable + 4 out-of-scope,
+each in a fresh session), local `qwen3.5:4b`, hybrid retriever k = 4, `MAX_DOCS_TO_GRADE=6`. How it's
+built and all evidence: [`task_05_observability/OBSERVABILITY.md`](task_05_observability/OBSERVABILITY.md).
+
 **Node-path distribution over the eval set** — how often does each path actually fire?
 
 | Path | Count | % |
 |---|---:|---:|
-| route→retrieve→grade→generate→check→END | | |
-| …with 1 rewrite loop | | |
-| …with 2 rewrite loops | | |
-| route→direct→END | | |
+| route→retrieve→grade→generate→check→END | 18 | 64% |
+| …with 1 rewrite loop | 2 | 7% (both answered) |
+| …with 2 rewrite loops | 6 | 21% (3 answered, 3 refused) |
+| route→direct→END | 2 | 7% (capital of France, football: refused in 2 LLM calls) |
 
 **Does the rewrite→retry loop fire in practice?**
 
+> **Yes: on 8 of 28 questions (29%), 14 rewrites in total. But mostly for the wrong reason.**
+> What sent the graph to `rewrite_query`: the doc grader rejecting every passage, **11 times**; the
+> fact-check rejecting the answer, **3 times**. Per question:
 >
+> | Question | What happened | Did the loop help? |
+> |---|---|---|
+> | Daily meal limit abroad | The first search missed the `$110/day` chunk; the rewrite found it | **Yes:** the only real retrieval rescue |
+> | Can I take time off in my first months? | The fact-check rejected draft 1; draft 2 passed | **Yes:** a generation retry |
+> | Is alcohol reimbursable? · Source code on a personal phone? · R2 outdoors? | The answer chunk **was** in the first search (graded position 3, 1 and 4), but the 4B grader said NO to every passage, twice. Answered only by the `MAX_RETRIES` fallback that lets the top passages through | **No:** 2 wasted rewrites (~12 extra calls each) caused by grader false negatives |
+> | Figma license | The fact-check rejected a correct answer twice → refused | **No:** the known false negative; the loop made it a refusal |
+> | CEO's home address · dental plan (out of scope) | Nothing relevant, 2 rewrites, fallback, refusal | Correct, but it takes **23 LLM calls to say "I don't know"**, vs 10 for a normal answer |
+>
+> So the self-correction isn't decorative: it fires on 29% of questions. It's **mostly expensive**,
+> though. The 4B relevance grader is **too strict, not too permissive**: 3 of the 6 answerable
+> questions that looped had their answer in the first search and were rescued by the fallback,
+> not by the rewrite. Retrieval itself is fine (hit rate 1.00). The fix belongs in the grader (a
+> better prompt, a bigger grader model, or batch grading), and Task 7's adversarial set is where
+> to measure it.
+
+**Request log line, `/metrics` and trace lookup** (Done-when items):
+
+- One request → **one** JSON line on stdout with every required field, plus `trace_id`,
+  `trace_url`, `llm_calls`, `per_node` and chunk ids. 4 demo requests → 4 lines
+  ([`evidence/request_log_lines.jsonl`](task_05_observability/evidence/request_log_lines.jsonl)).
+  Example in [OBSERVABILITY.md](task_05_observability/OBSERVABILITY.md#one-request--one-log-line).
+- **Log line → LangSmith trace:** `trace_url` in the line is a direct link (0 s). From the
+  `request_id` alone, `make find-trace RID=demo-req-0001` found the root run in **1.6–2.5 s**
+  over 4 lookups (at most 3.2 s including Python startup; [transcript](task_05_observability/evidence/find_trace.txt)).
+- `/metrics` returns live counters: 4 requests → `requests_total` 3 + 1 (chat / stream),
+  `refusal_rate` 0.5, `mean_retries` 0.5, p50 3.08 s / p95 4.58 s, `grade_documents` LLM calls 30
+  ([`evidence/metrics_sample.txt`](task_05_observability/evidence/metrics_sample.txt)). Also
+  verified in the Docker container.
+- Instrumentation overhead: **+0.43 ms per request**.
+- Stretch: grading 2 passages instead of 6 is **−36% cost, −0.14 correctness**. Rejected; see `COST.md`.
 
 ---
 

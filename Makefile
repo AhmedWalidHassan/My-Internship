@@ -5,7 +5,7 @@
 PY ?= $(if $(wildcard week1/.venv/bin/python),week1/.venv/bin/python,python)
 APP := week1/capstone_internal_docs_assistant/app.py
 
-.PHONY: help check check-live test-durations run run-dev run-ui run-ui-capstone bench-api up down logs eval cost fmt
+.PHONY: help check check-live test-durations run run-dev run-ui run-ui-capstone bench-api up down logs eval cost find-trace fmt
 
 help:
 	@echo "make check       lint + fast tests   (no API key, no network, < 5s)"
@@ -14,6 +14,8 @@ help:
 	@echo "make run-ui      start the Streamlit UI (talks to the API over HTTP)"
 	@echo "make bench-api   p50/p95 latency of /chat and /chat/stream against a running API"
 	@echo "make up / down   API + UI in docker compose (week2/task_04_containerize/), logs: make logs"
+	@echo "make cost        cost/latency per question, per node and per path over the eval set"
+	@echo "make find-trace RID=<request_id>   LangSmith trace URL for a request log line"
 	@echo "make eval        run the LangSmith eval suite"
 	@echo "make fmt         autofix lint"
 
@@ -66,6 +68,9 @@ run-ui-capstone:
 eval:
 	$(PY) $(APP) eval
 
-# --- Task 5 (not built yet) -----------------------------------------------
-cost:
-	$(PY) scripts/cost_report.py
+# --- Task 5: observability (files in week2/task_05_observability/) ---------
+cost:          ## run the eval questions and print cost/latency per question, node and path
+	$(PY) week2/task_05_observability/scripts/cost_report.py
+
+find-trace:    ## make find-trace RID=<request_id>  ->  the LangSmith trace URL
+	$(PY) week2/task_05_observability/scripts/find_trace.py $(RID)

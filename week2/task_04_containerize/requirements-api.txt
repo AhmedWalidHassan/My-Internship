@@ -17,6 +17,8 @@ pydantic
 pydantic-settings
 python-dotenv
 httpx
+structlog                  # one JSON log line per request (Task 5)
+prometheus-client          # GET /metrics (Task 5)
 
 # --- RAG: index, retriever, graph, tracing ---
 langchain-core

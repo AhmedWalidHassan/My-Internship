@@ -1,0 +1,24 @@
+# From a request log line to its LangSmith trace (2026-11-16T11:36:13+02:00). Lines from request_log_lines.jsonl.
+$ make find-trace RID=demo-req-0001
+found in 1.61 s via request_id metadata search
+  run:        northwind_assistant  (root: True)  status: success
+  trace_id:   334a738a-8cf9-47c5-90a8-839f477cd0f0
+  request_id: demo-req-0001   session_id: demo-session-1
+  started:    2026-11-16 09:19:00.001989+00:00
+  url:        https://smith.langchain.com/o/d25a7522-0a1b-46db-9753-429d87a65bfc/projects/p/d9b175d7-527e-45d2-bf7f-84e3376a8f76/r/334a738a-8cf9-47c5-90a8-839f477cd0f0?poll=true
+  (whole command incl. Python startup: 2.02 s)
+$ make find-trace RID=demo-req-0004
+found in 1.80 s via request_id metadata search
+  run:        northwind_assistant  (root: True)  status: success
+  trace_id:   4c63d2aa-327f-494a-8a9a-bd91f5910816
+  request_id: demo-req-0004   session_id: 4673cf7a-c597-4799-b9a2-bce00cdbd9a8
+  started:    2026-11-16 09:19:07.606893+00:00
+  url:        https://smith.langchain.com/o/d25a7522-0a1b-46db-9753-429d87a65bfc/projects/p/d9b175d7-527e-45d2-bf7f-84e3376a8f76/r/4c63d2aa-327f-494a-8a9a-bd91f5910816?poll=true
+  (whole command incl. Python startup: 2.28 s)
+$ python week2/task_05_observability/scripts/find_trace.py 334a738a-8cf9-47c5-90a8-839f477cd0f0   # trace_id from the same line
+found in 2.84 s via trace_id = root run id (direct read)
+  run:        northwind_assistant  (root: True)  status: success
+  trace_id:   334a738a-8cf9-47c5-90a8-839f477cd0f0
+  request_id: demo-req-0001   session_id: demo-session-1
+  started:    2026-11-16 09:19:00.001989+00:00
+  url:        https://smith.langchain.com/o/d25a7522-0a1b-46db-9753-429d87a65bfc/projects/p/d9b175d7-527e-45d2-bf7f-84e3376a8f76/r/334a738a-8cf9-47c5-90a8-839f477cd0f0?poll=true

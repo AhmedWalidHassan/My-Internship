@@ -275,6 +275,42 @@ def app_backend(make_backend):
     return make_backend()
 
 
+def wait_until_ready(client, timeout=5.0):
+    """Poll /readyz until the API's background startup has finished."""
+    import time
+
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        r = client.get("/readyz")
+        if r.status_code == 200:
+            return r
+        time.sleep(0.01)
+    raise AssertionError(f"service never became ready: {r.json()}")
+
+
+@pytest.fixture
+def start_api():
+    """start_api(backend_factory, ...) -> a TestClient of the real app, lifespan running."""
+    from fastapi.testclient import TestClient
+
+    from app.main import create_app
+
+    clients = []
+
+    def start(backend_factory, *, feedback_client_factory=lambda: None, wait=True):
+        api = create_app(backend_factory=backend_factory, feedback_client_factory=feedback_client_factory)
+        client = TestClient(api)
+        client.__enter__()
+        clients.append(client)
+        if wait:
+            wait_until_ready(client)
+        return client
+
+    yield start
+    for c in clients:
+        c.__exit__(None, None, None)
+
+
 @pytest.fixture
 def app_graph(app_backend):
     """The compiled graph the app really runs: Backend() -> Assistant -> .graph.
