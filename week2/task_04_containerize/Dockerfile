@@ -134,6 +134,7 @@ RUN mkdir -p /data && chown app:app /data
 COPY app/ /app/app/
 COPY week1/common/ /app/week1/common/
 COPY week1/capstone_internal_docs_assistant/app.py /app/week1/capstone_internal_docs_assistant/app.py
+COPY ingest/ /app/ingest/
 COPY week1/data/ /app/week1/data/
 
 # Container defaults for settings tied to the image layout (common/settings.py).

@@ -1,0 +1,33 @@
+## docker compose up -d --wait (corpus mounted read-only at /corpus, index on the named volume)
+ Container northwind-ui-1 Waiting 
+ Container northwind-api-1 Healthy 
+ Container northwind-ui-1 Healthy 
+up rc 0 in 51 s
+api-1  | 2026-11-18 11:01:14,227 WARNING northwind: Index settings changed (800/100/sentence-transformers/all-MiniLM-L6-v2 -> 800/100/sentence-transformers/all-MiniLM-L6-v2/w3-loaders-1): rebuilding.
+api-1  | {"event": "ingest", "level": "info", "ts": "2026-11-18T11:01:41.406Z", "corpus": "/corpus", "snapshot": "2026-10-01", "documents_loaded": 190, "documents_skipped": 0, "chunks": 348, "duplicates": 1, "added": 190, "changed": 0, "removed": 0, "reused": 0, "rebuilt": true, "embedding_calls": 348, "duration_s": 27.19, "corpus_version": "d2a735e0ebf4e2bf"}
+api-1  | 2026-11-18 11:01:41,406 INFO northwind: Index BUILT: embedded 348 chunks from 190 files in 27.19s, saved to /data/faiss_index_w3
+
+## /readyz
+{"status":"ready","graph_compiled":true,"index":"built","chunks":348,"documents":190,"retriever":"hybrid (BM25 + dense)","active_sessions":0,"startup_seconds":38.38,"corpus_snapshot":"2026-10-01","documents_skipped":0,"index_built_at":"2026-11-18T11:01:41+00:00","index_build_seconds":27.18,"index_updated_at":"2026-11-18T11:01:41+00:00"}
+
+## restart on the warm volume
+api-1  | {"event": "ingest", "level": "info", "ts": "2026-11-18T11:01:41.406Z", "corpus": "/corpus", "snapshot": "2026-10-01", "documents_loaded": 190, "documents_skipped": 0, "chunks": 348, "duplicates": 1, "added": 190, "changed": 0, "removed": 0, "reused": 0, "rebuilt": true, "embedding_calls": 348, "duration_s": 27.19, "corpus_version": "d2a735e0ebf4e2bf"}
+api-1  | 2026-11-18 11:01:41,406 INFO northwind: Index BUILT: embedded 348 chunks from 190 files in 27.19s, saved to /data/faiss_index_w3
+api-1  | {"event": "ingest", "level": "info", "ts": "2026-11-18T11:02:06.779Z", "corpus": "/corpus", "snapshot": "2026-10-01", "documents_loaded": 190, "documents_skipped": 0, "chunks": 348, "duplicates": 1, "added": 0, "changed": 0, "removed": 0, "reused": 190, "rebuilt": false, "embedding_calls": 0, "duration_s": 0.2, "corpus_version": "d2a735e0ebf4e2bf"}
+api-1  | 2026-11-18 11:02:06,779 INFO northwind: Index LOADED from /data/faiss_index_w3 in 0.20s: 348 chunks from 190 files, 0 chunks embedded
+{"status":"ready","graph_compiled":true,"index":"loaded","chunks":348,"documents":190,"retriever":"hybrid (BM25 + dense)","active_sessions":0,"startup_seconds":11.51,"corpus_snapshot":"2026-10-01","documents_skipped":0,"index_built_at":"2026-11-18T11:01:41+00:00","index_build_seconds":27.18,"index_updated_at":"2026-11-18T11:01:41+00:00"}
+
+## down + up (warm volume)
+up in 22 s
+api-1  | 2026-11-18 11:02:33,848 INFO northwind: Index LOADED from /data/faiss_index_w3 in 0.20s: 348 chunks from 190 files, 0 chunks embedded
+{"status":"ready","graph_compiled":true,"index":"loaded","chunks":348,"documents":190,"retriever":"hybrid (BM25 + dense)","active_sessions":0,"startup_seconds":11.07,"corpus_snapshot":"2026-10-01","documents_skipped":0,"index_built_at":"2026-11-18T11:01:41+00:00","index_build_seconds":27.18,"index_updated_at":"2026-11-18T11:01:41+00:00"}
+
+## the corpus is read-only inside the container
+touch: cannot touch '/corpus/x': Read-only file system
+embedding_cache
+faiss_index
+faiss_index_w3
+index.faiss
+index.pkl
+ingestion_report.json
+manifest.json

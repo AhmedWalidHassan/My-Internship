@@ -440,7 +440,12 @@ def create_app(backend_factory: Callable | None = None,
             graph_compiled=graph_compiled,
             index="built" if backend.ingest_stats.get("rebuilt") else "loaded",
             chunks=backend.n_chunks, documents=len(backend.files), retriever=backend.retriever_name,
-            active_sessions=len(backend.assistant.sessions), startup_seconds=runtime.startup_seconds)
+            active_sessions=len(backend.assistant.sessions), startup_seconds=runtime.startup_seconds,
+            corpus_snapshot=backend.ingest_stats.get("snapshot"),
+            documents_skipped=len(backend.ingest_stats.get("skipped") or {}),
+            index_built_at=backend.ingest_stats.get("built_at"),
+            index_build_seconds=backend.ingest_stats.get("build_seconds"),
+            index_updated_at=backend.ingest_stats.get("updated_at"))
 
     # -- feedback -------------------------------------------------------------
     @app.post("/feedback", response_model=FeedbackResponse, tags=["chat"], responses={

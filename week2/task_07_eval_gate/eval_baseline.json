@@ -1,6 +1,6 @@
 {
  "meta": {
-  "date": "2026-11-18T10:06:00+00:00",
+  "date": "2026-11-18T11:10:48+00:00",
   "dataset_version": "5d9544921fd6",
   "n": 70,
   "runs": 2,
@@ -9,33 +9,33 @@
   "runners": [
    "Linux x86_64 py3.14.10"
   ],
-  "git_sha": "daea10ff5594e5d15dd8e51161fae9d933f8566e",
+  "git_sha": "76f82e95fd4c955c3a9650b492acd28bb5a5175f",
   "experiment_urls": [],
   "dataset_name": "northwind-eval-v3",
   "split": "dev"
  },
  "scores": {
-  "correctness": 0.3571,
-  "groundedness": 1.0,
-  "deterministic": 0.3143
+  "correctness": 0.5,
+  "groundedness": 0.9857,
+  "deterministic": 0.7429
  },
  "tolerance": {
   "correctness": 0.08,
   "groundedness": 0.08,
   "cost_increase": 0.2
  },
- "tolerance_justification": "Tolerance 0.08 for correctness and groundedness, kept from Week 2 (the brief: keep it unless Task 4's noise floor says otherwise). On the 70-example dev split that is 5.6 examples: the gate fires on a drop of 6 or more (>= 0.086).\n\nMeasured 2026-11-18, dataset northwind-eval-v3 (dev, 70), generator qwen3.5:4b, judge gemma3:4b (a different model, as Week 3 requires), laptop GPU:\n\n1. Same hardware, repeated: dev runs 2 and 3 were identical, answer for answer and verdict for verdict (spread 0.000 on every metric).\n2. The judge alone, replayed on the same 70 answers: at most 1 verdict of 70 moved (0.014) between replays, so the judge is close to, but not exactly, deterministic.\n3. Week 2's hardware-change evidence still applies (GPU vs CPU/ONNX moved 3 verdicts of 38: ~0.08), and CI builds its index with fastembed (ONNX) rather than PyTorch.\n4. Real regressions on this set are large: the Week 2 loader as shipped (README only) scores 0.15 deterministic on the seed set; losing the 118 readable documents would drop correctness by far more than 0.08.\n\nWhy not tighter: 0.03 (2 examples) is within the judge replay noise plus a hardware change. Why not looser: 0.10+ would let 7 examples (10% of dev) regress unseen.\n\nKnown weakness of what is gated: groundedness is 1.000 on every run because 32/70 answers are refusals (trivially grounded) and the gemma3:4b judge said YES to all 38 non-refusals; on six probes it caught only 1 of 3 planted unsupported claims. A groundedness drop is therefore unlikely to be seen until the judge is stronger. Correctness and the deterministic score carry the gate.\n\nCost: +20% mean cost per question fails the gate (kept from Week 2).",
+ "tolerance_justification": "Tolerance 0.08 for correctness and groundedness, unchanged from Week 2 and Week 3 Task 2 (justification: week3/task_02_eval_at_scale/tolerance_justification_v3.md). This baseline is re-set in Week 3 Task 3 because the system changed a lot (every format is now parsed: deterministic 0.314 -> 0.743, correctness 0.357 -> 0.500 on the same dev split). Leaving the Task 2 baseline in place would let a regression of up to 0.22 correctness through unseen.\n\nMeasured 2026-11-18, dataset northwind-eval-v3 (dev, 70), qwen3.5:4b generator, gemma3:4b judge, laptop GPU: two full dev runs after the ingestion change were identical, answer for answer and verdict for verdict (spread 0.000).\n\nKnown weakness: the gemma3:4b correctness judge (with the stricter Task 2 prompt) is now too strict on CORRECT answers: on 18 dev examples the deterministic check passes and the judge says incorrect, and about 13 of those are plainly correct (it penalises reference details the question did not ask for). Correctness (0.500) therefore understates the system; the deterministic score (0.743) is the more honest floor here. Recalibrating the judge (new human labels on this system's answers) is a follow-up, not part of the ingestion change.\n\nCost: +20% mean cost per question fails the gate (kept). This run: $0.000698 per question, +1.7% vs the Task 2 baseline.",
  "noise": {
   "per_run_scores": [
    {
-    "correctness": 0.3571,
-    "groundedness": 1.0,
-    "deterministic": 0.3143
+    "correctness": 0.5,
+    "groundedness": 0.9857,
+    "deterministic": 0.7429
    },
    {
-    "correctness": 0.3571,
-    "groundedness": 1.0,
-    "deterministic": 0.3143
+    "correctness": 0.5,
+    "groundedness": 0.9857,
+    "deterministic": 0.7429
    }
   ],
   "max_spread": {
@@ -52,80 +52,80 @@
   "factual": {
    "n": 10,
    "correctness": 0.7,
-   "groundedness": 1.0,
-   "deterministic": 0.7
+   "groundedness": 0.9,
+   "deterministic": 0.9
   },
   "table": {
    "n": 4,
-   "correctness": 0.0,
+   "correctness": 0.75,
    "groundedness": 1.0,
-   "deterministic": 0.0
+   "deterministic": 1.0
   },
   "keyword": {
    "n": 4,
-   "correctness": 0.5,
+   "correctness": 0.75,
    "groundedness": 1.0,
-   "deterministic": 0.5
+   "deterministic": 1.0
   },
   "version": {
    "n": 5,
-   "correctness": 0.0,
+   "correctness": 0.4,
    "groundedness": 1.0,
-   "deterministic": 0.0
+   "deterministic": 0.8
   },
   "conflict": {
    "n": 3,
-   "correctness": 0.0,
-   "groundedness": 1.0,
-   "deterministic": 0.0
-  },
-  "draft": {
-   "n": 4,
-   "correctness": 0.5,
-   "groundedness": 1.0,
-   "deterministic": 0.5
-  },
-  "multi_hop": {
-   "n": 4,
-   "correctness": 0.25,
-   "groundedness": 1.0,
-   "deterministic": 0.0
-  },
-  "multi_part": {
-   "n": 4,
-   "correctness": 0.25,
-   "groundedness": 1.0,
-   "deterministic": 0.0
-  },
-  "ambiguous": {
-   "n": 3,
-   "correctness": 0.6667,
+   "correctness": 0.3333,
    "groundedness": 1.0,
    "deterministic": 0.3333
   },
-  "long_doc": {
+  "draft": {
    "n": 4,
    "correctness": 0.0,
    "groundedness": 1.0,
-   "deterministic": 0.0
+   "deterministic": 0.75
+  },
+  "multi_hop": {
+   "n": 4,
+   "correctness": 0.0,
+   "groundedness": 1.0,
+   "deterministic": 0.25
+  },
+  "multi_part": {
+   "n": 4,
+   "correctness": 1.0,
+   "groundedness": 1.0,
+   "deterministic": 1.0
+  },
+  "ambiguous": {
+   "n": 3,
+   "correctness": 1.0,
+   "groundedness": 1.0,
+   "deterministic": 1.0
+  },
+  "long_doc": {
+   "n": 4,
+   "correctness": 0.25,
+   "groundedness": 1.0,
+   "deterministic": 0.75
   },
   "cross_lingual": {
    "n": 4,
    "correctness": 0.0,
    "groundedness": 1.0,
-   "deterministic": 0.0
+   "deterministic": 0.25
   },
   "follow_up": {
    "n": 4,
    "correctness": 0.25,
    "groundedness": 1.0,
-   "deterministic": 0.25
+   "deterministic": 0.75
   },
   "personalized": {
    "n": 4,
-   "correctness": 0.0,
+   "correctness": 0.25,
    "groundedness": 1.0,
-   "deterministic": 0.0
+   "deterministic": 0.75
   },
   "access": {
    "n": 7,
@@ -141,9 +141,9 @@
   }
  },
  "cost": {
-  "mean_cost_usd": 0.0006867,
-  "mean_llm_calls": 17.9286,
-  "mean_latency_s": 5.3848
+  "mean_cost_usd": 0.0006982,
+  "mean_llm_calls": 13.9,
+  "mean_latency_s": 5.9455
  },
  "examples": [
   {
@@ -153,7 +153,7 @@
    "scores": {
     "correctness": 0,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -170,8 +170,8 @@
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -211,7 +211,7 @@
    "scores": {
     "correctness": 0,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -228,8 +228,8 @@
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -240,7 +240,7 @@
    "scores": {
     "correctness": 1,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -257,8 +257,8 @@
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -269,7 +269,7 @@
    "scores": {
     "correctness": 0,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -286,8 +286,8 @@
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -295,93 +295,6 @@
    "id": "16",
    "category": "multi_part",
    "question": "My laptop got stolen, what do I do?",
-   "scores": {
-    "correctness": 0,
-    "groundedness": 1,
-    "deterministic": 0
-   },
-   "flaky": {
-    "correctness": false,
-    "groundedness": false,
-    "deterministic": false
-   },
-   "votes": {
-    "correctness": [
-     0,
-     0
-    ],
-    "groundedness": [
-     1,
-     1
-    ],
-    "deterministic": [
-     0,
-     0
-    ]
-   }
-  },
-  {
-   "id": "17",
-   "category": "multi_part",
-   "question": "What are the password rules?",
-   "scores": {
-    "correctness": 0,
-    "groundedness": 1,
-    "deterministic": 0
-   },
-   "flaky": {
-    "correctness": false,
-    "groundedness": false,
-    "deterministic": false
-   },
-   "votes": {
-    "correctness": [
-     0,
-     0
-    ],
-    "groundedness": [
-     1,
-     1
-    ],
-    "deterministic": [
-     0,
-     0
-    ]
-   }
-  },
-  {
-   "id": "18",
-   "category": "conflict",
-   "question": "How do I get on the VPN from home?",
-   "scores": {
-    "correctness": 0,
-    "groundedness": 1,
-    "deterministic": 0
-   },
-   "flaky": {
-    "correctness": false,
-    "groundedness": false,
-    "deterministic": false
-   },
-   "votes": {
-    "correctness": [
-     0,
-     0
-    ],
-    "groundedness": [
-     1,
-     1
-    ],
-    "deterministic": [
-     0,
-     0
-    ]
-   }
-  },
-  {
-   "id": "19",
-   "category": "factual",
-   "question": "Can I open our source code on my personal phone?",
    "scores": {
     "correctness": 1,
     "groundedness": 1,
@@ -408,11 +321,69 @@
    }
   },
   {
-   "id": "20",
-   "category": "factual",
-   "question": "Do I need approval for a Figma license?",
+   "id": "17",
+   "category": "multi_part",
+   "question": "What are the password rules?",
    "scores": {
-    "correctness": 0,
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "18",
+   "category": "conflict",
+   "question": "How do I get on the VPN from home?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "19",
+   "category": "factual",
+   "question": "Can I open our source code on my personal phone?",
+   "scores": {
+    "correctness": 1,
     "groundedness": 1,
     "deterministic": 0
    },
@@ -423,8 +394,8 @@
    },
    "votes": {
     "correctness": [
-     0,
-     0
+     1,
+     1
     ],
     "groundedness": [
      1,
@@ -437,11 +408,11 @@
    }
   },
   {
-   "id": "24",
+   "id": "20",
    "category": "factual",
-   "question": "Can the R2 be used outdoors?",
+   "question": "Do I need approval for a Figma license?",
    "scores": {
-    "correctness": 0,
+    "correctness": 1,
     "groundedness": 1,
     "deterministic": 1
    },
@@ -452,8 +423,37 @@
    },
    "votes": {
     "correctness": [
-     0,
-     0
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "24",
+   "category": "factual",
+   "question": "Can the R2 be used outdoors?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
     ],
     "groundedness": [
      1,
@@ -557,35 +557,6 @@
    "category": "multi_hop",
    "question": "I just referred a friend who got hired. When do I get my referral bonus, and when will my friend be allowed to use their PTO?",
    "scores": {
-    "correctness": 1,
-    "groundedness": 1,
-    "deterministic": 0
-   },
-   "flaky": {
-    "correctness": false,
-    "groundedness": false,
-    "deterministic": false
-   },
-   "votes": {
-    "correctness": [
-     1,
-     1
-    ],
-    "groundedness": [
-     1,
-     1
-    ],
-    "deterministic": [
-     0,
-     0
-    ]
-   }
-  },
-  {
-   "id": "3",
-   "category": "version",
-   "question": "Can I take time off in my first months?",
-   "scores": {
     "correctness": 0,
     "groundedness": 1,
     "deterministic": 0
@@ -607,6 +578,35 @@
     "deterministic": [
      0,
      0
+    ]
+   }
+  },
+  {
+   "id": "3",
+   "category": "version",
+   "question": "Can I take time off in my first months?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
     ]
    }
   },
@@ -644,9 +644,9 @@
    "category": "multi_part",
    "question": "What are the rules for booking business travel?",
    "scores": {
-    "correctness": 0,
+    "correctness": 1,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -655,16 +655,16 @@
    },
    "votes": {
     "correctness": [
-     0,
-     0
+     1,
+     1
     ],
     "groundedness": [
      1,
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -702,7 +702,7 @@
    "category": "follow_up",
    "question": "And what does the standard plan cover?",
    "scores": {
-    "correctness": 1,
+    "correctness": 0,
     "groundedness": 1,
     "deterministic": 1
    },
@@ -713,8 +713,8 @@
    },
    "votes": {
     "correctness": [
-     1,
-     1
+     0,
+     0
     ],
     "groundedness": [
      1,
@@ -789,7 +789,7 @@
    "category": "factual",
    "question": "How far ahead do I have to ask for PTO?",
    "scores": {
-    "correctness": 1,
+    "correctness": 0,
     "groundedness": 1,
     "deterministic": 1
    },
@@ -800,8 +800,8 @@
    },
    "votes": {
     "correctness": [
-     1,
-     1
+     0,
+     0
     ],
     "groundedness": [
      1,
@@ -905,9 +905,9 @@
    "category": "version",
    "question": "What is the home-office stipend?",
    "scores": {
-    "correctness": 0,
+    "correctness": 1,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -916,16 +916,16 @@
    },
    "votes": {
     "correctness": [
-     0,
-     0
+     1,
+     1
     ],
     "groundedness": [
      1,
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -963,9 +963,9 @@
    "category": "table",
    "question": "What is the hotel cap per night for a business trip to India?",
    "scores": {
-    "correctness": 0,
+    "correctness": 1,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -974,16 +974,16 @@
    },
    "votes": {
     "correctness": [
-     0,
-     0
+     1,
+     1
     ],
     "groundedness": [
      1,
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -992,9 +992,9 @@
    "category": "table",
    "question": "How much does the 5G connectivity module cost?",
    "scores": {
-    "correctness": 0,
+    "correctness": 1,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -1003,16 +1003,16 @@
    },
    "votes": {
     "correctness": [
-     0,
-     0
+     1,
+     1
     ],
     "groundedness": [
      1,
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -1023,7 +1023,7 @@
    "scores": {
     "correctness": 0,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -1040,8 +1040,8 @@
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -1108,36 +1108,7 @@
    "category": "draft",
    "question": "Is Northwind switching to flexible time off?",
    "scores": {
-    "correctness": 1,
-    "groundedness": 1,
-    "deterministic": 1
-   },
-   "flaky": {
-    "correctness": false,
-    "groundedness": false,
-    "deterministic": false
-   },
-   "votes": {
-    "correctness": [
-     1,
-     1
-    ],
-    "groundedness": [
-     1,
-     1
-    ],
-    "deterministic": [
-     1,
-     1
-    ]
-   }
-  },
-  {
-   "id": "n09",
-   "category": "draft",
-   "question": "What is the minimum amount of time off I must take under the flexible time off policy?",
-   "scores": {
-    "correctness": 1,
+    "correctness": 0,
     "groundedness": 1,
     "deterministic": 0
    },
@@ -1148,8 +1119,8 @@
    },
    "votes": {
     "correctness": [
-     1,
-     1
+     0,
+     0
     ],
     "groundedness": [
      1,
@@ -1158,6 +1129,35 @@
     "deterministic": [
      0,
      0
+    ]
+   }
+  },
+  {
+   "id": "n09",
+   "category": "draft",
+   "question": "What is the minimum amount of time off I must take under the flexible time off policy?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
     ]
    }
   },
@@ -1197,7 +1197,7 @@
    "scores": {
     "correctness": 0,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -1214,8 +1214,8 @@
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -1255,7 +1255,7 @@
    "scores": {
     "correctness": 0,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -1272,8 +1272,8 @@
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -1282,9 +1282,9 @@
    "category": "long_doc",
    "question": "Can the R3 work on an outdoor loading dock in hot weather?",
    "scores": {
-    "correctness": 0,
+    "correctness": 1,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -1293,16 +1293,16 @@
    },
    "votes": {
     "correctness": [
-     0,
-     0
+     1,
+     1
     ],
     "groundedness": [
      1,
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -1371,7 +1371,7 @@
    "scores": {
     "correctness": 0,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -1388,8 +1388,8 @@
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -1398,9 +1398,9 @@
    "category": "ambiguous",
    "question": "Which battery pack does the rover use?",
    "scores": {
-    "correctness": 0,
+    "correctness": 1,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -1409,16 +1409,16 @@
    },
    "votes": {
     "correctness": [
-     0,
-     0
+     1,
+     1
     ],
     "groundedness": [
      1,
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -1458,7 +1458,7 @@
    "scores": {
     "correctness": 0,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -1475,8 +1475,8 @@
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -1514,9 +1514,9 @@
    "category": "personalized",
    "question": "How many PTO days do I get this year?",
    "scores": {
-    "correctness": 0,
+    "correctness": 1,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -1525,16 +1525,16 @@
    },
    "votes": {
     "correctness": [
-     0,
-     0
+     1,
+     1
     ],
     "groundedness": [
      1,
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -1545,7 +1545,7 @@
    "scores": {
     "correctness": 0,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -1562,8 +1562,8 @@
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -1630,9 +1630,9 @@
    "category": "access",
    "question": "How long is a performance improvement plan?",
    "scores": {
-    "correctness": 0,
+    "correctness": 1,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -1641,16 +1641,16 @@
    },
    "votes": {
     "correctness": [
-     0,
-     0
+     1,
+     1
     ],
     "groundedness": [
      1,
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -1659,9 +1659,9 @@
    "category": "table",
    "question": "What is the hotel cap per night for a business trip to Germany?",
    "scores": {
-    "correctness": 0,
+    "correctness": 1,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -1670,16 +1670,16 @@
    },
    "votes": {
     "correctness": [
-     0,
-     0
+     1,
+     1
     ],
     "groundedness": [
      1,
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -1690,7 +1690,7 @@
    "scores": {
     "correctness": 0,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -1707,8 +1707,8 @@
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -1719,7 +1719,7 @@
    "scores": {
     "correctness": 0,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -1736,8 +1736,8 @@
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -1748,7 +1748,7 @@
    "scores": {
     "correctness": 1,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -1765,8 +1765,8 @@
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -1804,35 +1804,6 @@
    "category": "access",
    "question": "What is the salary range for an L4 engineer in Austin?",
    "scores": {
-    "correctness": 1,
-    "groundedness": 1,
-    "deterministic": 1
-   },
-   "flaky": {
-    "correctness": false,
-    "groundedness": false,
-    "deterministic": false
-   },
-   "votes": {
-    "correctness": [
-     1,
-     1
-    ],
-    "groundedness": [
-     1,
-     1
-    ],
-    "deterministic": [
-     1,
-     1
-    ]
-   }
-  },
-  {
-   "id": "s19",
-   "category": "access",
-   "question": "What is the salary range for an L4 engineer in Austin?",
-   "scores": {
     "correctness": 0,
     "groundedness": 1,
     "deterministic": 0
@@ -1854,6 +1825,35 @@
     "deterministic": [
      0,
      0
+    ]
+   }
+  },
+  {
+   "id": "s19",
+   "category": "access",
+   "question": "What is the salary range for an L4 engineer in Austin?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
     ]
    }
   },
@@ -1920,9 +1920,9 @@
    "category": "access",
    "question": "How long is a performance improvement plan?",
    "scores": {
-    "correctness": 1,
+    "correctness": 0,
     "groundedness": 1,
-    "deterministic": 1
+    "deterministic": 0
    },
    "flaky": {
     "correctness": false,
@@ -1931,16 +1931,16 @@
    },
    "votes": {
     "correctness": [
-     1,
-     1
+     0,
+     0
     ],
     "groundedness": [
      1,
      1
     ],
     "deterministic": [
-     1,
-     1
+     0,
+     0
     ]
    }
   },
@@ -1978,9 +1978,9 @@
    "category": "follow_up",
    "question": "And how many of them can I carry over?",
    "scores": {
-    "correctness": 0,
+    "correctness": 1,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -1989,16 +1989,16 @@
    },
    "votes": {
     "correctness": [
-     0,
-     0
+     1,
+     1
     ],
     "groundedness": [
      1,
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -2038,7 +2038,7 @@
    "scores": {
     "correctness": 0,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -2055,8 +2055,8 @@
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -2065,9 +2065,9 @@
    "category": "factual",
    "question": "How quickly do I have to report a lost laptop?",
    "scores": {
-    "correctness": 1,
-    "groundedness": 1,
-    "deterministic": 0
+    "correctness": 0,
+    "groundedness": 0,
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -2076,16 +2076,16 @@
    },
    "votes": {
     "correctness": [
-     1,
-     1
-    ],
-    "groundedness": [
-     1,
-     1
-    ],
-    "deterministic": [
      0,
      0
+    ],
+    "groundedness": [
+     0,
+     0
+    ],
+    "deterministic": [
+     1,
+     1
     ]
    }
   },
@@ -2096,7 +2096,7 @@
    "scores": {
     "correctness": 0,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -2113,8 +2113,8 @@
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },
@@ -2123,9 +2123,9 @@
    "category": "keyword",
    "question": "What does error E-271 indicate?",
    "scores": {
-    "correctness": 0,
+    "correctness": 1,
     "groundedness": 1,
-    "deterministic": 0
+    "deterministic": 1
    },
    "flaky": {
     "correctness": false,
@@ -2134,16 +2134,16 @@
    },
    "votes": {
     "correctness": [
-     0,
-     0
+     1,
+     1
     ],
     "groundedness": [
      1,
      1
     ],
     "deterministic": [
-     0,
-     0
+     1,
+     1
     ]
    }
   },

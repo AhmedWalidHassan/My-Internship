@@ -5,7 +5,7 @@
 PY ?= $(if $(wildcard week1/.venv/bin/python),week1/.venv/bin/python,python)
 APP := week1/capstone_internal_docs_assistant/app.py
 
-.PHONY: help check check-live test-durations run run-dev run-ui run-ui-capstone bench-api up down logs eval eval-capstone eval-retrieval eval-test ingest ingest-full cost find-trace cache-bench eval-gate injection-test load-test fmt
+.PHONY: help check check-corpus check-live test-durations run run-dev run-ui run-ui-capstone bench-api up down logs eval eval-capstone eval-retrieval eval-test ingest ingest-full cost find-trace cache-bench eval-gate injection-test load-test fmt
 
 help:
 	@echo "make check       lint + fast tests   (no API key, no network, ~5 s)"
@@ -28,7 +28,10 @@ help:
 # --- Task 2 ---------------------------------------------------------------
 check:
 	$(PY) -m ruff check .
-	$(PY) -m pytest -m "not live" -q
+	$(PY) -m pytest -m "not live and not corpus" -q
+
+check-corpus:  ## every document of the Week 3 corpus through the loaders (offline, ~5 s)
+	$(PY) -m pytest -m corpus -q
 
 check-live:
 	$(PY) -m pytest -m live -q -rA --durations=5
