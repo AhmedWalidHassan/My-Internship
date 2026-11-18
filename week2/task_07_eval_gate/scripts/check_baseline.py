@@ -27,7 +27,7 @@ from pathlib import Path
 
 GATED = ("correctness", "groundedness")
 ARCHIVED_BASELINES = {"eval_baseline_w2.json"}     # Week 3 Task 1: kept for history, never a gate
-SHOWN = ("correctness", "groundedness", "retrieval_hit")
+SHOWN = ("correctness", "groundedness", "deterministic", "retrieval_hit")   # whichever the run has
 
 
 def load(path: Path) -> dict:
@@ -87,7 +87,7 @@ def report(results: dict, baseline: dict, passed: bool, failures: list[str], det
         L += [f"> ⚠️ Dataset changed since the baseline ({bm.get('dataset_version')} → {rm.get('dataset_version')}). "
               "Compared on the examples both have; refresh the baseline in the PR that changes the dataset.", ""]
     L += ["| Metric | Baseline | This run | Δ | Tolerance |", "|---|---:|---:|---:|---:|"]
-    for m in SHOWN:
+    for m in [m for m in SHOWN if m in results["scores"] or m in baseline["scores"]]:
         L.append(f"| {m} | {fmt(baseline['scores'].get(m))} | {fmt(results['scores'].get(m))} | "
                  f"{delta(baseline['scores'].get(m), results['scores'].get(m))} | {fmt(tol.get(m)) if m in GATED else 'not gated'} |")
     if details["base_cost"] and details["now_cost"] is not None:

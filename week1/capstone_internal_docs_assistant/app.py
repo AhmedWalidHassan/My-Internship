@@ -114,11 +114,47 @@ def _meaningful(text: str) -> bool:
     return len(body.strip()) >= 20
 
 
-def chunk_file(path: Path) -> list:
+def corpus_files(data_dir: Path) -> tuple[dict, dict]:
+    """({key: path} of the files to index, {extension: count} of listed documents skipped).
+
+    A corpus export with a `_metadata.csv` (the Week 3 corpus) is indexed from that list:
+    every listed document, in any sub-folder, keyed by its path relative to the corpus
+    (`policies/hr/HR-POL-005_sick_leave.pdf`). The export's own README and CSVs are not
+    documents and are never indexed. Formats the loader can't parse yet (only .md/.txt
+    today; PDF/HTML/XLSX/CSV are Week 3 Task 3) are SKIPPED, and every skip is logged with
+    the count per format: nothing is skipped silently any more (Week 3 Task 1 finding).
+
+    Without a `_metadata.csv` (the Week 1 corpus, tests) it is the Week 2 behaviour: the
+    .md/.txt files at the top level of `data_dir`, keyed by file name.
+    """
+    data_dir = Path(data_dir)
+    metadata = data_dir / "_metadata.csv"
+    if not metadata.exists():
+        return {p.name: p for p in sorted(data_dir.iterdir()) if p.suffix.lower() in SUPPORTED_EXT}, {}
+    import csv
+    with open(metadata, encoding="utf-8") as f:
+        listed = [row["path"] for row in csv.DictReader(f)]
+    files, skipped = {}, {}
+    for rel in listed:
+        path = data_dir / rel
+        if path.suffix.lower() in SUPPORTED_EXT and path.is_file():
+            files[rel] = path
+        else:
+            reason = (path.suffix.lower() or "no extension") if path.is_file() else "listed but missing"
+            skipped[reason] = skipped.get(reason, 0) + 1
+    if skipped:
+        log.warning("Corpus %s: indexing %d of %d listed documents; SKIPPED %d (unsupported format: %s)",
+                    data_dir, len(files), len(listed), sum(skipped.values()),
+                    ", ".join(f"{k} {v}" for k, v in sorted(skipped.items(), key=lambda kv: -kv[1])))
+    return dict(sorted(files.items())), skipped
+
+
+def chunk_file(path: Path, rel: str | None = None) -> list:
     """Split one file into section-aligned chunks.
 
     Splitting on markdown headings first keeps every policy section in its own chunk
     (no chunk mixes two sections), and each chunk remembers its section for citations.
+    `rel` is the file's path in the corpus (metadata "path"); it defaults to the file name.
     """
     from langchain_text_splitters import MarkdownHeaderTextSplitter, RecursiveCharacterTextSplitter
 
@@ -136,7 +172,7 @@ def chunk_file(path: Path) -> list:
             continue
         section = piece.metadata.get("section") or piece.metadata.get("title") or ""
         chunks.append(Document(page_content=piece.page_content,
-                               metadata={"source": path.name, "section": section}))
+                               metadata={"source": path.name, "path": rel or path.name, "section": section}))
     return chunks
 
 
@@ -153,8 +189,7 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
     from langchain_community.vectorstores import FAISS
 
     t0 = time.perf_counter()
-    files = sorted(p for p in Path(data_dir).iterdir() if p.suffix.lower() in SUPPORTED_EXT)
-    current = {p.name: p for p in files}
+    current, skipped = corpus_files(data_dir)
     signature = f"{CHUNK_SIZE}/{CHUNK_OVERLAP}/{_embedding_id(embeddings)}"
 
     store, manifest = None, {"signature": signature, "files": {}}
@@ -167,7 +202,7 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
             log.warning("Index settings changed (%s -> %s): rebuilding.", saved.get("signature"), signature)
 
     stats = {"added": [], "updated": [], "removed": [], "reused": [], "rebuilt": store is None,
-             "embedded_chunks": 0}
+             "embedded_chunks": 0, "skipped": skipped}
 
     # removed files
     for name in [n for n in manifest["files"] if n not in current]:
@@ -189,7 +224,7 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
             stats["updated"].append(name)
         else:
             stats["added"].append(name)
-        chunks = chunk_file(path)
+        chunks = chunk_file(path, rel=name)
         ids = [f"{name}::{i}" for i in range(len(chunks))]
         stats["embedded_chunks"] += len(chunks)
         if chunks:
@@ -915,17 +950,27 @@ def _judge(llm, prompt: str, pattern: str):
     return verdict
 
 
+# Week 3 Task 2: stricter than Week 2's prompt. With a judge that is NOT the generator (gemma3:4b),
+# the Week 2 wording let it call "90 days" correct against a reference of "60 days" and invent facts
+# the answer never stated. The judge now has to QUOTE the answer's value for each needed fact and
+# compare it, and a different value is an explicit fail. Measured in week3/task_02_eval_at_scale/
+# judge_check.py (agreement with 20 hand labels and with the deterministic scorer).
 CORRECTNESS_PROMPT = (
-    "You are grading an assistant's answer against a reference answer.\n"
+    "You are a strict grader. Compare the assistant answer with the reference answer, which is the "
+    "truth.\n"
     "Question: {question}\n"
     "Reference answer: {reference}\n"
     "Assistant answer: {answer}\n\n"
-    "List the key facts (numbers, limits, conditions) that are needed to answer THE "
-    "QUESTION ASKED and check whether the assistant answer states each one. Extra "
-    "detail in the reference that the question did not ask for may be missing, and "
-    "extra correct detail in the assistant answer is fine. Finish with a last line "
-    "that says exactly 'VERDICT: CORRECT' if every needed fact is present and nothing "
-    "contradicts the reference, otherwise 'VERDICT: INCORRECT'."
+    "Step 1. List the key facts in the reference that THE QUESTION ASKED needs (numbers, amounts, "
+    "dates, durations, names, versions, conditions). Ignore reference details the question did not ask for.\n"
+    "Step 2. For each key fact, copy word for word what the assistant answer says about it, or write "
+    "NOT STATED. Do not assume or fill in anything the assistant answer does not literally say.\n"
+    "Step 3. Mark each fact MATCH only if the assistant states the same value as the reference. A "
+    "different number, amount, version or name (for example 90 days instead of 60, $1,500 instead of "
+    "$2,000, a different product) is a MISMATCH, even if it sounds plausible. NOT STATED is a miss.\n"
+    "Extra correct detail in the assistant answer is fine.\n"
+    "Finish with a last line that says exactly 'VERDICT: CORRECT' if every key fact is a MATCH, "
+    "otherwise 'VERDICT: INCORRECT'."
 )
 
 

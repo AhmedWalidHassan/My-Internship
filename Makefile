@@ -5,7 +5,7 @@
 PY ?= $(if $(wildcard week1/.venv/bin/python),week1/.venv/bin/python,python)
 APP := week1/capstone_internal_docs_assistant/app.py
 
-.PHONY: help check check-live test-durations run run-dev run-ui run-ui-capstone bench-api up down logs eval cost find-trace cache-bench eval-gate injection-test load-test fmt
+.PHONY: help check check-live test-durations run run-dev run-ui run-ui-capstone bench-api up down logs eval eval-capstone eval-retrieval eval-test ingest ingest-full cost find-trace cache-bench eval-gate injection-test load-test fmt
 
 help:
 	@echo "make check       lint + fast tests   (no API key, no network, ~5 s)"
@@ -19,7 +19,10 @@ help:
 	@echo "make cache-bench MODE=cold-warm|workload|prewarm   prove the cache's savings"
 	@echo "make injection-test   7 prompt-injection attempts against a running API, judged (leak? bypass?)"
 	@echo "make load-test        50 requests over 30 s against a running API (N=, SECONDS=)"
-	@echo "make eval        run the LangSmith eval suite"
+	@echo "make eval        Week 3 eval, dev split, full pipeline + judge (JUDGE_MODEL, default gemma3:4b)"
+	@echo "make eval-retrieval   dev split, retrieval only (recall@k, MRR): seconds, no LLM"
+	@echo "make eval-test   the frozen TEST split: only to confirm a decision (the run is committed)"
+	@echo "make ingest / ingest-full   update / rebuild the index from DATA_DIR"
 	@echo "make fmt         autofix lint"
 
 # --- Task 2 ---------------------------------------------------------------
@@ -68,7 +71,7 @@ logs:
 run-ui-capstone:
 	$(PY) -m streamlit run $(APP)
 
-eval:
+eval-capstone:  ## the Week 1 LangSmith eval of the capstone's 28 built-in examples (was `make eval`)
 	$(PY) $(APP) eval
 
 # --- Task 5: observability (files in week2/task_05_observability/) ---------
@@ -78,10 +81,31 @@ cost:          ## run the eval questions and print cost/latency per question, no
 find-trace:    ## make find-trace RID=<request_id>  ->  the LangSmith trace URL
 	$(PY) week2/task_05_observability/scripts/find_trace.py $(RID)
 
-# --- Task 7: eval gate (files in week2/task_07_eval_gate/) -----------------
-eval-gate:     ## the 38-example eval on the real model, then the gate vs eval_baseline.json
-	$(PY) week2/task_07_eval_gate/scripts/run_eval.py --out eval_results.json --no-publish
+# --- Task 7 + Week 3 Task 2: the eval (runner in week2/task_07_eval_gate/scripts/run_eval.py) ----
+# Dataset v3 (week3/eval/eval_v3.jsonl) with a committed dev/test split. Results go to
+# week3/eval/runs/<split>/<sha>_<split>_<mode>_<time>.json (dev ignored by git, test committed).
+JUDGE_MODEL ?= gemma3:4b
+EVAL := $(PY) week2/task_07_eval_gate/scripts/run_eval.py
+
+eval:           ## dev split, full pipeline, judged by a model other than the generator
+	JUDGE_MODEL=$(JUDGE_MODEL) $(EVAL) --split dev --no-publish
+
+eval-retrieval: ## dev split, retrieval only: no LLM call, seconds, ~$0 (Week 3 Task 2)
+	$(EVAL) --retrieval-only --split dev
+
+eval-test:      ## frozen TEST split: run ONLY to confirm a decision (rule 5); commit the run file
+	JUDGE_MODEL=$(JUDGE_MODEL) $(EVAL) --split test --no-cache --no-publish
+
+eval-gate:      ## dev eval on the real model, then the gate vs eval_baseline.json (what CI runs)
+	JUDGE_MODEL=$(JUDGE_MODEL) $(EVAL) --split dev --out eval_results.json --no-publish
 	$(PY) week2/task_07_eval_gate/scripts/check_baseline.py --results eval_results.json --report regression_report.md
+
+# --- Week 3: ingestion (Task 3 replaces these with its own loader) --------------
+ingest:         ## incremental: re-embed only new/changed documents of DATA_DIR
+	$(PY) $(APP) ingest
+
+ingest-full:    ## rebuild the whole index from scratch
+	$(PY) $(APP) ingest --rebuild
 
 # --- Task 6: caching (files in week2/task_06_caching/) --------------------
 cache-bench:   ## make cache-bench MODE=cold-warm|workload|prewarm

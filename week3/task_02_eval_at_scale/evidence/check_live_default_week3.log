@@ -1,0 +1,126 @@
+FF.FF..x.                                                                [100%]
+=================================== FAILURES ===================================
+_________________ test_live_stream_delivers_real_model_tokens __________________
+
+    @pytest.mark.live
+    def test_live_stream_delivers_real_model_tokens():
+        """The default app (real Backend, real model): the answer arrives as many token
+        events from the model, then a cited `done`."""
+        with TestClient(create_app()) as client:
+            wait_until_ready(client, timeout=180)
+            events = stream_chat(client, "How many sick days do I get per year?")
+        kinds = [k for k, _ in events]
+        assert kinds[-1] == "done", events[-1]
+        assert kinds.count("token") > 5, f"expected a token stream, got {kinds}"
+        done = events[-1][1]
+        assert re.search(r"\b10\b|\bten\b", done["answer"], re.I), done["answer"]
+        source = corpus_facts()["sick_days_source"]           # depends on the corpus (Week 3 Task 1 triage)
+>       assert any(s.startswith(source) for s in done["sources"]), done["sources"]
+E       AssertionError: ['employee_handbook.md › 3. Sick Leave', 'employee_handbook.md › 2. Paid Time Off (PTO)']
+E       assert False
+E        +  where False = any(<generator object test_live_stream_delivers_real_model_tokens.<locals>.<genexpr> at 0x7fcfc9e9dd20>)
+
+tests/test_api.py:476: AssertionError
+----------------------------- Captured stdout call -----------------------------
+{"request_id": "0a5b0dec6c1540df930b3e99f9b5571f", "session_id": "583d82f7-a39d-403c-8c5a-fdd8dd06f65f", "trace_id": "c0707f5e-3570-479f-93b6-40d08b221cf0", "endpoint": "chat/stream", "status": "ok", "route": "retrieve", "node_path": ["contextualize", "route_question", "retrieve", "grade_documents", "generate", "grade_generation"], "retries": 0, "latency_ms": 11382, "tokens_in": 2064, "tokens_out": 80, "estimated_cost_usd": 0.000358, "refused": false, "cache_hit": false, "llm_calls": 10, "model": "ollama:qwen3.5:4b", "per_node": {"contextualize": {"runs": 1, "ms": 0.1, "llm_calls": 0, "llm_ms": 0.0, "tokens_in": 0, "tokens_out": 0}, "route_question": {"runs": 1, "ms": 9176.0, "llm_calls": 1, "llm_ms": 9174.6, "tokens_in": 148, "tokens_out": 5}, "retrieve": {"runs": 1, "ms": 5.7, "llm_calls": 0, "llm_ms": 0.0, "tokens_in": 0, "tokens_out": 0}, "grade_documents": {"runs": 1, "ms": 849.9, "llm_calls": 6, "llm_ms": 846.3, "tokens_in": 1135, "tokens_out": 12}, "generate": {"runs": 1, "ms": 449.1, "llm_calls": 1, "llm_ms": 448.0, "tokens_in": 370, "tokens_out": 19}, "grade_generation": {"runs": 1, "ms": 890.4, "llm_calls": 2, "llm_ms": 889.0, "tokens_in": 411, "tokens_out": 44}}, "retrieved_ids": ["legacy_intranet/employee_handbook.md::2", "legacy_intranet/it_faq.md::3", "legacy_intranet/it_faq.md::0", "meetings/2026-03-05_people_ops_allhands_qa_203.txt::0", "legacy_intranet/employee_handbook.md::1", "legacy_intranet/it_faq.md::2", "scanned_archive/PTO_Policy_2017_scan.txt::0"], "kept_ids": ["legacy_intranet/employee_handbook.md::2", "legacy_intranet/employee_handbook.md::1"], "degraded": [], "llm_attempts": 10, "ttft_ms": 10227, "trace_url": null, "event": "request", "level": "info", "ts": "2026-11-18T10:09:40.448640Z"}
+----------------------------- Captured stderr call -----------------------------
+2026-11-18 12:09:18,360 INFO northwind.api: config: llm=ollama:qwen3.5:4b base_url=http://172.17.0.1:11434 embeddings=ollama k=4 chunks=800/100 index=/mnt/games/coding/My-Internship/week1/capstone_internal_docs_assistant/faiss_index_w3 | cache: on (ttl 3600s, refusals 300s)
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 2095.82it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-11-18 12:09:28,987 WARNING northwind: Corpus /mnt/games/coding/My-Internship/week3/corpus: indexing 118 of 190 listed documents; SKIPPED 72 (unsupported format: .html 46, .pdf 23, .xlsx 2, .csv 1)
+2026-11-18 12:09:29,012 INFO northwind: Index LOADED from /mnt/games/coding/My-Internship/week1/capstone_internal_docs_assistant/faiss_index_w3 in 0.03s: 139 chunks from 118 files, 0 chunks embedded
+2026-11-18 12:09:29,061 INFO northwind.api: API READY in 10.70s: index LOADED, 139 chunks from 118 documents, hybrid (BM25 + dense) retriever
+------------------------------ Captured log call -------------------------------
+WARNING  huggingface_hub.utils._http:_http.py:993 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+______________________ test_grounded_answer_with_citation ______________________
+
+backend = <capstone_app.Backend object at 0x7fd0b8289f90>
+
+    def test_grounded_answer_with_citation(backend):
+        r = ask(backend, "How many sick days do I get per year?")
+        assert re.search(r"\b10\b|\bten\b", r["answer"], re.I), r["answer"]
+        # Week 1 corpus: the handbook. Week 3 corpus: the policy that is authoritative now (Task 1 triage).
+>       assert corpus_facts()["sick_days_source"] in cited_files(r), r["sources"]
+E       AssertionError: ['employee_handbook.md › 3. Sick Leave', 'employee_handbook.md › 2. Paid Time Off (PTO)']
+E       assert 'HR-POL-005_sick_leave.pdf' in {'employee_handbook.md'}
+E        +  where {'employee_handbook.md'} = cited_files({'event': 'final', 'answer': 'You receive 10 paid sick days per year.', 'sources': ['employee_handbook.md › 3. Sick Le...TO)'], 'path': ['contextualize', 'route_question', 'retrieve', 'grade_documents', 'generate', 'grade_generation'], ...})
+
+tests/test_golden_path.py:48: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 14375.53it/s]
+2026-11-18 12:09:41,300 WARNING northwind: Corpus /mnt/games/coding/My-Internship/week3/corpus: indexing 118 of 190 listed documents; SKIPPED 72 (unsupported format: .html 46, .pdf 23, .xlsx 2, .csv 1)
+2026-11-18 12:09:41,305 INFO northwind: Index LOADED from /mnt/games/coding/My-Internship/week1/capstone_internal_docs_assistant/faiss_index_w3 in 0.01s: 139 chunks from 118 files, 0 chunks embedded
+------------------------------ Captured log setup ------------------------------
+WARNING  northwind:app.py:146 Corpus /mnt/games/coding/My-Internship/week3/corpus: indexing 118 of 190 listed documents; SKIPPED 72 (unsupported format: .html 46, .pdf 23, .xlsx 2, .csv 1)
+INFO     northwind:app.py:263 Index LOADED from /mnt/games/coding/My-Internship/week1/capstone_internal_docs_assistant/faiss_index_w3 in 0.01s: 139 chunks from 118 files, 0 chunks embedded
+_______________ test_plausible_sounding_out_of_scope_is_refused ________________
+
+backend = <capstone_app.Backend object at 0x7fd0b8289f90>
+
+    def test_plausible_sounding_out_of_scope_is_refused(backend):
+        """Week 1 corpus: sounds internal, but the corpus only covers remote work from HOME
+        (3 days a week), not from abroad. It must refuse rather than stretch the home policy.
+    
+        Week 3 corpus (Task 1 triage, "the world changed"): HR-POL-011 Work From Abroad
+        (2026-04-01) now answers it: up to 30 days a year. Refusing is now the wrong answer."""
+        facts = corpus_facts()
+        r = ask(backend, "What's our policy on remote work from abroad?")
+        if not facts["abroad_answerable"]:
+            assert REFUSAL in r["answer"], f"answered instead of refusing: {r['answer']!r} (path {r['path']})"
+        else:
+>           assert REFUSAL not in r["answer"], f"refused a question HR-POL-011 answers (path {r['path']})"
+E           AssertionError: refused a question HR-POL-011 answers (path ['contextualize', 'route_question', 'retrieve', 'grade_documents', 'generate', 'grade_generation', 'rewrite_query', 'retrieve', 'grade_documents', 'generate', 'grade_generation', 'rewrite_query', 'retrieve', 'grade_documents', 'generate', 'grade_generation', 'refuse'])
+E           assert "I don't kno...d documents." not in "I don't kno...d documents."
+E             
+E             "I don't know based...provided documents." is contained here:
+E               I don't know based on the provided documents.
+
+tests/test_golden_path.py:73: AssertionError
+___________________ test_two_turn_follow_up_resolves_pronoun ___________________
+
+backend = <capstone_app.Backend object at 0x7fd0b8289f90>
+
+    def test_two_turn_follow_up_resolves_pronoun(backend):
+        session = f"test-{uuid.uuid4()}"
+        ask(backend, "How much PTO do I get?", session)
+        follow_up = "Can I carry it over to next year?"
+        assert "PTO" not in follow_up
+    
+        r = ask(backend, follow_up, session)
+        assert re.search(r"\b(PTO|paid time off|vacation)\b", r["standalone"], re.I), (
+            f"'it' was not resolved: understood as {r['standalone']!r}")
+        facts = corpus_facts()       # Week 3: HR-POL-004 v3 says 3 days, not 5 (Task 1 triage)
+>       assert re.search(facts["pto_carry_over"], r["answer"], re.I), r["answer"]
+E       AssertionError: Yes, up to 5 days of unused PTO may be carried into the next calendar year; anything above 5 days is forfeited on December 31.
+E       assert None
+E        +  where None = <function search at 0x7fd0bf8e3d70>('\\b3\\b|\\bthree\\b', 'Yes, up to 5 days of unused PTO may be carried into the next calendar year; anything above 5 days is forfeited on December 31.', re.IGNORECASE)
+E        +    where <function search at 0x7fd0bf8e3d70> = re.search
+E        +    and   re.IGNORECASE = re.I
+
+tests/test_golden_path.py:92: AssertionError
+==================================== PASSES ====================================
+_______________________ test_warm_start_does_not_reembed _______________________
+----------------------------- Captured stdout call -----------------------------
+
+cold start: 0.013s, 20 chunks embedded | warm start: 0.000s, 0 chunks embedded
+----------------------------- Captured stderr call -----------------------------
+2026-11-18 12:10:15,160 INFO northwind: Index BUILT: embedded 20 chunks from 4 files in 0.01s, saved to /tmp/pytest-of-ahmed/pytest-65/test_warm_start_does_not_reemb0/faiss_index
+2026-11-18 12:10:15,160 INFO northwind: Index LOADED from /tmp/pytest-of-ahmed/pytest-65/test_warm_start_does_not_reemb0/faiss_index in 0.00s: 20 chunks from 4 files, 0 chunks embedded
+------------------------------ Captured log call -------------------------------
+INFO     northwind:app.py:255 Index BUILT: embedded 20 chunks from 4 files in 0.01s, saved to /tmp/pytest-of-ahmed/pytest-65/test_warm_start_does_not_reemb0/faiss_index
+INFO     northwind:app.py:263 Index LOADED from /tmp/pytest-of-ahmed/pytest-65/test_warm_start_does_not_reemb0/faiss_index in 0.00s: 20 chunks from 4 files, 0 chunks embedded
+_________________ test_unanswerable_question_exhausts_rewrites _________________
+----------------------------- Captured stdout call -----------------------------
+
+path: contextualize -> route_question -> retrieve -> grade_documents -> rewrite_query -> retrieve -> grade_documents -> rewrite_query -> retrieve -> grade_documents -> generate -> grade_generation -> refuse
+=========================== short test summary info ============================
+PASSED tests/test_golden_path.py::test_out_of_scope_question_is_refused
+PASSED tests/test_golden_path.py::test_sessions_are_isolated
+PASSED tests/test_golden_path.py::test_warm_start_does_not_reembed
+PASSED tests/test_golden_path.py::test_unanswerable_question_exhausts_rewrites
+XFAIL tests/test_golden_path.py::test_awkward_query_triggers_rewrite_loop - Finding (week2/RESULTS.md, Task 1 and Task 2): with the production hybrid retriever (BM25 + dense, k=4) the first search already finds the PTO section, so the grader keeps it and no rewrite is needed. The loop does fire on unanswerable questions; see test_unanswerable_question_exhausts_rewrites.
+FAILED tests/test_api.py::test_live_stream_delivers_real_model_tokens - Asser...
+FAILED tests/test_golden_path.py::test_grounded_answer_with_citation - Assert...
+FAILED tests/test_golden_path.py::test_plausible_sounding_out_of_scope_is_refused
+FAILED tests/test_golden_path.py::test_two_turn_follow_up_resolves_pronoun - ...
+4 failed, 4 passed, 142 deselected, 1 xfailed in 69.44s (0:01:09)

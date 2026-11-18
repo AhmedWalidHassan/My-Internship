@@ -28,6 +28,11 @@ Run it by hand: `make eval-gate` runs the eval, then the gate, against the commi
 > the new baseline (dataset v3). The Week 2 run on the new corpus is in
 > [`week3/RESULTS.md`](../../week3/RESULTS.md#the-week-2-toolchain-against-the-new-corpus).
 
+> **Week 3 Task 2 (2026-11-18): the gate now protects the Week 3 system.** `eval_baseline.json` is dataset
+> `northwind-eval-v3`, dev split (70 examples), judged by `gemma3:4b` (the judge is no longer the generator).
+> The runner (`scripts/run_eval.py`) gained `--split`, `--retrieval-only` and the Week 3 categories, and
+> scores the deterministic floor. See [`week3/task_02_eval_at_scale/RUN.md`](../../week3/task_02_eval_at_scale/RUN.md).
+
 ## The two jobs
 
 **`fast-checks`, on every PR and push.** `uv` (cached) installs only what the fast tests import,

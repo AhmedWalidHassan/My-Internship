@@ -1,0 +1,1274 @@
+{
+ "meta": {
+  "date": "2026-11-18T09:29:15+00:00",
+  "git_sha": "daea10ff5594e5d15dd8e51161fae9d933f8566e",
+  "dataset": "week3/eval/eval_v3.jsonl",
+  "dataset_name": "northwind-eval-v3",
+  "dataset_version": "5d9544921fd6",
+  "split": "dev",
+  "mode": "retrieval",
+  "n": 70,
+  "data_dir": "/mnt/games/coding/My-Internship/week3/corpus",
+  "retriever_k": 4,
+  "max_docs_to_grade": 6,
+  "chunking": "800/100",
+  "embeddings": "ollama/sentence-transformers",
+  "runner": "Linux x86_64 py3.14.10",
+  "wall_clock_s": 5.95
+ },
+ "retrieval": {
+  "overall": {
+   "n": 60,
+   "recall@1": 0.0333,
+   "recall@3": 0.1167,
+   "recall@5": 0.1333,
+   "recall@10": 0.1333,
+   "mrr": 0.0756
+  },
+  "by_category": {
+   "factual": {
+    "n": 10,
+    "recall@1": 0.1,
+    "recall@3": 0.1,
+    "recall@5": 0.1,
+    "recall@10": 0.1,
+    "mrr": 0.1
+   },
+   "table": {
+    "n": 4,
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0
+   },
+   "keyword": {
+    "n": 4,
+    "recall@1": 0.0,
+    "recall@3": 0.25,
+    "recall@5": 0.25,
+    "recall@10": 0.25,
+    "mrr": 0.0833
+   },
+   "version": {
+    "n": 5,
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0
+   },
+   "conflict": {
+    "n": 3,
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0
+   },
+   "draft": {
+    "n": 4,
+    "recall@1": 0.25,
+    "recall@3": 0.75,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.55
+   },
+   "multi_hop": {
+    "n": 4,
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0
+   },
+   "multi_part": {
+    "n": 4,
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0
+   },
+   "ambiguous": {
+    "n": 3,
+    "recall@1": 0.0,
+    "recall@3": 0.3333,
+    "recall@5": 0.3333,
+    "recall@10": 0.3333,
+    "mrr": 0.1667
+   },
+   "long_doc": {
+    "n": 4,
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0
+   },
+   "cross_lingual": {
+    "n": 4,
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0
+   },
+   "follow_up": {
+    "n": 4,
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0
+   },
+   "personalized": {
+    "n": 4,
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0
+   },
+   "access": {
+    "n": 3,
+    "recall@1": 0.0,
+    "recall@3": 0.3333,
+    "recall@5": 0.3333,
+    "recall@10": 0.3333,
+    "mrr": 0.1667
+   }
+  },
+  "per_example": {
+   "11": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "legacy_intranet/hr_policies.md",
+     "scanned_archive/Handbook_2016_cover_scan.txt",
+     "cairo/بدل_الانتقالات.md",
+     "cairo/دليل_مكتب_القاهرة.md",
+     "product/fleet_manager/release_notes_5.0.md",
+     "product/fleet_manager/release_notes_4.3.md",
+     "meetings/2026-05-01_finance_050.txt"
+    ]
+   },
+   "12": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "legacy_intranet/it_faq.md",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/employee_handbook.md",
+     "legacy_intranet/product_specs.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-09-22_leadership_sync_202.txt",
+     "meetings/2026-06-12_field_service_033.txt"
+    ]
+   },
+   "19": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-07-16_fleet_software_080.txt",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-01-10_legal_045.txt",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-09-14_product_management_075.txt",
+     "meetings/2026-04-17_field_service_047.txt",
+     "meetings/2026-06-28_people_operations_054.txt",
+     "meetings/2026-02-11_firmware_023.txt",
+     "meetings/2026-09-20_marketing_037.txt"
+    ]
+   },
+   "20": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-08-10_firmware_088.txt",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-09-14_product_management_075.txt",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-06-02_quality_015.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-08-11_perception_096.txt",
+     "meetings/2026-09-07_hardware_sustaining_091.txt",
+     "meetings/2026-07-13_fleet_software_073.txt"
+    ]
+   },
+   "24": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "product/R2/R2_End_of_Life_Notice.md",
+     "legacy_intranet/product_specs.md",
+     "product/fleet_manager/release_notes_5.0.md",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "hr_restricted/Project_Juniper_Workforce_Plan.md",
+     "meetings/2026-08-14_facilities_office_ops_201.txt",
+     "product/fleet_manager/release_notes_4.3.md",
+     "meetings/2026-08-11_perception_096.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+    ]
+   },
+   "4": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/employee_handbook.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "meetings/2026-08-14_facilities_office_ops_201.txt",
+     "meetings/2026-07-16_fleet_software_080.txt",
+     "meetings/2026-09-26_hardware_sustaining_011.txt",
+     "meetings/2026-09-22_leadership_sync_202.txt",
+     "meetings/2026-07-26_legal_083.txt"
+    ]
+   },
+   "5": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/employee_handbook.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/it_faq.md",
+     "hr_restricted/Performance_Calibration_Guide_2026.md",
+     "legacy_intranet/product_specs.md",
+     "scanned_archive/Travel_Policy_2018_scan.txt"
+    ]
+   },
+   "6": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-08-14_facilities_office_ops_201.txt",
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-02-21_legal_005.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "meetings/2026-01-10_legal_045.txt",
+     "meetings/2026-01-15_legal_057.txt",
+     "meetings/2026-09-22_leadership_sync_202.txt"
+    ]
+   },
+   "7": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/product_specs.md",
+     "meetings/2026-09-22_leadership_sync_202.txt",
+     "legacy_intranet/hr_policies.md",
+     "hr_restricted/Project_Juniper_Workforce_Plan.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt"
+    ]
+   },
+   "s29": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/product_specs.md",
+     "meetings/2026-09-27_data_platform_019.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-02-11_firmware_023.txt",
+     "meetings/2026-09-22_leadership_sync_202.txt",
+     "meetings/2026-03-07_customer_success_092.txt",
+     "legacy_intranet/employee_handbook.md"
+    ]
+   },
+   "10": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/hr_policies.md",
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-08-11_perception_096.txt",
+     "meetings/2026-09-28_people_operations_095.txt",
+     "meetings/2026-09-19_hardware_sustaining_014.txt",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "meetings/2026-03-16_legal_003.txt",
+     "product/fleet_manager/release_notes_4.3.md"
+    ]
+   },
+   "n01": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/employee_handbook.md",
+     "legacy_intranet/it_faq.md",
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/product_specs.md",
+     "meetings/2026-09-16_perception_008.txt",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "meetings/2026-01-01_fleet_software_077.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-01-12_finance_043.txt"
+    ]
+   },
+   "n02": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/product_specs.md",
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/it_faq.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "meetings/2026-05-18_field_service_052.txt",
+     "meetings/2026-01-06_fleet_software_079.txt",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-04-17_hardware_sustaining_087.txt",
+     "meetings/2026-02-10_supply_chain_013.txt"
+    ]
+   },
+   "s06": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "legacy_intranet/employee_handbook.md",
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/product_specs.md",
+     "meetings/2026-09-16_perception_008.txt",
+     "meetings/2026-06-11_motion_planning_094.txt",
+     "meetings/2026-07-18_people_operations_021.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-09-16_supply_chain_002.txt"
+    ]
+   },
+   "37": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.3333333333333333,
+    "ranked_docs": [
+     "product/fleet_manager/release_notes_5.0.md",
+     "product/R2/R2_End_of_Life_Notice.md",
+     "product/fleet_manager/release_notes_4.3.md",
+     "legacy_intranet/product_specs.md",
+     "meetings/2026-01-01_fleet_software_077.txt",
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-07-13_fleet_software_073.txt",
+     "meetings/2026-05-25_fleet_software_069.txt",
+     "meetings/2026-01-06_fleet_software_079.txt",
+     "meetings/2026-07-16_fleet_software_080.txt"
+    ]
+   },
+   "38": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "product/fleet_manager/release_notes_5.0.md",
+     "product/R2/R2_End_of_Life_Notice.md",
+     "legacy_intranet/product_specs.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-05-18_hardware_sustaining_012.txt",
+     "hr_restricted/Project_Juniper_Workforce_Plan.md",
+     "meetings/2026-09-07_field_service_027.txt",
+     "meetings/2026-08-10_firmware_088.txt",
+     "meetings/2026-04-02_data_platform_044.txt",
+     "product/fleet_manager/release_notes_4.3.md"
+    ]
+   },
+   "n04": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-03-07_customer_success_092.txt",
+     "product/fleet_manager/release_notes_5.0.md",
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-07-02_legal_070.txt",
+     "meetings/2026-09-22_leadership_sync_202.txt",
+     "meetings/2026-03-16_legal_003.txt",
+     "meetings/2026-02-15_field_service_035.txt"
+    ]
+   },
+   "s34": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-04-24_data_platform_086.txt",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-03-07_customer_success_092.txt",
+     "legacy_intranet/hr_policies.md",
+     "meetings/2026-06-13_hardware_sustaining_060.txt",
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-07-07_finance_036.txt",
+     "meetings/2026-04-02_data_platform_044.txt",
+     "meetings/2026-02-15_field_service_035.txt"
+    ]
+   },
+   "15": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/hr_policies.md",
+     "meetings/2026-09-07_hardware_sustaining_091.txt",
+     "meetings/2026-02-15_field_service_035.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "legacy_intranet/it_faq.md",
+     "hr_restricted/Comp_Review_2026_Guidance.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-03-16_legal_003.txt",
+     "meetings/2026-05-06_perception_076.txt",
+     "meetings/2026-09-28_product_management_032.txt"
+    ]
+   },
+   "3": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/hr_policies.md",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "meetings/2026-09-22_leadership_sync_202.txt"
+    ]
+   },
+   "8": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/employee_handbook.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "meetings/2026-08-11_perception_096.txt",
+     "hr_restricted/Comp_Review_2026_Guidance.md",
+     "meetings/2026-09-28_people_operations_095.txt",
+     "meetings/2026-08-14_facilities_office_ops_201.txt",
+     "meetings/2026-09-19_hardware_sustaining_014.txt",
+     "legacy_intranet/hr_policies.md",
+     "meetings/2026-03-16_legal_003.txt"
+    ]
+   },
+   "9": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/employee_handbook.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "legacy_intranet/hr_policies.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/product_specs.md",
+     "hr_restricted/Project_Juniper_Workforce_Plan.md",
+     "scanned_archive/Expense_Policy_2019_scan.txt"
+    ]
+   },
+   "s32": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/employee_handbook.md",
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/product_specs.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-09-07_hardware_sustaining_091.txt",
+     "meetings/2026-08-10_firmware_088.txt",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "meetings/2026-07-16_marketing_051.txt",
+     "legacy_intranet/hr_policies.md"
+    ]
+   },
+   "18": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-03-28_legal_071.txt",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-07-16_marketing_051.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "legacy_intranet/hr_policies.md",
+     "meetings/2026-02-11_firmware_023.txt",
+     "meetings/2026-09-22_leadership_sync_202.txt",
+     "meetings/2026-01-25_field_service_063.txt"
+    ]
+   },
+   "n06": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/hr_policies.md",
+     "meetings/2026-09-27_data_platform_019.txt",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-01-21_field_service_018.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-07-02_field_service_009.txt",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "meetings/2026-05-08_field_service_026.txt",
+     "legacy_intranet/product_specs.md"
+    ]
+   },
+   "n07": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/employee_handbook.md",
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "legacy_intranet/product_specs.md",
+     "meetings/2026-09-23_security_020.txt",
+     "legacy_intranet/hr_policies.md",
+     "meetings/2026-09-01_customer_success_017.txt",
+     "meetings/2026-09-22_leadership_sync_202.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+    ]
+   },
+   "n08": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.2,
+    "ranked_docs": [
+     "legacy_intranet/employee_handbook.md",
+     "legacy_intranet/it_faq.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "legacy_intranet/hr_policies.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "scanned_archive/Handbook_2016_cover_scan.txt",
+     "product/R2/R2_End_of_Life_Notice.md",
+     "legacy_intranet/product_specs.md",
+     "meetings/2026-09-12_motion_planning_046.txt"
+    ]
+   },
+   "n09": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/product_specs.md"
+    ]
+   },
+   "n10": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-09-26_hardware_sustaining_011.txt",
+     "meetings/2026-06-28_motion_planning_062.txt",
+     "meetings/2026-02-22_data_platform_028.txt",
+     "meetings/2026-09-28_security_082.txt",
+     "meetings/2026-01-12_finance_043.txt"
+    ]
+   },
+   "n11": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "legacy_intranet/employee_handbook.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-07-15_security_061.txt",
+     "meetings/2026-07-16_fleet_software_080.txt",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-04-17_field_service_047.txt",
+     "meetings/2026-03-23_sales_engineering_029.txt",
+     "meetings/2026-04-13_hardware_sustaining_055.txt",
+     "meetings/2026-05-01_finance_050.txt",
+     "meetings/2026-04-02_data_platform_044.txt"
+    ]
+   },
+   "29": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/hr_policies.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/employee_handbook.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "hr_restricted/Comp_Review_2026_Guidance.md",
+     "meetings/2026-07-26_legal_083.txt",
+     "meetings/2026-07-16_fleet_software_080.txt",
+     "legacy_intranet/product_specs.md"
+    ]
+   },
+   "30": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/employee_handbook.md",
+     "legacy_intranet/product_specs.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-09-22_leadership_sync_202.txt",
+     "meetings/2026-07-16_marketing_051.txt",
+     "legacy_intranet/hr_policies.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt"
+    ]
+   },
+   "n23": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "product/R2/R2_End_of_Life_Notice.md",
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/product_specs.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-04-13_hardware_sustaining_055.txt",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-08-26_firmware_004.txt",
+     "meetings/2026-03-07_customer_success_092.txt"
+    ]
+   },
+   "s07": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/it_faq.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "legacy_intranet/employee_handbook.md",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-02-21_legal_005.txt",
+     "meetings/2026-03-16_legal_003.txt",
+     "meetings/2026-09-07_field_service_027.txt"
+    ]
+   },
+   "13": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/employee_handbook.md",
+     "legacy_intranet/it_faq.md",
+     "hr_restricted/Comp_Review_2026_Guidance.md",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "meetings/2026-08-14_facilities_office_ops_201.txt"
+    ]
+   },
+   "16": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-02-11_firmware_023.txt",
+     "meetings/2026-09-22_leadership_sync_202.txt",
+     "meetings/2026-01-15_legal_057.txt",
+     "product/fleet_manager/release_notes_5.0.md",
+     "legacy_intranet/employee_handbook.md",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "meetings/2026-05-15_firmware_068.txt",
+     "scanned_archive/Travel_Policy_2018_scan.txt"
+    ]
+   },
+   "17": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-07-02_field_service_009.txt",
+     "meetings/2026-09-27_data_platform_019.txt",
+     "meetings/2026-05-08_field_service_026.txt",
+     "meetings/2026-03-23_it_operations_049.txt",
+     "meetings/2026-01-21_field_service_018.txt",
+     "meetings/2026-02-22_data_platform_028.txt",
+     "meetings/2026-07-18_people_operations_021.txt",
+     "meetings/2026-02-20_data_platform_006.txt",
+     "meetings/2026-07-02_legal_070.txt"
+    ]
+   },
+   "32": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/product_specs.md",
+     "meetings/2026-09-16_perception_008.txt",
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "meetings/2026-03-28_legal_071.txt",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-03-16_legal_003.txt",
+     "meetings/2026-01-12_finance_043.txt",
+     "meetings/2026-09-26_firmware_084.txt"
+    ]
+   },
+   "n20": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "meetings/2026-02-03_customer_success_056.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "legacy_intranet/product_specs.md",
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/employee_handbook.md",
+     "product/fleet_manager/release_notes_4.3.md",
+     "meetings/2026-02-10_supply_chain_013.txt",
+     "product/fleet_manager/release_notes_5.0.md",
+     "product/R2/R2_End_of_Life_Notice.md",
+     "meetings/2026-08-11_perception_096.txt"
+    ]
+   },
+   "n21": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "product/fleet_manager/release_notes_5.0.md",
+     "product/R2/R2_End_of_Life_Notice.md",
+     "product/fleet_manager/release_notes_4.3.md",
+     "meetings/2026-05-25_fleet_software_069.txt",
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/product_specs.md",
+     "meetings/2026-02-25_fleet_software_024.txt",
+     "meetings/2026-08-26_firmware_004.txt",
+     "meetings/2026-07-22_fleet_software_007.txt",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt"
+    ]
+   },
+   "s12": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/product_specs.md",
+     "product/fleet_manager/release_notes_5.0.md",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-04-13_hardware_sustaining_055.txt",
+     "product/fleet_manager/release_notes_4.3.md",
+     "hr_restricted/Project_Juniper_Workforce_Plan.md",
+     "meetings/2026-03-25_it_operations_065.txt",
+     "legacy_intranet/hr_policies.md",
+     "meetings/2026-04-24_data_platform_086.txt"
+    ]
+   },
+   "n12": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "product/R2/R2_End_of_Life_Notice.md",
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-09-14_product_management_075.txt",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-05-07_it_operations_090.txt",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-02-20_data_platform_006.txt",
+     "meetings/2026-04-24_data_platform_086.txt",
+     "meetings/2026-02-25_motion_planning_041.txt",
+     "legacy_intranet/hr_policies.md"
+    ]
+   },
+   "n13": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "meetings/2026-04-24_data_platform_086.txt",
+     "meetings/2026-04-13_hardware_sustaining_055.txt",
+     "meetings/2026-02-21_legal_005.txt",
+     "meetings/2026-03-17_people_operations_085.txt",
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/product_specs.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-07-07_finance_036.txt",
+     "meetings/2026-06-13_hardware_sustaining_060.txt",
+     "meetings/2026-03-25_it_operations_065.txt"
+    ]
+   },
+   "n14": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/product_specs.md",
+     "meetings/2026-02-25_motion_planning_041.txt",
+     "meetings/2026-03-17_people_operations_085.txt",
+     "meetings/2026-03-25_it_operations_065.txt",
+     "meetings/2026-07-13_fleet_software_073.txt",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-07-02_legal_070.txt",
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-04-02_sales_engineering_078.txt",
+     "meetings/2026-05-07_it_operations_090.txt"
+    ]
+   },
+   "s10": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/product_specs.md",
+     "meetings/2026-04-24_data_platform_086.txt",
+     "meetings/2026-02-21_legal_005.txt",
+     "meetings/2026-08-11_perception_096.txt",
+     "meetings/2026-08-26_firmware_004.txt",
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-07-07_finance_036.txt",
+     "meetings/2026-02-03_customer_success_056.txt",
+     "meetings/2026-06-13_hardware_sustaining_060.txt",
+     "meetings/2026-03-25_it_operations_065.txt"
+    ]
+   },
+   "n15": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-09-26_firmware_084.txt",
+     "meetings/2026-04-02_sales_engineering_078.txt",
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-07-13_fleet_software_073.txt",
+     "meetings/2026-07-26_manufacturing_058.txt",
+     "meetings/2026-06-02_quality_015.txt",
+     "meetings/2026-09-14_product_management_075.txt",
+     "meetings/2026-03-05_quality_034.txt",
+     "meetings/2026-03-16_legal_003.txt"
+    ]
+   },
+   "n16": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "legacy_intranet/it_faq.md",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "meetings/2026-07-26_manufacturing_058.txt",
+     "meetings/2026-03-16_legal_003.txt",
+     "meetings/2026-07-13_fleet_software_073.txt",
+     "legacy_intranet/hr_policies.md",
+     "meetings/2026-09-07_field_service_027.txt",
+     "meetings/2026-08-14_facilities_office_ops_201.txt",
+     "meetings/2026-06-02_quality_015.txt"
+    ]
+   },
+   "n17": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "meetings/2026-07-26_manufacturing_058.txt",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-09-26_firmware_084.txt",
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-02-22_data_platform_028.txt",
+     "product/R2/R2_End_of_Life_Notice.md",
+     "meetings/2026-07-16_marketing_051.txt",
+     "hr_restricted/Performance_Calibration_Guide_2026.md"
+    ]
+   },
+   "s25": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-07-13_fleet_software_073.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-09-16_motion_planning_072.txt",
+     "meetings/2026-09-22_leadership_sync_202.txt",
+     "meetings/2026-03-05_quality_034.txt",
+     "hr_restricted/Performance_Calibration_Guide_2026.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "meetings/2026-09-26_firmware_084.txt"
+    ]
+   },
+   "36": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/product_specs.md",
+     "legacy_intranet/hr_policies.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "product/R2/R2_End_of_Life_Notice.md",
+     "legacy_intranet/it_faq.md",
+     "product/fleet_manager/release_notes_5.0.md",
+     "meetings/2026-05-25_fleet_software_069.txt",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-07-09_customer_success_010.txt",
+     "meetings/2026-09-20_motion_planning_059.txt"
+    ]
+   },
+   "n22": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "meetings/2026-08-14_facilities_office_ops_201.txt",
+     "legacy_intranet/product_specs.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-07-07_finance_036.txt",
+     "legacy_intranet/hr_policies.md",
+     "meetings/2026-03-25_it_operations_065.txt",
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-08-10_firmware_088.txt",
+     "meetings/2026-04-24_data_platform_086.txt",
+     "meetings/2026-04-02_data_platform_044.txt"
+    ]
+   },
+   "s26": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "legacy_intranet/employee_handbook.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "legacy_intranet/it_faq.md",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "meetings/2026-09-26_hardware_sustaining_011.txt",
+     "legacy_intranet/product_specs.md"
+    ]
+   },
+   "s27": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "meetings/2026-03-16_legal_003.txt",
+     "meetings/2026-07-13_fleet_software_073.txt",
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/hr_policies.md",
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "meetings/2026-09-28_product_management_032.txt",
+     "meetings/2026-05-06_perception_076.txt",
+     "meetings/2026-04-24_data_platform_086.txt",
+     "meetings/2026-06-02_quality_015.txt",
+     "meetings/2026-04-25_marketing_042.txt"
+    ]
+   },
+   "n24": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "legacy_intranet/employee_handbook.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-09-26_hardware_sustaining_011.txt",
+     "legacy_intranet/hr_policies.md",
+     "meetings/2026-01-12_finance_043.txt",
+     "meetings/2026-07-16_fleet_software_080.txt",
+     "meetings/2026-02-15_field_service_035.txt"
+    ]
+   },
+   "n25": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "legacy_intranet/employee_handbook.md",
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/it_faq.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "hr_restricted/Comp_Review_2026_Guidance.md",
+     "meetings/2026-07-16_fleet_software_080.txt"
+    ]
+   },
+   "n26": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/hr_policies.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "legacy_intranet/it_faq.md",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "meetings/2026-02-10_supply_chain_013.txt",
+     "meetings/2026-06-17_hardware_sustaining_000.txt",
+     "product/fleet_manager/release_notes_4.3.md"
+    ]
+   },
+   "s28": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "legacy_intranet/employee_handbook.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "legacy_intranet/it_faq.md",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "meetings/2026-01-12_finance_043.txt",
+     "meetings/2026-09-26_hardware_sustaining_011.txt",
+     "legacy_intranet/hr_policies.md",
+     "meetings/2026-04-25_marketing_042.txt"
+    ]
+   },
+   "n32": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/product_specs.md",
+     "hr_restricted/Performance_Calibration_Guide_2026.md",
+     "legacy_intranet/it_faq.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "hr_restricted/Comp_Review_2026_Guidance.md",
+     "meetings/2026-09-04_field_service_066.txt",
+     "meetings/2026-05-25_fleet_software_069.txt",
+     "meetings/2026-09-28_product_management_032.txt",
+     "meetings/2026-08-14_facilities_office_ops_201.txt"
+    ]
+   },
+   "s19": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "hr_restricted/Comp_Review_2026_Guidance.md",
+     "meetings/2026-06-17_hardware_sustaining_000.txt",
+     "legacy_intranet/it_faq.md",
+     "hr_restricted/Project_Juniper_Workforce_Plan.md",
+     "legacy_intranet/product_specs.md",
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "meetings/2026-03-16_legal_003.txt",
+     "meetings/2026-08-14_facilities_office_ops_201.txt",
+     "meetings/2026-04-02_sales_engineering_078.txt",
+     "meetings/2026-09-16_supply_chain_002.txt"
+    ]
+   },
+   "s21": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "legacy_intranet/hr_policies.md",
+     "hr_restricted/Performance_Calibration_Guide_2026.md",
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/product_specs.md",
+     "hr_restricted/Comp_Review_2026_Guidance.md",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-08-10_firmware_088.txt",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-07-07_finance_036.txt",
+     "meetings/2026-04-24_data_platform_086.txt"
+    ]
+   }
+  },
+  "retriever": "hybrid (BM25 + dense), depth 10 per retriever",
+  "load_s": 5.57,
+  "query_s": 0.3,
+  "n_queries": 60,
+  "latency_ms_p50": 3.1,
+  "latency_ms_p95": 4.0,
+  "query_embedding_tokens": 731
+ }
+}

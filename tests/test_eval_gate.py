@@ -252,3 +252,50 @@ def test_ci_workflow_wires_both_gates():
     assert "run_eval.py" in steps and "check_baseline.py" in steps
     assert "OPENAI_API_KEY" not in json.dumps(fast), "the fast tier gets no secrets"
     assert re.search(r"pytest .*not live", " ".join(str(s.get("run", "")) for s in fast["steps"]))
+
+
+def test_runner_scores_a_week3_example_with_the_deterministic_scorer(app, sample_docs):
+    """Week 3 Task 2: a v3 example (role/content history, must_include, gold_docs) runs through the
+    same runner; it gets the deterministic scorer instead of Week 2's fact-based retrieval_hit, and
+    the judge that grades it is a separate model object from the generator."""
+    run_eval = load_script("run_eval")
+    from app.config import get_settings
+
+    llm = scripted_llm(app, standalone="How many paid sick days are there per year?")
+    judge = scripted_llm(app)
+    judge.rules[prefix(app.CORRECTNESS_PROMPT)] = "Fact: 10 days. MATCH.\nVERDICT: CORRECT"
+    assistant = app.Assistant(FakeRetriever(sample_docs), llm)
+    ex = {"id": "s99", "category": "follow_up", "user_id": "u1001", "split": "dev",
+          "history": [{"role": "user", "content": "Tell me about sick leave."},
+                      {"role": "assistant", "content": "There is a sick leave policy."}],
+          "question": "How many per year?", "reference_answer": "10 paid sick days per year.",
+          "gold_docs": ["policies/hr/HR-POL-005_sick_leave.pdf"], "must_include": ["10"],
+          "must_not_include": ["15"], "expect_refusal": False}
+    row = run_eval.score_example(assistant, app.make_evaluators(judge), ex, get_settings(), "t")
+    assert set(row["scores"]) == {"correctness", "groundedness", "deterministic"}
+    assert row["scores"]["deterministic"] == int("10" in row["answer"] and "15" not in row["answer"])
+    assert row["split"] == "dev" and row["user_id"] == "u1001"
+    assert judge.calls_to(prefix(app.CORRECTNESS_PROMPT)) and not llm.calls_to(prefix(app.CORRECTNESS_PROMPT))
+    [ctx] = llm.calls_to(prefix(app.CONTEXTUALIZE_PROMPT))
+    assert "Tell me about sick leave." in ctx, "v3 history (role/content) is injected into the session"
+    agg = run_eval.aggregate([row])
+    assert list(agg["by_category"]) == ["follow_up"] and "deterministic" in agg["scores"]
+
+
+def test_v3_dataset_is_complete_and_split():
+    """The committed v3 set: 100 examples, every category >= 5 and in both splits, every answerable
+    example has gold_docs that exist, and access covers all six directory users."""
+    import csv
+
+    week3 = REPO_ROOT / "week3"
+    rows = [json.loads(x) for x in (week3 / "eval" / "eval_v3.jsonl").read_text(encoding="utf-8").splitlines() if x]
+    assert len(rows) == 100 and len({r["id"] for r in rows}) == 100
+    cats = {}
+    for r in rows:
+        cats.setdefault(r["category"], set()).add(r["split"])
+        assert r["expect_refusal"] or r["gold_docs"], r["id"]
+        assert all((week3 / "corpus" / g).exists() for g in r["gold_docs"]), r["id"]
+    assert len(cats) == 15 and all(v == {"dev", "test"} for v in cats.values()), cats
+    assert all(sum(r["category"] == c for r in rows) >= 5 for c in cats)
+    users = {u["user_id"] for u in csv.DictReader(open(week3 / "corpus" / "_directory.csv", encoding="utf-8"))}
+    assert {r["user_id"] for r in rows if r["category"] == "access"} == users

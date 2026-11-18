@@ -16,6 +16,7 @@ records both.
 | Date | What ran | Cost | Running total | Remaining of $25 |
 |---|---|---:|---:|---:|
 | 2026-11-18 | Task 1: seed eval ×2, Week 2 eval gate ×2, `make cost` ×2 (236 questions, 4,469 pipeline LLM calls, plus judge calls that are not instrumented), live tier ×4, 5 full index builds ×2 devices, Docker smoke test | **$0 actual** (≈ $0.17 at gpt-4o-mini prices, pipeline calls only; embeddings ≈ $0.003) | $0 (≈ $0.17) | $25.00 |
+| 2026-11-18 | Task 2: 3 full dev runs (210 questions, ~3,760 pipeline LLM calls + ~420 judge calls), 2 judge replays on run 1 (~280 judge calls), synthetic generation (33 LLM calls, 65 candidates), retrieval-only runs | **$0 actual** (≈ $0.15 pipeline + ≈ $0.08 judge at gpt-4o-mini prices) | $0 (≈ $0.40) | $25.00 |
 
 ---
 
@@ -44,13 +45,21 @@ two questions through the graph.
 
 ## Task 2 — What an eval run costs
 
+Measured 2026-11-18, laptop GPU, generator `qwen3.5:4b`, judge `gemma3:4b`. Actual spend is $0 (all local).
+The cost column prices the same tokens at gpt-4o-mini / text-embedding-3-small rates. Judge tokens aren't
+instrumented, so the judge share is an estimate (~900 input / ~300 output tokens per example for the
+two judge calls).
+
 | Run type | Examples | Wall clock | Cost |
 |---|---:|---:|---:|
-| Retrieval only (dev) | | | |
-| Full pipeline + judges (dev) | | | |
-| Full pipeline + judges (test) | | | |
+| Retrieval only (dev) | 70 (60 with gold docs) | **7.5 s** (5.6 s model + index load, 0.3 s for 60 queries) | **$0** (731 query tokens = $0.000015 if hosted) |
+| Full pipeline + judges (dev) | 70 | **~530 s** (pipeline 386–392 s, then ~140 s of judging) | **$0** actual · ≈ $0.048 pipeline ($0.000687 × 70, 17.9 LLM calls each) + ≈ $0.02 judge (estimated) |
+| Full pipeline + judges (test) | 30 | not run: test is frozen (0 runs). Estimate ~230 s | ≈ $0.03 (estimate) |
 
-**Runs you can afford with the remaining budget:** ___ retrieval-only, or ___ full.
+**Runs you can afford with the remaining budget:** at hosted prices, ~**1.6 million** retrieval-only
+runs (effectively unlimited), or ~**350** full dev runs (~$0.07 each). Locally both cost $0; the real
+limit is time: ~9 minutes per full dev run against ~8 seconds for retrieval-only. That's the case for
+doing Wednesday's experiments retrieval-first.
 
 ## Task 3 — Ingestion
 
@@ -113,7 +122,7 @@ two questions through the graph.
 | PR | Change | Latency impact | Cost impact | Notes |
 |---|---|---|---|---|
 | (this PR) | Task 1 baseline | n/a (no product change). Measured on the new corpus: 4.05 s mean as shipped (3.28 s on the Week 2 corpus) | n/a. Measured: $0.000795 per question as shipped (+84%: every question exhausts the rewrite loop). Embedding the full corpus once: $0.00105 at text-embedding-3-small, 0.75 s GPU / 4.9 s CPU | corpus embed; all runs local, $0 actual |
-| | Task 2 eval | n/a | | eval runs |
+| (this PR) | Task 2 eval | per question on the Week 3 corpus: 5.4 s mean (17.9 LLM calls). The loader change (118 of 190 documents instead of 1) is what moved it: 4.05 s in Task 1 → 5.4 s, because now some answers get generated and fact-checked instead of all ending in a refusal. Index build: 139 chunks in 1.0 s | $0.000687 per question at gpt-4o-mini prices (Task 1 as shipped: $0.000795). Eval: retrieval-only $0 and 7.5 s; full dev run ≈ $0.07 and ~9 min | judge is now `gemma3:4b`; all runs local, $0 actual |
 | | Task 3 ingestion | | | |
 | | Task 4 experiments | | | |
 | | Task 5 time and truth | | | |

@@ -213,70 +213,135 @@ PDF page furniture repeats on 17–23 pages per kind.
 
 ## Task 2 — Eval at scale
 
+Measured 2026-11-18 on the laptop GPU. Generator `qwen3.5:4b`; judge `gemma3:4b` (a different model,
+as required). Retriever: the production hybrid (BM25 + dense MiniLM). Scripts, review files and every
+run: [`task_02_eval_at_scale/`](task_02_eval_at_scale/RUN.md).
+
+**What "the system" is from this task on.** The Week 2 loader indexed only the export's README (Task 1),
+so a baseline on it would have been 70 refusals. Every metric, and the judge–human check, would have been
+meaningless. I made one small, logged change to the product: when `DATA_DIR` holds a `_metadata.csv`,
+`ingest()` indexes the documents listed there, in their sub-folders, keyed by corpus path. It still reads
+`.md`/`.txt` only, so **118 of 190** documents load. The other 72 (every PDF, HTML, XLSX, CSV) are now
+**skipped with a logged warning**, never silently. Writing parsers for them is Task 3. `DATA_DIR` now
+defaults to `week3/corpus`, with its own index (`faiss_index_w3`) so the Week 2 index is never rewritten.
+The Docker image still pins the Week 1 corpus until Task 3 mounts the export. Pinned by
+`tests/test_corpus_loading.py`.
+
 | | Value |
 |---|---|
-| Total examples | 100 |
-| From Week 2 (migrated / updated / dropped) | / / |
-| From the seed set (merged / duplicate of a Week 2 example) | / |
-| New | |
-| Dev / test split | / |
-| New `eval_baseline.json`: dataset version, date, correctness, groundedness | |
-| Synthetic candidates generated / accepted / rejected | / / |
-| Top 3 rejection reasons | |
-| Judge model / generator model | / |
-| Judge–human agreement (20 examples) | |
-| Retrieval-only eval: wall clock / cost | / |
+| Total examples | **100** ([`week3/eval/eval_v3.jsonl`](eval/eval_v3.jsonl), built by [`build_dataset.py`](task_02_eval_at_scale/build_dataset.py); provenance per example in [`dataset_report.md`](task_02_eval_at_scale/dataset_report.md)) |
+| From Week 2 (migrated / updated / dropped) | **38 / 21 / 0**. My Week 2 set had 38 examples, not 30, and all 38 are accounted for. 17 migrated with the same expected answer, 21 updated (the 15 Task 1 "world changed" verdicts, plus 6 references made more precise; #37's keyword moved from Fleet Manager 4.2 to 4.3), 0 dropped. Week 2 IDs kept. Category map as in the brief, except where the question now tests a Week 3 behaviour: 5 factual → `version`, #1 → `personalized` (asked by u1002), #10 → `table`, #18 → `conflict`, #22 → `ambiguous` ("the rover" is now two rovers) |
+| From the seed set (merged / duplicate of a Week 2 example) | **30 / 10**. s01→#5, s02→#2, s03→#9, s05→#18, s13→#17, s14→#13, s16→#26, s30→#15, s31→#8, s39→#10: Week 2's kept |
+| New | **32**: 22 hand-written (conflict, draft, ambiguous, personalized, access, follow-up, multi-hop: categories where the question *is* the design), 10 LLM-generated and reviewed |
+| Dev / test split | **70 / 30**. Stratified by category (access also by refuse/answer); every category is in both. Test is frozen: **0 test runs so far** |
+| New `eval_baseline.json`: dataset version, date, correctness, groundedness | `northwind-eval-v3` dev, version `5d9544921fd6`, 2026-11-18, **correctness 0.357, groundedness 1.000** (deterministic 0.314, $0.000687/question, 17.9 LLM calls). Two runs, identical verdict for verdict. Tolerance 0.08 kept ([justification](task_02_eval_at_scale/tolerance_justification_v3.md)) |
+| Synthetic candidates generated / accepted / rejected | **65 / 10 / 55** (15% accepted; 19% if "valid, but its category was already full" isn't counted as a quality rejection). [Review of every candidate](task_02_eval_at_scale/synth/candidates_reviewed.jsonl) |
+| Top 3 rejection reasons | 1. **Boilerplate (21):** questions about the ~10 safety sentences the R3 manual repeats 80+ times ("slows to 0.5 m/s", "operator course"), not about its needles. 2. **Valid, but the category was already full (13).** 3. **Duplicate of an existing example (9).** Then: malformed or ambiguous (5), templated filler rows of the error sheet (4), **wrong or hallucinated answers (3)**: Egypt's meal allowance read from the hotel-cap column of a flattened table, a "one operator at a time" rule that isn't in the text, and the 24-hour visitor rule pinned on Cairo |
+| Judge model / generator model | `gemma3:4b` / `qwen3.5:4b` (synthetic candidates also by `qwen3.5:4b`) |
+| Judge–human agreement (20 examples) | **18 / 20 (90%)** with the final judge prompt; 17 / 20 (85%) with Week 2's prompt. ⚠️ The "human" labels were made by the coding assistant on the intern's behalf, against the reference and the source document, and are **awaiting the intern's review** ([`human_labels.json`](task_02_eval_at_scale/human_labels.json)) |
+| Retrieval-only eval: wall clock / cost | **7.5 s** for `make eval-retrieval` end to end (5.6 s loading the embedding model and index; 60 queries 0.3 s, p50 3 ms) / **$0** (local; 731 query tokens = $0.000015 at text-embedding-3-small) |
 
 ### Retrieval by category (dev)
 
+Document-level, from the retriever alone (`make eval-retrieval`; the production hybrid at depth 10 per
+retriever). Follow-ups query with the earlier user turn prepended, a deterministic stand-in for the
+`contextualize` LLM call. `user_id` is passed through but not used yet (Task 6).
+
 | Category | n | R@1 | R@3 | R@5 | R@10 | MRR |
 |---|---:|---:|---:|---:|---:|---:|
-| factual | | | | | | |
-| table | | | | | | |
-| keyword | | | | | | |
-| version | | | | | | |
-| conflict | | | | | | |
-| draft | | | | | | |
-| multi_hop | | | | | | |
-| multi_part | | | | | | |
-| ambiguous | | | | | | |
-| long_doc | | | | | | |
-| cross_lingual | | | | | | |
-| follow_up | | | | | | |
-| personalized | | | | | | |
-| access *(authorised users only)* | | | | | | |
-| **All** | | | | | | |
+| factual | 10 | 0.10 | 0.10 | 0.10 | 0.10 | 0.10 |
+| table | 4 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
+| keyword | 4 | 0.00 | 0.25 | 0.25 | 0.25 | 0.08 |
+| version | 5 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
+| conflict | 3 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
+| draft | 4 | 0.25 | 0.75 | **1.00** | 1.00 | 0.55 |
+| multi_hop | 4 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
+| multi_part | 4 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
+| ambiguous | 3 | 0.00 | 0.33 | 0.33 | 0.33 | 0.17 |
+| long_doc | 4 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
+| cross_lingual | 4 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
+| follow_up | 4 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
+| personalized | 4 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
+| access *(authorised users only)* | 3 | 0.00 | 0.33 | 0.33 | 0.33 | 0.17 |
+| **All** | 60 | **0.03** | **0.12** | **0.13** | **0.13** | **0.08** |
+
+**The ceiling explains most of it:** only **13 of the 60** answerable dev questions have *any* gold
+document the loader can read. The rest are PDF, HTML or XLSX. Of those 13, retrieval finds **8**. Three of
+the 5 misses are `cross_lingual`: the Arabic pages are indexed (3 of 4 gold docs) and never retrieved,
+because the embedding model is English-only. So 47 of 52 retrieval misses are ingestion (Task 3), and the
+rest are the embedding model (Task 4).
 
 ### Generation by category (dev)
 
+Full pipeline, then the judge (`make eval`). These are the committed baseline's numbers; runs 2 and 3
+were identical.
+
 | Category | n | Deterministic | Correctness | Groundedness |
 |---|---:|---:|---:|---:|
-| factual | | | | |
-| table | | | | |
-| keyword | | | | |
-| version | | | | |
-| conflict | | | | |
-| draft | | | | |
-| multi_hop | | | | |
-| multi_part | | | | |
-| ambiguous | | | | |
-| long_doc | | | | |
-| cross_lingual | | | | |
-| follow_up | | | | |
-| personalized | | | | |
-| access | | | | |
-| out_of_scope | | | | |
-| **All** | | | | |
+| factual | 10 | 0.70 | 0.70 | 1.00 |
+| table | 4 | 0.00 | 0.00 | 1.00 |
+| keyword | 4 | 0.50 | 0.50 | 1.00 |
+| version | 5 | 0.00 | 0.00 | 1.00 |
+| conflict | 3 | 0.00 | 0.00 | 1.00 |
+| draft | 4 | 0.50 | 0.50 | 1.00 |
+| multi_hop | 4 | 0.00 | 0.25 | 1.00 |
+| multi_part | 4 | 0.00 | 0.25 | 1.00 |
+| ambiguous | 3 | 0.33 | 0.67 | 1.00 |
+| long_doc | 4 | 0.00 | 0.00 | 1.00 |
+| cross_lingual | 4 | 0.00 | 0.00 | 1.00 |
+| follow_up | 4 | 0.25 | 0.25 | 1.00 |
+| personalized | 4 | 0.00 | 0.00 | 1.00 |
+| access | 7 | 0.43 | 0.43 | 1.00 |
+| out_of_scope | 6 | 1.00 | 1.00 | 1.00 |
+| **All** | 70 | **0.31** | **0.36** | **1.00** |
 
-**Judge–human disagreements:**
+- **Two leaks on dev:** n28 gave the 3.5% merit budget (an `hr` document) to u1002, a Support Engineer,
+  and s20 described Project Juniper ("18 roles") to u1001. The Week 2 system has no notion of a user;
+  Task 6 fixes this. Both are deterministic failures (`must_not_include`), so the gate sees them.
+- 32 of 70 answers are refusals. Every `out_of_scope` question is correctly refused, but so are 4 of 4
+  `cross_lingual`, 3 of 4 `table` and 3 of 4 `long_doc` questions.
+- **Groundedness is 1.00 everywhere, and that is a judge limitation, not a property of the system.** 32
+  answers are refusals, which count as grounded by rule, and `gemma3:4b` said YES to all 38 others,
+  including stale answers (grounded in a stale document, fairly) and two wrong-number answers. On 6
+  probes it caught **1 of 3** planted unsupported claims (`judge_check.py`). A stricter groundedness
+  prompt scored the same 4/6 with different mistakes, so I kept the existing one. The groundedness gate
+  can't catch much until the judge is stronger (an 8B judge needs a ~5 GB download: your call).
+- **Judge prompt changed.** Week 2's correctness prompt, run on `gemma3:4b`, called "90 days" correct
+  against "60 days" and invented facts the answer didn't state. The new prompt makes the judge quote the
+  answer's value for each key fact and fail any mismatch. Same answers, re-judged: human agreement
+  16–17/20 → 18/20, agreement with the deterministic floor 58–59/70 → 62–63/70
+  ([`judge_check.json`](task_02_eval_at_scale/evidence/judge_check.json)). Replaying the judge on
+  identical answers moves at most 1 of 70 verdicts, so it is not perfectly deterministic.
+
+**Judge–human disagreements** (final judge = the baseline's verdicts; same answers as the labelled run):
 
 | Example | Judge said | I said | Who was right, and why |
 |---|---|---|---|
-| | | | |
+| #29 referral bonus + new hire's PTO | correct | incorrect | **Me.** The answer gives the stale facts: "$3,000 after 90 days" and "PTO not usable for the first 90 days". HR-POL-014 v2.0 pays $4,000/$3,000 in two halves (90 days and 12 months), and HR-POL-004 v3.0 says 60 days. The judge still accepts a number that differs from the reference when the answer *sounds* complete |
+| #13 referral bonus amount and timing | correct | incorrect | **Me.** Same stale $3,000 single payment. The reference lists $4,000, $3,000, 90 days and 12 months; the answer has two of the four, and $3,000 is right only for non-engineering roles |
+| *(Week 2 prompt only)* #18 VPN | correct | incorrect | **Me.** It told the user to install GlobalConnect, which IT-STD-007 v3.0 retired. Fixed by the stricter prompt |
+| *(Week 2 prompt only)* n20 battery | correct | incorrect | **Me.** One battery (no part number) for an ambiguous "the rover". Fixed by the stricter prompt |
+
+In the 20 labelled examples every disagreement is the judge being **too lenient**, and the
+deterministic scorer catches all four. Outside the sample the stricter prompt can also err the other
+way: n10 ("by October 31, 2026", correct) was judged incorrect, apparently for leaving out the comment
+address. That's why both scores are reported. They disagree on 7 of 70 dev examples.
 
 **Was the Task 1 guess right?**
 
+> **Yes.** Task 1 guessed `version` was the biggest drop and that it's retrieval, specifically ingestion.
+> On dev, `version` has **recall@5 0.00 and a pass rate of 0.00** (deterministic and correctness):
+> low recall, low pass rate. The ceiling makes it certain: none of the 5 `version` questions has a gold
+> document the loader can read (they are all policy PDFs), so the generator only ever sees the stale
+> legacy copy and repeats it. Wednesday's retriever work can't fix that; Task 3's parsers have to come first.
 >
+> Two categories break the pattern, and they're worth knowing before Wednesday:
+> - **`draft`: recall@5 1.00, pass 0.50: mostly a generation problem.** The draft is always retrieved.
+>   n09 presented the unapproved FTO proposal as policy ("every employee is expected to take a minimum
+>   of 15 days"), which is Task 5's. n11 refused because the policy that answers it (PTO v3) is an
+>   unreadable PDF, and only the draft was there to contradict.
+> - **`cross_lingual`: the gold doc is indexed, recall 0.00: retrieval, but the embedding model, not ingestion.**
+>   That is a Task 4 experiment (a multilingual embedding model).
 
 ---
 
