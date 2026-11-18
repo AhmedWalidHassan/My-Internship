@@ -116,39 +116,112 @@ against a predicted ≥ 0.60, MRR 0.61 against ≥ 0.45. Lessons:
 
 ## Experiments
 
-Copy this block once per experiment. Commit the top half first.
+Every experiment is the baseline (the noise-floor config) plus ONE change, run with
+`run_experiment.py`, retrieval-only, dev. Per-example results: `week3/task_04_retrieval_experiments/evidence/<ID>_dev.json`.
+The hypotheses for EXP-01 to EXP-07 were committed together, before any of them was run.
 
-### EXP-01 — <short name>
+### EXP-01 — More dense, less BM25 (hybrid weight 0.5 → 0.3)
 
-**Hypothesis** *(committed before running)*: If I change ___, then ___ will
-improve/worsen in categories ___, because ___.
+**Hypothesis** *(committed before running)*: If I lower the BM25 share of the fusion from 0.5 to 0.3, then **multi_part improves** (#17 "What are the password rules?" comes back into the top 5: it is lost today because three meeting notes about a "password reset flow" win on BM25), while **keyword MRR drops** (E-301, NW-BAT-4380, Fleet Manager 4.3 are exact tokens that BM25 ranks first and dense blurs) but keyword recall@5 holds. Overall recall@5 +0.017 (one question), MRR within ±0.03.
 
-**The one change:** 
+**The one change:** more dense, less bm25 (hybrid weight 0.5 → 0.3).
 
 **Config diff:**
 ```
+HYBRID_BM25_WEIGHT: 0.5 -> 0.3
 ```
 
-**Result** *(committed after running)*:
+**Result** *(committed after running)*: *(pending)*
 
-| | Baseline | This | Delta | Bigger than noise? |
-|---|---:|---:|---:|---|
-| recall@5 (all) | | | | |
-| MRR (all) | | | | |
-| Latency / query | | | | |
-| Cost / query | | | | |
+---
 
-Categories that moved by more than the noise floor:
+### EXP-02 — Dense only (no BM25)
 
-| Category | Baseline R@5 | This R@5 |
-|---|---:|---:|
-| | | |
+**Hypothesis** *(committed before running)*: If I drop BM25 entirely, then retrieval gets **worse**: **keyword** loses at least one question at recall@5 (error and part codes are exact strings a 384-dimension MiniLM vector can't distinguish: 4380 vs 4830), **table** and **version** MRR fall (IDs like FIN-POL-002 in the context line match by BM25 today), and overall MRR drops by ≥ 0.05. #17 comes back (BM25 caused it). cross_lingual doesn't change (the dense model is English-only anyway).
 
-**Hypothesis confirmed?** Yes / No / Partly — and what I learned:
+**The one change:** dense only (no bm25).
 
->
+**Config diff:**
+```
+HYBRID_BM25_WEIGHT: 0.5 -> 0.0
+```
 
-**Decision:** keep / revert / follow up with EXP-__
+**Result** *(committed after running)*: *(pending)*
+
+---
+
+### EXP-03 — No contextual chunk header
+
+**Hypothesis** *(committed before running)*: If I stop prepending `<title> [<id> v<version> · <status> · effective <date>] › <section>` to every chunk (Task 3), then retrieval gets **worse**, mostly in MRR (≥ 0.05 overall): **version / draft / conflict** (the header carries the document ID, version and status that distinguish PTO v2, v3 and the draft), **table** and **keyword** (a table row like "Tier: B | …" no longer says it is the Travel & Per Diem Policy), **long_doc** (a manual chunk no longer says "R3 Operator Manual › 14. Floors, ramps"). Recall@5 drops by at least one question.
+
+**The one change:** no contextual chunk header.
+
+**Config diff:**
+```
+CHUNK_CONTEXT_HEADER: true -> false   (own index)
+```
+
+**Result** *(committed after running)*: *(pending)*
+
+---
+
+### EXP-04 — Smaller chunks (800/100 → 400/50)
+
+**Hypothesis** *(committed before running)*: If I halve the chunk size, then **long_doc and factual MRR improve slightly** (a needle sentence dominates a smaller chunk's vector) but **multi_part and multi_hop get worse** (the answer's parts, e.g. referral amount + timing, password length + MFA + rotation, are split across chunks, so the top 5 holds fewer of them), and BM25's per-chunk statistics shift. Net overall recall@5 within ±0.02 and MRR within ±0.03, i.e. no clear win, at roughly 1.6× the chunks.
+
+**The one change:** smaller chunks (800/100 → 400/50).
+
+**Config diff:**
+```
+CHUNK_SIZE: 800 -> 400, CHUNK_OVERLAP: 100 -> 50   (own index)
+```
+
+**Result** *(committed after running)*: *(pending)*
+
+---
+
+### EXP-05 — Multilingual embedding model
+
+**Hypothesis** *(committed before running)*: If I replace all-MiniLM-L6-v2 with paraphrase-multilingual-MiniLM-L12-v2 (same 384 dimensions, trained to map translations to the same vector), then **cross_lingual rises from 0.25 to ≥ 0.75** at recall@5 (the Arabic Cairo pages finally land near English questions). English categories lose a little MRR (−0.02 to −0.05: a 12-layer multilingual model spreads its capacity over 50 languages), and recall@5 holds because BM25 still anchors exact terms. The index costs about 2× to build (12 layers vs 6).
+
+**The one change:** multilingual embedding model.
+
+**Config diff:**
+```
+HF_EMBED_MODEL: sentence-transformers/all-MiniLM-L6-v2 -> sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2   (own index)
+```
+
+**Result** *(committed after running)*: *(pending)*
+
+---
+
+### EXP-06 — Cross-encoder re-ranker over the top 20
+
+**Hypothesis** *(committed before running)*: If I re-rank the hybrid's top 20 candidates per retriever with cross-encoder/ms-marco-MiniLM-L-6-v2, then **MRR rises by ≥ 0.05** and recall@1 by ≥ 0.10 (a cross-encoder reads question and passage together, so it should put the policy above the meeting note that merely shares words: #17 returns). But **cross_lingual drops to 0** (an English-only cross-encoder scores Arabic passages as irrelevant and pushes the one CSV row we find today out of the top 5). Latency: +20–60 ms per query on the GPU, **+150–400 ms on CPU** (the container), against ~1 ms for retrieval today.
+
+**The one change:** cross-encoder re-ranker over the top 20.
+
+**Config diff:**
+```
+RERANKER_MODEL: (none) -> cross-encoder/ms-marco-MiniLM-L-6-v2, RERANK_TOP_N: 20
+```
+
+**Result** *(committed after running)*: *(pending)*
+
+---
+
+### EXP-07 — Source prior: down-weight meeting notes and newsletters
+
+**Hypothesis** *(committed before running)*: If I multiply the fused score of chunks from `meetings/` and `newsletters/` by 0.5, then **#17 returns** (multi_part 0.75 → 1.00) and **MRR rises slightly** (+0.01 to +0.03) on policy questions where chatter competes ("carry over" in 35 meeting notes, "PTO" in 53). **No dev question loses**, because no dev gold document is a meeting note or a newsletter, which is also this experiment's risk: it bakes in a judgment (chatter is less authoritative) that the holdout could punish if it asks about something only a meeting note says.
+
+**The one change:** source prior: down-weight meeting notes and newsletters.
+
+**Config diff:**
+```
+SOURCE_PRIOR: (none) -> meetings/:0.5,newsletters/:0.5
+```
+
+**Result** *(committed after running)*: *(pending)*
 
 ---
 
@@ -156,8 +229,10 @@ Categories that moved by more than the noise floor:
 
 | ID | Change | R@5 Δ | MRR Δ | Latency Δ | Decision |
 |---|---|---:|---:|---:|---|
-| EXP-01 | | | | | |
-| EXP-02 | | | | | |
-| EXP-03 | | | | | |
-| EXP-04 | | | | | |
-| EXP-05 | | | | | |
+| EXP-01 | BM25 weight 0.5 → 0.3 | | | | |
+| EXP-02 | dense only | | | | |
+| EXP-03 | no context header | | | | |
+| EXP-04 | chunks 800 → 400 | | | | |
+| EXP-05 | multilingual embeddings | | | | |
+| EXP-06 | cross-encoder re-ranker | | | | |
+| EXP-07 | source prior | | | | |
