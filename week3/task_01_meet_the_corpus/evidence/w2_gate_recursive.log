@@ -1,0 +1,56 @@
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 2839.69it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-11-18 10:48:52,197 INFO northwind: Index LOADED from /mnt/games/coding/My-Internship/week3/task_01_meet_the_corpus/faiss_index_w2_recursive in 0.08s: 146 chunks from 119 files, 0 chunks embedded
+Eval: 38 examples, model ollama:qwen3.5:4b, judge ollama:qwen3.5:4b (same model as the generator), dataset 58fefe13fc23
+  # 1 factual    C1 G1 R1   2.6s  How many vacation days do I get a year?
+  # 2 factual    C0 G1 R0   8.8s  time off carry rules?
+  # 3 factual    C0 G1 R1   5.8s  Can I take time off in my first months?
+  # 4 factual    C1 G1 R1   2.3s  How far ahead do I have to ask for PTO?
+  # 5 factual    C1 G1 R1   2.5s  How many sick days are there per year?
+  # 6 factual    C1 G1 R1   2.2s  When do I need a doctor's note?
+  # 7 factual    C1 G1 R1   2.9s  How many days a week can I work from home?
+  # 8 factual    C1 G1 R1   2.3s  What is the home-office stipend?
+  # 9 factual    C1 G1 R1   3.1s  How long is paid leave for an adoptive parent?
+  #10 factual    C0 G1 R1   9.2s  What is the daily meal limit when travelling abroad?
+  #11 factual    C1 G1 R1   4.7s  Is alcohol reimbursable?
+  #12 factual    C0 G1 R1  12.3s  How long do I have to file an expense report?
+  #13 multi-part C1 G1 R1   2.7s  How much is the referral bonus and when is it paid?
+  #14 factual    C1 G1 R1   2.0s  How often are performance reviews held?
+  #15 factual    C1 G1 R1   3.0s  What is my annual learning budget?
+  #16 multi-part C1 G1 R1   3.2s  My laptop got stolen, what do I do?
+  #17 multi-part C1 G1 R1   3.4s  What are the password rules?
+  #18 multi-part C1 G0 R1   4.5s  How do I get on the VPN from home?
+  #19 factual    C1 G1 R1   5.6s  Can I open our source code on my personal phone?
+  #20 factual    C0 G1 R1   8.1s  Do I need approval for a Figma license?
+  #21 factual    C1 G1 R1   2.0s  How much weight can the Warehouse Rover R2 carry?
+  #22 factual    C1 G1 R1   2.6s  How fast does the rover go with a load?
+  #23 multi-part C1 G1 R1   3.7s  What does premium support include?
+  #24 factual    C1 G0 R1   4.8s  Can the R2 be used outdoors?
+  #25 refusal    C1 G1 R1   0.2s  What is the capital of France?
+  #26 refusal    C1 G1 R1   5.6s  What is the CEO's home address?
+  #27 refusal    C1 G1 R1   4.1s  What dental insurance plan does Northwind offer?
+  #28 refusal    C1 G1 R1   0.2s  Who won the football match last night?
+  #29 multi-hop  C1 G1 R1   4.3s  I just referred a friend who got hired. When do I get my ref
+  #30 multi-hop  C1 G1 R1   4.0s  I want to work fully remote. What do I need to get approved,
+  #31 multi-part C0 G1 R0   2.3s  What are the known limitations of the Warehouse Rover R2?
+  #32 multi-part C1 G1 R1  11.3s  What are the rules for booking business travel?
+  #33 refusal    C1 G1 R1   4.8s  How many days of bereavement leave do I get?
+  #34 refusal    C1 G1 R1   7.5s  What is the maximum operating temperature of the Warehouse R
+  #35 follow-up  C1 G1 R1   7.2s  Do they carry over?
+  #36 follow-up  C1 G1 R1   5.0s  And what does the standard plan cover?
+  #37 keyword    C1 G1 R1   2.5s  What does Fleet Manager 4.2 handle?
+  #38 keyword    C1 G1 R1   3.2s  Does the R2 support 5G?
+
+correctness 0.842  groundedness 0.947  retrieval_hit 0.947   (38 examples, 313 s)
+category       n  correct  grounded
+factual       19     0.74      0.95
+multi-hop      2     1.00      1.00
+multi-part     7     0.86      0.86
+refusal        6     1.00      1.00
+follow-up      2     1.00      1.00
+keyword        2     1.00      1.00
+wrote week3/task_01_meet_the_corpus/evidence/w2_gate_results_recursive.json
+## Eval gate: ❌ NO BASELINE
+
+No current baseline at `/mnt/games/coding/My-Internship/week2/task_07_eval_gate/eval_baseline.json`. The Week 2 baseline was archived as eval_baseline_w2.json in Week 3 Task 1 (it describes the old corpus); Week 3 Task 2 sets the new one (make_baseline.py). The gate cannot vouch for quality until then.
+gate exit 1

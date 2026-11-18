@@ -1,0 +1,44 @@
+.......x.                                                                [100%]
+==================================== PASSES ====================================
+_________________ test_live_stream_delivers_real_model_tokens __________________
+----------------------------- Captured stdout call -----------------------------
+{"request_id": "c281d8d06e164007bb0c4e5ab5d24231", "session_id": "5440cc52-f526-48ac-a309-85b0ba4efc88", "trace_id": "7b6c256a-130c-439f-b3b8-28a1c764acd9", "endpoint": "chat/stream", "status": "ok", "route": "retrieve", "node_path": ["contextualize", "route_question", "retrieve", "grade_documents", "generate", "grade_generation"], "retries": 0, "latency_ms": 2953, "tokens_in": 1938, "tokens_out": 80, "estimated_cost_usd": 0.000339, "refused": false, "cache_hit": false, "llm_calls": 10, "model": "ollama:qwen3.5:4b", "per_node": {"contextualize": {"runs": 1, "ms": 0.1, "llm_calls": 0, "llm_ms": 0.0, "tokens_in": 0, "tokens_out": 0}, "route_question": {"runs": 1, "ms": 631.3, "llm_calls": 1, "llm_ms": 629.9, "tokens_in": 148, "tokens_out": 5}, "retrieve": {"runs": 1, "ms": 4.6, "llm_calls": 0, "llm_ms": 0.0, "tokens_in": 0, "tokens_out": 0}, "grade_documents": {"runs": 1, "ms": 848.9, "llm_calls": 6, "llm_ms": 845.4, "tokens_in": 1009, "tokens_out": 12}, "generate": {"runs": 1, "ms": 531.4, "llm_calls": 1, "llm_ms": 530.9, "tokens_in": 370, "tokens_out": 19}, "grade_generation": {"runs": 1, "ms": 924.1, "llm_calls": 2, "llm_ms": 922.8, "tokens_in": 411, "tokens_out": 44}}, "retrieved_ids": ["employee_handbook.md::2", "employee_handbook.md::1", "it_faq.md::3", "it_faq.md::0", "hr_policies.md::3", "employee_handbook.md::3"], "kept_ids": ["employee_handbook.md::2", "employee_handbook.md::1"], "degraded": [], "llm_attempts": 10, "ttft_ms": 1764, "trace_url": null, "event": "request", "level": "info", "ts": "2026-11-18T09:06:20.512344Z"}
+----------------------------- Captured stderr call -----------------------------
+2026-11-18 11:06:12,735 INFO northwind.api: config: llm=ollama:qwen3.5:4b base_url=http://172.17.0.1:11434 embeddings=ollama k=4 chunks=800/100 index=/mnt/games/coding/My-Internship/week1/capstone_internal_docs_assistant/faiss_index | cache: on (ttl 3600s, refusals 300s)
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 12232.79it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-11-18 11:06:17,485 INFO northwind: Index LOADED from /mnt/games/coding/My-Internship/week1/capstone_internal_docs_assistant/faiss_index in 0.02s: 20 chunks from 4 files, 0 chunks embedded
+2026-11-18 11:06:17,549 INFO northwind.api: API READY in 4.81s: index LOADED, 20 chunks from 4 documents, hybrid (BM25 + dense) retriever
+------------------------------ Captured log call -------------------------------
+WARNING  huggingface_hub.utils._http:_http.py:993 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+______________________ test_grounded_answer_with_citation ______________________
+---------------------------- Captured stderr setup -----------------------------
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 2375.62it/s]
+2026-11-18 11:06:21,471 INFO northwind: Index LOADED from /mnt/games/coding/My-Internship/week1/capstone_internal_docs_assistant/faiss_index in 0.00s: 20 chunks from 4 files, 0 chunks embedded
+------------------------------ Captured log setup ------------------------------
+INFO     northwind:app.py:228 Index LOADED from /mnt/games/coding/My-Internship/week1/capstone_internal_docs_assistant/faiss_index in 0.00s: 20 chunks from 4 files, 0 chunks embedded
+_______________________ test_warm_start_does_not_reembed _______________________
+----------------------------- Captured stdout call -----------------------------
+
+cold start: 0.016s, 20 chunks embedded | warm start: 0.000s, 0 chunks embedded
+----------------------------- Captured stderr call -----------------------------
+2026-11-18 11:06:48,370 INFO northwind: Index BUILT: embedded 20 chunks from 4 files in 0.02s, saved to /tmp/pytest-of-ahmed/pytest-50/test_warm_start_does_not_reemb0/faiss_index
+2026-11-18 11:06:48,371 INFO northwind: Index LOADED from /tmp/pytest-of-ahmed/pytest-50/test_warm_start_does_not_reemb0/faiss_index in 0.00s: 20 chunks from 4 files, 0 chunks embedded
+------------------------------ Captured log call -------------------------------
+INFO     northwind:app.py:220 Index BUILT: embedded 20 chunks from 4 files in 0.02s, saved to /tmp/pytest-of-ahmed/pytest-50/test_warm_start_does_not_reemb0/faiss_index
+INFO     northwind:app.py:228 Index LOADED from /tmp/pytest-of-ahmed/pytest-50/test_warm_start_does_not_reemb0/faiss_index in 0.00s: 20 chunks from 4 files, 0 chunks embedded
+_________________ test_unanswerable_question_exhausts_rewrites _________________
+----------------------------- Captured stdout call -----------------------------
+
+path: contextualize -> route_question -> retrieve -> grade_documents -> rewrite_query -> retrieve -> grade_documents -> rewrite_query -> retrieve -> grade_documents -> generate -> grade_generation -> refuse
+=========================== short test summary info ============================
+PASSED tests/test_api.py::test_live_stream_delivers_real_model_tokens
+PASSED tests/test_golden_path.py::test_grounded_answer_with_citation
+PASSED tests/test_golden_path.py::test_out_of_scope_question_is_refused
+PASSED tests/test_golden_path.py::test_plausible_sounding_out_of_scope_is_refused
+PASSED tests/test_golden_path.py::test_two_turn_follow_up_resolves_pronoun
+PASSED tests/test_golden_path.py::test_sessions_are_isolated
+PASSED tests/test_golden_path.py::test_warm_start_does_not_reembed
+PASSED tests/test_golden_path.py::test_unanswerable_question_exhausts_rewrites
+XFAIL tests/test_golden_path.py::test_awkward_query_triggers_rewrite_loop - Finding (week2/RESULTS.md, Task 1 and Task 2): with the production hybrid retriever (BM25 + dense, k=4) the first search already finds the PTO section, so the grader keeps it and no rewrite is needed. The loop does fire on unanswerable questions; see test_unanswerable_question_exhausts_rewrites.
+8 passed, 138 deselected, 1 xfailed in 43.45s

@@ -1,0 +1,2914 @@
+{
+ "meta": {
+  "label": "recursive",
+  "date": "2026-11-18T08:48:35+00:00",
+  "git_sha": "9ca3dcc005ee1ee3d910a0531a4f672587a3f096",
+  "dataset": "week3/eval/seed_eval.jsonl",
+  "dataset_version": "d73feb361d7a",
+  "n": 40,
+  "data_dir": "/tmp/northwind_w3_recursive_view",
+  "indexed_files": 119,
+  "indexed_chunks": 146,
+  "model": "ollama:qwen3.5:4b",
+  "judge": "ollama:qwen3.5:4b (same model as the generator: the Week 2 judges)",
+  "retriever_k": 4,
+  "max_docs_to_grade": 6,
+  "chunking": "800/100",
+  "wall_clock_s": 279.0,
+  "cost": {
+   "mean_cost_usd": 0.0007,
+   "mean_llm_calls": 18.125,
+   "mean_latency_s": 4.6368
+  }
+ },
+ "summary": {
+  "all": {
+   "n": 40,
+   "deterministic": 0.175,
+   "correctness": 0.15,
+   "groundedness": 0.975,
+   "refused": 0.575,
+   "gold_indexed": 0.2059,
+   "gold_retrieved": 0.1176,
+   "gold_kept": 0.0588,
+   "mean_llm_calls": 18.125,
+   "mean_latency_s": 4.6368
+  },
+  "by_category": {
+   "factual": {
+    "n": 4,
+    "deterministic": 0.5,
+    "correctness": 0.25,
+    "groundedness": 1.0,
+    "refused": 0.25,
+    "gold_indexed": 0.25,
+    "gold_retrieved": 0.25,
+    "gold_kept": 0.25,
+    "mean_llm_calls": 13.0,
+    "mean_latency_s": 2.815
+   },
+   "table": {
+    "n": 3,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 26.0,
+    "mean_latency_s": 8.06
+   },
+   "keyword": {
+    "n": 3,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 23.3333,
+    "mean_latency_s": 4.9733
+   },
+   "version": {
+    "n": 6,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 0.1667,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 12.0,
+    "mean_latency_s": 2.9
+   },
+   "conflict": {
+    "n": 2,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 0.5,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 16.0,
+    "mean_latency_s": 4.21
+   },
+   "draft": {
+    "n": 1,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 1.0,
+    "gold_retrieved": 1.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 25.0,
+    "mean_latency_s": 5.75
+   },
+   "multi_hop": {
+    "n": 2,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.5,
+    "gold_retrieved": 0.5,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 24.5,
+    "mean_latency_s": 6.51
+   },
+   "multi_part": {
+    "n": 2,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 0.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 10.0,
+    "mean_latency_s": 3.115
+   },
+   "ambiguous": {
+    "n": 1,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 0.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 10.0,
+    "mean_latency_s": 2.42
+   },
+   "long_doc": {
+    "n": 2,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 25.5,
+    "mean_latency_s": 5.96
+   },
+   "cross_lingual": {
+    "n": 3,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 1.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 23.6667,
+    "mean_latency_s": 5.7667
+   },
+   "follow_up": {
+    "n": 2,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 0.5,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 19.5,
+    "mean_latency_s": 7.625
+   },
+   "personalized": {
+    "n": 1,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 0.0,
+    "refused": 0.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 10.0,
+    "mean_latency_s": 6.33
+   },
+   "access": {
+    "n": 5,
+    "deterministic": 0.6,
+    "correctness": 0.6,
+    "groundedness": 1.0,
+    "refused": 0.6,
+    "gold_indexed": 0.5,
+    "gold_retrieved": 0.5,
+    "gold_kept": 0.5,
+    "mean_llm_calls": 17.8,
+    "mean_latency_s": 3.796
+   },
+   "out_of_scope": {
+    "n": 3,
+    "deterministic": 0.6667,
+    "correctness": 0.6667,
+    "groundedness": 1.0,
+    "refused": 0.6667,
+    "gold_indexed": null,
+    "gold_retrieved": null,
+    "gold_kept": null,
+    "mean_llm_calls": 19.0,
+    "mean_latency_s": 4.03
+   }
+  }
+ },
+ "examples": [
+  {
+   "id": "s01",
+   "category": "factual",
+   "question": "How many paid sick days do employees get per year?",
+   "answer": "Employees receive 10 paid sick days per year.",
+   "standalone": "How many paid sick days do employees get per year?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "employee_handbook.md › 3. Sick Leave"
+   ],
+   "refused": false,
+   "latency_s": 2.34,
+   "llm_calls": 10,
+   "tokens_in": 1754,
+   "tokens_out": 78,
+   "cost_usd": 0.00031,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-005_sick_leave.pdf"
+   ],
+   "deterministic": {
+    "passed": true,
+    "reasons": []
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-03-05_people_ops_allhands_qa_203.txt",
+    "PTO_Policy_2017_scan.txt",
+    "employee_handbook.md",
+    "hr_policies.md",
+    "it_faq.md"
+   ],
+   "kept_files": [
+    "employee_handbook.md"
+   ]
+  },
+  {
+   "id": "s02",
+   "category": "version",
+   "question": "How many PTO days can I carry over into next year?",
+   "answer": "You can carry over up to 5 days of unused PTO into the next calendar year; any amount above 5 days is forfeited on December 31.",
+   "standalone": "How many PTO days can I carry over into next year?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "employee_handbook.md › 2. Paid Time Off (PTO)"
+   ],
+   "refused": false,
+   "latency_s": 3.31,
+   "llm_calls": 10,
+   "tokens_in": 2246,
+   "tokens_out": 137,
+   "cost_usd": 0.000419,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '3 days|three days'",
+     "missing: 'March 31'"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-03-05_people_ops_allhands_qa_203.txt",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "employee_handbook.md",
+    "it_faq.md"
+   ],
+   "kept_files": [
+    "2026-03-05_people_ops_allhands_qa_203.txt",
+    "employee_handbook.md"
+   ]
+  },
+  {
+   "id": "s03",
+   "category": "version",
+   "question": "How long is parental leave for an adoptive parent?",
+   "answer": "Non-birth and adoptive parents receive 10 weeks of fully paid leave, which must be taken within 12 months of the placement.",
+   "standalone": "How long is parental leave for an adoptive parent?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "employee_handbook.md › 6. Parental Leave"
+   ],
+   "refused": false,
+   "latency_s": 3.02,
+   "llm_calls": 10,
+   "tokens_in": 1747,
+   "tokens_out": 129,
+   "cost_usd": 0.000339,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-006_parental_leave.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '12 weeks|twelve weeks'"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "employee_handbook.md",
+    "it_faq.md"
+   ],
+   "kept_files": [
+    "employee_handbook.md"
+   ]
+  },
+  {
+   "id": "s04",
+   "category": "version",
+   "question": "What is the minimum length for a corporate password?",
+   "answer": "The minimum length for a corporate password is 14 characters.",
+   "standalone": "What is the minimum length for a corporate password?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "it_faq.md › Accounts & Access"
+   ],
+   "refused": false,
+   "latency_s": 2.14,
+   "llm_calls": 10,
+   "tokens_in": 1974,
+   "tokens_out": 62,
+   "cost_usd": 0.000333,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/it/IT-STD-003_password_and_authentication.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '16'"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-07-02_field_service_009.txt",
+    "2026-09-27_data_platform_019.txt",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "hr_policies.md",
+    "it_faq.md"
+   ],
+   "kept_files": [
+    "it_faq.md"
+   ]
+  },
+  {
+   "id": "s05",
+   "category": "conflict",
+   "question": "How do I connect to the VPN from home?",
+   "answer": "Install the GlobalConnect client from the Self-Service app catalog, authenticate with your corporate SSO, and approve the MFA push. The VPN is required when accessing internal systems from outside the office network.",
+   "standalone": "How do I connect to the VPN from home?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "it_faq.md › VPN & Security"
+   ],
+   "refused": false,
+   "latency_s": 3.3,
+   "llm_calls": 10,
+   "tokens_in": 2320,
+   "tokens_out": 130,
+   "cost_usd": 0.000426,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/it/IT-STD-007_remote_access.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: 'Northwind Access'"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-07-16_marketing_051.txt",
+    "employee_handbook.md",
+    "it_faq.md"
+   ],
+   "kept_files": [
+    "2026-07-16_marketing_051.txt",
+    "it_faq.md"
+   ]
+  },
+  {
+   "id": "s06",
+   "category": "table",
+   "question": "What is the hotel cap per night for a business trip to Germany?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the hotel cap per night for a business trip to Germany?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 7.78,
+   "llm_calls": 27,
+   "tokens_in": 5348,
+   "tokens_out": 333,
+   "cost_usd": 0.001002,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: The hotel booking cap is $250/night without VP approval. This limit applies generally; the context does not specify different caps for Germany or other international destinations. | fact-check said: The hotel booking cap is $250/night without VP approval. Supported.\nThis limit applies generally; the context does not specify different caps for Germa",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "The hotel cap per night is $180, regardless of the duration or destination (including Germany).",
+    "The hotel cap per night is $180, regardless of the duration or destination (including Germany).",
+    "The hotel booking cap is $250/night without VP approval. This limit applies generally; the context does not specify different caps for Germany or other international destinations."
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '260'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-09-16_perception_008.txt",
+    "Expense_Policy_2019_scan.txt",
+    "Travel_Policy_2018_scan.txt",
+    "employee_handbook.md",
+    "hr_policies.md",
+    "it_faq.md",
+    "product_specs.md"
+   ],
+   "kept_files": [
+    "hr_policies.md",
+    "it_faq.md"
+   ]
+  },
+  {
+   "id": "s07",
+   "category": "multi_hop",
+   "question": "What is the daily meal allowance when I travel to Cairo?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the daily meal allowance when I travel to Cairo?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 6.21,
+   "llm_calls": 26,
+   "tokens_in": 4842,
+   "tokens_out": 224,
+   "cost_usd": 0.000861,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is fully supported by the fact that the provided context contains no information regarding travel policy exceptions, PTO interaction with Egyptian law, or specific day counts for minimum leave.\nANSWER: YE",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "The daily meal allowance for travel to Cairo is $75, as Cairo is a domestic location.",
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '55'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "README.md",
+    "Travel_Policy_2018_scan.txt",
+    "employee_handbook.md",
+    "hr_policies.md",
+    "it_faq.md",
+    "product_specs.md"
+   ],
+   "kept_files": [
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "employee_handbook.md",
+    "hr_policies.md"
+   ]
+  },
+  {
+   "id": "s08",
+   "category": "keyword",
+   "question": "What does error code E-217 mean?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What does error code E-217 mean?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.82,
+   "llm_calls": 23,
+   "tokens_in": 4631,
+   "tokens_out": 160,
+   "cost_usd": 0.000791,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is incorrect because the context does contain information about software licenses.\nThe context explicitly explains how to obtain a software license by requesting it through the IT portal's Software Catalo",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/Rover_Error_Codes_2026.xlsx"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: 'left'",
+     "missing: 'overcurrent'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-03-07_customer_success_092.txt",
+    "2026-03-23_it_operations_049.txt",
+    "2026-04-24_data_platform_086.txt",
+    "2026-07-02_legal_070.txt",
+    "2026-07-16_marketing_051.txt",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "README.md",
+    "employee_handbook.md",
+    "hr_policies.md",
+    "it_faq.md"
+   ],
+   "kept_files": [
+    "README.md",
+    "it_faq.md"
+   ]
+  },
+  {
+   "id": "s09",
+   "category": "keyword",
+   "question": "Is part NW-BAT-4830 compatible with the R2?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Is part NW-BAT-4830 compatible with the R2?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 5.46,
+   "llm_calls": 24,
+   "tokens_in": 5264,
+   "tokens_out": 168,
+   "cost_usd": 0.00089,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is fully supported by the context because the documents explicitly contain specific policies regarding laptop refresh cycles, lost devices, VPN connections, and BYOD rules.\nANSWER: YES\n[grounded, but judg",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/Spare_Parts_Catalog_2026.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: 'not compatible|R3 only|only compatible with the R3|incompatible|only for the R3'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-01-06_fleet_software_079.txt",
+    "2026-01-25_field_service_063.txt",
+    "2026-02-10_supply_chain_013.txt",
+    "2026-04-02_sales_engineering_078.txt",
+    "2026-04-17_hardware_sustaining_087.txt",
+    "2026-08-11_perception_096.txt",
+    "Handbook_2016_cover_scan.txt",
+    "R2_End_of_Life_Notice.md",
+    "README.md",
+    "hr_policies.md",
+    "it_faq.md",
+    "product_specs.md",
+    "release_notes_5.0.md"
+   ],
+   "kept_files": [
+    "README.md",
+    "it_faq.md"
+   ]
+  },
+  {
+   "id": "s10",
+   "category": "long_doc",
+   "question": "What is the maximum ramp incline for a loaded R3?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the maximum ramp incline for a loaded R3?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 6.82,
+   "llm_calls": 27,
+   "tokens_in": 5340,
+   "tokens_out": 278,
+   "cost_usd": 0.000968,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: The maximum ramp incline for a loaded R3 is 5 degrees. | fact-check said: The context states the maximum ramp incline is 5 degrees.\nThe answer does not mention \"loaded\" or \"R3\", which are specific details not found in the provided text.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "The maximum ramp incline for a loaded R3 is 5 degrees.",
+    "The maximum ramp incline for a loaded R3 is 5 degrees.",
+    "The maximum ramp incline for a loaded R3 is 5 degrees."
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/R3/R3_Operator_Manual_RevC.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '5 degrees|5°|five degrees|5 deg'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-02-21_legal_005.txt",
+    "2026-04-24_data_platform_086.txt",
+    "2026-06-13_hardware_sustaining_060.txt",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "README.md",
+    "employee_handbook.md",
+    "it_faq.md",
+    "product_specs.md"
+   ],
+   "kept_files": [
+    "product_specs.md"
+   ]
+  },
+  {
+   "id": "s11",
+   "category": "long_doc",
+   "question": "How do I reset the emergency stop on an R3?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How do I reset the emergency stop on an R3?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 5.1,
+   "llm_calls": 24,
+   "tokens_in": 5710,
+   "tokens_out": 161,
+   "cost_usd": 0.000953,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. | fact-check said: The answer states \"I don't know based on the provided documents,\" which is fully supported because none of the three provided files contain information about how to reset a corporate password or request access to a new system.\nANSWER: YES\n[grounded, but judged NOT to answer the questi",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents."
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/R3/R3_Operator_Manual_RevC.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: 'RESUME'",
+     "missing: '3 seconds|three seconds'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-06-13_hardware_sustaining_060.txt",
+    "2026-07-15_security_061.txt",
+    "2026-07-26_manufacturing_058.txt",
+    "R2_End_of_Life_Notice.md",
+    "README.md",
+    "it_faq.md",
+    "product_specs.md"
+   ],
+   "kept_files": [
+    "README.md",
+    "it_faq.md",
+    "product_specs.md"
+   ]
+  },
+  {
+   "id": "s12",
+   "category": "ambiguous",
+   "question": "What is the payload capacity of the rover?",
+   "answer": "The payload capacity of the rover is 80 kg.",
+   "standalone": "What is the payload capacity of the rover?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "product_specs.md › Key Specifications"
+   ],
+   "refused": false,
+   "latency_s": 2.42,
+   "llm_calls": 10,
+   "tokens_in": 2515,
+   "tokens_out": 68,
+   "cost_usd": 0.000418,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: 'R2'",
+     "missing: 'R3'"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-04-13_hardware_sustaining_055.txt",
+    "README.md",
+    "it_faq.md",
+    "product_specs.md",
+    "release_notes_4.3.md",
+    "release_notes_5.0.md"
+   ],
+   "kept_files": [
+    "2026-04-13_hardware_sustaining_055.txt",
+    "product_specs.md"
+   ]
+  },
+  {
+   "id": "s13",
+   "category": "multi_part",
+   "question": "What are the password requirements?",
+   "answer": "Passwords must be at least 14 characters and are rotated every 180 days. After 5 failed attempts, your account locks for 30 minutes.",
+   "standalone": "What are the password requirements?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "it_faq.md › Accounts & Access"
+   ],
+   "refused": false,
+   "latency_s": 3.49,
+   "llm_calls": 10,
+   "tokens_in": 2871,
+   "tokens_out": 126,
+   "cost_usd": 0.000506,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/it/IT-STD-003_password_and_authentication.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '16'",
+     "missing: 'MFA|multi-factor'"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-02-20_data_platform_006.txt",
+    "2026-02-22_data_platform_028.txt",
+    "2026-03-23_it_operations_049.txt",
+    "2026-07-02_field_service_009.txt",
+    "it_faq.md"
+   ],
+   "kept_files": [
+    "2026-02-22_data_platform_028.txt",
+    "2026-03-23_it_operations_049.txt",
+    "2026-07-02_field_service_009.txt",
+    "it_faq.md"
+   ]
+  },
+  {
+   "id": "s14",
+   "category": "multi_part",
+   "question": "How much is the referral bonus and when is it paid?",
+   "answer": "The referral bonus is $3,000 and is paid after the new hire completes 90 days. There is no limit on the number of referrals.",
+   "standalone": "How much is the referral bonus and when is it paid?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "hr_policies.md › Referral Bonus"
+   ],
+   "refused": false,
+   "latency_s": 2.74,
+   "llm_calls": 10,
+   "tokens_in": 1814,
+   "tokens_out": 104,
+   "cost_usd": 0.000334,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-014_referral_bonus.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '4,000|4000'",
+     "missing: '12 months'"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "Comp_Review_2026_Guidance.md",
+    "Expense_Policy_2019_scan.txt",
+    "hr_policies.md",
+    "it_faq.md"
+   ],
+   "kept_files": [
+    "hr_policies.md"
+   ]
+  },
+  {
+   "id": "s15",
+   "category": "out_of_scope",
+   "question": "What is the company policy on bringing dogs to the office?",
+   "answer": "There is no established company policy on bringing dogs to the office. While it is informally allowed in Berlin, there is currently no decision made for the Austin office.",
+   "standalone": "What is the company policy on bringing dogs to the office?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "2026-08-14_facilities_office_ops_201.txt"
+   ],
+   "refused": false,
+   "latency_s": 3.66,
+   "llm_calls": 10,
+   "tokens_in": 2039,
+   "tokens_out": 162,
+   "cost_usd": 0.000403,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "answered an out-of-scope question",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "showed citations for an out-of-scope question"
+   },
+   "rejected_attempts": [],
+   "user_id": "u1001",
+   "gold_docs": [],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "expected a refusal"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-08-14_facilities_office_ops_201.txt",
+    "README.md",
+    "employee_handbook.md",
+    "hr_policies.md",
+    "it_faq.md"
+   ],
+   "kept_files": [
+    "2026-08-14_facilities_office_ops_201.txt"
+   ]
+  },
+  {
+   "id": "s16",
+   "category": "out_of_scope",
+   "question": "What is the CEO's home address?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the CEO's home address?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.49,
+   "llm_calls": 24,
+   "tokens_in": 4881,
+   "tokens_out": 118,
+   "cost_usd": 0.000803,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "no citations shown"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [],
+   "deterministic": {
+    "passed": true,
+    "reasons": []
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-01-27_sales_engineering_031.txt",
+    "2026-03-23_it_operations_049.txt",
+    "2026-03-23_sales_engineering_029.txt",
+    "2026-07-20_marketing_039.txt",
+    "2026-08-14_facilities_office_ops_201.txt",
+    "2026-09-26_firmware_084.txt",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "README.md",
+    "employee_handbook.md",
+    "hr_policies.md",
+    "it_faq.md",
+    "product_specs.md"
+   ],
+   "kept_files": [
+    "2026-08-14_facilities_office_ops_201.txt",
+    "hr_policies.md",
+    "it_faq.md"
+   ]
+  },
+  {
+   "id": "s17",
+   "category": "draft",
+   "question": "Do we have unlimited PTO?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Do we have unlimited PTO?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 5.75,
+   "llm_calls": 25,
+   "tokens_in": 4741,
+   "tokens_out": 230,
+   "cost_usd": 0.000849,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the document explicitly answers the questions asked.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents.",
+    "I don't know based on the provided documents."
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: 'draft|not approved|proposal|proposed'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": true,
+   "gold_retrieved": true,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-03-05_people_ops_allhands_qa_203.txt",
+    "2026-08-14_facilities_office_ops_201.txt",
+    "2026-09-26_hardware_sustaining_011.txt",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "PTO_Policy_2017_scan.txt",
+    "README.md",
+    "employee_handbook.md"
+   ],
+   "kept_files": [
+    "2026-03-05_people_ops_allhands_qa_203.txt"
+   ]
+  },
+  {
+   "id": "s18",
+   "category": "access",
+   "question": "What is the salary range for an L4 engineer in Austin?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the salary range for an L4 engineer in Austin?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.28,
+   "llm_calls": 23,
+   "tokens_in": 4615,
+   "tokens_out": 124,
+   "cost_usd": 0.000767,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "no citations shown"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [],
+   "deterministic": {
+    "passed": true,
+    "reasons": []
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-04-25_sales_engineering_067.txt",
+    "2026-06-17_hardware_sustaining_000.txt",
+    "2026-09-26_firmware_084.txt",
+    "Comp_Review_2026_Guidance.md",
+    "Project_Juniper_Workforce_Plan.md",
+    "README.md",
+    "Travel_Policy_2018_scan.txt",
+    "employee_handbook.md",
+    "hr_policies.md",
+    "it_faq.md",
+    "product_specs.md"
+   ],
+   "kept_files": [
+    "Comp_Review_2026_Guidance.md",
+    "Project_Juniper_Workforce_Plan.md",
+    "it_faq.md"
+   ]
+  },
+  {
+   "id": "s19",
+   "category": "access",
+   "question": "What is the salary range for an L4 engineer in Austin?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the salary range for an L4 engineer in Austin?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.36,
+   "llm_calls": 23,
+   "tokens_in": 4615,
+   "tokens_out": 124,
+   "cost_usd": 0.000767,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is not explicitly stated in any of the provided context files.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u3001",
+   "gold_docs": [
+    "hr_restricted/Salary_Bands_2026.xlsx"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '142,000|142000|142k'",
+     "missing: '178,000|178000|178k'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-04-25_sales_engineering_067.txt",
+    "2026-06-17_hardware_sustaining_000.txt",
+    "2026-09-26_firmware_084.txt",
+    "Comp_Review_2026_Guidance.md",
+    "Project_Juniper_Workforce_Plan.md",
+    "README.md",
+    "Travel_Policy_2018_scan.txt",
+    "employee_handbook.md",
+    "hr_policies.md",
+    "it_faq.md",
+    "product_specs.md"
+   ],
+   "kept_files": [
+    "Comp_Review_2026_Guidance.md",
+    "Project_Juniper_Workforce_Plan.md",
+    "it_faq.md"
+   ]
+  },
+  {
+   "id": "s20",
+   "category": "access",
+   "question": "What is Project Juniper?",
+   "answer": "Project Juniper is a workforce plan for the Austin hardware sustaining team following the R2 end of sale, which involves reducing the team by 18 roles.",
+   "standalone": "What is Project Juniper?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "Project_Juniper_Workforce_Plan.md › Project Juniper workforce plan — STRICTLY RESTRICTED (HR leadership)"
+   ],
+   "refused": false,
+   "latency_s": 3.07,
+   "llm_calls": 10,
+   "tokens_in": 2140,
+   "tokens_out": 117,
+   "cost_usd": 0.000391,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "answered an out-of-scope question",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "showed citations for an out-of-scope question"
+   },
+   "rejected_attempts": [],
+   "user_id": "u1001",
+   "gold_docs": [],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "forbidden content present: '18 roles'",
+     "expected a refusal"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-03-23_it_operations_049.txt",
+    "2026-09-22_leadership_sync_202.txt",
+    "Project_Juniper_Workforce_Plan.md",
+    "README.md",
+    "it_faq.md",
+    "product_specs.md"
+   ],
+   "kept_files": [
+    "Project_Juniper_Workforce_Plan.md"
+   ]
+  },
+  {
+   "id": "s21",
+   "category": "access",
+   "question": "What target rating distribution should I use in performance calibration?",
+   "answer": "The target rating distribution is 15% Exceeds, 70% Meets, and 15% Below. Departments may deviate by up to 5 points with VP approval. Calibration sessions are held per department in the week before review meetings.",
+   "standalone": "What target rating distribution should I use in performance calibration?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "Performance_Calibration_Guide_2026.md › Performance Calibration Guide 2026 (managers only)"
+   ],
+   "refused": false,
+   "latency_s": 3.53,
+   "llm_calls": 10,
+   "tokens_in": 1897,
+   "tokens_out": 156,
+   "cost_usd": 0.000378,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [],
+   "user_id": "u2001",
+   "gold_docs": [
+    "hr_restricted/Performance_Calibration_Guide_2026.md"
+   ],
+   "deterministic": {
+    "passed": true,
+    "reasons": []
+   },
+   "gold_indexed": true,
+   "gold_retrieved": true,
+   "gold_kept": true,
+   "retrieved_files": [
+    "Comp_Review_2026_Guidance.md",
+    "Performance_Calibration_Guide_2026.md",
+    "hr_policies.md",
+    "it_faq.md",
+    "product_specs.md"
+   ],
+   "kept_files": [
+    "Performance_Calibration_Guide_2026.md"
+   ]
+  },
+  {
+   "id": "s22",
+   "category": "access",
+   "question": "How long is a performance improvement plan?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How long is a performance improvement plan?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.74,
+   "llm_calls": 23,
+   "tokens_in": 4276,
+   "tokens_out": 161,
+   "cost_usd": 0.000738,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "no citations shown"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents."
+   ],
+   "user_id": "u1001",
+   "gold_docs": [],
+   "deterministic": {
+    "passed": true,
+    "reasons": []
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-05-25_fleet_software_069.txt",
+    "Comp_Review_2026_Guidance.md",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "PTO_Policy_2017_scan.txt",
+    "Performance_Calibration_Guide_2026.md",
+    "hr_policies.md",
+    "it_faq.md",
+    "product_specs.md"
+   ],
+   "kept_files": [
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "Performance_Calibration_Guide_2026.md",
+    "hr_policies.md"
+   ]
+  },
+  {
+   "id": "s23",
+   "category": "cross_lingual",
+   "question": "What are the Cairo office working hours during Ramadan?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What are the Cairo office working hours during Ramadan?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 5.45,
+   "llm_calls": 24,
+   "tokens_in": 4802,
+   "tokens_out": 182,
+   "cost_usd": 0.000829,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. | fact-check said: The answer states \"I don't know based on the provided documents,\" which is fully supported because none of the three documents contain information about the specific interaction between flexible time off and statutory leave under Egyptian labour law, nor do they specify a minimum numb",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents."
+   ],
+   "user_id": "u1002",
+   "gold_docs": [
+    "cairo/ساعات_العمل_في_رمضان.md"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '9:00|9 am|9am|09:00|9 a.m'",
+     "missing: '3:00|3 pm|3pm|15:00|3 p.m'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": true,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-01-12_finance_043.txt",
+    "2026-03-05_quality_034.txt",
+    "2026-07-13_fleet_software_073.txt",
+    "2026-07-16_marketing_051.txt",
+    "2026-07-26_manufacturing_058.txt",
+    "2026-09-26_firmware_084.txt",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "README.md",
+    "employee_handbook.md",
+    "hr_policies.md",
+    "it_faq.md",
+    "product_specs.md"
+   ],
+   "kept_files": [
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "employee_handbook.md",
+    "product_specs.md"
+   ]
+  },
+  {
+   "id": "s24",
+   "category": "cross_lingual",
+   "question": "How much is the monthly transport allowance for Cairo employees?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How much is the monthly transport allowance for Cairo employees?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.83,
+   "llm_calls": 24,
+   "tokens_in": 4521,
+   "tokens_out": 142,
+   "cost_usd": 0.000763,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is fully supported because none of the three documents contain information about flexible time off (FTO) interaction with Egyptian labour law or a recommendation for whether the minimum should be 15 or 20",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1002",
+   "gold_docs": [
+    "cairo/بدل_الانتقالات.md"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '1,500|1500'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": true,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-07-16_marketing_051.txt",
+    "2026-09-14_product_management_075.txt",
+    "2026-09-16_motion_planning_072.txt",
+    "2026-09-26_firmware_084.txt",
+    "Comp_Review_2026_Guidance.md",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "Expense_Policy_2019_scan.txt",
+    "README.md",
+    "Travel_Policy_2018_scan.txt",
+    "hr_policies.md",
+    "it_faq.md"
+   ],
+   "kept_files": [
+    "2026-09-26_firmware_084.txt",
+    "Comp_Review_2026_Guidance.md",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ]
+  },
+  {
+   "id": "s25",
+   "category": "cross_lingual",
+   "question": "Which days make up the work week in the Cairo office?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Which days make up the work week in the Cairo office?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 7.02,
+   "llm_calls": 23,
+   "tokens_in": 4438,
+   "tokens_out": 320,
+   "cost_usd": 0.000858,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know,\" which is not a specific claim about facts found in the text but rather an admission of lack of knowledge; however, since the user's instruction requires checking if the *answer sentences* are supported by the context, and the answer explicitl",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1002",
+   "gold_docs": [
+    "cairo/ساعات_العمل_في_رمضان.md",
+    "cairo/دليل_مكتب_القاهرة.md"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: 'Sunday'",
+     "missing: 'Thursday'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": true,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-03-05_people_ops_allhands_qa_203.txt",
+    "2026-03-05_quality_034.txt",
+    "2026-09-16_motion_planning_072.txt",
+    "2026-09-22_leadership_sync_202.txt",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "Performance_Calibration_Guide_2026.md",
+    "employee_handbook.md",
+    "it_faq.md"
+   ],
+   "kept_files": [
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "employee_handbook.md"
+   ]
+  },
+  {
+   "id": "s26",
+   "category": "follow_up",
+   "question": "And how many of them can I carry over?",
+   "answer": "Full-time employees may carry over up to 5 days of unused PTO into the next calendar year; any amount above 5 days is forfeited on December 31.",
+   "standalone": "And how many of the PTO days can I carry over?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "2026-03-05_people_ops_allhands_qa_203.txt",
+    "employee_handbook.md › 2. Paid Time Off (PTO)"
+   ],
+   "refused": false,
+   "latency_s": 4.61,
+   "llm_calls": 10,
+   "tokens_in": 2559,
+   "tokens_out": 207,
+   "cost_usd": 0.000508,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '3 days|three days|up to 3'"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-03-05_people_ops_allhands_qa_203.txt",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "PTO_Policy_2017_scan.txt",
+    "employee_handbook.md"
+   ],
+   "kept_files": [
+    "2026-03-05_people_ops_allhands_qa_203.txt",
+    "PTO_Policy_2017_scan.txt",
+    "employee_handbook.md"
+   ]
+  },
+  {
+   "id": "s27",
+   "category": "follow_up",
+   "question": "What about Egypt?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What about Egypt?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 10.64,
+   "llm_calls": 29,
+   "tokens_in": 5883,
+   "tokens_out": 500,
+   "cost_usd": 0.001182,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: The context mentions travel to the Cairo office for the R3 training is approved for two people, but it does not specify what \"Egypt\" refers to in relation to leave entitlements or other policies. I do | fact-check said: The context mentions travel to the Cairo office for the R3 training is approved for two people. Supported.\nbut it does not specify",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "The provided context does not contain information regarding Egypt's specific policies, leave entitlements under Egyptian labour law, or details about a \"Cairo office\" beyond a mention of travel for R3",
+    "The context mentions travel to the Cairo office for the R3 training is approved for two people, but it does not specify what \"Egypt\" refers to in relation to leave entitlements or other policies. I do",
+    "The context mentions travel to the Cairo office for the R3 training is approved for two people, but it does not specify what \"Egypt\" refers to in relation to leave entitlements or other policies. I do"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '150'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-02-15_field_service_035.txt",
+    "2026-06-02_quality_015.txt",
+    "2026-09-26_firmware_084.txt",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "README.md",
+    "employee_handbook.md",
+    "hr_policies.md",
+    "it_faq.md"
+   ],
+   "kept_files": [
+    "2026-09-26_firmware_084.txt",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ]
+  },
+  {
+   "id": "s28",
+   "category": "personalized",
+   "question": "How many PTO days am I entitled to this year?",
+   "answer": "Based on the provided documents, you are entitled to 20 days of PTO per year if you are a full-time employee under the current policy, which accrues at a rate of 1.67 days per month starting from your first day of employment (excluding the first 90 days). However, there is a proposal to replace this with Flexible Time Off (FTO), where employees take the time they need with manager approval, subject to a minimum of 15 days per year that every employee is expected to take.",
+   "standalone": "How many PTO days am I entitled to this year?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "2026-03-05_people_ops_allhands_qa_203.txt",
+    "employee_handbook.md › 2. Paid Time Off (PTO)",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md › Proposal"
+   ],
+   "refused": false,
+   "latency_s": 6.33,
+   "llm_calls": 10,
+   "tokens_in": 2693,
+   "tokens_out": 325,
+   "cost_usd": 0.000599,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 0,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: NO",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '23'"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-03-05_people_ops_allhands_qa_203.txt",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "employee_handbook.md",
+    "it_faq.md"
+   ],
+   "kept_files": [
+    "2026-03-05_people_ops_allhands_qa_203.txt",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "employee_handbook.md"
+   ]
+  },
+  {
+   "id": "s29",
+   "category": "factual",
+   "question": "How quickly do I have to report a lost laptop?",
+   "answer": "You must report a lost or stolen laptop immediately; you should not wait until the next business day.",
+   "standalone": "How quickly do I have to report a lost laptop?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "it_faq.md › Hardware"
+   ],
+   "refused": false,
+   "latency_s": 2.42,
+   "llm_calls": 10,
+   "tokens_in": 1955,
+   "tokens_out": 81,
+   "cost_usd": 0.000342,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '1 hour|one hour|within an hour'"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-09-27_data_platform_019.txt",
+    "it_faq.md",
+    "product_specs.md"
+   ],
+   "kept_files": [
+    "it_faq.md"
+   ]
+  },
+  {
+   "id": "s30",
+   "category": "version",
+   "question": "What is the annual learning budget per employee?",
+   "answer": "The annual learning budget per employee is $1,500.",
+   "standalone": "What is the annual learning budget per employee?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "hr_policies.md › Training & Development"
+   ],
+   "refused": false,
+   "latency_s": 2.11,
+   "llm_calls": 10,
+   "tokens_in": 1797,
+   "tokens_out": 64,
+   "cost_usd": 0.000308,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-016_learning_development.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '2,000|2000'"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-03-16_legal_003.txt",
+    "2026-09-07_hardware_sustaining_091.txt",
+    "Comp_Review_2026_Guidance.md",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "hr_policies.md",
+    "it_faq.md"
+   ],
+   "kept_files": [
+    "hr_policies.md"
+   ]
+  },
+  {
+   "id": "s31",
+   "category": "version",
+   "question": "How much is the home-office stipend?",
+   "answer": "The home-office stipend is $500 per year, reimbursed through the Finance portal.",
+   "standalone": "How much is the home-office stipend?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "employee_handbook.md › 4. Remote Work Policy"
+   ],
+   "refused": false,
+   "latency_s": 2.18,
+   "llm_calls": 10,
+   "tokens_in": 1684,
+   "tokens_out": 72,
+   "cost_usd": 0.000296,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-010_remote_work.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '600'"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "Travel_Policy_2018_scan.txt",
+    "employee_handbook.md",
+    "hr_policies.md",
+    "it_faq.md"
+   ],
+   "kept_files": [
+    "employee_handbook.md"
+   ]
+  },
+  {
+   "id": "s32",
+   "category": "version",
+   "question": "Can I work from another country for a few weeks?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Can I work from another country for a few weeks?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.64,
+   "llm_calls": 22,
+   "tokens_in": 4283,
+   "tokens_out": 146,
+   "cost_usd": 0.00073,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. | fact-check said: The answer states \"I don't know based on the provided documents,\" which is incorrect because the context explicitly contains information about remote work policies.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents."
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-011_work_from_abroad.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '30'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-03-05_people_ops_allhands_qa_203.txt",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "Project_Juniper_Workforce_Plan.md",
+    "README.md",
+    "employee_handbook.md",
+    "hr_policies.md",
+    "it_faq.md"
+   ],
+   "kept_files": [
+    "employee_handbook.md",
+    "it_faq.md"
+   ]
+  },
+  {
+   "id": "s33",
+   "category": "factual",
+   "question": "How much is the primary on-call stipend?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How much is the primary on-call stipend?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.2,
+   "llm_calls": 23,
+   "tokens_in": 4223,
+   "tokens_out": 112,
+   "cost_usd": 0.000701,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know,\" which is not supported by any specific fact in the provided context documents.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "wiki/eng/On_Call.html"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '400'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "Comp_Review_2026_Guidance.md",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "PTO_Policy_2017_scan.txt",
+    "README.md",
+    "Travel_Policy_2018_scan.txt",
+    "employee_handbook.md",
+    "hr_policies.md",
+    "it_faq.md",
+    "product_specs.md"
+   ],
+   "kept_files": [
+    "Comp_Review_2026_Guidance.md",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "product_specs.md"
+   ]
+  },
+  {
+   "id": "s34",
+   "category": "keyword",
+   "question": "What does error E-271 indicate?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What does error E-271 indicate?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.64,
+   "llm_calls": 23,
+   "tokens_in": 5176,
+   "tokens_out": 126,
+   "cost_usd": 0.000852,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The statement \"I don't know based on the provided documents\" is not supported because the context contains specific information about VPN procedures, BYOD policies, customer success meeting notes, and Ramadan working hours.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/Rover_Error_Codes_2026.xlsx"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: 'LiDAR'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-03-07_customer_success_092.txt",
+    "2026-04-24_data_platform_086.txt",
+    "2026-06-13_hardware_sustaining_060.txt",
+    "2026-06-27_legal_030.txt",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "README.md",
+    "employee_handbook.md",
+    "hr_policies.md",
+    "it_faq.md",
+    "بدل_الانتقالات.md",
+    "دليل_مكتب_القاهرة.md",
+    "ساعات_العمل_في_رمضان.md"
+   ],
+   "kept_files": [
+    "2026-03-07_customer_success_092.txt",
+    "it_faq.md",
+    "ساعات_العمل_في_رمضان.md"
+   ]
+  },
+  {
+   "id": "s35",
+   "category": "table",
+   "question": "What is the first response time on the Premium Plus support plan?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the first response time on the Premium Plus support plan?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 5.6,
+   "llm_calls": 24,
+   "tokens_in": 4996,
+   "tokens_out": 192,
+   "cost_usd": 0.000865,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents.\nSources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is fully supported because none of the three provided texts contain information about the specific product support policies or employee handbook details required to form a definitive opinion beyond what i",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents.\nSources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/Support_SLA_2026.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '30 min'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-02-11_firmware_023.txt",
+    "2026-04-24_customer_success_074.txt",
+    "2026-05-15_firmware_068.txt",
+    "2026-07-16_marketing_051.txt",
+    "2026-09-20_motion_planning_059.txt",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "Project_Juniper_Workforce_Plan.md",
+    "README.md",
+    "employee_handbook.md",
+    "it_faq.md",
+    "product_specs.md"
+   ],
+   "kept_files": [
+    "2026-04-24_customer_success_074.txt",
+    "employee_handbook.md",
+    "product_specs.md"
+   ]
+  },
+  {
+   "id": "s36",
+   "category": "multi_hop",
+   "question": "Can an R2 be managed by Fleet Manager 5.0?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Can an R2 be managed by Fleet Manager 5.0?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 6.81,
+   "llm_calls": 23,
+   "tokens_in": 4866,
+   "tokens_out": 322,
+   "cost_usd": 0.000923,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer claims ignorance of the document content, which contradicts the provided context that clearly lists release notes for Fleet Manager 4.3.\nThe answer states \"I don't know,\" but the context explicitly provides details about battery-aware scheduling, traffic rules, API",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:",
+    "I don't know based on the provided documents. Sources:",
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/fleet_manager/release_notes_5.0.md",
+    "product/R2/R2_End_of_Life_Notice.md"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: \"4.3|not supported|cannot|can't|does not support\"",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": true,
+   "gold_retrieved": true,
+   "gold_kept": false,
+   "retrieved_files": [
+    "R2_End_of_Life_Notice.md",
+    "product_specs.md",
+    "release_notes_4.3.md",
+    "release_notes_5.0.md"
+   ],
+   "kept_files": [
+    "release_notes_4.3.md"
+   ]
+  },
+  {
+   "id": "s37",
+   "category": "factual",
+   "question": "When will Fleet Manager REST API v1 be removed?",
+   "answer": "The Fleet Manager REST API v1 will be removed on December 31, 2026.",
+   "standalone": "When will Fleet Manager REST API v1 be removed?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "release_notes_5.0.md › Breaking changes"
+   ],
+   "refused": false,
+   "latency_s": 2.3,
+   "llm_calls": 9,
+   "tokens_in": 1705,
+   "tokens_out": 80,
+   "cost_usd": 0.000304,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/fleet_manager/release_notes_5.0.md"
+   ],
+   "deterministic": {
+    "passed": true,
+    "reasons": []
+   },
+   "gold_indexed": true,
+   "gold_retrieved": true,
+   "gold_kept": true,
+   "retrieved_files": [
+    "R2_End_of_Life_Notice.md",
+    "product_specs.md",
+    "release_notes_4.3.md",
+    "release_notes_5.0.md"
+   ],
+   "kept_files": [
+    "release_notes_5.0.md"
+   ]
+  },
+  {
+   "id": "s38",
+   "category": "conflict",
+   "question": "Do I need to change my password every 90 days?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Do I need to change my password every 90 days?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 5.12,
+   "llm_calls": 22,
+   "tokens_in": 4807,
+   "tokens_out": 177,
+   "cost_usd": 0.000827,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: No, based on the provided documents, passwords are rotated every 180 days, not every 90 days. | fact-check said: The answer states that passwords are rotated every 180 days, which is directly confirmed by the context in [it_faq.md].\nThe answer implies a correction regarding a 90-day rotation period, but the provided context does not mention any 90-",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "No, based on the provided documents, passwords are rotated every 180 days, not every 90 days."
+   ],
+   "user_id": "u1003",
+   "gold_docs": [
+    "policies/it/IT-STD-003_password_and_authentication.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: \"no longer|not required|no scheduled|not rotated|no forced|don't need|do not need|not need\"",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "2026-01-21_field_service_018.txt",
+    "2026-03-05_people_ops_allhands_qa_203.txt",
+    "2026-09-27_data_platform_019.txt",
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "README.md",
+    "employee_handbook.md",
+    "it_faq.md"
+   ],
+   "kept_files": [
+    "DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "employee_handbook.md",
+    "it_faq.md"
+   ]
+  },
+  {
+   "id": "s39",
+   "category": "table",
+   "question": "How much are meals reimbursed per day on international trips?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How much are meals reimbursed per day on international trips?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 10.8,
+   "llm_calls": 27,
+   "tokens_in": 5705,
+   "tokens_out": 530,
+   "cost_usd": 0.001174,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: Meals during travel are reimbursed up to $75/day for domestic and $110/day for international trips according to the current HR policies, though a 2019 policy scan indicates rates of $80/day for intern | fact-check said: The first sentence claims current rates of $75/day domestic and $110/day international, which is fully supported by the `hr_polici",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "Meals during travel are reimbursed up to $110/day internationally according to the 2019 policy, while the HR policies document states $110/day international.",
+    "Meals during travel are reimbursed up to $75/day for domestic and $110/day for international trips according to the current HR policies, though a 2019 policy scan indicates rates of $80/day for intern",
+    "Meals during travel are reimbursed up to $75/day for domestic and $110/day for international trips according to the current HR policies, though a 2019 policy scan indicates rates of $80/day for intern"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '90'",
+     "missing: '55'",
+     "missing: '70'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "Expense_Policy_2019_scan.txt",
+    "README.md",
+    "Travel_Policy_2018_scan.txt",
+    "employee_handbook.md",
+    "hr_policies.md",
+    "it_faq.md",
+    "product_specs.md"
+   ],
+   "kept_files": [
+    "Expense_Policy_2019_scan.txt",
+    "hr_policies.md"
+   ]
+  },
+  {
+   "id": "s40",
+   "category": "out_of_scope",
+   "question": "What is Northwind Robotics' current share price?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is Northwind Robotics' current share price?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.94,
+   "llm_calls": 23,
+   "tokens_in": 4677,
+   "tokens_out": 109,
+   "cost_usd": 0.000767,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "no citations shown"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [],
+   "deterministic": {
+    "passed": true,
+    "reasons": []
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "Handbook_2016_cover_scan.txt",
+    "R2_End_of_Life_Notice.md",
+    "employee_handbook.md",
+    "hr_policies.md",
+    "it_faq.md",
+    "product_specs.md"
+   ],
+   "kept_files": [
+    "Handbook_2016_cover_scan.txt",
+    "R2_End_of_Life_Notice.md",
+    "product_specs.md"
+   ]
+  }
+ ]
+}

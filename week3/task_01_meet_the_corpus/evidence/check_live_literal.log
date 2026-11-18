@@ -1,0 +1,113 @@
+FF..F..X.                                                                [100%]
+=================================== FAILURES ===================================
+_________________ test_live_stream_delivers_real_model_tokens __________________
+
+    @pytest.mark.live
+    def test_live_stream_delivers_real_model_tokens():
+        """The default app (real Backend, real model): the answer arrives as many token
+        events from the model, then a cited `done`."""
+        with TestClient(create_app()) as client:
+            wait_until_ready(client, timeout=180)
+            events = stream_chat(client, "How many sick days do I get per year?")
+        kinds = [k for k, _ in events]
+        assert kinds[-1] == "done", events[-1]
+        assert kinds.count("token") > 5, f"expected a token stream, got {kinds}"
+        done = events[-1][1]
+>       assert re.search(r"\b10\b|\bten\b", done["answer"], re.I), done["answer"]
+E       AssertionError: I don't know based on the provided documents.
+E       assert None
+E        +  where None = <function search at 0x7f89c13e3d70>('\\b10\\b|\\bten\\b', "I don't know based on the provided documents.", re.IGNORECASE)
+E        +    where <function search at 0x7f89c13e3d70> = re.search
+E        +    and   re.IGNORECASE = re.I
+
+tests/test_api.py:474: AssertionError
+----------------------------- Captured stdout call -----------------------------
+{"request_id": "4edccd44eadf4fd5909058aef9d08ad2", "session_id": "19508286-b1dd-4a09-8501-abc448574544", "trace_id": "742a28c7-8bb1-4dc1-b98a-3e77d91d9366", "endpoint": "chat/stream", "status": "ok", "route": "retrieve", "node_path": ["contextualize", "route_question", "retrieve", "grade_documents", "rewrite_query", "retrieve", "grade_documents", "rewrite_query", "retrieve", "grade_documents", "generate", "grade_generation", "refuse"], "retries": 2, "latency_ms": 5193, "tokens_in": 5471, "tokens_out": 143, "estimated_cost_usd": 0.000906, "refused": true, "cache_hit": false, "llm_calls": 23, "model": "ollama:qwen3.5:4b", "per_node": {"contextualize": {"runs": 1, "ms": 0.1, "llm_calls": 0, "llm_ms": 0.0, "tokens_in": 0, "tokens_out": 0}, "route_question": {"runs": 1, "ms": 346.5, "llm_calls": 1, "llm_ms": 345.2, "tokens_in": 148, "tokens_out": 5}, "retrieve": {"runs": 3, "ms": 467.8, "llm_calls": 0, "llm_ms": 0.0, "tokens_in": 0, "tokens_out": 0}, "grade_documents": {"runs": 3, "ms": 2047.9, "llm_calls": 17, "llm_ms": 2039.0, "tokens_in": 3643, "tokens_out": 34}, "rewrite_query": {"runs": 2, "ms": 503.6, "llm_calls": 2, "llm_ms": 502.5, "tokens_in": 211, "tokens_out": 23}, "generate": {"runs": 1, "ms": 459.2, "llm_calls": 1, "llm_ms": 458.6, "tokens_in": 720, "tokens_out": 13}, "grade_generation": {"runs": 1, "ms": 1349.4, "llm_calls": 2, "llm_ms": 1348.0, "tokens_in": 749, "tokens_out": 68}, "refuse": {"runs": 1, "ms": 0.1, "llm_calls": 0, "llm_ms": 0.0, "tokens_in": 0, "tokens_out": 0}}, "retrieved_ids": ["README.md::1", "README.md::4", "README.md::3", "README.md::5", "README.md::0", "README.md::6"], "kept_ids": ["README.md::0", "README.md::1", "README.md::3"], "degraded": [], "llm_attempts": 23, "ttft_ms": 3665, "trace_url": null, "event": "request", "level": "info", "ts": "2026-11-18T08:43:02.830138Z"}
+----------------------------- Captured stderr call -----------------------------
+2026-11-18 10:42:47,469 INFO northwind.api: config: llm=ollama:qwen3.5:4b base_url=http://172.17.0.1:11434 embeddings=ollama k=4 chunks=800/100 index=/mnt/games/coding/My-Internship/week3/task_01_meet_the_corpus/faiss_index_w2_literal | cache: on (ttl 3600s, refusals 300s)
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 21897.38it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-11-18 10:42:57,562 INFO northwind: Index LOADED from /mnt/games/coding/My-Internship/week3/task_01_meet_the_corpus/faiss_index_w2_literal in 0.07s: 7 chunks from 1 files, 0 chunks embedded
+2026-11-18 10:42:57,627 INFO northwind.api: API READY in 10.16s: index LOADED, 7 chunks from 1 documents, hybrid (BM25 + dense) retriever
+------------------------------ Captured log call -------------------------------
+WARNING  huggingface_hub.utils._http:_http.py:993 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+______________________ test_grounded_answer_with_citation ______________________
+
+backend = <capstone_app.Backend object at 0x7f89b8977d90>
+
+    def test_grounded_answer_with_citation(backend):
+        r = ask(backend, "How many sick days do I get per year?")
+>       assert re.search(r"\b10\b|\bten\b", r["answer"], re.I), r["answer"]
+E       AssertionError: I don't know based on the provided documents.
+E       assert None
+E        +  where None = <function search at 0x7f89c13e3d70>('\\b10\\b|\\bten\\b', "I don't know based on the provided documents.", re.IGNORECASE)
+E        +    where <function search at 0x7f89c13e3d70> = re.search
+E        +    and   re.IGNORECASE = re.I
+
+tests/test_golden_path.py:46: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 22414.30it/s]
+2026-11-18 10:43:03,841 INFO northwind: Index LOADED from /mnt/games/coding/My-Internship/week3/task_01_meet_the_corpus/faiss_index_w2_literal in 0.00s: 7 chunks from 1 files, 0 chunks embedded
+------------------------------ Captured log setup ------------------------------
+INFO     northwind:app.py:228 Index LOADED from /mnt/games/coding/My-Internship/week3/task_01_meet_the_corpus/faiss_index_w2_literal in 0.00s: 7 chunks from 1 files, 0 chunks embedded
+___________________ test_two_turn_follow_up_resolves_pronoun ___________________
+
+backend = <capstone_app.Backend object at 0x7f89b8977d90>
+
+    def test_two_turn_follow_up_resolves_pronoun(backend):
+        session = f"test-{uuid.uuid4()}"
+        ask(backend, "How much PTO do I get?", session)
+        follow_up = "Can I carry it over to next year?"
+        assert "PTO" not in follow_up
+    
+        r = ask(backend, follow_up, session)
+>       assert re.search(r"\b(PTO|paid time off|vacation)\b", r["standalone"], re.I), (
+            f"'it' was not resolved: understood as {r['standalone']!r}")
+E       AssertionError: 'it' was not resolved: understood as 'Can I carry it over to next year?'
+E       assert None
+E        +  where None = <function search at 0x7f89c13e3d70>('\\b(PTO|paid time off|vacation)\\b', 'Can I carry it over to next year?', re.IGNORECASE)
+E        +    where <function search at 0x7f89c13e3d70> = re.search
+E        +    and   re.IGNORECASE = re.I
+
+tests/test_golden_path.py:79: AssertionError
+==================================== PASSES ====================================
+_______________________ test_warm_start_does_not_reembed _______________________
+----------------------------- Captured stdout call -----------------------------
+
+cold start: 0.173s, 20 chunks embedded | warm start: 0.004s, 0 chunks embedded
+----------------------------- Captured stderr call -----------------------------
+2026-11-18 10:43:32,290 INFO northwind: Index BUILT: embedded 20 chunks from 4 files in 0.17s, saved to /tmp/pytest-of-ahmed/pytest-36/test_warm_start_does_not_reemb0/faiss_index
+2026-11-18 10:43:32,295 INFO northwind: Index LOADED from /tmp/pytest-of-ahmed/pytest-36/test_warm_start_does_not_reemb0/faiss_index in 0.00s: 20 chunks from 4 files, 0 chunks embedded
+------------------------------ Captured log call -------------------------------
+INFO     northwind:app.py:220 Index BUILT: embedded 20 chunks from 4 files in 0.17s, saved to /tmp/pytest-of-ahmed/pytest-36/test_warm_start_does_not_reemb0/faiss_index
+INFO     northwind:app.py:228 Index LOADED from /tmp/pytest-of-ahmed/pytest-36/test_warm_start_does_not_reemb0/faiss_index in 0.00s: 20 chunks from 4 files, 0 chunks embedded
+_________________ test_unanswerable_question_exhausts_rewrites _________________
+----------------------------- Captured stdout call -----------------------------
+
+path: contextualize -> route_question -> retrieve -> grade_documents -> rewrite_query -> retrieve -> grade_documents -> rewrite_query -> retrieve -> grade_documents -> generate -> grade_generation -> refuse
+=================================== XPASSES ====================================
+___________________ test_awkward_query_triggers_rewrite_loop ___________________
+----------------------------- Captured stdout call -----------------------------
+
+path: contextualize -> route_question -> retrieve -> grade_documents -> rewrite_query -> retrieve -> grade_documents -> rewrite_query -> retrieve -> grade_documents -> generate -> grade_generation -> refuse
+============================= slowest 5 durations ==============================
+15.75s call     tests/test_api.py::test_live_stream_delivers_real_model_tokens
+8.96s call     tests/test_golden_path.py::test_two_turn_follow_up_resolves_pronoun
+7.47s call     tests/test_golden_path.py::test_sessions_are_isolated
+4.14s call     tests/test_golden_path.py::test_out_of_scope_question_is_refused
+4.14s call     tests/test_golden_path.py::test_awkward_query_triggers_rewrite_loop
+=========================== short test summary info ============================
+PASSED tests/test_golden_path.py::test_out_of_scope_question_is_refused
+PASSED tests/test_golden_path.py::test_plausible_sounding_out_of_scope_is_refused
+PASSED tests/test_golden_path.py::test_sessions_are_isolated
+PASSED tests/test_golden_path.py::test_warm_start_does_not_reembed
+PASSED tests/test_golden_path.py::test_unanswerable_question_exhausts_rewrites
+XPASS tests/test_golden_path.py::test_awkward_query_triggers_rewrite_loop - Finding (week2/RESULTS.md, Task 1 and Task 2): with the production hybrid retriever (BM25 + dense, k=4) the first search already finds the PTO section, so the grader keeps it and no rewrite is needed. The loop does fire on unanswerable questions; see test_unanswerable_question_exhausts_rewrites.
+FAILED tests/test_api.py::test_live_stream_delivers_real_model_tokens - Asser...
+FAILED tests/test_golden_path.py::test_grounded_answer_with_citation - Assert...
+FAILED tests/test_golden_path.py::test_two_turn_follow_up_resolves_pronoun - ...
+3 failed, 5 passed, 138 deselected, 1 xpassed in 53.86s
+
+real	0m59.245s
+user	0m11.361s
+sys	0m1.680s

@@ -1,0 +1,44 @@
+## 1st up (image rebuilt from current code, new corpus mounted read-only at /corpus, INDEX_PATH=/data/faiss_index_w3)
+
+## readyz
+{"status":"ready","graph_compiled":true,"index":"built","chunks":7,"documents":1,"retriever":"hybrid (BM25 + dense)","active_sessions":0,"startup_seconds":9.82}
+## a question
+{"answer":"I don't know based on the provided documents.","sources":[],"node_path":["contextualize","route_question","retrieve","grade_documents","rewrite_query","retrieve","grade_documents","rewrite_query","retrieve","grade_documents","generate","grade_generation","refuse"],"session_id":"0aec8504-2d70-4e5a-83d9-f7d274651a10","trace_id":"a68c69cd-8294-4a7f-b3ae-173a43dca745","standalone_question":"How many paid sick days do employees get per year?","retries":2,"elapsed_ms":4987,"llm_calls":21,"tokens_in":5164,"tokens_out":138,"estimated_cost_usd":0.000857,"cache_hit":false,"degraded":[],"cache
+
+## restart
+
+## ls /corpus and /data in the container
+(eval):1: no such file or directory: docker compose -f week2/task_04_containerize/docker-compose.yml -f week3/task_01_meet_the_corpus/docker-compose.corpus.yml
+## startup log lines (1st up on this volume path)
+api-1  | INFO:     Application startup complete.
+api-1  | 2026-11-18 09:03:04,660 INFO northwind: Index BUILT: embedded 7 chunks from 1 files in 0.28s, saved to /data/faiss_index_w3
+
+## restart
+api-1  | 2026-11-18 09:04:13,505 INFO northwind: Index LOADED from /data/faiss_index_w3 in 0.10s: 7 chunks from 1 files, 0 chunks embedded
+{"status":"ready","graph_compiled":true,"index":"loaded","chunks":7,"documents":1,"retriever":"hybrid (BM25 + dense)","active_sessions":0,"startup_seconds":9.23}
+
+## inside the container
+DATA_DIR=/corpus INDEX_PATH=/data/faiss_index_w3
+README.md
+_directory.csv
+_metadata.csv
+cairo
+hr_restricted
+legacy_intranet
+meetings
+newsletters
+policies
+product
+scanned_archive
+wiki
+embedding_cache
+faiss_index
+faiss_index_w3
+employee_handbook.md
+hr_policies.md
+it_faq.md
+product_specs.md
+
+## without the override (plain make up): DATA_DIR from week1/.env is ignored
+      DATA_DIR: /app/week1/data
+      INDEX_PATH: /data/faiss_index

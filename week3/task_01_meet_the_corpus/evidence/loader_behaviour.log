@@ -1,0 +1,28 @@
+# Week 3 Task 1 — what the UNCHANGED Week 2 loader does with the new corpus path (2026-11-18)
+
+## 1. DATA_DIR=week3/corpus, new INDEX_PATH (the literal baseline)
+$ DATA_DIR=$PWD/week3/corpus INDEX_PATH=.../faiss_index_w2_literal python week1/capstone_internal_docs_assistant/app.py ingest
+INFO northwind: Index BUILT: embedded 7 chunks from 1 files in 0.73s, saved to .../week3/task_01_meet_the_corpus/faiss_index_w2_literal
+Index: 7 passages from 1 documents (hybrid (BM25 + dense))
+  added: ['README.md']
+  updated: []
+  removed: []
+  reused (not re-embedded): []
+
+-> The only file indexed is corpus/README.md, the Knowledge Platform team's cover note (not one of
+   the 190 documents in _metadata.csv). ingest() lists DATA_DIR with iterdir(): top level only, and
+   keeps only .md/.txt. Every document lives in a sub-folder, so all 190 are SKIPPED SILENTLY:
+   no warning, no error, exit code 0, and the startup line says "BUILT ... from 1 files".
+   With a recursive walk (corpus_view.py) the same filter still drops every PDF, HTML, XLSX and
+   CSV silently (72 of 190 documents); nothing crashes and nothing is logged.
+
+## 2. DATA_DIR=week3/corpus but the OLD index path (what a one-line .env edit does)
+(on a copy of the Week 2 index)
+before: ['employee_handbook.md', 'hr_policies.md', 'it_faq.md', 'product_specs.md']
+INFO northwind: Index LOADED from .../w2idx and UPDATED in 0.89s: added ['README.md'], updated [],
+     removed ['employee_handbook.md', 'hr_policies.md', 'it_faq.md', 'product_specs.md']
+     (7 chunks re-embedded, 0 unchanged files reused)
+after: ['README.md']
+
+-> The incremental index treats a corpus switch as "4 files deleted, 1 added" and rewrites the
+   Week 2 index in place. That is why week3/.env.example insists on a NEW INDEX_PATH.

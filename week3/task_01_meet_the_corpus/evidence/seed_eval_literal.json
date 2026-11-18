@@ -1,0 +1,2731 @@
+{
+ "meta": {
+  "label": "literal",
+  "date": "2026-11-18T08:36:47+00:00",
+  "git_sha": "9ca3dcc005ee1ee3d910a0531a4f672587a3f096",
+  "dataset": "week3/eval/seed_eval.jsonl",
+  "dataset_version": "d73feb361d7a",
+  "n": 40,
+  "data_dir": "/mnt/games/coding/My-Internship/week3/corpus",
+  "indexed_files": 1,
+  "indexed_chunks": 7,
+  "model": "ollama:qwen3.5:4b",
+  "judge": "ollama:qwen3.5:4b (same model as the generator: the Week 2 judges)",
+  "retriever_k": 4,
+  "max_docs_to_grade": 6,
+  "chunking": "800/100",
+  "wall_clock_s": 163.3,
+  "cost": {
+   "mean_cost_usd": 0.0008,
+   "mean_llm_calls": 21.275,
+   "mean_latency_s": 4.0812
+  }
+ },
+ "summary": {
+  "all": {
+   "n": 40,
+   "deterministic": 0.15,
+   "correctness": 0.15,
+   "groundedness": 1.0,
+   "refused": 1.0,
+   "gold_indexed": 0.0,
+   "gold_retrieved": 0.0,
+   "gold_kept": 0.0,
+   "mean_llm_calls": 21.275,
+   "mean_latency_s": 4.0812
+  },
+  "by_category": {
+   "factual": {
+    "n": 4,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 20.5,
+    "mean_latency_s": 4.3025
+   },
+   "table": {
+    "n": 3,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 21.3333,
+    "mean_latency_s": 3.8767
+   },
+   "keyword": {
+    "n": 3,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 23.0,
+    "mean_latency_s": 4.41
+   },
+   "version": {
+    "n": 6,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 20.1667,
+    "mean_latency_s": 3.8333
+   },
+   "conflict": {
+    "n": 2,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 20.0,
+    "mean_latency_s": 4.035
+   },
+   "draft": {
+    "n": 1,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 22.0,
+    "mean_latency_s": 4.36
+   },
+   "multi_hop": {
+    "n": 2,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 21.5,
+    "mean_latency_s": 4.06
+   },
+   "multi_part": {
+    "n": 2,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 21.5,
+    "mean_latency_s": 3.985
+   },
+   "ambiguous": {
+    "n": 1,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 22.0,
+    "mean_latency_s": 3.97
+   },
+   "long_doc": {
+    "n": 2,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 23.0,
+    "mean_latency_s": 4.54
+   },
+   "cross_lingual": {
+    "n": 3,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 21.6667,
+    "mean_latency_s": 4.16
+   },
+   "follow_up": {
+    "n": 2,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 21.5,
+    "mean_latency_s": 4.285
+   },
+   "personalized": {
+    "n": 1,
+    "deterministic": 0.0,
+    "correctness": 0.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 20.0,
+    "mean_latency_s": 4.69
+   },
+   "access": {
+    "n": 5,
+    "deterministic": 0.6,
+    "correctness": 0.6,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": 0.0,
+    "gold_retrieved": 0.0,
+    "gold_kept": 0.0,
+    "mean_llm_calls": 21.2,
+    "mean_latency_s": 3.746
+   },
+   "out_of_scope": {
+    "n": 3,
+    "deterministic": 1.0,
+    "correctness": 1.0,
+    "groundedness": 1.0,
+    "refused": 1.0,
+    "gold_indexed": null,
+    "gold_retrieved": null,
+    "gold_kept": null,
+    "mean_llm_calls": 21.6667,
+    "mean_latency_s": 4.0467
+   }
+  }
+ },
+ "examples": [
+  {
+   "id": "s01",
+   "category": "factual",
+   "question": "How many paid sick days do employees get per year?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How many paid sick days do employees get per year?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.07,
+   "llm_calls": 21,
+   "tokens_in": 5164,
+   "tokens_out": 138,
+   "cost_usd": 0.000857,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is fully supported by the context because the text explicitly describes this as a one-off export of specific data sources and notes that it has not been cleaned or reviewed for accuracy, implying uncertai",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-005_sick_leave.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '10'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s02",
+   "category": "version",
+   "question": "How many PTO days can I carry over into next year?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How many PTO days can I carry over into next year?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.85,
+   "llm_calls": 20,
+   "tokens_in": 4461,
+   "tokens_out": 129,
+   "cost_usd": 0.000747,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the documents clearly provide information about the export contents, classification rules, and known issues.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '3 days|three days'",
+     "missing: 'March 31'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s03",
+   "category": "version",
+   "question": "How long is parental leave for an adoptive parent?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How long is parental leave for an adoptive parent?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.67,
+   "llm_calls": 20,
+   "tokens_in": 4061,
+   "tokens_out": 123,
+   "cost_usd": 0.000683,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The context does not contain any information regarding the assistant's current knowledge level or its ability to answer questions.\nThe provided documents only describe the scope of data available for export and specific classification rules.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-006_parental_leave.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '12 weeks|twelve weeks'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s04",
+   "category": "version",
+   "question": "What is the minimum length for a corporate password?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the minimum length for a corporate password?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.48,
+   "llm_calls": 19,
+   "tokens_in": 4206,
+   "tokens_out": 96,
+   "cost_usd": 0.000688,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The context does not contain information about the assistant's ability to answer questions or its general knowledge base capabilities.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/it/IT-STD-003_password_and_authentication.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '16'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s05",
+   "category": "conflict",
+   "question": "How do I connect to the VPN from home?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How do I connect to the VPN from home?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.0,
+   "llm_calls": 20,
+   "tokens_in": 5048,
+   "tokens_out": 132,
+   "cost_usd": 0.000836,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the context explicitly provides detailed information about the Northwind Knowledge Export.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/it/IT-STD-007_remote_access.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: 'Northwind Access'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s06",
+   "category": "table",
+   "question": "What is the hotel cap per night for a business trip to Germany?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the hotel cap per night for a business trip to Germany?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.79,
+   "llm_calls": 20,
+   "tokens_in": 4857,
+   "tokens_out": 104,
+   "cost_usd": 0.000791,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer claims ignorance and cites sources, which contradicts the context where the source document itself is explicitly identified as [README.md].\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '260'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s07",
+   "category": "multi_hop",
+   "question": "What is the daily meal allowance when I travel to Cairo?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the daily meal allowance when I travel to Cairo?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.78,
+   "llm_calls": 20,
+   "tokens_in": 5004,
+   "tokens_out": 122,
+   "cost_usd": 0.000824,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the context explicitly provides detailed information about `_directory.csv` in the second section.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '55'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s08",
+   "category": "keyword",
+   "question": "What does error code E-217 mean?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What does error code E-217 mean?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.41,
+   "llm_calls": 23,
+   "tokens_in": 4802,
+   "tokens_out": 119,
+   "cost_usd": 0.000792,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is incorrect because the context does provide specific information about the folders and their contents.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/Rover_Error_Codes_2026.xlsx"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: 'left'",
+     "missing: 'overcurrent'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s09",
+   "category": "keyword",
+   "question": "Is part NW-BAT-4830 compatible with the R2?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Is part NW-BAT-4830 compatible with the R2?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.56,
+   "llm_calls": 23,
+   "tokens_in": 5059,
+   "tokens_out": 155,
+   "cost_usd": 0.000852,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the documents clearly provide information about the export contents and classification rules.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/Spare_Parts_Catalog_2026.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: 'not compatible|R3 only|only compatible with the R3|incompatible|only for the R3'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s10",
+   "category": "long_doc",
+   "question": "What is the maximum ramp incline for a loaded R3?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the maximum ramp incline for a loaded R3?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.17,
+   "llm_calls": 22,
+   "tokens_in": 4882,
+   "tokens_out": 130,
+   "cost_usd": 0.00081,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the context explicitly provides information about the export files and their contents.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/R3/R3_Operator_Manual_RevC.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '5 degrees|5°|five degrees|5 deg'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s11",
+   "category": "long_doc",
+   "question": "How do I reset the emergency stop on an R3?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How do I reset the emergency stop on an R3?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.91,
+   "llm_calls": 24,
+   "tokens_in": 5525,
+   "tokens_out": 164,
+   "cost_usd": 0.000927,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is fully supported by the context because the text explicitly describes this as a one-off export of specific data sources and notes that it has not been cleaned or reviewed for accuracy, implying uncertai",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/R3/R3_Operator_Manual_RevC.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: 'RESUME'",
+     "missing: '3 seconds|three seconds'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s12",
+   "category": "ambiguous",
+   "question": "What is the payload capacity of the rover?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the payload capacity of the rover?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.97,
+   "llm_calls": 22,
+   "tokens_in": 4970,
+   "tokens_out": 115,
+   "cost_usd": 0.000814,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is not supported because the context does provide specific information about the CSV files and known issues.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: 'R2'",
+     "missing: 'R3'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s13",
+   "category": "multi_part",
+   "question": "What are the password requirements?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What are the password requirements?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.76,
+   "llm_calls": 21,
+   "tokens_in": 4605,
+   "tokens_out": 114,
+   "cost_usd": 0.000759,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer claims ignorance and cites sources, which contradicts the context where the source document itself is explicitly identified as [README.md].\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/it/IT-STD-003_password_and_authentication.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '16'",
+     "missing: 'MFA|multi-factor'",
+     "missing: 'rotat|changed immediately|change it immediately|compromise'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s14",
+   "category": "multi_part",
+   "question": "How much is the referral bonus and when is it paid?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How much is the referral bonus and when is it paid?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.21,
+   "llm_calls": 22,
+   "tokens_in": 4782,
+   "tokens_out": 133,
+   "cost_usd": 0.000797,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. | fact-check said: The answer states \"I don't know based on the provided documents,\" which is not a factual claim about the content of the context and therefore cannot be verified as supported or unsupported by the text itself.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents."
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-014_referral_bonus.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '4,000|4000'",
+     "missing: '3,000|3000'",
+     "missing: '90 days'",
+     "missing: '12 months'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s15",
+   "category": "out_of_scope",
+   "question": "What is the company policy on bringing dogs to the office?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the company policy on bringing dogs to the office?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.12,
+   "llm_calls": 21,
+   "tokens_in": 5032,
+   "tokens_out": 136,
+   "cost_usd": 0.000836,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "no citations shown"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [],
+   "deterministic": {
+    "passed": true,
+    "reasons": []
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s16",
+   "category": "out_of_scope",
+   "question": "What is the CEO's home address?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the CEO's home address?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.16,
+   "llm_calls": 23,
+   "tokens_in": 4875,
+   "tokens_out": 123,
+   "cost_usd": 0.000805,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "no citations shown"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [],
+   "deterministic": {
+    "passed": true,
+    "reasons": []
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s17",
+   "category": "draft",
+   "question": "Do we have unlimited PTO?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Do we have unlimited PTO?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.36,
+   "llm_calls": 22,
+   "tokens_in": 4945,
+   "tokens_out": 131,
+   "cost_usd": 0.00082,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer claims ignorance and cites sources, which contradicts the context where the source files are explicitly listed in the README.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: 'draft|not approved|proposal|proposed'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s18",
+   "category": "access",
+   "question": "What is the salary range for an L4 engineer in Austin?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the salary range for an L4 engineer in Austin?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.83,
+   "llm_calls": 20,
+   "tokens_in": 4364,
+   "tokens_out": 113,
+   "cost_usd": 0.000722,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "no citations shown"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [],
+   "deterministic": {
+    "passed": true,
+    "reasons": []
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s19",
+   "category": "access",
+   "question": "What is the salary range for an L4 engineer in Austin?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the salary range for an L4 engineer in Austin?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 2.97,
+   "llm_calls": 20,
+   "tokens_in": 4364,
+   "tokens_out": 113,
+   "cost_usd": 0.000722,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The context does not contain any information to support the statement \"I don't know based on the provided documents.\"\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u3001",
+   "gold_docs": [
+    "hr_restricted/Salary_Bands_2026.xlsx"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '142,000|142000|142k'",
+     "missing: '178,000|178000|178k'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s20",
+   "category": "access",
+   "question": "What is Project Juniper?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is Project Juniper?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.27,
+   "llm_calls": 23,
+   "tokens_in": 4981,
+   "tokens_out": 134,
+   "cost_usd": 0.000828,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "no citations shown"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [],
+   "deterministic": {
+    "passed": true,
+    "reasons": []
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s21",
+   "category": "access",
+   "question": "What target rating distribution should I use in performance calibration?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What target rating distribution should I use in performance calibration?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.93,
+   "llm_calls": 22,
+   "tokens_in": 5040,
+   "tokens_out": 121,
+   "cost_usd": 0.000829,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. | fact-check said: The context does not contain information about the assistant's knowledge regarding the provided documents.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents."
+   ],
+   "user_id": "u2001",
+   "gold_docs": [
+    "hr_restricted/Performance_Calibration_Guide_2026.md"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '15%'",
+     "missing: '70%'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s22",
+   "category": "access",
+   "question": "How long is a performance improvement plan?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How long is a performance improvement plan?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.73,
+   "llm_calls": 21,
+   "tokens_in": 4596,
+   "tokens_out": 110,
+   "cost_usd": 0.000755,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "no citations shown"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [],
+   "deterministic": {
+    "passed": true,
+    "reasons": []
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s23",
+   "category": "cross_lingual",
+   "question": "What are the Cairo office working hours during Ramadan?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What are the Cairo office working hours during Ramadan?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.65,
+   "llm_calls": 22,
+   "tokens_in": 5184,
+   "tokens_out": 157,
+   "cost_usd": 0.000872,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is fully supported by the context because the context explicitly notes that the export has not been cleaned, deduplicated, or reviewed for accuracy and leaves those tasks to the user.\nThe answer includes ",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1002",
+   "gold_docs": [
+    "cairo/ساعات_العمل_في_رمضان.md"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '9:00|9 am|9am|09:00|9 a.m'",
+     "missing: '3:00|3 pm|3pm|15:00|3 p.m'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s24",
+   "category": "cross_lingual",
+   "question": "How much is the monthly transport allowance for Cairo employees?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How much is the monthly transport allowance for Cairo employees?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.48,
+   "llm_calls": 20,
+   "tokens_in": 4555,
+   "tokens_out": 108,
+   "cost_usd": 0.000748,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is not supported because the context does provide specific information about the files and folders.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1002",
+   "gold_docs": [
+    "cairo/بدل_الانتقالات.md"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '1,500|1500'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s25",
+   "category": "cross_lingual",
+   "question": "Which days make up the work week in the Cairo office?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Which days make up the work week in the Cairo office?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.35,
+   "llm_calls": 23,
+   "tokens_in": 5457,
+   "tokens_out": 137,
+   "cost_usd": 0.000901,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is fully supported by the context because the text cuts off mid-sentence in the section about `_directory.csv`, leaving the information incomplete and preventing a full understanding of that specific expo",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1002",
+   "gold_docs": [
+    "cairo/ساعات_العمل_في_رمضان.md",
+    "cairo/دليل_مكتب_القاهرة.md"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: 'Sunday'",
+     "missing: 'Thursday'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s26",
+   "category": "follow_up",
+   "question": "And how many of them can I carry over?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "And how many of the PTO days can I carry over?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.13,
+   "llm_calls": 20,
+   "tokens_in": 5146,
+   "tokens_out": 134,
+   "cost_usd": 0.000852,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is not supported because the context explicitly provides information about the files and their contents.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '3 days|three days|up to 3'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s27",
+   "category": "follow_up",
+   "question": "What about Egypt?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What about Egypt?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.44,
+   "llm_calls": 23,
+   "tokens_in": 4914,
+   "tokens_out": 141,
+   "cost_usd": 0.000822,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: The context mentions a folder named `cairo/` which contains Cairo office pages maintained locally in Arabic. No other information regarding Egypt is provided. | fact-check said: The context states that the `cairo/` folder contains Cairo office pages maintained locally in Arabic.\nThe context does not provide any other information regarding Egypt.\nAN",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "The context mentions a folder named `cairo/` which contains Cairo office pages maintained locally in Arabic. No other information regarding Egypt is provided."
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '150'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s28",
+   "category": "personalized",
+   "question": "How many PTO days am I entitled to this year?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How many PTO days am I entitled to this year?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.69,
+   "llm_calls": 20,
+   "tokens_in": 4901,
+   "tokens_out": 171,
+   "cost_usd": 0.000838,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: README.md, policies/, product/, wiki/, newsletters/, meetings/, cairo/, hr_restricted/, scanned_archive/, legacy_intranet/ | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the context explicitly lists all the folders and ",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources: README.md, policies/, product/, wiki/, newsletters/, meetings/, cairo/, hr_restricted/, scanned_archive/, legacy_intranet/"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '23'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s29",
+   "category": "factual",
+   "question": "How quickly do I have to report a lost laptop?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How quickly do I have to report a lost laptop?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.21,
+   "llm_calls": 20,
+   "tokens_in": 4621,
+   "tokens_out": 134,
+   "cost_usd": 0.000774,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is not explicitly stated in the context; the context provides specific details about the files and data but does not express uncertainty or lack of knowledge.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '1 hour|one hour|within an hour'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s30",
+   "category": "version",
+   "question": "What is the annual learning budget per employee?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the annual learning budget per employee?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.59,
+   "llm_calls": 20,
+   "tokens_in": 4790,
+   "tokens_out": 111,
+   "cost_usd": 0.000785,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know,\" which contradicts the context that explicitly lists all available files and their contents in the README.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-016_learning_development.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '2,000|2000'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s31",
+   "category": "version",
+   "question": "How much is the home-office stipend?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How much is the home-office stipend?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.02,
+   "llm_calls": 21,
+   "tokens_in": 4935,
+   "tokens_out": 133,
+   "cost_usd": 0.00082,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The statement \"I don't know based on the provided documents\" is not supported because the context explicitly details the contents of various folders and systems.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-010_remote_work.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '600'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s32",
+   "category": "version",
+   "question": "Can I work from another country for a few weeks?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Can I work from another country for a few weeks?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.39,
+   "llm_calls": 21,
+   "tokens_in": 5019,
+   "tokens_out": 139,
+   "cost_usd": 0.000836,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the documents clearly provide information about the Northwind Knowledge Export.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/hr/HR-POL-011_work_from_abroad.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '30'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s33",
+   "category": "factual",
+   "question": "How much is the primary on-call stipend?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How much is the primary on-call stipend?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.43,
+   "llm_calls": 19,
+   "tokens_in": 4145,
+   "tokens_out": 157,
+   "cost_usd": 0.000716,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. | fact-check said: The answer states \"I don't know based on the provided documents,\" which is not a factual claim about the content of the context and therefore cannot be evaluated as supported or unsupported in the required manner.\nSince the answer fails to make specific claims that can be verified aga",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents."
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "wiki/eng/On_Call.html"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '400'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s34",
+   "category": "keyword",
+   "question": "What does error E-271 indicate?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What does error E-271 indicate?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.26,
+   "llm_calls": 23,
+   "tokens_in": 4534,
+   "tokens_out": 126,
+   "cost_usd": 0.000756,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the documents explicitly provide information about restricted data, known issues, and the Northwind Knowledge Export snapshot.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/Rover_Error_Codes_2026.xlsx"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: 'LiDAR'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s35",
+   "category": "table",
+   "question": "What is the first response time on the Premium Plus support plan?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the first response time on the Premium Plus support plan?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.93,
+   "llm_calls": 22,
+   "tokens_in": 4754,
+   "tokens_out": 113,
+   "cost_usd": 0.000781,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer claims ignorance and cites sources, which contradicts the context where specific details about data exports, user fields, and knowledge snapshots are clearly provided.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/Support_SLA_2026.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '30 min'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s36",
+   "category": "multi_hop",
+   "question": "Can an R2 be managed by Fleet Manager 5.0?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Can an R2 be managed by Fleet Manager 5.0?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.34,
+   "llm_calls": 23,
+   "tokens_in": 5216,
+   "tokens_out": 132,
+   "cost_usd": 0.000862,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the documents clearly provide information about the Northwind Knowledge Export.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/fleet_manager/release_notes_5.0.md",
+    "product/R2/R2_End_of_Life_Notice.md"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: \"4.3|not supported|cannot|can't|does not support\"",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s37",
+   "category": "factual",
+   "question": "When will Fleet Manager REST API v1 be removed?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "When will Fleet Manager REST API v1 be removed?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.5,
+   "llm_calls": 22,
+   "tokens_in": 4796,
+   "tokens_out": 138,
+   "cost_usd": 0.000802,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. | fact-check said: The answer states \"I don't know based on the provided documents,\" which is not supported because the context explicitly provides detailed information about the Northwind Knowledge Export.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents."
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "product/fleet_manager/release_notes_5.0.md"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: 'December 31, 2026|2026-12-31|31 December 2026|Dec 31, 2026'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s38",
+   "category": "conflict",
+   "question": "Do I need to change my password every 90 days?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Do I need to change my password every 90 days?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.07,
+   "llm_calls": 20,
+   "tokens_in": 4419,
+   "tokens_out": 118,
+   "cost_usd": 0.000734,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know,\" which is not supported because the context explicitly provides detailed information about the Northwind Knowledge Export.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1003",
+   "gold_docs": [
+    "policies/it/IT-STD-003_password_and_authentication.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: \"no longer|not required|no scheduled|not rotated|no forced|don't need|do not need|not need\"",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s39",
+   "category": "table",
+   "question": "How much are meals reimbursed per day on international trips?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How much are meals reimbursed per day on international trips?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.91,
+   "llm_calls": 22,
+   "tokens_in": 5208,
+   "tokens_out": 112,
+   "cost_usd": 0.000848,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the documents clearly provide information about the Northwind Knowledge Export.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "deterministic": {
+    "passed": false,
+    "reasons": [
+     "missing: '90'",
+     "missing: '55'",
+     "missing: '70'",
+     "refused an answerable question"
+    ]
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  },
+  {
+   "id": "s40",
+   "category": "out_of_scope",
+   "question": "What is Northwind Robotics' current share price?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is Northwind Robotics' current share price?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.86,
+   "llm_calls": 21,
+   "tokens_in": 4414,
+   "tokens_out": 115,
+   "cost_usd": 0.000731,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "no citations shown"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "user_id": "u1001",
+   "gold_docs": [],
+   "deterministic": {
+    "passed": true,
+    "reasons": []
+   },
+   "gold_indexed": false,
+   "gold_retrieved": false,
+   "gold_kept": false,
+   "retrieved_files": [
+    "README.md"
+   ],
+   "kept_files": [
+    "README.md"
+   ]
+  }
+ ]
+}

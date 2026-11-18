@@ -1,0 +1,47 @@
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 5845.21it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-11-18 10:43:56,786 INFO northwind: Index BUILT: embedded 146 chunks from 119 files in 1.17s, saved to /mnt/games/coding/My-Internship/week3/task_01_meet_the_corpus/faiss_index_w2_recursive
+Seed eval [recursive]: 40 examples, 119 files / 146 chunks indexed from /tmp/northwind_w3_recursive_view, model ollama:qwen3.5:4b
+   s01 factual       det ✓ C0 G1 gold idx/ret/kept 000   2.3s  'Employees receive 10 paid sick days per year.'
+   s02 version       det ✗ C0 G1 gold idx/ret/kept 000   3.3s  'You can carry over up to 5 days of unused PTO into the next calendar y'
+   s03 version       det ✗ C0 G1 gold idx/ret/kept 000   3.0s  'Non-birth and adoptive parents receive 10 weeks of fully paid leave, w'
+   s04 version       det ✗ C0 G1 gold idx/ret/kept 000   2.1s  'The minimum length for a corporate password is 14 characters.'
+   s05 conflict      det ✗ C0 G1 gold idx/ret/kept 000   3.3s  'Install the GlobalConnect client from the Self-Service app catalog, au'
+   s06 table         det ✗ C0 G1 gold idx/ret/kept 000   7.8s  "I don't know based on the provided documents."
+   s07 multi_hop     det ✗ C0 G1 gold idx/ret/kept 000   6.2s  "I don't know based on the provided documents."
+   s08 keyword       det ✗ C0 G1 gold idx/ret/kept 000   4.8s  "I don't know based on the provided documents."
+   s09 keyword       det ✗ C0 G1 gold idx/ret/kept 000   5.5s  "I don't know based on the provided documents."
+   s10 long_doc      det ✗ C0 G1 gold idx/ret/kept 000   6.8s  "I don't know based on the provided documents."
+   s11 long_doc      det ✗ C0 G1 gold idx/ret/kept 000   5.1s  "I don't know based on the provided documents."
+   s12 ambiguous     det ✗ C0 G1 gold idx/ret/kept 000   2.4s  'The payload capacity of the rover is 80 kg.'
+   s13 multi_part    det ✗ C0 G1 gold idx/ret/kept 000   3.5s  'Passwords must be at least 14 characters and are rotated every 180 day'
+   s14 multi_part    det ✗ C0 G1 gold idx/ret/kept 000   2.7s  'The referral bonus is $3,000 and is paid after the new hire completes '
+   s15 out_of_scope  det ✗ C0 G1 gold idx/ret/kept 000   3.7s  'There is no established company policy on bringing dogs to the office.'
+   s16 out_of_scope  det ✓ C1 G1 gold idx/ret/kept 000   4.5s  "I don't know based on the provided documents."
+   s17 draft         det ✗ C0 G1 gold idx/ret/kept 110   5.8s  "I don't know based on the provided documents."
+   s18 access        det ✓ C1 G1 gold idx/ret/kept 000   4.3s  "I don't know based on the provided documents."
+   s19 access        det ✗ C0 G1 gold idx/ret/kept 000   3.4s  "I don't know based on the provided documents."
+   s20 access        det ✗ C0 G1 gold idx/ret/kept 000   3.1s  'Project Juniper is a workforce plan for the Austin hardware sustaining'
+   s21 access        det ✓ C1 G1 gold idx/ret/kept 111   3.5s  'The target rating distribution is 15% Exceeds, 70% Meets, and 15% Belo'
+   s22 access        det ✓ C1 G1 gold idx/ret/kept 000   4.7s  "I don't know based on the provided documents."
+   s23 cross_lingual det ✗ C0 G1 gold idx/ret/kept 100   5.5s  "I don't know based on the provided documents."
+   s24 cross_lingual det ✗ C0 G1 gold idx/ret/kept 100   4.8s  "I don't know based on the provided documents."
+   s25 cross_lingual det ✗ C0 G1 gold idx/ret/kept 100   7.0s  "I don't know based on the provided documents."
+   s26 follow_up     det ✗ C0 G1 gold idx/ret/kept 000   4.6s  'Full-time employees may carry over up to 5 days of unused PTO into the'
+   s27 follow_up     det ✗ C0 G1 gold idx/ret/kept 000  10.6s  "I don't know based on the provided documents."
+   s28 personalized  det ✗ C0 G0 gold idx/ret/kept 000   6.3s  'Based on the provided documents, you are entitled to 20 days of PTO pe'
+   s29 factual       det ✗ C0 G1 gold idx/ret/kept 000   2.4s  'You must report a lost or stolen laptop immediately; you should not wa'
+   s30 version       det ✗ C0 G1 gold idx/ret/kept 000   2.1s  'The annual learning budget per employee is $1,500.'
+   s31 version       det ✗ C0 G1 gold idx/ret/kept 000   2.2s  'The home-office stipend is $500 per year, reimbursed through the Finan'
+   s32 version       det ✗ C0 G1 gold idx/ret/kept 000   4.6s  "I don't know based on the provided documents."
+   s33 factual       det ✗ C0 G1 gold idx/ret/kept 000   4.2s  "I don't know based on the provided documents."
+   s34 keyword       det ✗ C0 G1 gold idx/ret/kept 000   4.6s  "I don't know based on the provided documents."
+   s35 table         det ✗ C0 G1 gold idx/ret/kept 000   5.6s  "I don't know based on the provided documents."
+   s36 multi_hop     det ✗ C0 G1 gold idx/ret/kept 110   6.8s  "I don't know based on the provided documents."
+   s37 factual       det ✓ C1 G1 gold idx/ret/kept 111   2.3s  'The Fleet Manager REST API v1 will be removed on December 31, 2026.'
+   s38 conflict      det ✗ C0 G1 gold idx/ret/kept 000   5.1s  "I don't know based on the provided documents."
+   s39 table         det ✗ C0 G1 gold idx/ret/kept 000  10.8s  "I don't know based on the provided documents."
+   s40 out_of_scope  det ✓ C1 G1 gold idx/ret/kept 000   3.9s  "I don't know based on the provided documents."
+
+[recursive] deterministic 18%  correctness 0.15  groundedness 0.97  (40 examples, 279 s)
+wrote week3/task_01_meet_the_corpus/evidence/seed_eval_recursive.json and week3/task_01_meet_the_corpus/evidence/seed_eval_recursive.md

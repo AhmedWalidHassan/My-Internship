@@ -278,6 +278,40 @@ def app_backend(make_backend):
     return make_backend()
 
 
+# ---------------------------------------------------------------------------
+# Live-tier expectations depend on WHICH corpus the app is configured to read (DATA_DIR).
+# Week 3 Task 1 triage, verdict "the world changed": the Week 3 corpus (recognised by its
+# _metadata.csv) holds newer policies than the 4 Week 1 files, so the same question has a
+# different correct answer and a different authoritative document. See week3/RESULTS.md
+# ("Week 2 tests and eval examples that failed — triage").
+# ---------------------------------------------------------------------------
+CORPUS_FACTS = {
+    "week1": {
+        "sick_days_source": "employee_handbook.md",
+        "pto_carry_over": r"\b5\b|\bfive\b",          "pto_source": "employee_handbook.md",
+        "abroad_answerable": False,                    # only remote work from HOME is covered
+    },
+    "week3": {
+        # The legacy copy of the handbook is a superseded migration page: the policy portal is
+        # authoritative (HR-POL-005 v1.1: still 10 days).
+        "sick_days_source": "HR-POL-005_sick_leave.pdf",
+        # HR-POL-004 v3.0 (effective 2026-03-01): up to 3 days, used by March 31 (v2 said 5).
+        "pto_carry_over": r"\b3\b|\bthree\b",          "pto_source": "HR-POL-004_PTO_v3.pdf",
+        # HR-POL-011 (2026-04-01): up to 30 days a year from another country. No longer out of scope.
+        "abroad_answerable": True, "abroad_fact": r"\b30\b|\bthirty\b", "abroad_source": "HR-POL-011_work_from_abroad.pdf",
+    },
+}
+
+
+def corpus_name() -> str:
+    from app.config import get_settings
+    return "week3" if (Path(get_settings().data_dir) / "_metadata.csv").exists() else "week1"
+
+
+def corpus_facts() -> dict:
+    return CORPUS_FACTS[corpus_name()]
+
+
 def wait_until_ready(client, timeout=5.0):
     """Poll /readyz until the API's background startup has finished."""
     import time
