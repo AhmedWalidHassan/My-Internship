@@ -148,17 +148,16 @@ jobs:
       - name: Post regression report on the PR
         if: always() && github.event_name == 'pull_request' && hashFiles('regression_report.md') != ''
         env:
-          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
           PR: ${{ github.event.pull_request.number }}
-        run: |
-          gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --edit-last --body-file regression_report.md \
-            || gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file regression_report.md
+        # One comment per PR, updated on every run (stdlib REST calls: no gh CLI on the runner).
+        run: .venv/bin/python week2/task_07_eval_gate/scripts/post_report.py pr "$PR" regression_report.md
 
       - name: Open an issue when the nightly eval regresses
         if: failure() && github.event_name == 'schedule' && hashFiles('regression_report.md') != ''
         env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh issue create --repo "$GITHUB_REPOSITORY" --title "Nightly eval gate failed ($(date -u +%F))" --body-file regression_report.md
+          GITHUB_TOKEN: ${{ github.token }}
+        run: .venv/bin/python week2/task_07_eval_gate/scripts/post_report.py issue "Nightly eval gate failed ($(date -u +%F))" regression_report.md
 
       - name: Upload results
         if: always()
