@@ -8,6 +8,7 @@
 !app/
 !week1/common/
 !week1/capstone_internal_docs_assistant/app.py
+!ingest/
 !week1/data/
 !week2/task_04_containerize/constraints.txt
 !week2/task_04_containerize/requirements-api.txt

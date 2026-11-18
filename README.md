@@ -34,9 +34,10 @@ chunking, index path, API host and port. Switching provider is an `.env` edit; s
 
 | Command | What it does | Needs |
 |---|---|---|
-| `make check` | Lint (ruff) plus the **fast** tests: graph wiring, prompts, memory wiring, index persistence the HTTP API (all endpoints, streaming, session isolation, error shape), and failure injection (provider down or hanging, every degradation rule, rate limit, injection guard), with a fake model. 4–5 s of tests (≈5.5 s wall). Run before every PR. | Nothing: no API key, no network (the tests block both) |
+| `make check` | Lint (ruff) plus the **fast** tests: graph wiring, prompts, memory wiring, index persistence, the HTTP API (all endpoints, streaming, session isolation, error shape), failure injection (provider down or hanging, every degradation rule, rate limit, injection guard), the eval gate, and the Week 3 loaders and incremental ingest, with a fake model. ~4.5 s of tests (≈5.7 s wall). Run before every PR. | Nothing: no API key, no network (the tests block both) |
+| `make check-corpus` | Every document of the Week 3 corpus through the loaders, plus the real-PDF table tests (offline, 5–9 s; also part of CI's fast job) | Nothing |
 | `make check-live` | The **live** golden-path tests through the real app: cited answer, refusals, two-turn follow-up, session isolation, warm start, rewrite loop, real token streaming through the API. About 60 s on local Ollama. | `week1/.env` and the model server running (e.g. `ollama serve`) |
-| `make up` / `make down` | **API + UI in Docker** (one command, from a clean checkout; the index lives in a named volume). `API_VARIANT=slim make up` for the 575 MB image. See [`week2/task_04_containerize/DEPLOY.md`](week2/task_04_containerize/DEPLOY.md) | Docker and `week1/.env` |
+| `make up` / `make down` | **API + UI in Docker** (one command, from a clean checkout; the index lives in a named volume, and `week3/corpus` is mounted read-only). `API_VARIANT=slim make up` for the 575 MB image. See [`week2/task_04_containerize/DEPLOY.md`](week2/task_04_containerize/DEPLOY.md) | Docker and `week1/.env` |
 | `make run` | Start the API on http://127.0.0.1:8000 (OpenAPI docs at `/docs`). Host and port come from `API_HOST` / `API_PORT` | same as live |
 | `make run-ui` | Start the Streamlit chat UI, which talks to the API over HTTP (start `make run` first) | a running API |
 | `make bench-api` | p50/p95 latency of `/chat` and `/chat/stream` over 20 questions | a running API |

@@ -42,6 +42,7 @@ from pathlib import Path
 from typing import Annotated, Iterator, TypedDict
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
+sys.path.append(str(Path(__file__).resolve().parents[2]))   # repo root: the ingest/ package (Week 3)
 
 from common.resilience import ProviderUnavailable, RetrievalUnavailable, VerificationUnavailable  # noqa: E402
 from common.settings import get_settings  # noqa: E402  (needs the sys.path line above)
@@ -115,38 +116,44 @@ def _meaningful(text: str) -> bool:
 
 
 def corpus_files(data_dir: Path) -> tuple[dict, dict]:
-    """({key: path} of the files to index, {extension: count} of listed documents skipped).
+    """({key: path} of the files to index, {key: reason} of listed documents that can't be).
 
-    A corpus export with a `_metadata.csv` (the Week 3 corpus) is indexed from that list:
-    every listed document, in any sub-folder, keyed by its path relative to the corpus
-    (`policies/hr/HR-POL-005_sick_leave.pdf`). The export's own README and CSVs are not
-    documents and are never indexed. Formats the loader can't parse yet (only .md/.txt
-    today; PDF/HTML/XLSX/CSV are Week 3 Task 3) are SKIPPED, and every skip is logged with
-    the count per format: nothing is skipped silently any more (Week 3 Task 1 finding).
+    A corpus export with a `_metadata.csv` (the Week 3 corpus) is indexed from that list: every
+    listed document, in any sub-folder, keyed by its path relative to the corpus
+    (`policies/hr/HR-POL-005_sick_leave.pdf`), in every format the Week 3 loaders read
+    (ingest/: PDF, HTML, XLSX, CSV, Markdown, text). The export's own README and CSVs are not
+    documents and are never indexed. A listed document that is missing or in a format with no
+    loader is returned with its reason, and every skip is logged: nothing is skipped silently.
 
     Without a `_metadata.csv` (the Week 1 corpus, tests) it is the Week 2 behaviour: the
     .md/.txt files at the top level of `data_dir`, keyed by file name.
     """
     data_dir = Path(data_dir)
-    metadata = data_dir / "_metadata.csv"
-    if not metadata.exists():
+    if not (data_dir / "_metadata.csv").exists():
         return {p.name: p for p in sorted(data_dir.iterdir()) if p.suffix.lower() in SUPPORTED_EXT}, {}
-    import csv
-    with open(metadata, encoding="utf-8") as f:
-        listed = [row["path"] for row in csv.DictReader(f)]
+    from ingest import EXPORT_EXT, read_metadata
+
     files, skipped = {}, {}
-    for rel in listed:
+    for rel in read_metadata(data_dir):
         path = data_dir / rel
-        if path.suffix.lower() in SUPPORTED_EXT and path.is_file():
-            files[rel] = path
+        if not path.is_file():
+            skipped[rel] = "listed in _metadata.csv but missing"
+        elif path.suffix.lower() not in EXPORT_EXT:
+            skipped[rel] = f"no loader for {path.suffix.lower() or 'files without an extension'}"
         else:
-            reason = (path.suffix.lower() or "no extension") if path.is_file() else "listed but missing"
-            skipped[reason] = skipped.get(reason, 0) + 1
-    if skipped:
-        log.warning("Corpus %s: indexing %d of %d listed documents; SKIPPED %d (unsupported format: %s)",
-                    data_dir, len(files), len(listed), sum(skipped.values()),
-                    ", ".join(f"{k} {v}" for k, v in sorted(skipped.items(), key=lambda kv: -kv[1])))
+            files[rel] = path
     return dict(sorted(files.items())), skipped
+
+
+def _emit_json(event: str, rec: dict) -> None:
+    """One JSON object per line on stdout, the same shape as the API's request log lines
+    ({"event", "level", "ts", ...}; app/observability.py), so ingestion and requests can be
+    read by the same tools."""
+    from datetime import datetime, timezone
+    level = "warning" if event.endswith("skipped") else "info"
+    print(json.dumps({"event": event, "level": level,
+                      "ts": datetime.now(timezone.utc).isoformat(timespec="milliseconds").replace("+00:00", "Z"),
+                      **rec}, ensure_ascii=False, default=str), flush=True)
 
 
 def chunk_file(path: Path, rel: str | None = None) -> list:
@@ -183,14 +190,26 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
     * new files        -> embedded and added
     * changed files    -> old vectors deleted, new ones added
     * removed files    -> vectors deleted
-    A different chunk setting or embedding model invalidates the index (full rebuild).
+    A different chunk setting, embedding model or loader version invalidates the index (full
+    rebuild). For a corpus export (Week 3) every document goes through ingest/ (one loader per
+    format, metadata, boilerplate removal), duplicates are labelled across the whole index, a
+    document that can't be parsed is skipped WITH its reason, and an ingestion report is written
+    next to the index (ingestion_report.json) and as one JSON log line.
     Returns (store, stats).
     """
+    from datetime import datetime, timezone
+
     from langchain_community.vectorstores import FAISS
 
     t0 = time.perf_counter()
     current, skipped = corpus_files(data_dir)
+    export = (Path(data_dir) / "_metadata.csv").exists()
+    rows = {}
     signature = f"{CHUNK_SIZE}/{CHUNK_OVERLAP}/{_embedding_id(embeddings)}"
+    if export:
+        from ingest import LOADER_VERSION, build_chunks, read_metadata
+        rows = read_metadata(data_dir)
+        signature += f"/{LOADER_VERSION}"
 
     store, manifest = None, {"signature": signature, "files": {}}
     if not force and MANIFEST_PATH.exists() and (INDEX_DIR / "index.faiss").exists():
@@ -202,9 +221,9 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
             log.warning("Index settings changed (%s -> %s): rebuilding.", saved.get("signature"), signature)
 
     stats = {"added": [], "updated": [], "removed": [], "reused": [], "rebuilt": store is None,
-             "embedded_chunks": 0, "skipped": skipped}
+             "embedded_chunks": 0, "skipped": dict(skipped)}
 
-    # removed files
+    # removed files (and files that now fail to parse lose their old vectors further down)
     for name in [n for n in manifest["files"] if n not in current]:
         ids = manifest["files"].pop(name)["ids"]
         if store is not None and ids:
@@ -221,10 +240,20 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
         if old:
             if store is not None and old["ids"]:
                 store.delete(old["ids"])
-            stats["updated"].append(name)
-        else:
-            stats["added"].append(name)
-        chunks = chunk_file(path, rel=name)
+            manifest["files"].pop(name)
+        report = None
+        try:
+            if export:
+                chunks, report = build_chunks(path, name, rows[name], CHUNK_SIZE, CHUNK_OVERLAP)
+            else:
+                chunks = chunk_file(path, rel=name)
+        except Exception as e:                       # one bad file never stops the ingest, and is listed
+            stats["skipped"][name] = f"could not be parsed: {type(e).__name__}: {str(e)[:150]}"
+            continue
+        if export and not chunks:
+            stats["skipped"][name] = report.get("reason", "no text after parsing")
+            continue
+        (stats["updated"] if old else stats["added"]).append(name)
         ids = [f"{name}::{i}" for i in range(len(chunks))]
         stats["embedded_chunks"] += len(chunks)
         if chunks:
@@ -232,15 +261,31 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
                 store = FAISS.from_documents(chunks, embeddings, ids=ids)
             else:
                 store.add_documents(chunks, ids=ids)
-        manifest["files"][name] = {"hash": h, "ids": ids}
+        manifest["files"][name] = {"hash": h, "ids": ids, **({"report": report} if report else {})}
 
     if store is None:
         raise RuntimeError(f"No documents found in {data_dir} (looked for {SUPPORTED_EXT}).")
 
-    if stats["added"] or stats["updated"] or stats["removed"] or stats["rebuilt"]:
+    changed = bool(stats["added"] or stats["updated"] or stats["removed"] or stats["rebuilt"])
+    if export:                                       # duplicates are a property of the whole index
+        from ingest.dedup import find_duplicates, label
+        docs = list(store.docstore._dict.values())
+        found = find_duplicates(docs)
+        label(docs, found)
+        dedup = [{k: v for k, v in d.items()} for d in found["near_documents"]] + \
+                [{"exact_chunk": d["b"].metadata.get("path"), "of": d["a"].metadata.get("path")}
+                 for d in found["exact_chunks"]]
+        changed = changed or dedup != manifest.get("duplicates")
+        manifest["duplicates"] = dedup
+        stats["duplicates"] = dedup
+    if stats["rebuilt"]:
+        manifest["built_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        manifest["build_seconds"] = round(time.perf_counter() - t0, 2)
+    if changed:
+        manifest["updated_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
         INDEX_DIR.mkdir(parents=True, exist_ok=True)
         store.save_local(str(INDEX_DIR))
-        MANIFEST_PATH.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+        MANIFEST_PATH.write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
 
     # Identifies exactly what is indexed (settings + every file's hash). It changes whenever a
     # document is added, changed or removed, so answer caches key on it (Week 2 Task 6).
@@ -248,9 +293,18 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
         [manifest["signature"], sorted((n, f["hash"]) for n, f in manifest["files"].items())]
     ).encode()).hexdigest()[:16]
 
-    # The startup line Week 2 Task 1 asks for: did this start BUILD the index or LOAD it?
     stats["seconds"] = round(time.perf_counter() - t0, 2)
     n_chunks, n_files = len(store.docstore._dict), len(manifest["files"])
+    stats.update(documents=n_files, chunks=n_chunks, built_at=manifest.get("built_at"),
+                 build_seconds=manifest.get("build_seconds"), updated_at=manifest.get("updated_at"))
+    if export:
+        from ingest import corpus_snapshot
+        stats["snapshot"] = corpus_snapshot(data_dir)
+        _write_ingestion_report(data_dir, manifest, stats)
+    if stats["skipped"]:
+        log.warning("Corpus %s: %d listed documents SKIPPED, with reasons: %s", data_dir, len(stats["skipped"]),
+                    "; ".join(f"{k} ({v})" for k, v in sorted(stats["skipped"].items())))
+    # The startup line Week 2 Task 1 asks for: did this start BUILD the index or LOAD it?
     if stats["rebuilt"]:
         log.info("Index BUILT: embedded %d chunks from %d files in %.2fs, saved to %s",
                  stats["embedded_chunks"], n_files, stats["seconds"], INDEX_DIR)
@@ -263,6 +317,41 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
         log.info("Index LOADED from %s in %.2fs: %d chunks from %d files, 0 chunks embedded",
                  INDEX_DIR, stats["seconds"], n_chunks, n_files)
     return store, stats
+
+
+def _write_ingestion_report(data_dir: Path, manifest: dict, stats: dict) -> None:
+    """ingestion_report.json next to the index (every document: loaded / skipped and why, chunks,
+    parsed metadata, what was removed), plus one structured log line per run and per skip."""
+    from collections import Counter
+    docs = [{"path": k, "status": "loaded", "chunks": len(v["ids"]), **(v.get("report") or {})}
+            for k, v in sorted(manifest["files"].items())]
+    docs += [{"path": k, "status": "skipped", "reason": v} for k, v in sorted(stats["skipped"].items())]
+    by_format = Counter(Path(d["path"]).suffix.lstrip(".") for d in docs if d["status"] == "loaded")
+    report = {"corpus": str(data_dir), "snapshot": stats.get("snapshot"), "index": str(INDEX_DIR),
+              "signature": manifest["signature"], "built_at": manifest.get("built_at"),
+              "build_seconds": manifest.get("build_seconds"), "updated_at": manifest.get("updated_at"),
+              "documents_listed": len(docs), "documents_loaded": stats["documents"],
+              "documents_skipped": len(stats["skipped"]), "chunks": stats["chunks"],
+              "loaded_by_format": dict(by_format), "duplicates": stats.get("duplicates", []),
+              "this_run": {k: (len(stats[k]) if isinstance(stats[k], list) else stats[k])
+                           for k in ("added", "updated", "removed", "reused", "rebuilt", "embedded_chunks", "seconds")},
+              "documents": docs}
+    try:
+        INDEX_DIR.mkdir(parents=True, exist_ok=True)
+        (INDEX_DIR / "ingestion_report.json").write_text(json.dumps(report, indent=1, ensure_ascii=False),
+                                                         encoding="utf-8")
+    except OSError as e:                                # a read-only index dir must not stop the service
+        log.warning("could not write ingestion_report.json: %s", e)
+    stats["report_path"] = str(INDEX_DIR / "ingestion_report.json")
+    _emit_json("ingest", {"corpus": str(data_dir), "snapshot": report["snapshot"],
+                          "documents_loaded": report["documents_loaded"], "documents_skipped": report["documents_skipped"],
+                          "chunks": report["chunks"], "duplicates": len(report["duplicates"]),
+                          "added": len(stats["added"]), "changed": len(stats["updated"]), "removed": len(stats["removed"]),
+                          "reused": len(stats["reused"]), "rebuilt": stats["rebuilt"],
+                          "embedding_calls": stats["embedded_chunks"], "duration_s": stats["seconds"],
+                          "corpus_version": stats["corpus_version"]})
+    for path, reason in sorted(stats["skipped"].items()):
+        _emit_json("ingest_document_skipped", {"path": path, "reason": reason})
 
 
 # ===========================================================================
@@ -624,7 +713,7 @@ def build_graph(retriever, llm):
 # 4. ASSISTANT — memory, citations, streamed events
 # ===========================================================================
 _SRC_HEAD = re.compile(r"(?i)\bsources?(?:[ \t]+files?)?(?:[ \t]+used)?[ \t*_]*:")
-_FILE_RE = re.compile(r"[\w\-.]+\.(?:md|txt)")
+_FILE_RE = re.compile(r"[\w\-.]+\.(?:md|txt|pdf|html|xlsx|csv)")
 
 
 def split_sources(text: str):
@@ -1245,7 +1334,12 @@ def cmd_ingest(args):
     backend = Backend(force_rebuild=args.rebuild)
     s = backend.ingest_stats
     print(f"Index: {backend.n_chunks} passages from {len(backend.files)} documents ({backend.retriever_name})")
-    print(f"  added: {s['added']}\n  updated: {s['updated']}\n  removed: {s['removed']}\n  reused (not re-embedded): {s['reused']}")
+    def show(xs):
+        return xs if len(xs) <= 10 else f"{len(xs)} files"
+    print(f"  added: {show(s['added'])}\n  updated: {show(s['updated'])}\n  removed: {show(s['removed'])}\n"
+          f"  reused (not re-embedded): {show(s['reused'])}\n  skipped (with reasons): {s.get('skipped') or 'none'}")
+    if s.get("report_path"):
+        print(f"  ingestion report: {s['report_path']}")
 
 
 def cmd_ask(args):

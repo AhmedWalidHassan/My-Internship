@@ -54,7 +54,51 @@ Dedup should find the wiki pages that mirror a policy (Password Policy ↔ IT-ST
 intranet copies. I expect it to change recall by less than the noise. Its job is fewer duplicate chunks
 in the top k and less grading cost, not recall.
 
-**Result** *(committed after running)*: *(pending)*
+**Result** *(committed after running, 2026-11-18)*:
+
+| | Before (Task 2) | After | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| Documents loaded | 118 / 190 | **190 / 190** | +72 | – |
+| Chunks | 139 | 348 | +209 | – |
+| recall@5 (all, dev) | 0.133 | **0.917** | **+0.783** | yes: retrieval is deterministic (two runs gave identical rankings for all 60 examples) |
+| MRR (all, dev) | 0.076 | **0.612** | +0.536 | yes |
+| Retrieval latency / query | 3.1 ms p50 | 0.9–1.0 ms p50 | ≈ | – |
+| Cost / question (full pipeline, gpt-4o-mini prices) | $0.000687 | $0.000698 | +1.7% | – |
+
+| Category | Before R@5 | After R@5 | My prediction |
+|---|---:|---:|---|
+| factual | 0.10 | 1.00 | ≥ 0.5 ✓ |
+| table | 0.00 | 1.00 | ≥ 0.6 ✓ |
+| keyword | 0.25 | 1.00 | ≥ 0.5 ✓ |
+| version | 0.00 | 1.00 | ≥ 0.6 ✓ |
+| conflict | 0.00 | 1.00 | ≥ 0.5 ✓ |
+| draft | 1.00 | 1.00 | "may drop to ≥ 0.75": **didn't drop** (but R@1 is 0.25: the draft competes for first place) |
+| multi_hop | 0.00 | 1.00 | ≥ 0.5 ✓ |
+| multi_part | 0.00 | 0.75 | ≥ 0.6 ✓ |
+| ambiguous | 0.33 | 1.00 | (no prediction) |
+| long_doc | 0.00 | **1.00** | "0.25–0.5 only": **wrong, it did much better** |
+| cross_lingual | 0.00 | 0.25 | "stays ~0" ✓ (one CSV row found) |
+| follow_up | 0.00 | 1.00 | ≥ 0.6 ✓ |
+| personalized | 0.00 | 0.75 | ≥ 0.6 ✓ |
+| access (authorised) | 0.33 | 1.00 | ≥ 0.6 ✓ |
+
+**Hypothesis confirmed?** **Yes, and the overall effect is larger than predicted.** recall@5 0.92
+against a predicted ≥ 0.60, MRR 0.61 against ≥ 0.45. Lessons:
+
+- **I was wrong about `long_doc`.** I expected the manual's boilerplate to crowd the top 5 even after
+  parsing. But dropping the repeated sentences at parse time (1,064 of 1,099) shrank 23 pages to 6
+  chunks, so the needles now sit in short, distinctive chunks. The boilerplate fix belonged in
+  ingestion, not in retrieval.
+- **`draft` didn't drop at recall@5, but recall@1 is 0.25:** the draft now competes with PTO v2/v3 for
+  first place. That's the ranking problem Task 5 has to solve with `status`.
+- **The 5 misses left:**
+  - 4 are the Arabic pages (the English-only embedding model, a Task 4 experiment).
+  - 1 is "What are the password rules?", where meeting notes about a "password reset flow" outrank
+    IT-STD-003: the lexical trap from Task 1 issue #10.
+- **Dedup changed recall by exactly 0, as predicted:** it labels a copy (`duplicate_of`), it doesn't
+  remove it from retrieval.
+
+**Decision:** keep. This is the new baseline for Task 4 (`eval_baseline.json` re-set on it).
 
 ---
 

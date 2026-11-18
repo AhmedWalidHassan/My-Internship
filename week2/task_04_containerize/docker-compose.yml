@@ -30,10 +30,12 @@ services:
     image: northwind-api:${API_VARIANT:-full}
     <<: *env
     environment:
-      # Fixed by the image layout, so not overridable from .env (a laptop path in .env
-      # would otherwise break the container).
-      INDEX_PATH: /data/faiss_index
-      DATA_DIR: /app/week1/data
+      # Fixed by the container layout, so not overridable from .env (a laptop path in .env
+      # would otherwise break the container). Week 3 Task 3: the corpus is the Week 3 export,
+      # mounted read-only below; its index has its own path on the named volume (the Week 1
+      # index at /data/faiss_index is left alone).
+      INDEX_PATH: /data/faiss_index_w3
+      DATA_DIR: /corpus
       API_HOST: 0.0.0.0
       API_PORT: "8000"
     ports:
@@ -44,6 +46,8 @@ services:
       # The FAISS index lives in a named volume: it survives `down`/`up`, restarts and
       # image rebuilds, so the corpus is embedded once, not on every rebuild.
       - index_data:/data
+      # The corpus export, read-only: upstream data, never written by the service (Week 3).
+      - ../../week3/corpus:/corpus:ro
     healthcheck:
       # Readiness, not just liveness: "healthy" = the index is loaded and the graph
       # compiled, so the UI below starts only when the API can actually answer.

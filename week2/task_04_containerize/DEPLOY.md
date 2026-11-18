@@ -1,5 +1,11 @@
 # Running the assistant in containers (Week 2, Task 4)
 
+> **Week 3 Task 3:** the API now reads the Week 3 corpus export, mounted read-only from `week3/corpus` at
+> `/corpus`, with its index at `/data/faiss_index_w3` on the same named volume (the Week 1 index at
+> `/data/faiss_index` is left alone). The image gained PyMuPDF, openpyxl and BeautifulSoup (+285 MB).
+> `/readyz` reports the corpus snapshot, document counts and index build time. See
+> `week3/task_03_ingestion/RUN.md`.
+
 The brief is in [README.md](README.md). This page covers how it was done: how to run it,
 what each file is for, and the evidence for every "Done when…" item.
 

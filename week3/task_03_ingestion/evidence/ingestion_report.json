@@ -1,0 +1,3002 @@
+{
+ "corpus": "/mnt/games/coding/My-Internship/week3/corpus",
+ "snapshot": "2026-10-01",
+ "index": "/mnt/games/coding/My-Internship/week1/capstone_internal_docs_assistant/faiss_index_w3",
+ "signature": "800/100/sentence-transformers/all-MiniLM-L6-v2/w3-loaders-1",
+ "built_at": "2026-11-18T10:45:09+00:00",
+ "build_seconds": 5.85,
+ "updated_at": "2026-11-18T10:45:09+00:00",
+ "documents_listed": 190,
+ "documents_loaded": 190,
+ "documents_skipped": 0,
+ "chunks": 348,
+ "loaded_by_format": {
+  "csv": 1,
+  "md": 14,
+  "pdf": 23,
+  "xlsx": 2,
+  "txt": 104,
+  "html": 46
+ },
+ "duplicates": [
+  {
+   "copy": "wiki/it/Password_Policy.html",
+   "of": "policies/it/IT-STD-003_password_and_authentication.pdf",
+   "containment": 0.759,
+   "declared": true
+  }
+ ],
+ "this_run": {
+  "added": 0,
+  "updated": 0,
+  "removed": 0,
+  "reused": 190,
+  "rebuilt": false,
+  "embedded_chunks": 0,
+  "seconds": 0.12
+ },
+ "documents": [
+  {
+   "path": "cairo/الإجازات_الرسمية_2026.csv",
+   "status": "loaded",
+   "chunks": 12,
+   "format": "csv",
+   "source_system": "wiki",
+   "title": "الإجازات الرسمية 2026",
+   "chars": 760,
+   "language": "ar",
+   "parsed": {},
+   "notes": {
+    "rows": 12
+   }
+  },
+  {
+   "path": "cairo/بدل_الانتقالات.md",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "md",
+   "source_system": "wiki",
+   "title": "بدل الانتقالات لموظفي مكتب القاهرة",
+   "chars": 246,
+   "language": "ar",
+   "parsed": {},
+   "notes": {}
+  },
+  {
+   "path": "cairo/دليل_مكتب_القاهرة.md",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "md",
+   "source_system": "wiki",
+   "title": "دليل مكتب القاهرة",
+   "chars": 383,
+   "language": "ar",
+   "parsed": {},
+   "notes": {}
+  },
+  {
+   "path": "cairo/ساعات_العمل_في_رمضان.md",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "md",
+   "source_system": "wiki",
+   "title": "ساعات العمل خلال شهر رمضان — مكتب القاهرة",
+   "chars": 397,
+   "language": "ar",
+   "parsed": {},
+   "notes": {}
+  },
+  {
+   "path": "hr_restricted/Comp_Review_2026_Guidance.md",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "md",
+   "source_system": "drive",
+   "title": "Compensation Review 2026 — HR Guidance (RESTRICTED)",
+   "chars": 302,
+   "language": "en",
+   "parsed": {
+    "marking": "RESTRICTED"
+   },
+   "notes": {}
+  },
+  {
+   "path": "hr_restricted/Disciplinary_Procedure.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Disciplinary Procedure (Managers' Guide)",
+   "chars": 354,
+   "language": "en",
+   "parsed": {
+    "marking": "RESTRICTED - HR and people managers only"
+   },
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "hr_restricted/Performance_Calibration_Guide_2026.md",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "md",
+   "source_system": "drive",
+   "title": "Performance Calibration Guide 2026 (managers only)",
+   "chars": 218,
+   "language": "en",
+   "parsed": {
+    "marking": "managers only"
+   },
+   "notes": {}
+  },
+  {
+   "path": "hr_restricted/Project_Juniper_Workforce_Plan.md",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "md",
+   "source_system": "drive",
+   "title": "Project Juniper workforce plan — STRICTLY RESTRICTED (HR leadership)",
+   "chars": 335,
+   "language": "en",
+   "parsed": {
+    "marking": "RESTRICTED"
+   },
+   "notes": {}
+  },
+  {
+   "path": "hr_restricted/Salary_Bands_2026.xlsx",
+   "status": "loaded",
+   "chunks": 8,
+   "format": "xlsx",
+   "source_system": "drive",
+   "title": "Salary Bands 2026",
+   "chars": 963,
+   "language": "en",
+   "parsed": {
+    "marking": "RESTRICTED - People Operations only. Do not share outside HR."
+   },
+   "notes": {
+    "rows": 7
+   }
+  },
+  {
+   "path": "legacy_intranet/employee_handbook.md",
+   "status": "loaded",
+   "chunks": 3,
+   "format": "md",
+   "source_system": "intranet-legacy",
+   "title": "Northwind Robotics — Employee Handbook (Excerpt)",
+   "chars": 1527,
+   "language": "en",
+   "parsed": {},
+   "notes": {}
+  },
+  {
+   "path": "legacy_intranet/hr_policies.md",
+   "status": "loaded",
+   "chunks": 2,
+   "format": "md",
+   "source_system": "intranet-legacy",
+   "title": "Northwind Robotics — HR Policies",
+   "chars": 1094,
+   "language": "en",
+   "parsed": {},
+   "notes": {}
+  },
+  {
+   "path": "legacy_intranet/it_faq.md",
+   "status": "loaded",
+   "chunks": 3,
+   "format": "md",
+   "source_system": "intranet-legacy",
+   "title": "Northwind Robotics — IT Help Desk FAQ",
+   "chars": 1517,
+   "language": "en",
+   "parsed": {},
+   "notes": {}
+  },
+  {
+   "path": "legacy_intranet/product_specs.md",
+   "status": "loaded",
+   "chunks": 3,
+   "format": "md",
+   "source_system": "intranet-legacy",
+   "title": "Northwind Robotics — Product Specs: \"Warehouse Rover R2\"",
+   "chars": 1324,
+   "language": "en",
+   "parsed": {},
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-01-01_fleet_software_077.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Weekly team meeting - Fleet Software",
+   "chars": 321,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-01-01"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-01-06_fleet_software_079.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Sprint review - Fleet Software",
+   "chars": 290,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-01-06"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-01-10_legal_045.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Release readiness - Legal",
+   "chars": 289,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-01-10"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-01-12_finance_043.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Site rollout check-in - Finance",
+   "chars": 295,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-01-12"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-01-15_legal_057.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Sprint review - Legal",
+   "chars": 415,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-01-15"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-01-21_field_service_018.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Site rollout check-in - Field Service",
+   "chars": 300,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-01-21"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-01-25_field_service_063.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "1:1 notes (shared) - Field Service",
+   "chars": 314,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-01-25"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-01-27_firmware_048.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Retro - Firmware",
+   "chars": 455,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-01-27"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-01-27_sales_engineering_031.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Ops review - Sales Engineering",
+   "chars": 460,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-01-27"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-02-02_hardware_sustaining_016.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Release readiness - Hardware Sustaining",
+   "chars": 332,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-02-02"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-02-03_customer_success_056.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "1:1 notes (shared) - Customer Success",
+   "chars": 340,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-02-03"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-02-10_supply_chain_013.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Customer escalation sync - Supply Chain",
+   "chars": 334,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-02-10"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-02-11_firmware_023.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Customer escalation sync - Firmware",
+   "chars": 376,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-02-11"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-02-15_field_service_035.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Ops review - Field Service",
+   "chars": 322,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-02-15"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-02-20_data_platform_006.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Site rollout check-in - Data Platform",
+   "chars": 323,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-02-20"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-02-21_legal_005.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Customer escalation sync - Legal",
+   "chars": 354,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-02-21"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-02-21_legal_089.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Planning - Legal",
+   "chars": 338,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-02-21"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-02-22_data_platform_028.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Planning - Data Platform",
+   "chars": 367,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-02-22"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-02-25_fleet_software_024.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Release readiness - Fleet Software",
+   "chars": 406,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-02-25"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-02-25_motion_planning_041.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Weekly team meeting - Motion Planning",
+   "chars": 435,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-02-25"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "All-hands Q&A (People Ops section)",
+   "chars": 292,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-03-05"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-03-05_quality_034.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Weekly team meeting - Quality",
+   "chars": 375,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-03-05"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-03-07_customer_success_092.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Ops review - Customer Success",
+   "chars": 414,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-03-07"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-03-16_legal_003.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "1:1 notes (shared) - Legal",
+   "chars": 474,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-03-16"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-03-17_people_operations_085.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Hiring sync - People Operations",
+   "chars": 490,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-03-17"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-03-21_field_service_038.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Retro - Field Service",
+   "chars": 328,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-03-21"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-03-23_it_operations_049.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "1:1 notes (shared) - IT Operations",
+   "chars": 309,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-03-23"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-03-23_sales_engineering_029.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Ops review - Sales Engineering",
+   "chars": 421,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-03-23"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-03-25_it_operations_065.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "1:1 notes (shared) - IT Operations",
+   "chars": 416,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-03-25"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-03-28_legal_071.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Site rollout check-in - Legal",
+   "chars": 324,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-03-28"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-04-02_data_platform_044.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Ops review - Data Platform",
+   "chars": 390,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-04-02"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-04-02_sales_engineering_078.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Sprint review - Sales Engineering",
+   "chars": 405,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-04-02"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-04-13_hardware_sustaining_055.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Ops review - Hardware Sustaining",
+   "chars": 498,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-04-13"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-04-17_field_service_047.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Weekly team meeting - Field Service",
+   "chars": 379,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-04-17"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-04-17_hardware_sustaining_087.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Sprint review - Hardware Sustaining",
+   "chars": 328,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-04-17"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-04-24_customer_success_074.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Retro - Customer Success",
+   "chars": 379,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-04-24"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-04-24_data_platform_086.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Retro - Data Platform",
+   "chars": 540,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-04-24"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-04-25_marketing_042.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Retro - Marketing",
+   "chars": 400,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-04-25"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-04-25_sales_engineering_067.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Hiring sync - Sales Engineering",
+   "chars": 304,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-04-25"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-05-01_finance_050.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Retro - Finance",
+   "chars": 447,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-05-01"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-05-06_perception_076.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "1:1 notes (shared) - Perception",
+   "chars": 444,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-05-06"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-05-07_it_operations_090.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Planning - IT Operations",
+   "chars": 454,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-05-07"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-05-08_field_service_026.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Customer escalation sync - Field Service",
+   "chars": 390,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-05-08"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-05-15_firmware_068.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Customer escalation sync - Firmware",
+   "chars": 303,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-05-15"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-05-18_field_service_052.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "1:1 notes (shared) - Field Service",
+   "chars": 307,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-05-18"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-05-18_hardware_sustaining_012.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Release readiness - Hardware Sustaining",
+   "chars": 444,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-05-18"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-05-25_fleet_software_069.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Planning - Fleet Software",
+   "chars": 465,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-05-25"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-06-02_quality_015.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Site rollout check-in - Quality",
+   "chars": 385,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-06-02"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-06-11_motion_planning_094.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Site rollout check-in - Motion Planning",
+   "chars": 377,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-06-11"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-06-12_field_service_033.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Ops review - Field Service",
+   "chars": 299,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-06-12"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-06-13_hardware_sustaining_060.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Retro - Hardware Sustaining",
+   "chars": 521,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-06-13"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-06-17_hardware_sustaining_000.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Hiring sync - Hardware Sustaining",
+   "chars": 478,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-06-17"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-06-25_data_platform_025.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Hiring sync - Data Platform",
+   "chars": 414,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-06-25"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-06-26_perception_081.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Hiring sync - Perception",
+   "chars": 445,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-06-26"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-06-27_legal_030.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Weekly team meeting - Legal",
+   "chars": 356,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-06-27"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-06-28_motion_planning_062.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Ops review - Motion Planning",
+   "chars": 427,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-06-28"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-06-28_people_operations_054.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Site rollout check-in - People Operations",
+   "chars": 446,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-06-28"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-07-02_field_service_009.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Ops review - Field Service",
+   "chars": 339,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-07-02"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-07-02_legal_070.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Ops review - Legal",
+   "chars": 395,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-07-02"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-07-07_finance_036.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "1:1 notes (shared) - Finance",
+   "chars": 332,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-07-07"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-07-09_customer_success_010.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Retro - Customer Success",
+   "chars": 398,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-07-09"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-07-09_sales_engineering_001.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Retro - Sales Engineering",
+   "chars": 474,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-07-09"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-07-12_legal_022.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Weekly team meeting - Legal",
+   "chars": 362,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-07-12"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-07-13_fleet_software_073.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Ops review - Fleet Software",
+   "chars": 463,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-07-13"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-07-15_security_061.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Release readiness - Security",
+   "chars": 438,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-07-15"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-07-16_fleet_software_080.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Hiring sync - Fleet Software",
+   "chars": 297,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-07-16"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-07-16_marketing_051.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Customer escalation sync - Marketing",
+   "chars": 442,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-07-16"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-07-18_people_operations_021.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Weekly team meeting - People Operations",
+   "chars": 489,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-07-18"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-07-20_marketing_039.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Ops review - Marketing",
+   "chars": 384,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-07-20"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-07-22_fleet_software_007.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Hiring sync - Fleet Software",
+   "chars": 402,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-07-22"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-07-26_legal_083.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Hiring sync - Legal",
+   "chars": 383,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-07-26"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-07-26_manufacturing_058.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Customer escalation sync - Manufacturing",
+   "chars": 391,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-07-26"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-07-27_marketing_064.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Weekly team meeting - Marketing",
+   "chars": 314,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-07-27"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-08-10_firmware_088.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Sprint review - Firmware",
+   "chars": 360,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-08-10"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-08-11_perception_096.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Site rollout check-in - Perception",
+   "chars": 342,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-08-11"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-08-14_facilities_office_ops_201.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Office ops - Facilities",
+   "chars": 351,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-08-14"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-08-14_firmware_093.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Weekly team meeting - Firmware",
+   "chars": 465,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-08-14"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-08-22_people_operations_053.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Sprint review - People Operations",
+   "chars": 477,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-08-22"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-08-26_firmware_004.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "1:1 notes (shared) - Firmware",
+   "chars": 426,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-08-26"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-01_customer_success_017.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Weekly team meeting - Customer Success",
+   "chars": 291,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-01"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-04_field_service_066.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Ops review - Field Service",
+   "chars": 394,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-04"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-07_field_service_027.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Sprint review - Field Service",
+   "chars": 375,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-07"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-07_hardware_sustaining_091.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Ops review - Hardware Sustaining",
+   "chars": 322,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-07"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-12_motion_planning_046.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Customer escalation sync - Motion Planning",
+   "chars": 321,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-12"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-14_product_management_075.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Release readiness - Product Management",
+   "chars": 310,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-14"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-15_fleet_software_040.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Hiring sync - Fleet Software",
+   "chars": 374,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-15"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-16_motion_planning_072.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Weekly team meeting - Motion Planning",
+   "chars": 311,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-16"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-16_perception_008.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Site rollout check-in - Perception",
+   "chars": 328,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-16"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-16_supply_chain_002.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Hiring sync - Supply Chain",
+   "chars": 390,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-16"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-19_hardware_sustaining_014.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Hiring sync - Hardware Sustaining",
+   "chars": 469,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-19"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-20_marketing_037.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Planning - Marketing",
+   "chars": 338,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-20"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-20_motion_planning_059.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Retro - Motion Planning",
+   "chars": 473,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-20"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-22_leadership_sync_202.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Leadership sync (managers only)",
+   "chars": 335,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-22",
+    "marking": "Leadership sync (managers only)"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-23_security_020.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Weekly team meeting - Security",
+   "chars": 321,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-23"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-26_firmware_084.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Hiring sync - Firmware",
+   "chars": 297,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-26"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-26_hardware_sustaining_011.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Planning - Hardware Sustaining",
+   "chars": 345,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-26"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-27_data_platform_019.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Site rollout check-in - Data Platform",
+   "chars": 399,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-27"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-28_people_operations_095.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Hiring sync - People Operations",
+   "chars": 480,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-28"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-28_product_management_032.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Planning - Product Management",
+   "chars": 345,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-28"
+   },
+   "notes": {}
+  },
+  {
+   "path": "meetings/2026-09-28_security_082.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "drive",
+   "title": "Hiring sync - Security",
+   "chars": 463,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09-28"
+   },
+   "notes": {}
+  },
+  {
+   "path": "newsletters/Northwind_Dispatch_2025-06.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "intranet",
+   "title": "The Northwind Dispatch",
+   "chars": 247,
+   "language": "en",
+   "parsed": {
+    "content_date": "2025-06"
+   },
+   "notes": {
+    "chrome_share_removed": 0.28
+   }
+  },
+  {
+   "path": "newsletters/Northwind_Dispatch_2025-07.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "intranet",
+   "title": "The Northwind Dispatch",
+   "chars": 277,
+   "language": "en",
+   "parsed": {
+    "content_date": "2025-07"
+   },
+   "notes": {
+    "chrome_share_removed": 0.257
+   }
+  },
+  {
+   "path": "newsletters/Northwind_Dispatch_2025-08.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "intranet",
+   "title": "The Northwind Dispatch",
+   "chars": 291,
+   "language": "en",
+   "parsed": {
+    "content_date": "2025-08"
+   },
+   "notes": {
+    "chrome_share_removed": 0.248
+   }
+  },
+  {
+   "path": "newsletters/Northwind_Dispatch_2025-09.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "intranet",
+   "title": "The Northwind Dispatch",
+   "chars": 275,
+   "language": "en",
+   "parsed": {
+    "content_date": "2025-09"
+   },
+   "notes": {
+    "chrome_share_removed": 0.259
+   }
+  },
+  {
+   "path": "newsletters/Northwind_Dispatch_2025-10.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "intranet",
+   "title": "The Northwind Dispatch",
+   "chars": 272,
+   "language": "en",
+   "parsed": {
+    "content_date": "2025-10"
+   },
+   "notes": {
+    "chrome_share_removed": 0.261
+   }
+  },
+  {
+   "path": "newsletters/Northwind_Dispatch_2025-11.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "intranet",
+   "title": "The Northwind Dispatch",
+   "chars": 295,
+   "language": "en",
+   "parsed": {
+    "content_date": "2025-11"
+   },
+   "notes": {
+    "chrome_share_removed": 0.245
+   }
+  },
+  {
+   "path": "newsletters/Northwind_Dispatch_2025-12.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "intranet",
+   "title": "The Northwind Dispatch",
+   "chars": 249,
+   "language": "en",
+   "parsed": {
+    "content_date": "2025-12"
+   },
+   "notes": {
+    "chrome_share_removed": 0.279
+   }
+  },
+  {
+   "path": "newsletters/Northwind_Dispatch_2026-01.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "intranet",
+   "title": "The Northwind Dispatch",
+   "chars": 234,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-01"
+   },
+   "notes": {
+    "chrome_share_removed": 0.291
+   }
+  },
+  {
+   "path": "newsletters/Northwind_Dispatch_2026-02.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "intranet",
+   "title": "The Northwind Dispatch",
+   "chars": 453,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-02"
+   },
+   "notes": {
+    "chrome_share_removed": 0.222
+   }
+  },
+  {
+   "path": "newsletters/Northwind_Dispatch_2026-03.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "intranet",
+   "title": "The Northwind Dispatch",
+   "chars": 441,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-03"
+   },
+   "notes": {
+    "chrome_share_removed": 0.197
+   }
+  },
+  {
+   "path": "newsletters/Northwind_Dispatch_2026-04.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "intranet",
+   "title": "The Northwind Dispatch",
+   "chars": 404,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-04"
+   },
+   "notes": {
+    "chrome_share_removed": 0.228
+   }
+  },
+  {
+   "path": "newsletters/Northwind_Dispatch_2026-05.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "intranet",
+   "title": "The Northwind Dispatch",
+   "chars": 455,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-05"
+   },
+   "notes": {
+    "chrome_share_removed": 0.207
+   }
+  },
+  {
+   "path": "newsletters/Northwind_Dispatch_2026-06.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "intranet",
+   "title": "The Northwind Dispatch",
+   "chars": 275,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-06"
+   },
+   "notes": {
+    "chrome_share_removed": 0.259
+   }
+  },
+  {
+   "path": "newsletters/Northwind_Dispatch_2026-07.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "intranet",
+   "title": "The Northwind Dispatch",
+   "chars": 271,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-07"
+   },
+   "notes": {
+    "chrome_share_removed": 0.262
+   }
+  },
+  {
+   "path": "newsletters/Northwind_Dispatch_2026-08.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "intranet",
+   "title": "The Northwind Dispatch",
+   "chars": 253,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-08"
+   },
+   "notes": {
+    "chrome_share_removed": 0.275
+   }
+  },
+  {
+   "path": "newsletters/Northwind_Dispatch_2026-09.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "intranet",
+   "title": "The Northwind Dispatch",
+   "chars": 280,
+   "language": "en",
+   "parsed": {
+    "content_date": "2026-09"
+   },
+   "notes": {
+    "chrome_share_removed": 0.255
+   }
+  },
+  {
+   "path": "policies/finance/FIN-POL-001_expense_reimbursement.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Expense Reimbursement Policy",
+   "chars": 371,
+   "language": "en",
+   "parsed": {
+    "doc_id": "FIN-POL-001",
+    "version": "3.1",
+    "status": "Approved",
+    "effective_date": "2025-04-01",
+    "owner": "Finance",
+    "marking": "INTERNAL"
+   },
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+   "status": "loaded",
+   "chunks": 3,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Travel & Per Diem Policy",
+   "chars": 1056,
+   "language": "en",
+   "parsed": {
+    "doc_id": "FIN-POL-002",
+    "version": "4.0",
+    "status": "Approved",
+    "effective_date": "2026-01-15",
+    "owner": "Finance",
+    "supersedes": "HR Policies 2024 - Travel Policy",
+    "marking": "INTERNAL"
+   },
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+   "status": "loaded",
+   "chunks": 2,
+   "format": "md",
+   "source_system": "policy-portal",
+   "title": "DRAFT — Flexible Time Off (proposed HR-POL-004 v4.0)",
+   "chars": 639,
+   "language": "en",
+   "parsed": {
+    "status": "draft",
+    "doc_id": "HR-POL-004",
+    "version": "4.0",
+    "proposed_effective_date": "2027-01-01"
+   },
+   "notes": {}
+  },
+  {
+   "path": "policies/hr/HR-POL-001_code_of_conduct.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Code of Conduct",
+   "chars": 384,
+   "language": "en",
+   "parsed": {
+    "doc_id": "HR-POL-001",
+    "version": "3.0",
+    "status": "Approved",
+    "effective_date": "2024-09-01",
+    "owner": "Legal",
+    "marking": "INTERNAL"
+   },
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "policies/hr/HR-POL-004_PTO_v2.pdf",
+   "status": "loaded",
+   "chunks": 2,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Paid Time Off Policy",
+   "chars": 735,
+   "language": "en",
+   "parsed": {
+    "doc_id": "HR-POL-004",
+    "version": "2.0",
+    "status": "Approved",
+    "effective_date": "2025-01-01",
+    "owner": "People Operations",
+    "supersedes": "Employee Handbook 2024, section 2",
+    "marking": "INTERNAL"
+   },
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "policies/hr/HR-POL-004_PTO_v3.pdf",
+   "status": "loaded",
+   "chunks": 4,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Paid Time Off Policy",
+   "chars": 1444,
+   "language": "en",
+   "parsed": {
+    "doc_id": "HR-POL-004",
+    "version": "3.0",
+    "status": "Approved",
+    "effective_date": "2026-03-01",
+    "owner": "People Operations",
+    "supersedes": "HR-POL-004 v2.0",
+    "marking": "INTERNAL"
+   },
+   "notes": {
+    "furniture_lines_removed": 4,
+    "pages": 2,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "policies/hr/HR-POL-005_sick_leave.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Sick Leave Policy",
+   "chars": 354,
+   "language": "en",
+   "parsed": {
+    "doc_id": "HR-POL-005",
+    "version": "1.1",
+    "status": "Approved",
+    "effective_date": "2025-01-01",
+    "owner": "People Operations",
+    "marking": "INTERNAL"
+   },
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "policies/hr/HR-POL-006_parental_leave.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Parental Leave Policy",
+   "chars": 312,
+   "language": "en",
+   "parsed": {
+    "doc_id": "HR-POL-006",
+    "version": "2.0",
+    "status": "Approved",
+    "effective_date": "2025-07-01",
+    "owner": "People Operations",
+    "supersedes": "HR-POL-006 v1.0",
+    "marking": "INTERNAL"
+   },
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "policies/hr/HR-POL-010_remote_work.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Remote Work Policy",
+   "chars": 539,
+   "language": "en",
+   "parsed": {
+    "doc_id": "HR-POL-010",
+    "version": "2.0",
+    "status": "Approved",
+    "effective_date": "2026-01-01",
+    "owner": "People Operations",
+    "marking": "INTERNAL"
+   },
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "policies/hr/HR-POL-011_work_from_abroad.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Work From Abroad Policy",
+   "chars": 633,
+   "language": "en",
+   "parsed": {
+    "doc_id": "HR-POL-011",
+    "version": "1.0",
+    "status": "Approved",
+    "effective_date": "2026-04-01",
+    "owner": "People Operations",
+    "marking": "INTERNAL"
+   },
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "policies/hr/HR-POL-014_referral_bonus.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Employee Referral Programme",
+   "chars": 417,
+   "language": "en",
+   "parsed": {
+    "doc_id": "HR-POL-014",
+    "version": "2.0",
+    "status": "Approved",
+    "effective_date": "2026-02-01",
+    "owner": "Talent Acquisition",
+    "supersedes": "HR Policies 2024 - Referral Bonus",
+    "marking": "INTERNAL"
+   },
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "policies/hr/HR-POL-016_learning_development.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Learning & Development Budget",
+   "chars": 372,
+   "language": "en",
+   "parsed": {
+    "doc_id": "HR-POL-016",
+    "version": "2.0",
+    "status": "Approved",
+    "effective_date": "2026-01-01",
+    "owner": "People Operations",
+    "marking": "INTERNAL"
+   },
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "policies/hr/HR-POL-020_performance_reviews.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Performance Review Cycle",
+   "chars": 350,
+   "language": "en",
+   "parsed": {
+    "doc_id": "HR-POL-020",
+    "version": "1.2",
+    "status": "Approved",
+    "effective_date": "2025-01-01",
+    "owner": "People Operations",
+    "marking": "INTERNAL"
+   },
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "policies/it/IT-STD-001_data_classification.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Data Classification Standard",
+   "chars": 486,
+   "language": "en",
+   "parsed": {
+    "doc_id": "IT-STD-001",
+    "version": "2.0",
+    "status": "Approved",
+    "effective_date": "2025-03-01",
+    "owner": "IT Security",
+    "marking": "INTERNAL"
+   },
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "policies/it/IT-STD-003_password_and_authentication.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Password & Authentication Standard",
+   "chars": 578,
+   "language": "en",
+   "parsed": {
+    "doc_id": "IT-STD-003",
+    "version": "2.0",
+    "status": "Approved",
+    "effective_date": "2026-02-01",
+    "owner": "IT Security",
+    "supersedes": "IT-STD-003 v1.0",
+    "marking": "INTERNAL"
+   },
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "policies/it/IT-STD-007_remote_access.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Remote Access Standard",
+   "chars": 615,
+   "language": "en",
+   "parsed": {
+    "doc_id": "IT-STD-007",
+    "version": "3.0",
+    "status": "Approved",
+    "effective_date": "2026-06-30",
+    "owner": "IT Security",
+    "supersedes": "IT-STD-007 v2.0 (GlobalConnect VPN)",
+    "marking": "INTERNAL"
+   },
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "policies/it/IT-STD-009_lost_or_stolen_devices.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Lost or Stolen Devices",
+   "chars": 381,
+   "language": "en",
+   "parsed": {
+    "doc_id": "IT-STD-009",
+    "version": "1.0",
+    "status": "Approved",
+    "effective_date": "2025-10-01",
+    "owner": "IT Security",
+    "marking": "INTERNAL"
+   },
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "policies/it/IT-STD-011_hardware_refresh.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "policy-portal",
+   "title": "Hardware Refresh Standard",
+   "chars": 249,
+   "language": "en",
+   "parsed": {
+    "doc_id": "IT-STD-011",
+    "version": "1.3",
+    "status": "Approved",
+    "effective_date": "2025-01-01",
+    "owner": "IT Operations",
+    "marking": "INTERNAL"
+   },
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "product/R2/R2_End_of_Life_Notice.md",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "md",
+   "source_system": "drive",
+   "title": "Warehouse Rover R2 — End-of-Life Notice",
+   "chars": 565,
+   "language": "en",
+   "parsed": {},
+   "notes": {}
+  },
+  {
+   "path": "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "drive",
+   "title": "Warehouse Rover R2 - Data Sheet",
+   "chars": 579,
+   "language": "en",
+   "parsed": {},
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "product/R3/R3_Operator_Manual_RevC.pdf",
+   "status": "loaded",
+   "chunks": 6,
+   "format": "pdf",
+   "source_system": "drive",
+   "title": "Warehouse Rover R3 - Operator Manual",
+   "chars": 2853,
+   "language": "en",
+   "parsed": {
+    "marking": "CONFIDENTIAL - for licensed operators only - do not distribute",
+    "version": "Rev C",
+    "content_date": "2026-05"
+   },
+   "notes": {
+    "furniture_lines_removed": 46,
+    "pages": 23,
+    "sentences_repeated_dropped": 1064
+   }
+  },
+  {
+   "path": "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "drive",
+   "title": "Warehouse Rover R3 - Data Sheet",
+   "chars": 558,
+   "language": "en",
+   "parsed": {},
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "product/Rover_Error_Codes_2026.xlsx",
+   "status": "loaded",
+   "chunks": 121,
+   "format": "xlsx",
+   "source_system": "drive",
+   "title": "Rover Error Codes 2026",
+   "chars": 19659,
+   "language": "en",
+   "parsed": {},
+   "notes": {
+    "rows": 120
+   }
+  },
+  {
+   "path": "product/Spare_Parts_Catalog_2026.pdf",
+   "status": "loaded",
+   "chunks": 2,
+   "format": "pdf",
+   "source_system": "drive",
+   "title": "Spare Parts Catalog 2026",
+   "chars": 1293,
+   "language": "en",
+   "parsed": {},
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "product/Support_SLA_2026.pdf",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "pdf",
+   "source_system": "drive",
+   "title": "Customer Support Service Levels - 2026",
+   "chars": 519,
+   "language": "en",
+   "parsed": {},
+   "notes": {
+    "furniture_lines_removed": 2,
+    "pages": 1,
+    "sentences_repeated_dropped": 0
+   }
+  },
+  {
+   "path": "product/fleet_manager/release_notes_4.3.md",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "md",
+   "source_system": "drive",
+   "title": "Fleet Manager 4.3 — Release Notes (November 2025)",
+   "chars": 290,
+   "language": "en",
+   "parsed": {
+    "version": "4.3",
+    "content_date": "2025-11"
+   },
+   "notes": {}
+  },
+  {
+   "path": "product/fleet_manager/release_notes_5.0.md",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "md",
+   "source_system": "drive",
+   "title": "Fleet Manager 5.0 — Release Notes (May 2026)",
+   "chars": 357,
+   "language": "en",
+   "parsed": {
+    "version": "5.0",
+    "content_date": "2026-05"
+   },
+   "notes": {}
+  },
+  {
+   "path": "scanned_archive/Expense_Policy_2019_scan.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "scanned-archive",
+   "title": "EXPENSE POLICY - rev 2019",
+   "chars": 174,
+   "language": "en",
+   "parsed": {
+    "version": "rev 2019",
+    "content_date": "2019"
+   },
+   "notes": {
+    "ocr_tokens_fixed": 10
+   }
+  },
+  {
+   "path": "scanned_archive/Handbook_2016_cover_scan.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "scanned-archive",
+   "title": "EMPLOYEE HANDBOOK",
+   "chars": 83,
+   "language": "en",
+   "parsed": {
+    "content_date": "2016"
+   },
+   "notes": {
+    "ocr_tokens_fixed": 3
+   }
+  },
+  {
+   "path": "scanned_archive/PTO_Policy_2017_scan.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "scanned-archive",
+   "title": "NORTHWIND ROBOTICS INC. HR POLICY 7",
+   "chars": 239,
+   "language": "en",
+   "parsed": {
+    "effective_date": "2017-01-01"
+   },
+   "notes": {
+    "ocr_tokens_fixed": 12
+   }
+  },
+  {
+   "path": "scanned_archive/Travel_Policy_2018_scan.txt",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "txt",
+   "source_system": "scanned-archive",
+   "title": "TRAVEL - 2018",
+   "chars": 82,
+   "language": "en",
+   "parsed": {
+    "content_date": "2018"
+   },
+   "notes": {
+    "ocr_tokens_fixed": 9
+   }
+  },
+  {
+   "path": "wiki/eng/New_Engineer_Onboarding.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "New Engineer Onboarding",
+   "chars": 369,
+   "language": "en",
+   "parsed": {
+    "edited_by": "p.raman",
+    "content_date": "2025-08-19"
+   },
+   "notes": {
+    "chrome_share_removed": 0.502
+   }
+  },
+  {
+   "path": "wiki/eng/On_Call.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "On-call rotation",
+   "chars": 315,
+   "language": "en",
+   "parsed": {
+    "edited_by": "sre.team",
+    "content_date": "2026-01-22"
+   },
+   "notes": {
+    "chrome_share_removed": 0.516
+   }
+  },
+  {
+   "path": "wiki/eng/Robotics_Lab_Safety.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Robotics lab safety",
+   "chars": 211,
+   "language": "en",
+   "parsed": {
+    "edited_by": "lab.ops",
+    "content_date": "2025-09-30"
+   },
+   "notes": {
+    "chrome_share_removed": 0.618
+   }
+  },
+  {
+   "path": "wiki/facilities/Offices.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Our offices",
+   "chars": 290,
+   "language": "en",
+   "parsed": {
+    "edited_by": "facilities",
+    "content_date": "2026-03-02"
+   },
+   "notes": {
+    "chrome_share_removed": 0.525
+   }
+  },
+  {
+   "path": "wiki/finance/How_to_submit_expenses.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "How to submit expenses",
+   "chars": 176,
+   "language": "en",
+   "parsed": {
+    "edited_by": "finance.ops",
+    "content_date": "2025-04-10"
+   },
+   "notes": {
+    "chrome_share_removed": 0.667
+   }
+  },
+  {
+   "path": "wiki/it/Password_Policy.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Password Policy",
+   "chars": 535,
+   "language": "en",
+   "parsed": {
+    "edited_by": "it.security",
+    "content_date": "2026-02-03",
+    "mirrors": "IT-STD-003 v2.0"
+   },
+   "notes": {
+    "chrome_share_removed": 0.386
+   }
+  },
+  {
+   "path": "wiki/it/VPN_Setup_Guide.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "VPN Setup Guide",
+   "chars": 301,
+   "language": "en",
+   "parsed": {
+    "edited_by": "d.okafor",
+    "content_date": "2024-10-03"
+   },
+   "notes": {
+    "chrome_share_removed": 0.523
+   }
+  },
+  {
+   "path": "wiki/people/Benefits_Overview.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Benefits Overview",
+   "chars": 269,
+   "language": "en",
+   "parsed": {
+    "edited_by": "people.ops",
+    "content_date": "2025-05-07"
+   },
+   "notes": {
+    "chrome_share_removed": 0.556
+   }
+  },
+  {
+   "path": "wiki/people/US_Holidays_2026.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "US company holidays 2026",
+   "chars": 162,
+   "language": "en",
+   "parsed": {
+    "edited_by": "people.ops",
+    "content_date": "2025-12-01"
+   },
+   "notes": {
+    "chrome_share_removed": 0.687
+   }
+  },
+  {
+   "path": "wiki/sales/Demo_Rover_Booking.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Booking a demo rover",
+   "chars": 192,
+   "language": "en",
+   "parsed": {
+    "edited_by": "sales.ops",
+    "content_date": "2026-04-15"
+   },
+   "notes": {
+    "chrome_share_removed": 0.64
+   }
+  },
+  {
+   "path": "wiki/sales/Sales_IT_Tips.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "IT tips for the sales team",
+   "chars": 257,
+   "language": "en",
+   "parsed": {
+    "edited_by": "l.vogel",
+    "content_date": "2025-03-12"
+   },
+   "notes": {
+    "chrome_share_removed": 0.582
+   }
+  },
+  {
+   "path": "wiki/teams/Team_Customer_Success.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: Customer Success",
+   "chars": 208,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-10-09"
+   },
+   "notes": {
+    "chrome_share_removed": 0.629
+   }
+  },
+  {
+   "path": "wiki/teams/Team_Data_Platform.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: Data Platform",
+   "chars": 186,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-06-05"
+   },
+   "notes": {
+    "chrome_share_removed": 0.649
+   }
+  },
+  {
+   "path": "wiki/teams/Team_Field_Service.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: Field Service",
+   "chars": 224,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-09-14"
+   },
+   "notes": {
+    "chrome_share_removed": 0.604
+   }
+  },
+  {
+   "path": "wiki/teams/Team_Finance.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: Finance",
+   "chars": 212,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-05-10"
+   },
+   "notes": {
+    "chrome_share_removed": 0.605
+   }
+  },
+  {
+   "path": "wiki/teams/Team_Firmware.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: Firmware",
+   "chars": 181,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-04-10"
+   },
+   "notes": {
+    "chrome_share_removed": 0.645
+   }
+  },
+  {
+   "path": "wiki/teams/Team_Fleet_Software.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: Fleet Software",
+   "chars": 198,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-01-03"
+   },
+   "notes": {
+    "chrome_share_removed": 0.636
+   }
+  },
+  {
+   "path": "wiki/teams/Team_Hardware_Sustaining.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: Hardware Sustaining",
+   "chars": 222,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-04-19"
+   },
+   "notes": {
+    "chrome_share_removed": 0.62
+   }
+  },
+  {
+   "path": "wiki/teams/Team_IT_Operations.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: IT Operations",
+   "chars": 186,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-10-02"
+   },
+   "notes": {
+    "chrome_share_removed": 0.649
+   }
+  },
+  {
+   "path": "wiki/teams/Team_Legal.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: Legal",
+   "chars": 191,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-04-01"
+   },
+   "notes": {
+    "chrome_share_removed": 0.626
+   }
+  },
+  {
+   "path": "wiki/teams/Team_Manufacturing.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: Manufacturing",
+   "chars": 197,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-04-12"
+   },
+   "notes": {
+    "chrome_share_removed": 0.634
+   }
+  },
+  {
+   "path": "wiki/teams/Team_Marketing.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: Marketing",
+   "chars": 214,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-02-20"
+   },
+   "notes": {
+    "chrome_share_removed": 0.607
+   }
+  },
+  {
+   "path": "wiki/teams/Team_Motion_Planning.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: Motion Planning",
+   "chars": 207,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-03-19"
+   },
+   "notes": {
+    "chrome_share_removed": 0.628
+   }
+  },
+  {
+   "path": "wiki/teams/Team_People_Operations.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: People Operations",
+   "chars": 228,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-08-09"
+   },
+   "notes": {
+    "chrome_share_removed": 0.608
+   }
+  },
+  {
+   "path": "wiki/teams/Team_Perception.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: Perception",
+   "chars": 181,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-07-25"
+   },
+   "notes": {
+    "chrome_share_removed": 0.65
+   }
+  },
+  {
+   "path": "wiki/teams/Team_Product_Management.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: Product Management",
+   "chars": 208,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-06-16"
+   },
+   "notes": {
+    "chrome_share_removed": 0.632
+   }
+  },
+  {
+   "path": "wiki/teams/Team_Quality.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: Quality",
+   "chars": 210,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-08-20"
+   },
+   "notes": {
+    "chrome_share_removed": 0.607
+   }
+  },
+  {
+   "path": "wiki/teams/Team_Sales_Engineering.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: Sales Engineering",
+   "chars": 188,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-10-27"
+   },
+   "notes": {
+    "chrome_share_removed": 0.655
+   }
+  },
+  {
+   "path": "wiki/teams/Team_Security.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: Security",
+   "chars": 200,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-08-28"
+   },
+   "notes": {
+    "chrome_share_removed": 0.622
+   }
+  },
+  {
+   "path": "wiki/teams/Team_Supply_Chain.html",
+   "status": "loaded",
+   "chunks": 1,
+   "format": "html",
+   "source_system": "wiki",
+   "title": "Team: Supply Chain",
+   "chars": 202,
+   "language": "en",
+   "parsed": {
+    "edited_by": "team.lead",
+    "content_date": "2025-03-04"
+   },
+   "notes": {
+    "chrome_share_removed": 0.626
+   }
+  }
+ ]
+}

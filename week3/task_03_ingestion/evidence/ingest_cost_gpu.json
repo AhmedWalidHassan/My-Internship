@@ -1,0 +1,49 @@
+{
+ "device": "cuda (NVIDIA GeForce RTX 3060 Laptop GPU)",
+ "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+ "price_per_1m_tokens": 0.02,
+ "index_bytes": 945743,
+ "runs": [
+  {
+   "run": "full re-ingest (force rebuild)",
+   "wall_clock_s": 8.76,
+   "chunks_embedded": 348,
+   "embedding_tokens": 30809,
+   "cost_usd_at_price": 0.000616,
+   "documents": 190,
+   "chunks_in_index": 348,
+   "added": 190,
+   "updated": [],
+   "reused": 0,
+   "skipped": 0
+  },
+  {
+   "run": "incremental: one changed document (R2_End_of_Life_Notice.md)",
+   "wall_clock_s": 0.04,
+   "chunks_embedded": 1,
+   "embedding_tokens": 170,
+   "cost_usd_at_price": 3e-06,
+   "documents": 190,
+   "chunks_in_index": 348,
+   "added": 0,
+   "updated": [
+    "product/R2/R2_End_of_Life_Notice.md"
+   ],
+   "reused": 189,
+   "skipped": 0
+  },
+  {
+   "run": "no change (warm start)",
+   "wall_clock_s": 0.03,
+   "chunks_embedded": 0,
+   "embedding_tokens": 0,
+   "cost_usd_at_price": 0.0,
+   "documents": 190,
+   "chunks_in_index": 348,
+   "added": 0,
+   "updated": [],
+   "reused": 190,
+   "skipped": 0
+  }
+ ]
+}

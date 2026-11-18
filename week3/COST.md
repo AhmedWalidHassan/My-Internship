@@ -17,6 +17,7 @@ records both.
 |---|---|---:|---:|---:|
 | 2026-11-18 | Task 1: seed eval ×2, Week 2 eval gate ×2, `make cost` ×2 (236 questions, 4,469 pipeline LLM calls, plus judge calls that are not instrumented), live tier ×4, 5 full index builds ×2 devices, Docker smoke test | **$0 actual** (≈ $0.17 at gpt-4o-mini prices, pipeline calls only; embeddings ≈ $0.003) | $0 (≈ $0.17) | $25.00 |
 | 2026-11-18 | Task 2: 3 full dev runs (210 questions, ~3,760 pipeline LLM calls + ~420 judge calls), 2 judge replays on run 1 (~280 judge calls), synthetic generation (33 LLM calls, 65 candidates), retrieval-only runs | **$0 actual** (≈ $0.15 pipeline + ≈ $0.08 judge at gpt-4o-mini prices) | $0 (≈ $0.40) | $25.00 |
+| 2026-11-18 | Task 3: 2 full dev runs (140 questions, ~1,950 pipeline LLM calls + ~280 judge calls), retrieval-only runs, live tier (9 tests), 4 full + 2 incremental re-ingests, 2 image builds + Docker smoke test | **$0 actual** (≈ $0.10 pipeline + ≈ $0.04 judge at gpt-4o-mini prices; embeddings ≈ $0.003) | $0 (≈ $0.54) | $25.00 |
 
 ---
 
@@ -63,10 +64,28 @@ doing Wednesday's experiments retrieval-first.
 
 ## Task 3 — Ingestion
 
+Measured 2026-11-18 with [`measure_ingest.py`](task_03_ingestion/scripts/measure_ingest.py) on a temporary
+copy of the corpus (the export itself is never edited), the real embedding model, and the embedding
+cache **off**, so every call is real. Tokens are counted with tiktoken `cl100k_base` over exactly the
+embedded texts, priced at text-embedding-3-small ($0.02 / 1M). Local spend: $0.
+[GPU](task_03_ingestion/evidence/ingest_cost_gpu.json) · [CPU](task_03_ingestion/evidence/ingest_cost_cpu.json).
+
 | | Wall clock | Embedding calls | Cost |
 |---|---:|---:|---:|
-| Full re-ingest | | | |
-| Incremental (one changed file) | | | |
+| Full re-ingest | **8.8 s** GPU / **22.2 s** CPU (27.2 s inside the container, CPU), parsing all 190 documents included | 348 chunks, 30,809 tokens | **$0.00062** |
+| Incremental (one changed file) | **0.04 s** GPU / 0.06 s CPU (189 documents reused by hash) | **1 chunk**, 170 tokens | **$0.0000034** |
+| No change (warm start) | 0.03 s | 0 | $0 |
+
+- **Fewer tokens than a naive extraction, despite reading all 190 documents.** Task 1's naive extraction
+  of the same 190 documents was 52,609 tokens. Removing the manual's boilerplate and the wiki chrome cut
+  that by **41%**.
+- **PDF table detection dominates a full re-ingest's parse time** (~0.2 s a page, on pages with
+  side-by-side text only). Embedding is the smaller part on the GPU.
+- **Per question it got slightly cheaper in calls** (17.9 → 13.9: fewer refusals, so fewer rewrite
+  loops), but each call carries more context (real documents now). Net **$0.000687 → $0.000698 (+1.7%)**,
+  mean latency 5.4 → 5.9 s.
+- **Docker image:** full API image **2.07 → 2.35 GB (+285 MB)**, for PyMuPDF 2.1 (110 MB) and the
+  onnxruntime it now requires (63 MB); openpyxl and BeautifulSoup are ~2 MB.
 
 ## Task 4 — Winner vs baseline
 
@@ -123,7 +142,7 @@ doing Wednesday's experiments retrieval-first.
 |---|---|---|---|---|
 | (this PR) | Task 1 baseline | n/a (no product change). Measured on the new corpus: 4.05 s mean as shipped (3.28 s on the Week 2 corpus) | n/a. Measured: $0.000795 per question as shipped (+84%: every question exhausts the rewrite loop). Embedding the full corpus once: $0.00105 at text-embedding-3-small, 0.75 s GPU / 4.9 s CPU | corpus embed; all runs local, $0 actual |
 | (this PR) | Task 2 eval | per question on the Week 3 corpus: 5.4 s mean (17.9 LLM calls). The loader change (118 of 190 documents instead of 1) is what moved it: 4.05 s in Task 1 → 5.4 s, because now some answers get generated and fact-checked instead of all ending in a refusal. Index build: 139 chunks in 1.0 s | $0.000687 per question at gpt-4o-mini prices (Task 1 as shipped: $0.000795). Eval: retrieval-only $0 and 7.5 s; full dev run ≈ $0.07 and ~9 min | judge is now `gemma3:4b`; all runs local, $0 actual |
-| | Task 3 ingestion | | | |
+| (this PR) | Task 3 ingestion | per question 5.4 → 5.9 s mean (more real context per call; fewer calls). Full re-ingest 8.8 s GPU / 22 s CPU; one changed file 0.04 s. Warm container start loads the index in 0.2 s (startup 11 s) | $0.000687 → $0.000698 per question (+1.7%; LLM calls 17.9 → 13.9). Full re-embed $0.00062, one file $0.0000034 at text-embedding-3-small | image +285 MB (PyMuPDF 2.1 + onnxruntime); all local, $0 actual |
 | | Task 4 experiments | | | |
 | | Task 5 time and truth | | | |
 | | Task 6 access | | | |

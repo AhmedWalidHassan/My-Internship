@@ -33,6 +33,11 @@ langchain-openai
 langchain-groq
 langchain-ollama
 
+# --- document loaders (Week 3 Task 3, ingest/): PDF, spreadsheets, HTML ---
+pymupdf                    # PDF text, layout and tables
+openpyxl                   # .xlsx
+beautifulsoup4             # wiki / newsletter HTML (drop the chrome)
+
 # --- tooling ---
 pytest
 ruff

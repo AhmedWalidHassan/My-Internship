@@ -347,37 +347,151 @@ address. That's why both scores are reported. They disagree on 7 of 70 dev examp
 
 ## Task 3 — Ingestion
 
+Measured 2026-11-18. One loader per format in [`ingest/`](../ingest/) (PDF tables rebuilt as rows with
+their column names, page furniture and wiki chrome removed, spreadsheet rows keeping their headers,
+NFKC, OCR repair, metadata parsed from the text, the manual's repeated sentences dropped), plugged
+into the capstone's incremental `ingest()`. Why each format looks the way it does:
+[`task_03_ingestion/LOADERS.md`](task_03_ingestion/LOADERS.md). The hypothesis was committed before
+any code ([`EXPERIMENTS.md` ING-01](EXPERIMENTS.md#task-3--ing-01-ingestion-that-reads-every-format)).
+
 | | Before | After |
 |---|---:|---:|
-| Documents loaded | | |
-| Documents skipped (with reasons listed below) | | |
-| Chunks | | |
-| Duplicates detected | — | |
-| recall@5, all (dev) | | |
+| Documents loaded | 118 / 190 (`.md`/`.txt` only) | **190 / 190** |
+| Documents skipped (with reasons listed below) | 72 (every PDF, HTML, XLSX, CSV; logged since Task 2) | **0** |
+| Chunks | 139 | **348** (1 per spreadsheet/CSV row: 132; the 23-page manual: 6) |
+| Duplicates detected | — | **1 near-duplicate document** (a mirror), **0 exact duplicate chunks** across documents, **1,064 repeated sentences** removed within the manual |
+| recall@5, all (dev) | 0.133 | **0.917** (MRR 0.076 → 0.612) |
 
-recall@5 by category, before → after: *(only categories that moved by more than the
-noise floor)*
+recall@5 by category, before → after. Retrieval is deterministic: two runs gave identical rankings for
+all 60 examples, so the noise floor is 0 and every move below is real. `draft` (1.00 → 1.00) is the
+only category that didn't move.
 
 | Category | Before | After |
 |---|---:|---:|
-| | | |
+| factual | 0.10 | 1.00 |
+| table | 0.00 | 1.00 |
+| keyword | 0.25 | 1.00 |
+| version | 0.00 | 1.00 |
+| conflict | 0.00 | 1.00 |
+| multi_hop | 0.00 | 1.00 |
+| multi_part | 0.00 | 0.75 |
+| ambiguous | 0.33 | 1.00 |
+| long_doc | 0.00 | 1.00 |
+| cross_lingual | 0.00 | 0.25 |
+| follow_up | 0.00 | 1.00 |
+| personalized | 0.00 | 0.75 |
+| access *(authorised users only)* | 0.33 | 1.00 |
+
+The 5 dev questions still missed at recall@5:
+- **4 are the Arabic pages** (n15, n16, s25, n26). The English-only MiniLM embedding model doesn't
+  place them near English questions. That's a Task 4 experiment (a multilingual embedding model),
+  not ingestion.
+- **#17 "What are the password rules?":** three meeting notes about a "password reset flow" outrank
+  IT-STD-003. That's the lexical trap from Task 1 issue #10.
+
+**What the answers did** (full pipeline, dev, two identical runs;
+[evidence](task_03_ingestion/evidence/dev_full_after.json)):
+- **Scores:** deterministic **0.314 → 0.743**, correctness 0.357 → 0.500, groundedness 1.000 → 0.986.
+- **Cheaper per question:** refusals fell from 32 to 15 of 70 and the rewrite loop fires on 20 instead
+  of 40, so LLM calls per question fell from 17.9 to 13.9.
+- **Live tier on the Week 3 corpus:** 8 passed + 1 xfail. The four Task 1 "world changed" tests pass:
+  HR-POL-005 cited, 3-day carry-over, work from abroad answered from HR-POL-011.
+- **The gate:** passes against the Task 2 baseline. `eval_baseline.json` is **re-set on this system**
+  (correctness 0.500, groundedness 0.986, deterministic 0.743,
+  [justification](task_03_ingestion/tolerance_justification.md)).
+
+Two consequences to know about:
+- ⚠️ **Leaks went from 2 to 4 on dev.** The salary bands (XLSX) and the disciplinary procedure (PDF) are
+  now readable, so u1001 gets the L4 salary range (s18) and the PIP length (s22). Restricted content is
+  now *more* exposed until Task 6. The service must stay on this machine until then.
+- **The correctness judge is now too strict on correct answers.** On 18 dev examples the deterministic
+  check passes and the judge says incorrect.
+  - **About 13 are plainly correct** (#4, n04, #15, s32, n10, n11, n13, s10, n17, n22, …): the judge
+    penalises reference details the question didn't ask for, like "8 degrees unloaded".
+  - **About 5 are rightly failed:** s28 and n25 list every tenure band instead of the user's, which games
+    `must_include`; s29 repeats the stale sales-wiki advice; #12 mixes in the 2019 scan.
+  - **Cause:** Task 2's stricter prompt was tuned on a system whose answers were mostly wrong. On correct
+    answers it overshoots. Recalibrating it needs new human labels on this system's answers: a follow-up,
+    deliberately not mixed into the ingestion change. Until then, the deterministic score is the more
+    honest number.
 
 **Dedup policy, and why:**
 
+> **Three kinds of duplicate, three policies**
+> ([`ingest/dedup.py`](../ingest/dedup.py), [LOADERS.md § Deduplication](task_03_ingestion/LOADERS.md#deduplication)):
 >
+> 1. **Repeated sentences within a document** are **removed** at parse time (first occurrence kept):
+>    1,064 of the R3 manual's 1,099 sentences. That's what took `long_doc` from 0.00 to 1.00.
+> 2. **Exact duplicate chunks across documents** (sha1 of the normalised body): keep the most
+>    authoritative, label the others. **0 found**, checked on every ingest.
+> 3. **Near-duplicate documents across source systems** (containment of word 3-shingles ≥ 0.75, or a
+>    declared mirror) are **kept and labelled** `duplicate_of` the document from the more authoritative
+>    source. **1 found:** `wiki/it/Password_Policy.html` → IT-STD-003 (containment 0.759; the page says
+>    "This page mirrors IT-STD-003 v2.0").
+>
+> **Why label instead of delete.**
+> - A copy is a ranking question: it agrees with the original until it goes stale, and stale versions
+>   are Task 5's.
+> - Deleting it at ingest would tie one document's index content to another's, so editing IT-STD-003
+>   would have to re-ingest the wiki. That breaks per-document incremental ingest. Labelling runs over
+>   stored texts after every ingest in 0.02 s, with no embedding call.
+>
+> **Deliberately *not* duplicates.** The highest similarity scores in the corpus come from documents of
+> the *same* source sharing a template: team pages up to 0.79, newsletters 0.80, meetings 0.74. They
+> share filler, not facts; merging them would delete "Karim is on PTO next week" because "Sofia is on
+> PTO next week" exists.
 
-**Incremental-index + cache-invalidation test:** `tests/___::___`
+**Incremental-index + cache-invalidation test:** `tests/test_corpus_loading.py::test_changing_one_document_reembeds_only_it_and_invalidates_cached_answers`
 
-**Warm `docker compose up` startup log line** (must say "loaded"):
+- **The setup:** an export in three formats (Markdown, HTML, CSV with a BOM, in sub-folders), counting
+  embeddings, and the real API with its answer cache.
+- **Editing one file:** only that file's chunks are embedded (counted), the other two are reused, and an
+  answer cached before the edit is not served.
+- **Removing a file:** nothing is embedded, its vectors are deleted, and the cache is invalidated again.
+- **`/readyz`:** the same test checks it reports the snapshot, document counts and build time.
+- **Timing:** fast tier, fake embeddings, 0.14 s. The Week 2 invalidation tests (`test_cache.py`, add
+  and change) still pass.
+
+**Warm `docker compose up` startup log line** (must say "loaded"). Compose now mounts `week3/corpus`
+read-only at `/corpus`; the index lives on the named volume at `/data/faiss_index_w3`
+([log](task_03_ingestion/evidence/docker_compose_up.log)):
 
 ```
+api-1  | 2026-11-18 11:02:33,848 INFO northwind: Index LOADED from /data/faiss_index_w3 in 0.20s: 348 chunks from 190 files, 0 chunks embedded
+{"status":"ready","graph_compiled":true,"index":"loaded","chunks":348,"documents":190,"retriever":"hybrid (BM25 + dense)","active_sessions":0,"startup_seconds":11.07,"corpus_snapshot":"2026-10-01","documents_skipped":0,"index_built_at":"2026-11-18T11:01:41+00:00","index_build_seconds":27.18,"index_updated_at":"2026-11-18T11:01:41+00:00"}
 ```
 
-**`make check` wall clock after Task 3's tests:** ___ s (budget 5 s)
+The first `up` on that volume logged `Index settings changed (…all-MiniLM-L6-v2 -> …/w3-loaders-1):
+rebuilding`, then `Index BUILT: embedded 348 chunks from 190 files in 27.19s`. The loader version in
+the index signature is what forced it. Writing to `/corpus` inside the container fails: `Read-only file system`.
+Every ingest also writes a JSON log line in the request-log format:
+
+```
+{"event": "ingest", "level": "info", "ts": "2026-11-18T11:02:06.779Z", "corpus": "/corpus", "snapshot": "2026-10-01", "documents_loaded": 190, "documents_skipped": 0, "chunks": 348, "duplicates": 1, "added": 0, "changed": 0, "removed": 0, "reused": 190, "rebuilt": false, "embedding_calls": 0, "duration_s": 0.2, "corpus_version": "d2a735e0ebf4e2bf"}
+```
+
+**`make check` wall clock after Task 3's tests:** pytest **4.4–5.4 s** over 5 runs (152 tests,
+typically 4.5 s), so at the budget rather than comfortably under it, as before this task (4.1–5.2 s
+in Task 2). Wall clock including ruff: 5.6–7.0 s. To stay there, the tests that parse real policy PDFs
+and the whole corpus are marked `corpus`, since PyMuPDF's table finder costs ~0.2 s a page. They run in
+`make check-corpus` (4.8–8.6 s) and in CI's fast job, which runs everything except `live`. The fast tier
+keeps a synthetic PDF built in milliseconds, plus unit tests of the table-row merging on the rows those
+PDFs really produce.
 
 **Skipped documents and reasons:**
 
->
+> **None: 190 of 190 load** ([ingestion report](task_03_ingestion/evidence/ingestion_report.json)).
+> The mechanism is tested: a corrupt PDF or a document listed in `_metadata.csv` but missing on disk is
+> skipped with its reason. The reason goes in the stats, in a warning, in `ingestion_report.json` and as
+> an `ingest_document_skipped` JSON log line
+> (`tests/test_corpus_loading.py::test_export_is_indexed_from_metadata_and_every_skip_is_listed`).
+> The export's own `README.md`, `_metadata.csv` and `_directory.csv` are not documents and are never
+> indexed.
+
+**Also changed for the container:** the image gains PyMuPDF, openpyxl and BeautifulSoup. Measured delta
+for the full API image: **+285 MB (2.07 → 2.35 GB)**. Most of it is PyMuPDF 2.1 itself (110 MB) and
+onnxruntime (63 MB), which PyMuPDF 2.x's new `pymupdf_layout` pulls in. Pinning PyMuPDF 1.x would
+probably save over 100 MB, but it means re-validating every loader: a follow-up.
 
 ---
 

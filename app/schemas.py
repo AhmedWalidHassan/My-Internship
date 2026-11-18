@@ -89,6 +89,14 @@ class ReadyResponse(BaseModel):
     retriever: str
     active_sessions: int
     startup_seconds: float
+    # Week 3 Task 3: which data this instance is serving
+    corpus_snapshot: str | None = Field(None, description="Snapshot date of the corpus export (its cover note), "
+                                                          "or None for a plain folder corpus.")
+    documents_skipped: int = Field(0, description="Listed documents that could not be indexed (reasons in "
+                                                  "ingestion_report.json next to the index).")
+    index_built_at: str | None = Field(None, description="When the index was last built from scratch (UTC).")
+    index_build_seconds: float | None = Field(None, description="How long that full build took.")
+    index_updated_at: str | None = Field(None, description="Last incremental update (UTC).")
 
 
 class FeedbackResponse(BaseModel):
