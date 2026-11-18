@@ -592,7 +592,50 @@ under 0.02 MRR I won't keep it: more, shorter chunks mean more `grade_documents`
 CHUNK_SIZE: 800 -> 400, CHUNK_OVERLAP: 100 -> 50   (own index)
 ```
 
-**Result** *(committed after running)*: *(pending)*
+**Result** *(committed after running)*: `hybrid (BM25 0.3 + dense 0.7), source prior meetings/:0.5,newsletters/:0.5, depth 10 per retriever`, 588 chunks.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.933 | +0.017 | no |
+| MRR (all) | 0.612 | 0.793 | +0.181 | yes |
+| recall@1 (all) | 0.417 | 0.683 | +0.267 | yes |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 0.7 / 1.2 ms | | – |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 1.00 | 0.64 | 0.73 |
+| table | 4 | 1.00 | 1.00 | 0.83 | 1.00 |
+| keyword | 4 | 1.00 | 1.00 | 0.71 | 0.83 |
+| version | 5 | 1.00 | 1.00 | 0.80 | 0.90 |
+| conflict | 3 | 1.00 | 1.00 | 0.56 | 0.78 |
+| draft | 4 | 1.00 | 1.00 | 0.45 | 0.81 |
+| multi_hop | 4 | 1.00 | 1.00 | 0.65 | 0.71 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.88 |
+| ambiguous | 3 | 1.00 | 1.00 | 0.67 | 0.83 |
+| long_doc | 4 | 1.00 | 1.00 | 0.83 | 1.00 |
+| cross_lingual | 4 | 0.25 | 0.25 | 0.06 | 0.12 |
+| follow_up | 4 | 1.00 | 1.00 | 0.52 | 0.88 |
+| personalized | 4 | 0.75 | 0.75 | 0.31 | 0.75 |
+
+Questions in/out of the top 5: 17 gained.
+
+**Hypothesis confirmed?** **No. The gain is much bigger than the +0.01–0.03 I predicted: MRR +0.070
+over EXP-08 (0.723 → 0.793), recall@1 0.583 → 0.683.**
+- **EXP-04's `factual` loss is gone:** with dense weighting and the prior, the smaller legacy
+  fragments no longer win.
+- **The small-chunk gains remain:** `table`, `long_doc`, `draft`.
+- **The levers compound:** smaller chunks make each vector more specific, and the prior and dense
+  weighting stop the extra fragments from crowding the top. EXP-04 alone (+0.027) understated what
+  chunk size is worth once the noise is controlled.
+- **Cost:** 588 chunks instead of 348 (1.7×). Index build 6 s → ~7 s on the GPU (local embeddings,
+  $0; ≈ $0.0006 hosted), index size ~1.7×, retrieval latency +0.2 ms. Shorter passages also mean
+  shorter `grade_documents` prompts. Whether the graph ends up cheaper or dearer is measured on the
+  generation side.
+
+**Decision:** keep. **This is the winner on dev.**
 
 ---
 
