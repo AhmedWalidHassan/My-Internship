@@ -1,0 +1,1199 @@
+{
+ "meta": {
+  "date": "2026-11-18T07:10:44+00:00",
+  "dataset_version": "58fefe13fc23",
+  "n": 38,
+  "runs": 2,
+  "model": "ollama:qwen3.5:4b",
+  "judge": "ollama:qwen3.5:4b (same model as the generator)",
+  "runners": [
+   "Linux x86_64 py3.14.10"
+  ],
+  "git_sha": "6958ecdddb705694ee8f2c04763e9d057bc78cd4",
+  "experiment_urls": [
+   "https://smith.langchain.com/o/d25a7522-0a1b-46db-9753-429d87a65bfc/datasets/2c1f3fff-aaca-4073-aed8-b66dbdfd79ef/compare?selectedSessions=c236ff0b-4245-4ef9-b958-8d37afdfec61",
+   "https://smith.langchain.com/o/d25a7522-0a1b-46db-9753-429d87a65bfc/datasets/2c1f3fff-aaca-4073-aed8-b66dbdfd79ef/compare?selectedSessions=39232b88-8ce6-4364-8410-5146724dabad"
+  ]
+ },
+ "scores": {
+  "correctness": 0.9211,
+  "groundedness": 0.9737,
+  "retrieval_hit": 1.0
+ },
+ "tolerance": {
+  "correctness": 0.08,
+  "groundedness": 0.08,
+  "cost_increase": 0.2
+ },
+ "tolerance_justification": "Tolerance 0.08 for correctness and groundedness = 3 of 38 examples. The gate fires on a drop of 4+ examples (>= 0.105). Measured 2026-11-16, qwen3.5:4b as generator and judge:\n\n1. Same hardware, repeated (laptop GPU, temperature 0): two full runs were identical, verdict for verdict (spread 0.000). Run-to-run noise on the CI hardware is zero.\n2. Hardware change (the same code on CPU with ONNX embeddings, i.e. GitHub-runner-like): 3 verdicts moved. Correctness went -2 examples (-0.053): the 4B fact-check rejected two correct answers and the system refused them. Groundedness went +1 (+0.026). A driver, Ollama or model update can do the same, so the gate must tolerate about 2 flips plus margin.\n3. Real regressions, measured on the same hardware:\n   - MAX_DOCS_TO_GRADE=1: -9 examples (correctness 0.921 -> 0.684). Caught with a wide margin.\n   - Task 5's MAX_DOCS_TO_GRADE=2: -0.14 on 28 examples (about -5 here). Caught.\n   - Deleting the refusal instruction from the generate prompt: -2 examples (0.921 -> 0.868). That is inside the hardware noise, so the eval cannot attribute it. The deterministic fast test (tests/test_graph_structure.py::test_generate_prompt_contains_refusal_instruction) catches it on every PR instead.\n\nWhy not tighter: at 0.03 (1 example) the gate would go red on any hardware or runtime change (point 2) and get switched off, the failure the brief warns about. Why not looser: 0.10+ would let a 4-example regression (about 10% of the set) through. The regression report lists every flipped example by id, even below the tolerance, so smaller changes are still visible in the PR comment without blocking it.\n\nCost: +20% mean cost per question fails the gate (stretch). The CPU path (extra retries from over-refusals) was +8%, the weakened prompt +6%.",
+ "noise": {
+  "per_run_scores": [
+   {
+    "correctness": 0.9211,
+    "groundedness": 0.9737,
+    "retrieval_hit": 1.0
+   },
+   {
+    "correctness": 0.9211,
+    "groundedness": 0.9737,
+    "retrieval_hit": 1.0
+   }
+  ],
+  "max_spread": {
+   "correctness": 0.0,
+   "groundedness": 0.0,
+   "retrieval_hit": 0.0
+  },
+  "examples_with_disagreeing_runs": {
+   "correctness": [],
+   "groundedness": []
+  }
+ },
+ "by_category": {
+  "factual": {
+   "n": 19,
+   "correctness": 0.9474,
+   "groundedness": 1.0,
+   "retrieval_hit": 1.0
+  },
+  "multi-hop": {
+   "n": 2,
+   "correctness": 0.5,
+   "groundedness": 1.0,
+   "retrieval_hit": 1.0
+  },
+  "multi-part": {
+   "n": 7,
+   "correctness": 1.0,
+   "groundedness": 0.8571,
+   "retrieval_hit": 1.0
+  },
+  "refusal": {
+   "n": 6,
+   "correctness": 1.0,
+   "groundedness": 1.0,
+   "retrieval_hit": 1.0
+  },
+  "follow-up": {
+   "n": 2,
+   "correctness": 0.5,
+   "groundedness": 1.0,
+   "retrieval_hit": 1.0
+  },
+  "keyword": {
+   "n": 2,
+   "correctness": 1.0,
+   "groundedness": 1.0,
+   "retrieval_hit": 1.0
+  }
+ },
+ "cost": {
+  "mean_cost_usd": 0.000467,
+  "mean_llm_calls": 13.4474,
+  "mean_latency_s": 3.8163
+ },
+ "examples": [
+  {
+   "id": 1,
+   "category": "factual",
+   "question": "How many vacation days do I get a year?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 2,
+   "category": "factual",
+   "question": "time off carry rules?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 3,
+   "category": "factual",
+   "question": "Can I take time off in my first months?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 4,
+   "category": "factual",
+   "question": "How far ahead do I have to ask for PTO?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 5,
+   "category": "factual",
+   "question": "How many sick days are there per year?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 6,
+   "category": "factual",
+   "question": "When do I need a doctor's note?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 7,
+   "category": "factual",
+   "question": "How many days a week can I work from home?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 8,
+   "category": "factual",
+   "question": "What is the home-office stipend?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 9,
+   "category": "factual",
+   "question": "How long is paid leave for an adoptive parent?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 10,
+   "category": "factual",
+   "question": "What is the daily meal limit when travelling abroad?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 11,
+   "category": "factual",
+   "question": "Is alcohol reimbursable?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 12,
+   "category": "factual",
+   "question": "How long do I have to file an expense report?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 13,
+   "category": "multi-part",
+   "question": "How much is the referral bonus and when is it paid?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 14,
+   "category": "factual",
+   "question": "How often are performance reviews held?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 15,
+   "category": "factual",
+   "question": "What is my annual learning budget?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 16,
+   "category": "multi-part",
+   "question": "My laptop got stolen, what do I do?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 17,
+   "category": "multi-part",
+   "question": "What are the password rules?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 18,
+   "category": "multi-part",
+   "question": "How do I get on the VPN from home?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 0,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     0,
+     0
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 19,
+   "category": "factual",
+   "question": "Can I open our source code on my personal phone?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 20,
+   "category": "factual",
+   "question": "Do I need approval for a Figma license?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 21,
+   "category": "factual",
+   "question": "How much weight can the Warehouse Rover R2 carry?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 22,
+   "category": "factual",
+   "question": "How fast does the rover go with a load?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 23,
+   "category": "multi-part",
+   "question": "What does premium support include?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 24,
+   "category": "factual",
+   "question": "Can the R2 be used outdoors?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 25,
+   "category": "refusal",
+   "question": "What is the capital of France?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 26,
+   "category": "refusal",
+   "question": "What is the CEO's home address?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 27,
+   "category": "refusal",
+   "question": "What dental insurance plan does Northwind offer?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 28,
+   "category": "refusal",
+   "question": "Who won the football match last night?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 29,
+   "category": "multi-hop",
+   "question": "I just referred a friend who got hired. When do I get my referral bonus, and when will my friend be allowed to use their PTO?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 30,
+   "category": "multi-hop",
+   "question": "I want to work fully remote. What do I need to get approved, and how do I reach internal systems from home?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 31,
+   "category": "multi-part",
+   "question": "What are the known limitations of the Warehouse Rover R2?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 32,
+   "category": "multi-part",
+   "question": "What are the rules for booking business travel?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 33,
+   "category": "refusal",
+   "question": "How many days of bereavement leave do I get?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 34,
+   "category": "refusal",
+   "question": "What is the maximum operating temperature of the Warehouse Rover R2?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 35,
+   "category": "follow-up",
+   "question": "Do they carry over?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 36,
+   "category": "follow-up",
+   "question": "And what does the standard plan cover?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 37,
+   "category": "keyword",
+   "question": "What does Fleet Manager 4.2 handle?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": 38,
+   "category": "keyword",
+   "question": "Does the R2 support 5G?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "retrieval_hit": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "retrieval_hit": [
+     1,
+     1
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,58 @@
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 5 files:  20%|██        | 1/5 [00:00<00:00,  5.87it/s]Fetching 5 files: 100%|██████████| 5/5 [00:09<00:00,  2.01s/it]Fetching 5 files: 100%|██████████| 5/5 [00:09<00:00,  1.90s/it]
+2026-11-16 13:22:17,086 INFO northwind: Index BUILT: embedded 20 chunks from 4 files in 0.16s, saved to /tmp/tmp.SEVIFx7ESt/faiss_index
+Eval: 38 examples, model ollama:qwen3.5:4b, judge ollama:qwen3.5:4b (same model as the generator), dataset 58fefe13fc23
+  # 1 factual    C1 G1 R1  37.4s  How many vacation days do I get a year?
+  # 2 factual    C1 G1 R1  41.8s  time off carry rules?
+  # 3 factual    C0 G1 R1 119.6s  Can I take time off in my first months?
+  # 4 factual    C1 G1 R1  31.9s  How far ahead do I have to ask for PTO?
+  # 5 factual    C1 G1 R1  28.3s  How many sick days are there per year?
+  # 6 factual    C1 G1 R1  29.4s  When do I need a doctor's note?
+  # 7 factual    C1 G1 R1  34.7s  How many days a week can I work from home?
+  # 8 factual    C1 G1 R1  29.0s  What is the home-office stipend?
+  # 9 factual    C0 G1 R1  78.5s  How long is paid leave for an adoptive parent?
+  #10 factual    C1 G1 R1  39.2s  What is the daily meal limit when travelling abroad?
+  #11 factual    C1 G1 R1  58.5s  Is alcohol reimbursable?
+  #12 factual    C1 G1 R1  30.9s  How long do I have to file an expense report?
+  #13 multi-part C1 G1 R1  32.3s  How much is the referral bonus and when is it paid?
+  #14 factual    C1 G1 R1  30.3s  How often are performance reviews held?
+  #15 factual    C1 G1 R1  34.4s  What is my annual learning budget?
+  #16 multi-part C1 G1 R1  32.1s  My laptop got stolen, what do I do?
+  #17 multi-part C1 G1 R1  34.6s  What are the password rules?
+  #18 multi-part C1 G1 R1  38.8s  How do I get on the VPN from home?
+  #19 factual    C1 G1 R1  31.6s  Can I open our source code on my personal phone?
+  #20 factual    C0 G1 R1  77.5s  Do I need approval for a Figma license?
+  #21 factual    C1 G1 R1  31.4s  How much weight can the Warehouse Rover R2 carry?
+  #22 factual    C1 G1 R1  32.1s  How fast does the rover go with a load?
+  #23 multi-part C1 G1 R1  34.5s  What does premium support include?
+  #24 factual    C1 G1 R1  57.7s  Can the R2 be used outdoors?
+  #25 refusal    C1 G1 R1   3.2s  What is the capital of France?
+  #26 refusal    C1 G1 R1  60.3s  What is the CEO's home address?
+  #27 refusal    C1 G1 R1  59.8s  What dental insurance plan does Northwind offer?
+  #28 refusal    C1 G1 R1   3.3s  Who won the football match last night?
+  #29 multi-hop  C0 G1 R1  98.6s  I just referred a friend who got hired. When do I get my ref
+  #30 multi-hop  C1 G1 R1  40.8s  I want to work fully remote. What do I need to get approved,
+  #31 multi-part C1 G1 R1  58.4s  What are the known limitations of the Warehouse Rover R2?
+  #32 multi-part C1 G1 R1  33.2s  What are the rules for booking business travel?
+  #33 refusal    C1 G1 R1  60.8s  How many days of bereavement leave do I get?
+  #34 refusal    C1 G1 R1  62.3s  What is the maximum operating temperature of the Warehouse R
+  #35 follow-up  C0 G1 R1  94.6s  Do they carry over?
+  #36 follow-up  C1 G1 R1  34.5s  And what does the standard plan cover?
+  #37 keyword    C1 G1 R1  34.2s  What does Fleet Manager 4.2 handle?
+  #38 keyword    C1 G1 R1  31.1s  Does the R2 support 5G?
+View the evaluation results for experiment: 'baseline-local-cpu-2b6e75a4' at:
+https://smith.langchain.com/o/d25a7522-0a1b-46db-9753-429d87a65bfc/datasets/2c1f3fff-aaca-4073-aed8-b66dbdfd79ef/compare?selectedSessions=a043b22c-38b3-4c57-8535-d5d76d8d4206
+
+
+0it [00:00, ?it/s]17it [00:00, 39.09it/s]38it [00:00, 87.13it/s]
+
+correctness 0.868  groundedness 1.000  retrieval_hit 1.000   (38 examples, 2467 s)
+category       n  correct  grounded
+factual       19     0.84      1.00
+multi-hop      2     0.50      1.00
+multi-part     7     1.00      1.00
+refusal        6     1.00      1.00
+follow-up      2     0.50      1.00
+keyword        2     1.00      1.00
+LangSmith: https://smith.langchain.com/o/d25a7522-0a1b-46db-9753-429d87a65bfc/datasets/2c1f3fff-aaca-4073-aed8-b66dbdfd79ef/compare?selectedSessions=a043b22c-38b3-4c57-8535-d5d76d8d4206
+wrote week2/task_07_eval_gate/evidence/baseline_runs/run3_cpu.json

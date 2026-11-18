@@ -42,10 +42,18 @@ chunking, index path, API host and port. Switching provider is an `.env` edit; s
 | `make bench-api` | p50/p95 latency of `/chat` and `/chat/stream` over 20 questions | a running API |
 | `make cost` | Runs the eval set through the service code and prints latency, LLM calls, tokens and cost per question, per graph node and per node path, plus the monthly projection ([Task 5](week2/task_05_observability/OBSERVABILITY.md)) | same as live |
 | `make find-trace RID=<request_id>` | The LangSmith trace of a request, from the `request_id` in its log line | a LangSmith key |
+| `make eval-gate` | The 38-example eval on the real model, then the gate against `eval_baseline.json` (what CI's eval job runs) ([Task 7](week2/task_07_eval_gate/EVAL_GATE.md)) | same as live |
 | `make cache-bench MODE=cold-warm\|workload\|prewarm` | Proves the answer cache's savings: cold vs warm, hit rate on a defined workload, startup pre-warm ([Task 6](week2/task_06_caching/CACHING.md)) | same as live |
 | `make run-ui-capstone` | The Week 1 Streamlit UI that runs the graph in-process (kept for reference) | same as live |
 | `make eval` | Run the LangSmith evaluation and update `EVAL_RESULTS.md` | same as live, plus a LangSmith key |
 | `make test-durations` | The fast tier with its 5 slowest tests listed | nothing |
+
+**CI** ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)):
+- `fast-checks` (lint + fast tests, ~20 s) runs on every PR.
+- `eval-gate` (the 38-example eval vs the committed baseline, ~5.5 min) runs nightly, on demand,
+  and on PRs labelled **`run-eval`**: add that label to PRs that touch prompts, retrieval or the
+  graph. It runs on a self-hosted runner on the maintainer's laptop GPU, and only for the owner's
+  events; see [EVAL_GATE.md](week2/task_07_eval_gate/EVAL_GATE.md).
 
 The regression guard is `tests/test_graph_structure.py::test_app_graph_has_contextualize_node`.
 It fails if the app is ever built from a graph without the conversation-history node

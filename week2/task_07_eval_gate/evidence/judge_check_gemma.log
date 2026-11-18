@@ -1,0 +1,16 @@
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 4876.16it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-11-16 14:24:44,104 INFO northwind: Index LOADED from /mnt/games/coding/My-Internship/week1/capstone_internal_docs_assistant/faiss_index in 0.07s: 20 chunks from 4 files, 0 chunks embedded
+Eval: 5 examples, model ollama:qwen3.5:4b, judge ollama:gemma3:4b, dataset 58fefe13fc23
+  # 1 factual    C1 G1 R1   9.3s  How many vacation days do I get a year?
+  #13 multi-part C1 G1 R1  11.4s  How much is the referral bonus and when is it paid?
+  #17 multi-part C1 G1 R1   6.9s  What are the password rules?
+  #18 multi-part C1 G1 R1   8.1s  How do I get on the VPN from home?
+  #35 follow-up  C0 G1 R1   6.3s  Do they carry over?
+
+correctness 0.800  groundedness 1.000  retrieval_hit 1.000   (5 examples, 91 s)
+category       n  correct  grounded
+factual        1     1.00      1.00
+multi-part     3     1.00      1.00
+follow-up      1     0.00      1.00
+wrote week2/task_07_eval_gate/evidence/judge_check_gemma.json

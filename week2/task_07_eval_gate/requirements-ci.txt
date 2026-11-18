@@ -1,0 +1,36 @@
+# Fast CI tier (ruff + `pytest -m "not live"`): exactly what the fast tests import.
+# No torch, no sentence-transformers, no streamlit: the fast tests use fake models and
+# only READ app/ui.py. Versions come from week2/task_04_containerize/constraints.txt (the
+# tested venv), so CI runs the versions the tests ran locally.
+#
+#   uv pip install -c week2/task_04_containerize/constraints.txt -r week2/task_07_eval_gate/requirements-ci.txt
+
+# --- service (app/) ---
+fastapi
+sse-starlette
+httpx
+pydantic
+pydantic-settings
+python-dotenv
+structlog
+prometheus-client
+cachetools
+
+# --- RAG (capstone) ---
+langchain-core
+langchain-community
+langchain-classic
+langchain-text-splitters
+langgraph
+langsmith
+faiss-cpu
+rank-bm25
+
+# --- providers (tests/test_settings.py builds each provider's client from env) ---
+langchain-openai
+langchain-groq
+langchain-ollama
+
+# --- tooling ---
+pytest
+ruff

@@ -1,0 +1,227 @@
+{
+ "meta": {
+  "date": "2026-11-16T12:26:15+00:00",
+  "git_sha": "60f4a3bac9a6bcb4ba568ef39b5436dbba385e50",
+  "model": "ollama:qwen3.5:4b",
+  "judge": "ollama:gemma3:4b",
+  "dataset_version": "58fefe13fc23",
+  "n": 5,
+  "retriever_k": 4,
+  "max_docs_to_grade": 6,
+  "embeddings": "ollama/sentence-transformers",
+  "runner": "Linux x86_64 py3.14.10",
+  "wall_clock_s": 91.4
+ },
+ "scores": {
+  "correctness": 0.8,
+  "groundedness": 1.0,
+  "retrieval_hit": 1.0
+ },
+ "by_category": {
+  "factual": {
+   "n": 1,
+   "correctness": 1.0,
+   "groundedness": 1.0,
+   "retrieval_hit": 1.0
+  },
+  "multi-part": {
+   "n": 3,
+   "correctness": 1.0,
+   "groundedness": 1.0,
+   "retrieval_hit": 1.0
+  },
+  "follow-up": {
+   "n": 1,
+   "correctness": 0.0,
+   "groundedness": 1.0,
+   "retrieval_hit": 1.0
+  }
+ },
+ "cost": {
+  "mean_cost_usd": 0.0003538,
+  "mean_llm_calls": 9.8,
+  "mean_latency_s": 8.412
+ },
+ "examples": [
+  {
+   "id": 1,
+   "category": "factual",
+   "question": "How many vacation days do I get a year?",
+   "answer": "Full-time employees accrue 20 days of PTO per year.",
+   "standalone": "How many vacation days do I get a year?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "employee_handbook.md › 2. Paid Time Off (PTO)"
+   ],
+   "refused": false,
+   "latency_s": 9.26,
+   "llm_calls": 10,
+   "tokens_in": 1900,
+   "tokens_out": 80,
+   "cost_usd": 0.000333,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was retrieved and kept"
+   },
+   "rejected_attempts": []
+  },
+  {
+   "id": 13,
+   "category": "multi-part",
+   "question": "How much is the referral bonus and when is it paid?",
+   "answer": "The referral bonus is $3,000 and is paid after the new hire completes 90 days. There is no limit on the number of referrals.",
+   "standalone": "How much is the referral bonus and when is it paid?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "hr_policies.md › Referral Bonus"
+   ],
+   "refused": false,
+   "latency_s": 11.45,
+   "llm_calls": 10,
+   "tokens_in": 1806,
+   "tokens_out": 104,
+   "cost_usd": 0.000333,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was retrieved and kept"
+   },
+   "rejected_attempts": []
+  },
+  {
+   "id": 17,
+   "category": "multi-part",
+   "question": "What are the password rules?",
+   "answer": "Passwords must be at least 14 characters long and are rotated every 180 days. After 5 failed attempts, the account locks for 30 minutes.",
+   "standalone": "What are the password rules?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "it_faq.md › Accounts & Access"
+   ],
+   "refused": false,
+   "latency_s": 6.87,
+   "llm_calls": 10,
+   "tokens_in": 1939,
+   "tokens_out": 110,
+   "cost_usd": 0.000357,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was retrieved and kept"
+   },
+   "rejected_attempts": []
+  },
+  {
+   "id": 18,
+   "category": "multi-part",
+   "question": "How do I get on the VPN from home?",
+   "answer": "To connect to the VPN from home, install the GlobalConnect client from the Self-Service app catalog, authenticate with your corporate SSO, and approve the MFA push. The VPN is required when accessing internal systems from outside the office network.",
+   "standalone": "How do I get on the VPN from home?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "it_faq.md › VPN & Security"
+   ],
+   "refused": false,
+   "latency_s": 8.13,
+   "llm_calls": 9,
+   "tokens_in": 1811,
+   "tokens_out": 214,
+   "cost_usd": 0.0004,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was retrieved and kept"
+   },
+   "rejected_attempts": []
+  },
+  {
+   "id": 35,
+   "category": "follow-up",
+   "question": "Do they carry over?",
+   "answer": "Unused Paid Time Off (PTO) up to 5 days may be carried into the next calendar year; anything above 5 days is forfeited on December 31.",
+   "standalone": "Do the paid sick days carry over?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    "employee_handbook.md › 2. Paid Time Off (PTO)"
+   ],
+   "refused": false,
+   "latency_s": 6.35,
+   "llm_calls": 10,
+   "tokens_in": 1804,
+   "tokens_out": 126,
+   "cost_usd": 0.000346,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "retrieval_hit": "key fact was retrieved (but the relevance grader dropped it)"
+   },
+   "rejected_attempts": []
+  }
+ ]
+}

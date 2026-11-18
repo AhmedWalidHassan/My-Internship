@@ -1,0 +1,5 @@
+# Custom labels of the self-hosted eval runner (see .github/workflows/ci.yml, eval-gate).
+self-hosted-runner:
+  labels:
+    - northwind-eval
+    - gpu
