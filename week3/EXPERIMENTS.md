@@ -483,7 +483,41 @@ checking whether it makes the *graph* cheaper (EXP-09: fewer passages to grade).
 SOURCE_PRIOR: (none) -> meetings/:0.5,newsletters/:0.5
 ```
 
-**Result** *(committed after running)*: *(pending)*
+**Result** *(committed after running)*: `hybrid (BM25 + dense), source prior meetings/:0.5,newsletters/:0.5, depth 10 per retriever`, 348 chunks.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.933 | +0.017 | no |
+| MRR (all) | 0.612 | 0.643 | +0.031 | yes |
+| recall@1 (all) | 0.417 | 0.450 | +0.033 | yes |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 0.6 / 0.9 ms | | – |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 1.00 | 0.64 | 0.67 |
+| draft | 4 | 1.00 | 1.00 | 0.45 | 0.46 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.58 |
+| long_doc | 4 | 1.00 | 1.00 | 0.83 | 0.88 |
+| follow_up | 4 | 1.00 | 1.00 | 0.52 | 0.56 |
+| personalized | 4 | 0.75 | 0.75 | 0.31 | 0.58 |
+
+Questions in/out of the top 5: 17 gained.
+
+**Hypothesis confirmed?** **Yes, exactly as predicted.**
+- **Gains:** #17 returned (multi_part 1.00), MRR +0.031, recall@1 +0.033, no dev question lost, and
+  latency unchanged (it's a multiplication).
+- **Biggest MRR gain:** `personalized` (0.31 → 0.58): PTO-entitlement questions no longer see
+  "Karim is on PTO next week" notes above HR-POL-004.
+
+**The risk is unchanged:** it's a judgment baked into ranking. On dev no gold document is a meeting
+note or a newsletter, so the prior can't lose there by construction. A holdout question that only a
+meeting note answers (who owns an action item, what was decided on 2026-05-08) would be pushed down,
+not removed: 0.5 is a demotion, not a filter.
+
+**Decision:** keep, as part of EXP-08.
 
 ---
 
