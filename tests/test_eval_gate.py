@@ -299,3 +299,34 @@ def test_v3_dataset_is_complete_and_split():
     assert all(sum(r["category"] == c for r in rows) >= 5 for c in cats)
     users = {u["user_id"] for u in csv.DictReader(open(week3 / "corpus" / "_directory.csv", encoding="utf-8"))}
     assert {r["user_id"] for r in rows if r["category"] == "access"} == users
+
+
+def retrieval_run(recalls: dict, version="v3"):
+    """A --retrieval-only results file with per-question recall@5 (MRR = recall@5 here)."""
+    n = len(recalls)
+    r5 = sum(recalls.values()) / n
+    return {"meta": {"dataset_version": version, "split": "dev"},
+            "retrieval": {"overall": {"recall@1": r5, "recall@5": r5, "mrr": r5},
+                          "per_example": {k: {"recall@5": v} for k, v in recalls.items()}}}
+
+
+def test_retrieval_gate_tolerance_is_one_question_and_names_who_left(gate, baseline, tmp_path):
+    """Week 3 Task 4: retrieval is deterministic (noise floor 0), so the tolerance is one question of
+    60 (0.017). One question leaving the top 5 passes but is named; two go red."""
+    ids = [f"q{i}" for i in range(60)]
+    base_run = retrieval_run({k: 1 for k in ids})
+    b = dict(baseline)
+    b["retrieval"] = {"dataset_version": "v3", "scores": base_run["retrieval"]["overall"],
+                      "tolerance": {"recall@5": 0.017, "mrr": 0.02},
+                      "per_example": {k: 1 for k in ids}}
+    ok, failures, text = gate.check_retrieval(retrieval_run({**{k: 1 for k in ids}, "q7": 0}), b)
+    assert ok and "q7" in text
+    ok, failures, text = gate.check_retrieval(retrieval_run({**{k: 1 for k in ids}, "q7": 0, "q8": 0}), b)
+    assert not ok and any("recall@5" in f for f in failures)
+
+    bp, rp, rep = tmp_path / "b.json", tmp_path / "r.json", tmp_path / "rep.md"
+    bp.write_text(json.dumps(b))
+    rp.write_text(json.dumps(retrieval_run({**{k: 1 for k in ids}, "q1": 0, "q2": 0})))
+    assert gate.main(["--retrieval-only", "--retrieval-results", str(rp), "--baseline", str(bp),
+                      "--report", str(rep)]) == 1
+    assert "Retrieval gate: ❌ FAILED" in rep.read_text() and "q1" in rep.read_text()

@@ -18,6 +18,7 @@ records both.
 | 2026-11-18 | Task 1: seed eval ×2, Week 2 eval gate ×2, `make cost` ×2 (236 questions, 4,469 pipeline LLM calls, plus judge calls that are not instrumented), live tier ×4, 5 full index builds ×2 devices, Docker smoke test | **$0 actual** (≈ $0.17 at gpt-4o-mini prices, pipeline calls only; embeddings ≈ $0.003) | $0 (≈ $0.17) | $25.00 |
 | 2026-11-18 | Task 2: 3 full dev runs (210 questions, ~3,760 pipeline LLM calls + ~420 judge calls), 2 judge replays on run 1 (~280 judge calls), synthetic generation (33 LLM calls, 65 candidates), retrieval-only runs | **$0 actual** (≈ $0.15 pipeline + ≈ $0.08 judge at gpt-4o-mini prices) | $0 (≈ $0.40) | $25.00 |
 | 2026-11-18 | Task 3: 2 full dev runs (140 questions, ~1,950 pipeline LLM calls + ~280 judge calls), retrieval-only runs, live tier (9 tests), 4 full + 2 incremental re-ingests, 2 image builds + Docker smoke test | **$0 actual** (≈ $0.10 pipeline + ≈ $0.04 judge at gpt-4o-mini prices; embeddings ≈ $0.003) | $0 (≈ $0.54) | $25.00 |
+| 2026-11-18 | Task 4: 18 retrieval-only runs (dev ×16, test ×2; no LLM), 4 full dev runs (280 questions, ~3,900 pipeline LLM calls + ~560 judge calls), 4 `make cost` runs (160 questions), 7 index builds, 1 image build + Docker smoke test | **$0 actual** (≈ $0.21 pipeline + ≈ $0.08 judge at gpt-4o-mini prices; retrieval runs ≈ $0.0003 of query embeddings) | $0 (≈ $0.83) | $25.00 |
 
 ---
 
@@ -89,34 +90,74 @@ embedded texts, priced at text-embedding-3-small ($0.02 / 1M). Local spend: $0.
 
 ## Task 4 — Winner vs baseline
 
+Measured 2026-11-18. Retrieval latency from the dev retrieval-only runs, on the laptop GPU (CPU numbers
+noted). End-to-end latency, cost and nodes from Week 2's `make cost` on the **seed set (40)**, same
+questions for both, local `qwen3.5:4b`, priced at gpt-4o-mini rates. "Winner" = EXP-09, the retrieval
+winner, which was **not shipped** (RESULTS.md Task 4). [Reports](task_04_retrieval_experiments/evidence/).
+
 | | Baseline | Winner | Delta |
+|---:|---:|---:|---:|
+| Retrieval latency p50 | 0.6 ms (CPU 5.9 ms) | 0.7 ms | +0.1 ms |
+| Retrieval latency p95 | 0.9 ms (CPU 7.9 ms) | 1.2 ms | +0.3 ms |
+| End-to-end latency p50 | 4.57 s (p95 15.1 s) | 4.47 s (p95 9.9 s) | −0.1 s (p95 −5.1 s) |
+| Cost per question | $0.000729 | $0.000591 | **−19%** |
+| Projected monthly cost @ 1,000 questions/day | $21.86 | $17.72 | −$4.14 |
+
+| Docker image size | Week 2: 2.07 GB (1.50 GB on disk) → Task 3: 2.35 GB | 2.35 GB (+11 KB: code only, no new dependency) | ≈ 0 |
+
+- **Why the winner is cheaper:** its 400-character chunks make every `grade_documents` prompt shorter
+  (same number of calls, fewer tokens).
+- **The rejected re-ranker (EXP-06/10)** would have added **+57 ms per query on GPU, +488 ms on CPU**
+  (the container), times up to 3 retrievals per answer. It needs no new package in the full image
+  (torch 747 MB and sentence-transformers are already there) plus a ~90 MB model download. The slim
+  image would need torch (+~750 MB, Week 2 Task 4) or a fastembed cross-encoder (not measured).
+- **The rejected multilingual model (EXP-05)** is ~470 MB instead of ~90 MB and doubles index-build time.
+
+**Cost by node — Week 2 vs now** (`make cost`; Week 2 = its 28-question set on the Week 1 corpus,
+Week 3 = the seed set on the Week 3 corpus):
+
+| Node | Week 2 % of spend | Week 3 baseline % | Week 3 winner % of spend |
 |---|---:|---:|---:|
-| Retrieval latency p50 | | | |
-| Retrieval latency p95 | | | |
-| End-to-end latency p50 | | | |
-| Cost per question | | | |
-| Projected monthly cost @ 1,000 questions/day | | | |
-
-| Docker image size | *(W2 `RESULTS.md`)* | | |
-
-**Cost by node — Week 2 vs now** (`make cost`, same seed set):
-
-| Node | Week 2 % of spend | Week 3 winner % of spend |
-|---|---:|---:|
-| `contextualize` (or your history node) | | |
-| `route_question` | | |
-| `grade_documents` | | |
-| `rewrite_query` | | |
-| `generate` | | |
-| `grade_generation` | | |
+| `contextualize` (or your history node) | 0% | 0% | 0% |
+| `route_question` | 5.8% | 3.5% | 4.3% |
+| `grade_documents` | **52.2%** (8.3 calls/q) | **44.3%** (9.2 calls/q) | **42.9%** (9.4 calls/q) |
+| `rewrite_query` | 2.7% | 2.0% | 2.6% |
+| `generate` | 16.8% | 21.2% | 21.7% |
+| `grade_generation` | 22.3% | 29.0% | 28.6% |
 
 **Most expensive node now, and did your Week 2 reduction idea get tested?**
 
+> **Still `grade_documents`** (43% of spend, 9.4 calls per question). Its share fell because generation
+> now has real documents to write from: `generate` and `grade_generation` grew.
 >
+> Week 2 proposed *batch grading* (all passages in one call) and measured that *grading fewer* hurt.
+> Here I tested *grading fewer on a better ranker*: **EXP-11, `MAX_DOCS_TO_GRADE` 6 → 3 on the winner.**
+> - **Cost went down:** −29% on the seed set ($0.000591 → $0.000420, 14.4 → 9.4 calls, p50 4.5 → 3.9 s).
+>   `grade_documents` drops to 31% and `grade_generation` becomes the most expensive node (34%).
+> - **Answers went down too:** 5 fewer dev answers (deterministic 0.686 → 0.614).
+>
+> So the brief's "a re-ranker lets you grade fewer documents" did not hold here. Better *document*
+> ranking does not put the right *passage* in the top 3 often enough. Batch grading is still the
+> untested idea, and still the best candidate: it cuts calls without dropping passages.
 
 **Was the quality gain worth the latency and cost?** One honest paragraph:
 
+> **The retrieval gain was free and real, and it still wasn't worth shipping.**
+> - **Free:** EXP-09 costs nothing at query time (+0.1 ms), makes answers ~19% cheaper (shorter
+>   grading prompts), adds nothing to the image, and lifts MRR by 0.18 on dev and 0.14 on test.
+> - **Not worth shipping:** it **answers 4 fewer dev questions** than the baseline (deterministic
+>   0.743 → 0.686), because smaller chunks split facts the generator needs together. The cheaper-still
+>   variant (EXP-11) loses 5 more.
+> - **The re-ranker was worse on all three counts:** less quality than EXP-09, 500 ms per query on
+>   CPU, and torch in any image that wants it.
 >
+> On this system, cost and retrieval quality are no longer what limits answers: the 4B graders, the
+> fact-check and version handling are. So the $4/month saving isn't worth 6% fewer correct answers,
+> and the decision was to keep the Task 3 configuration and spend the next day on Task 5. What would
+> change my mind: a chunking that keeps a section's facts together while staying small (sentence
+> windows, or parent-document retrieval: retrieve 400-character chunks, send their 800-character
+> parents to the graph). That keeps EXP-09's ranking without its fragmentation, and is the obvious next
+> experiment.
 
 ## Task 5 — Time and truth
 
@@ -143,7 +184,7 @@ embedded texts, priced at text-embedding-3-small ($0.02 / 1M). Local spend: $0.
 | (this PR) | Task 1 baseline | n/a (no product change). Measured on the new corpus: 4.05 s mean as shipped (3.28 s on the Week 2 corpus) | n/a. Measured: $0.000795 per question as shipped (+84%: every question exhausts the rewrite loop). Embedding the full corpus once: $0.00105 at text-embedding-3-small, 0.75 s GPU / 4.9 s CPU | corpus embed; all runs local, $0 actual |
 | (this PR) | Task 2 eval | per question on the Week 3 corpus: 5.4 s mean (17.9 LLM calls). The loader change (118 of 190 documents instead of 1) is what moved it: 4.05 s in Task 1 → 5.4 s, because now some answers get generated and fact-checked instead of all ending in a refusal. Index build: 139 chunks in 1.0 s | $0.000687 per question at gpt-4o-mini prices (Task 1 as shipped: $0.000795). Eval: retrieval-only $0 and 7.5 s; full dev run ≈ $0.07 and ~9 min | judge is now `gemma3:4b`; all runs local, $0 actual |
 | (this PR) | Task 3 ingestion | per question 5.4 → 5.9 s mean (more real context per call; fewer calls). Full re-ingest 8.8 s GPU / 22 s CPU; one changed file 0.04 s. Warm container start loads the index in 0.2 s (startup 11 s) | $0.000687 → $0.000698 per question (+1.7%; LLM calls 17.9 → 13.9). Full re-embed $0.00062, one file $0.0000034 at text-embedding-3-small | image +285 MB (PyMuPDF 2.1 + onnxruntime); all local, $0 actual |
-| | Task 4 experiments | | | |
+| (this PR) | Task 4 experiments | none shipped: production keeps the Task 3 retriever (same rankings, re-implemented as weighted RRF). New per-PR `retrieval-gate` CI job: ~1–2 min of free runner time | none at runtime. Measured for the rejected winner: −19% per question; re-ranker +488 ms/query on CPU | 12 experiments, all local, $0 actual; image +11 KB |
 | | Task 5 time and truth | | | |
 | | Task 6 access | | | |
 

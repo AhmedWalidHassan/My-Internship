@@ -31,6 +31,9 @@ def main(argv=None) -> int:
     p.add_argument("--cost-tolerance", type=float, default=0.20, help="allowed rise in mean cost per question")
     p.add_argument("--justification-file", type=Path, required=True)
     p.add_argument("--out", type=Path, default=here / "eval_baseline.json")
+    p.add_argument("--retrieval", type=Path, help="a --retrieval-only run on the same split (Week 3 Task 4)")
+    p.add_argument("--retrieval-tolerance", type=float, nargs=2, metavar=("RECALL5", "MRR"),
+                   default=(0.017, 0.02), help="allowed drop in recall@5 and MRR")
     args = p.parse_args(argv)
 
     runs = [json.loads(r.read_text(encoding="utf-8")) for r in args.runs]
@@ -82,6 +85,16 @@ def main(argv=None) -> int:
                  **{k: mean([r["cost"][k] for r in runs]) for k in ("mean_llm_calls", "mean_latency_s")}},
         "examples": examples,
     }
+    if args.retrieval:
+        r = json.loads(args.retrieval.read_text(encoding="utf-8"))
+        ret = r["retrieval"]
+        baseline["retrieval"] = {
+            "dataset_version": r["meta"]["dataset_version"], "split": r["meta"]["split"],
+            "retriever": ret["retriever"], "settings": ret.get("settings"),
+            "scores": {k: ret["overall"][k] for k in ("recall@1", "recall@3", "recall@5", "recall@10", "mrr")},
+            "tolerance": {"recall@5": args.retrieval_tolerance[0], "mrr": args.retrieval_tolerance[1]},
+            "by_category": ret["by_category"],
+            "per_example": {k: v["recall@5"] for k, v in ret["per_example"].items()}}
     args.out.write_text(json.dumps(baseline, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps({k: baseline[k] for k in ("scores", "tolerance", "noise", "by_category", "cost")}, indent=1))
     print(f"wrote {args.out}")

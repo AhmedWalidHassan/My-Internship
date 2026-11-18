@@ -497,28 +497,101 @@ probably save over 100 MB, but it means re-validating every loader: a follow-up.
 
 ## Task 4 — Retrieval experiments
 
-*(Every experiment is in `EXPERIMENTS.md`. This section is the outcome.)*
+*(Every experiment is in `EXPERIMENTS.md`. This section is the outcome.)* Measured 2026-11-18.
+12 experiments (9 retrieval-only, 3 checking generation), each hypothesis committed and pushed before
+its run (`git log -p week3/EXPERIMENTS.md`). Runner, results and evidence:
+[`task_04_retrieval_experiments/`](task_04_retrieval_experiments/RUN.md).
 
-| | Baseline | Winner |
+| | Baseline | Winner (EXP-09) |
 |---|---:|---:|
-| Config summary | | |
-| recall@5 dev | | |
-| recall@5 **test** (run once) | | |
-| MRR dev | | |
-| MRR **test** | | |
-| Latency per query | | |
+| Config summary | Task 3: hybrid BM25 0.5 / dense 0.5 (weighted RRF), no prior, chunks 800/100 with context header, all-MiniLM-L6-v2 | BM25 0.3 / dense 0.7, meetings and newsletters × 0.5, chunks **400/50**, same model and header |
+| recall@5 dev | 0.917 | **0.933** |
+| recall@5 **test** (run once) | 0.885 | **0.923** |
+| MRR dev | 0.612 | **0.793** |
+| MRR **test** | 0.603 | **0.740** |
+| Latency per query (retrieval, p50 / p95) | 0.6 / 0.9 ms | 0.7 / 1.2 ms |
+
+Test was run **twice in total**: once for the baseline, once for the winner. Both run files are
+committed in `week3/eval/runs/test/`.
 
 **Why this winner, citing per-category numbers:**
 
+> EXP-09 has the best dev MRR (0.793) and recall@1 (0.683, from 0.417) with no question lost at
+> recall@5 (it gains #17). Its gains are spread across the board, which makes it more than a fit to a
+> few questions:
 >
+> | Category | MRR baseline → EXP-09 |
+> |---|---|
+> | factual | 0.64 → 0.73 |
+> | draft | 0.45 → 0.81 |
+> | follow_up | 0.52 → 0.88 |
+> | personalized | 0.31 → 0.75 |
+> | conflict | 0.56 → 0.78 |
+> | table | 0.83 → 1.00 |
+> | long_doc | 0.83 → 1.00 |
+> | multi_part | 0.54 → 0.88 (#17 recovered) |
+>
+> No category's MRR fell; `cross_lingual` barely moved (0.06 → 0.12).
+>
+> Its three changes each won alone first:
+> - **BM25 0.3** (EXP-01, MRR +0.073): BM25's equal vote was promoting word-overlap from chatty
+>   documents. Dropping BM25 entirely went too far (EXP-02 lost the 5G price row).
+> - **The source prior** (EXP-07, +0.031): it demotes meeting notes and newsletters that mention "PTO"
+>   or "password" in passing.
+> - **400/50 chunks** (EXP-04, +0.027): their benefit compounded with the other two.
+>
+> What lost:
+> - **The re-ranker** (EXP-10, MRR 0.748): it ranked below EXP-09 at +490 ms per query on CPU.
+> - **The multilingual model** (EXP-05): −0.083 recall@5, losing 9 English questions to gain 2 Arabic ones.
+> - **Removing the context header** (EXP-03): −0.033 / −0.031.
+>
+> **But the winner was not shipped.** Measured end to end on dev, the answers got *worse*: deterministic
+> 0.743 → **0.686** (EXP-09), correctness 0.500 → 0.400.
+> - **The cause is fragmentation, not retrieval.** All 4 lost questions still have their gold document
+>   in the top 5. But a 400-character chunk can separate a policy's "reduced to 60 days" from its
+>   context, or a draft's "NOT APPROVED" banner from its 15-day minimum.
+> - **Without the chunk change it's still worse.** The same retriever on 800-character chunks (EXP-08,
+>   checked as EXP-12) answers 2 fewer questions than the baseline (0.714), on borderline grader and
+>   generator decisions over a re-ordered context.
+> - **Grading fewer passages costs answers too.** Grading 3 passages instead of 6 (EXP-11) cuts cost
+>   by 26% but loses 5 more.
+>
+> A retriever that ranks better and answers worse isn't an improvement for users, so **production
+> keeps the Task 3 retriever** (that's also the gate's baseline). Every lever stays available as a
+> setting for Task 5.
 
 **Did test agree with dev?**
 
+> **Yes, in direction and roughly in size.**
+> - recall@5: +0.038 on test against +0.017 on dev.
+> - MRR: +0.137 on test against +0.181 on dev.
+> - Per category on test the winner gains `conflict` (R@5 0.50 → 1.00) and MRR in `draft`,
+>   `long_doc`, `follow_up` (0.33 → 1.00), `personalized` (0.67 → 1.00) and `multi_hop`.
+>   `factual` dips slightly (0.88 → 0.83).
 >
+> Test was used only to confirm, not to choose. The decision not to ship came from *dev* generation
+> results (EXP-11, EXP-12), not from test. Test is small (26 answerable questions, one question = 0.038),
+> so "agrees" means "same sign, similar size", not a precise estimate.
 
 **CI retrieval gate tolerance, and how it was derived from the noise floor:**
 
+> **recall@5 0.017, MRR 0.02** on the 60 answerable dev questions
+> ([justification](task_04_retrieval_experiments/tolerance_justification.md)).
 >
+> **The noise floor is exactly 0.** Three baseline runs, a fastembed/ONNX rebuild (CI's backend) and a
+> CPU PyTorch rebuild (the container's) gave identical rankings for 60/60 questions. So the only noise
+> left is the metric's resolution: one question is 0.017 recall@5.
+> - The gate tolerates one question leaving the top 5 (still listed by name in the report) and fails
+>   at two.
+> - For MRR it tolerates about two or three one-rank slips.
+> - It would have caught EXP-03 (−0.033 / −0.031) and EXP-05 (−0.083 / −0.055).
+> - Pinned by `tests/test_eval_gate.py::test_retrieval_gate_tolerance_is_one_question_and_names_who_left`.
+>
+> **Where it runs:** in a **new per-PR job, `retrieval-gate`**: GitHub-hosted, no secrets, no LLM. It
+> uses the local all-MiniLM-L6-v2 on ONNX (fastembed) with the model cached between runs. It costs about
+> 1–2 minutes of free runner time per PR (install, parse and embed the corpus, 60 queries). I chose this
+> over the nightly eval job so a retrieval regression is caught **before merge**. The same check also runs
+> inside the eval-gate job.
 
 ---
 

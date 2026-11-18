@@ -120,12 +120,44 @@ def report(results: dict, baseline: dict, passed: bool, failures: list[str], det
     return "\n".join(L)
 
 
+def check_retrieval(run: dict, baseline: dict) -> tuple[bool, list[str], str]:
+    """Week 3 Task 4: the retrieval gate. `run` is a --retrieval-only results file, `baseline` the
+    eval_baseline.json with a "retrieval" section. Red if recall@5 or MRR fell by more than its
+    tolerance (derived from the noise floor: week3/EXPERIMENTS.md). Lists every question that left
+    the top 5, even when the drop is within the tolerance."""
+    base = baseline.get("retrieval")
+    if not base:
+        return True, [], "*(no retrieval baseline: retrieval not gated)*"
+    now = run["retrieval"]
+    tol = base["tolerance"]
+    failures = []
+    for m in ("recall@5", "mrr"):
+        floor = base["scores"][m] - tol[m]
+        if now["overall"][m] < floor - 1e-9:
+            failures.append(f"**retrieval {m}** {now['overall'][m]:.3f} is below the baseline {base['scores'][m]:.3f} "
+                            f"minus the tolerance {tol[m]:.3f} (floor {floor:.3f})")
+    if run["meta"].get("dataset_version") != base.get("dataset_version"):
+        failures.append(f"retrieval run is on dataset {run['meta'].get('dataset_version')}, the baseline on "
+                        f"{base.get('dataset_version')}: refresh the retrieval baseline")
+    lost = [k for k, v in now["per_example"].items() if base["per_example"].get(k, 0) == 1 and v["recall@5"] == 0]
+    gained = [k for k, v in now["per_example"].items() if base["per_example"].get(k, 1) == 0 and v["recall@5"] == 1]
+    L = ["", "**Retrieval** (dev, no LLM; tolerance from the noise floor):", "",
+         "| Metric | Baseline | This run | Δ | Tolerance |", "|---|---:|---:|---:|---:|"]
+    for m in ("recall@1", "recall@5", "mrr"):
+        b, n = base["scores"].get(m), now["overall"].get(m)
+        L.append(f"| {m} | {fmt(b)} | {fmt(n)} | {delta(b, n)} | {fmt(tol[m]) if m in tol else 'not gated'} |")
+    L += ["", f"Questions that left the top 5: {', '.join(lost) or 'none'} · entered it: {', '.join(gained) or 'none'}"]
+    return not failures, failures, "\n".join(L)
+
+
 def main(argv=None) -> int:
     here = Path(__file__).resolve().parent.parent
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--results", type=Path, default=Path("eval_results.json"))
     p.add_argument("--baseline", type=Path, default=here / "eval_baseline.json")
     p.add_argument("--report", type=Path, default=Path("regression_report.md"))
+    p.add_argument("--retrieval-results", type=Path, help="a --retrieval-only results file (Week 3 Task 4)")
+    p.add_argument("--retrieval-only", action="store_true", help="gate retrieval only (the per-PR job: no LLM)")
     args = p.parse_args(argv)
 
     # Week 3 Task 1: the Week 2 baseline was measured on the 4-file Week 1 corpus and no longer
@@ -148,9 +180,20 @@ def main(argv=None) -> int:
                 f.write(text + "\n")
         return 1
 
-    results, baseline = load(args.results), load(args.baseline)
-    passed, failures, details = check(results, baseline)
-    text = report(results, baseline, passed, failures, details)
+    baseline = load(args.baseline)
+    if args.retrieval_only:
+        passed, failures, rtext = check_retrieval(load(args.retrieval_results), baseline)
+        text = (f"## Retrieval gate: {'✅ passed' if passed else '❌ FAILED'}\n"
+                + ("\n**Why it failed:**\n" + "\n".join(f"- {f}" for f in failures) + "\n" if failures else "")
+                + rtext)
+    else:
+        results = load(args.results)
+        passed, failures, details = check(results, baseline)
+        rtext = ""
+        if args.retrieval_results:
+            r_ok, r_fail, rtext = check_retrieval(load(args.retrieval_results), baseline)
+            passed, failures = passed and r_ok, failures + r_fail
+        text = report(results, baseline, passed, failures, details) + ("\n" + rtext if rtext else "")
     args.report.write_text(text + "\n", encoding="utf-8")
     print(text)
     if os.getenv("GITHUB_STEP_SUMMARY"):

@@ -39,3 +39,4 @@ regression_report.md
 
 # Week 3 Task 4: one index per index-changing experiment
 week3/task_04_retrieval_experiments/indexes/
+.fastembed_cache/

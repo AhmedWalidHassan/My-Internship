@@ -1,6 +1,6 @@
 {
  "meta": {
-  "date": "2026-11-18T11:10:48+00:00",
+  "date": "2026-11-18T12:41:20+00:00",
   "dataset_version": "5d9544921fd6",
   "n": 70,
   "runs": 2,
@@ -24,7 +24,7 @@
   "groundedness": 0.08,
   "cost_increase": 0.2
  },
- "tolerance_justification": "Tolerance 0.08 for correctness and groundedness, unchanged from Week 2 and Week 3 Task 2 (justification: week3/task_02_eval_at_scale/tolerance_justification_v3.md). This baseline is re-set in Week 3 Task 3 because the system changed a lot (every format is now parsed: deterministic 0.314 -> 0.743, correctness 0.357 -> 0.500 on the same dev split). Leaving the Task 2 baseline in place would let a regression of up to 0.22 correctness through unseen.\n\nMeasured 2026-11-18, dataset northwind-eval-v3 (dev, 70), qwen3.5:4b generator, gemma3:4b judge, laptop GPU: two full dev runs after the ingestion change were identical, answer for answer and verdict for verdict (spread 0.000).\n\nKnown weakness: the gemma3:4b correctness judge (with the stricter Task 2 prompt) is now too strict on CORRECT answers: on 18 dev examples the deterministic check passes and the judge says incorrect, and about 13 of those are plainly correct (it penalises reference details the question did not ask for). Correctness (0.500) therefore understates the system; the deterministic score (0.743) is the more honest floor here. Recalibrating the judge (new human labels on this system's answers) is a follow-up, not part of the ingestion change.\n\nCost: +20% mean cost per question fails the gate (kept). This run: $0.000698 per question, +1.7% vs the Task 2 baseline.",
+ "tolerance_justification": "Generation (correctness, groundedness): tolerance 0.08, unchanged since Week 2 and re-justified in Week 3 Task 2 and Task 3 (week3/task_02_eval_at_scale/tolerance_justification_v3.md, week3/task_03_ingestion/tolerance_justification.md). The generation baseline is still the Task 3 system: Task 4 shipped no retrieval change.\n\nRetrieval (Week 3 Task 4): recall@5 tolerance 0.017, MRR tolerance 0.02, on the 60 answerable dev questions.\n\nDerived from the noise floor (week3/EXPERIMENTS.md): three baseline runs, plus a fastembed/ONNX rebuild (the CI backend) and a CPU PyTorch rebuild (the container's), gave identical document rankings for all 60 questions. The noise is 0.000, so the smallest real change is one question: 1/60 = 0.017 recall@5, and 0.008 MRR for one question moving from rank 1 to rank 2.\n- recall@5: one question may leave the top 5 without failing the gate. It still shows up by name in the report, to absorb a library or model-version change that flips a tie, which the noise runs could not exercise. Two questions (0.033) fail. EXP-03 (dropping the context header) was −0.033 and would have been caught.\n- MRR: 0.02 is about two or three questions slipping one rank. EXP-03 was −0.031 and EXP-05 −0.055; both would fail.\n\nWhere it runs: in a new key-free per-PR job (retrieval-gate: local ONNX embeddings, no LLM, no secrets) and in the eval-gate job, so a retrieval regression is caught before merge, not the next night.",
  "noise": {
   "per_run_scores": [
    {
@@ -2176,5 +2176,208 @@
     ]
    }
   }
- ]
+ ],
+ "retrieval": {
+  "dataset_version": "5d9544921fd6",
+  "split": "dev",
+  "retriever": "hybrid (BM25 + dense), depth 10 per retriever",
+  "settings": {
+   "hybrid_bm25_weight": 0.5,
+   "source_prior": null,
+   "reranker_model": null,
+   "rerank_top_n": 20,
+   "chunk_size": 800,
+   "chunk_overlap": 100,
+   "chunk_context_header": true,
+   "hf_embed_model": "sentence-transformers/all-MiniLM-L6-v2",
+   "local_embeddings_backend": "sentence-transformers"
+  },
+  "scores": {
+   "recall@1": 0.4167,
+   "recall@3": 0.8,
+   "recall@5": 0.9167,
+   "recall@10": 0.9333,
+   "mrr": 0.6117
+  },
+  "tolerance": {
+   "recall@5": 0.017,
+   "mrr": 0.02
+  },
+  "by_category": {
+   "factual": {
+    "n": 10,
+    "recall@1": 0.4,
+    "recall@3": 0.9,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.6417
+   },
+   "table": {
+    "n": 4,
+    "recall@1": 0.75,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.8333
+   },
+   "keyword": {
+    "n": 4,
+    "recall@1": 0.5,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.7083
+   },
+   "version": {
+    "n": 5,
+    "recall@1": 0.6,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.8
+   },
+   "conflict": {
+    "n": 3,
+    "recall@1": 0.3333,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5556
+   },
+   "draft": {
+    "n": 4,
+    "recall@1": 0.25,
+    "recall@3": 0.5,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.4458
+   },
+   "multi_hop": {
+    "n": 4,
+    "recall@1": 0.5,
+    "recall@3": 0.75,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.6458
+   },
+   "multi_part": {
+    "n": 4,
+    "recall@1": 0.25,
+    "recall@3": 0.75,
+    "recall@5": 0.75,
+    "recall@10": 1.0,
+    "mrr": 0.5417
+   },
+   "ambiguous": {
+    "n": 3,
+    "recall@1": 0.3333,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.6667
+   },
+   "long_doc": {
+    "n": 4,
+    "recall@1": 0.75,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.8333
+   },
+   "cross_lingual": {
+    "n": 4,
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.25,
+    "recall@10": 0.25,
+    "mrr": 0.0625
+   },
+   "follow_up": {
+    "n": 4,
+    "recall@1": 0.25,
+    "recall@3": 0.75,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5208
+   },
+   "personalized": {
+    "n": 4,
+    "recall@1": 0.0,
+    "recall@3": 0.5,
+    "recall@5": 0.75,
+    "recall@10": 0.75,
+    "mrr": 0.3125
+   },
+   "access": {
+    "n": 3,
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0
+   }
+  },
+  "per_example": {
+   "11": 1.0,
+   "12": 1.0,
+   "19": 1.0,
+   "20": 1.0,
+   "24": 1.0,
+   "4": 1.0,
+   "5": 1.0,
+   "6": 1.0,
+   "7": 1.0,
+   "s29": 1.0,
+   "10": 1.0,
+   "n01": 1.0,
+   "n02": 1.0,
+   "s06": 1.0,
+   "37": 1.0,
+   "38": 1.0,
+   "n04": 1.0,
+   "s34": 1.0,
+   "15": 1.0,
+   "3": 1.0,
+   "8": 1.0,
+   "9": 1.0,
+   "s32": 1.0,
+   "18": 1.0,
+   "n06": 1.0,
+   "n07": 1.0,
+   "n08": 1.0,
+   "n09": 1.0,
+   "n10": 1.0,
+   "n11": 1.0,
+   "29": 1.0,
+   "30": 1.0,
+   "n23": 1.0,
+   "s07": 1.0,
+   "13": 1.0,
+   "16": 1.0,
+   "17": 0.0,
+   "32": 1.0,
+   "n20": 1.0,
+   "n21": 1.0,
+   "s12": 1.0,
+   "n12": 1.0,
+   "n13": 1.0,
+   "n14": 1.0,
+   "s10": 1.0,
+   "n15": 0.0,
+   "n16": 0.0,
+   "n17": 1.0,
+   "s25": 0.0,
+   "36": 1.0,
+   "n22": 1.0,
+   "s26": 1.0,
+   "s27": 1.0,
+   "n24": 1.0,
+   "n25": 1.0,
+   "n26": 0.0,
+   "s28": 1.0,
+   "n32": 1.0,
+   "s19": 1.0,
+   "s21": 1.0
+  }
+ }
 }
