@@ -131,7 +131,46 @@ The hypotheses for EXP-01 to EXP-07 were committed together, before any of them 
 HYBRID_BM25_WEIGHT: 0.5 -> 0.3
 ```
 
-**Result** *(committed after running)*: *(pending)*
+**Result** *(committed after running)*: `hybrid (BM25 0.3 + dense 0.7), depth 10 per retriever`, 348 chunks.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.917 | +0.000 | no (identical) |
+| MRR (all) | 0.612 | 0.685 | +0.073 | yes |
+| recall@1 (all) | 0.417 | 0.533 | +0.117 | yes |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 0.6 / 0.9 ms | | – |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 1.00 | 0.64 | 0.78 |
+| table | 4 | 1.00 | 1.00 | 0.83 | 0.80 |
+| keyword | 4 | 1.00 | 1.00 | 0.71 | 0.88 |
+| version | 5 | 1.00 | 1.00 | 0.80 | 0.85 |
+| draft | 4 | 1.00 | 0.75 | 0.45 | 0.30 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.68 |
+| ambiguous | 3 | 1.00 | 1.00 | 0.67 | 0.83 |
+| long_doc | 4 | 1.00 | 1.00 | 0.83 | 0.88 |
+| cross_lingual | 4 | 0.25 | 0.25 | 0.06 | 0.08 |
+| follow_up | 4 | 1.00 | 1.00 | 0.52 | 0.75 |
+| personalized | 4 | 0.75 | 0.75 | 0.31 | 0.46 |
+
+Questions in/out of the top 5: n08 lost, 17 gained.
+
+**Hypothesis confirmed?** **Partly.**
+- **Right:** #17 came back (multi_part 0.75 → 1.00) and recall@5 held overall.
+- **Wrong about keyword:** its MRR *rose* (0.71 → 0.88). The exact-code questions are just as well
+  served by dense once the context line ("Rover Error Codes 2026 › Error codes") is in the vector.
+- **Missed entirely:** MRR rose across the board (+0.073; recall@1 +0.117). Lowering BM25's weight
+  mostly removes the noise of word-overlap matches from chatty documents.
+- **The cost I didn't predict:** `draft` lost n08 ("Is Northwind switching to flexible time off?",
+  R@5 1.00 → 0.75). Dense ranks newsletters and the PTO policy above the FTO draft, whose words BM25
+  matched exactly.
+
+**Decision:** follow up. The direction is right, and EXP-08 combines it with the levers that don't
+cost a question.
 
 ---
 
