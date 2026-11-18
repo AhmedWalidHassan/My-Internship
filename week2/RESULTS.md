@@ -435,37 +435,97 @@ The other Done-when items are each pinned by a test in `tests/test_cache.py` (18
 
 **Baseline committed in** `eval_baseline.json` — scores and date:
 
+Built 2026-11-18 from two full runs on 2026-11-16 (identical, verdict for verdict) on the CI
+hardware: the laptop GPU, `qwen3.5:4b` as generator and judge, 38 examples, dataset `58fefe13fc23`.
+**Tolerance 0.08** (3 of 38 examples), with its justification in the file and in
+[`tolerance_justification.md`](task_07_eval_gate/tolerance_justification.md). Cost gate: +20%.
+Write-up: [`task_07_eval_gate/EVAL_GATE.md`](task_07_eval_gate/EVAL_GATE.md).
+
 | Metric | Baseline | Date |
 |---|---:|---|
-| Correctness | | |
-| Groundedness | | |
+| Correctness | 0.921 | 2026-11-16 runs (file 2026-11-18) |
+| Groundedness | 0.974 | 2026-11-16 runs (file 2026-11-18) |
+
+(Retrieval hit 1.000; mean cost $0.000467 per question, 13.4 LLM calls. The first CI eval on the
+self-hosted runner reproduced these exactly: 0.921 / 0.974 / 1.000.)
 
 **Category-split scores** (this is the point — a blended average hides the roadmap):
 
 | Category | n | Correctness | Groundedness |
 |---|---:|---:|---:|
-| Factual (single doc) | | | |
-| Multi-hop (two docs) | | | |
-| Multi-part answers | | | |
-| Refusal / out-of-scope | | | |
-| Follow-up (needs history) | | | |
-| Keyword-precise | | | |
+| Factual (single doc) | 19 | 0.95 | 1.00 |
+| Multi-hop (two docs) | 2 | 0.50 | 1.00 |
+| Multi-part answers | 7 | 1.00 | 0.86 |
+| Refusal / out-of-scope | 6 | 1.00 | 1.00 |
+| Follow-up (needs history) | 2 | 0.50 | 1.00 |
+| Keyword-precise | 2 | 1.00 | 1.00 |
+
+The roadmap the split shows:
+- **Multi-hop and follow-up are at 0.50.** A blended 0.92 hides both.
+- **Multi-part groundedness is 0.86:** the VPN judge false alarm.
+- **Refusal and keyword hold at 1.00.**
 
 **The 10 new adversarial examples** — what each is designed to break:
 
-| # | Question | Designed to break |
-|---|---|---|
-| 21 | | |
-| 22 | | |
-| … | | |
+The dataset has **38** examples, not 30: the capstone's eval already had 28, not Week 1's 20, and
+the 10 new ones are added to all of them.
+
+| # | Category | Question | Designed to break | Result (C = correct, G = grounded) |
+|---|---|---|---|---|
+| 29 | multi-hop | I just referred a friend who got hired. When do I get my referral bonus, and when will my friend be allowed to use their PTO? | Combining two documents: the bonus timing (hr_policies) and the PTO waiting period (handbook). A retriever or generator that stops at one document answers half. | C0 G1 |
+| 30 | multi-hop | I want to work fully remote. What do I need to get approved, and how do I reach internal systems from home? | Two documents from two different domains (HR handbook + IT FAQ) in one question; the router/grader must keep both. | C1 G1 |
+| 31 | multi-part | What are the known limitations of the Warehouse Rover R2? | A plural question with three list items; the model tends to name the first (outdoor) and stop. | C1 G1 |
+| 32 | multi-part | What are the rules for booking business travel? | Four separate rules in one section (flight class by duration, hotel cap with an exception, booking tool); partial answers are likely. | C1 G1 |
+| 33 | refusal | How many days of bereavement leave do I get? | Near-miss out-of-scope: the handbook has PTO, sick leave and parental leave, so adjacent chunks invite an improvised answer (e.g. using sick days). | C1 G1 |
+| 34 | refusal | What is the maximum operating temperature of the Warehouse Rover R2? | Near-miss out-of-scope: a full spec sheet is retrieved, but it has no temperature. The model must not stretch 'IP54 / not for outdoor use' into a temperature. | C1 G1 |
+| 35 | follow-up | *(after “How many sick days do I get per year?”)* Do they carry over? | Only answerable with history ('they' = sick days). Trap: PTO, right next to it, DOES carry over (up to 5 days), so a wrong resolution or retrieval gives the opposite answer. | C0 G1 |
+| 36 | follow-up | *(after “What does premium support include for the R2?”)* And what does the standard plan cover? | 'The standard plan' only means R2 support given the previous turn; the contextualizer may also copy premium details into the question (Task 1 finding B). | C1 G1 |
+| 37 | keyword | What does Fleet Manager 4.2 handle? | An exact product/version token ('Fleet Manager 4.2') that dense embeddings blur; needs the BM25 half of the hybrid retriever. | C1 G1 |
+| 38 | keyword | Does the R2 support 5G? | A two-character keyword ('5G') buried in a spec list; dense retrieval matches 'connectivity' generally, exact-token match is what finds it. | C1 G1 |
 
 **The red build:** link to the CI run that blocked the deliberately-weakened prompt.
 
+> **[Run 44258689585](https://github.com/AhmedWalidHassan/My-Internship/actions/runs/44258689585)
+> on demo PR [#7](https://github.com/AhmedWalidHassan/My-Internship/pull/7)** (refusal instruction
+> deleted): `fast-checks` red on `test_generate_prompt_contains_refusal_instruction`. The PR was
+> closed unmerged.
 >
+> The eval gate on the same PR **passed**: −2 examples, +6% cost, within the tolerance. Without the
+> rule, the model still declines out-of-scope questions in its own words, the fact-check rejects
+> those drafts, and the `refuse` node gives the canonical refusal, so all 6 refusal examples stayed
+> correct. A deterministic contract belongs to a deterministic test.
+>
+> **The eval gate firing:** [run 44258699220](https://github.com/AhmedWalidHassan/My-Internship/actions/runs/44258699220)
+> on demo PR [#8](https://github.com/AhmedWalidHassan/My-Internship/pull/8) (grade 1 passage
+> instead of 6). Red: correctness 0.92 → 0.68, and the PR comment lists all 10 flipped examples by id.
 
 **Real weakness found by the adversarial set:**
 
+> 1. **#35, follow-up, "Do they carry over?" after sick days: answered about PTO.**
+>    - The question was resolved correctly ("Do the paid sick days carry over?") and the Sick
+>      Leave chunk ranked **first**.
+>    - The generator answered from the PTO chunk next to it ("carried into the next calendar
+>      year" matches "carry over" more directly than "does not carry over").
+>    - **Groundedness passed it (it's true of PTO), correctness failed it.** That's why the gate
+>      checks correctness, not groundedness alone.
+> 2. **#29, multi-hop, referral bonus + new hire's PTO: a correct answer refused.** Both chunks were
+>    retrieved and the draft was right ("$3,000 … after 90 days … no PTO in the first 90 days").
+>    The 4B fact-check rejected it twice: the Figma failure mode again, now on a two-document answer.
+> 3. **The verification stage is hardware-sensitive.** On CPU (GitHub-runner-like) the same
+>    fact-check also refused two correct answers it accepts on the GPU (#3, #9).
 >
+> The new multi-part, keyword and near-miss refusal examples all passed. The fix list from Week 1
+> stands, with more evidence: a stronger fact-check model, and regenerate instead of rewriting
+> when retrieval was fine.
+
+**Also measured:**
+- *Fast CI:* **18–21 s** per job on GitHub's runner (tests 6–8 s); the test step is capped at 60 s.
+- *Eval CI:* **~5.5 min** per run on the self-hosted GPU runner. GitHub's free CPU runner managed
+  only 11 of 38 examples in 67 min, then crashed ("lost communication"); details in EVAL_GATE.md.
+- *Self-grading check:* re-judging 5 examples with `gemma3:4b` moved 1 of 10 verdicts, toward
+  *leniency* (VPN grounding).
+- *Fixed on the way:* a flaky Task 3 test (`test_session_memory_survives_across_requests_and_clients`
+  raced the app's background startup; 1 failure in 5 runs, 0 in 15 after the fix).
 
 ---
 

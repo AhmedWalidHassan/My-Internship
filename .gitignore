@@ -31,3 +31,7 @@ __pycache__/
 # Tooling / OS
 node_modules/
 .DS_Store
+
+# Task 7: local eval-gate outputs (CI uploads them as artifacts)
+eval_results.json
+regression_report.md

@@ -5,7 +5,7 @@
 PY ?= $(if $(wildcard week1/.venv/bin/python),week1/.venv/bin/python,python)
 APP := week1/capstone_internal_docs_assistant/app.py
 
-.PHONY: help check check-live test-durations run run-dev run-ui run-ui-capstone bench-api up down logs eval cost find-trace cache-bench fmt
+.PHONY: help check check-live test-durations run run-dev run-ui run-ui-capstone bench-api up down logs eval cost find-trace cache-bench eval-gate fmt
 
 help:
 	@echo "make check       lint + fast tests   (no API key, no network, < 5s)"
@@ -75,6 +75,11 @@ cost:          ## run the eval questions and print cost/latency per question, no
 
 find-trace:    ## make find-trace RID=<request_id>  ->  the LangSmith trace URL
 	$(PY) week2/task_05_observability/scripts/find_trace.py $(RID)
+
+# --- Task 7: eval gate (files in week2/task_07_eval_gate/) -----------------
+eval-gate:     ## the 38-example eval on the real model, then the gate vs eval_baseline.json
+	$(PY) week2/task_07_eval_gate/scripts/run_eval.py --out eval_results.json --no-publish
+	$(PY) week2/task_07_eval_gate/scripts/check_baseline.py --results eval_results.json --report regression_report.md
 
 # --- Task 6: caching (files in week2/task_06_caching/) --------------------
 cache-bench:   ## make cache-bench MODE=cold-warm|workload|prewarm
