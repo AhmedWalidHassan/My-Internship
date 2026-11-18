@@ -356,7 +356,57 @@ if it still adds on top of the cheaper levers.
 HF_EMBED_MODEL: sentence-transformers/all-MiniLM-L6-v2 -> sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2   (own index)
 ```
 
-**Result** *(committed after running)*: *(pending)*
+**Result** *(committed after running)*: `hybrid (BM25 + dense), depth 10 per retriever`, 348 chunks, index rebuilt in 6.32 s.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.833 | -0.083 | yes |
+| MRR (all) | 0.612 | 0.556 | -0.055 | yes |
+| recall@1 (all) | 0.417 | 0.383 | -0.033 | yes |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 5.9 / 9.5 ms | | – |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 0.60 | 0.64 | 0.36 |
+| table | 4 | 1.00 | 1.00 | 0.83 | 1.00 |
+| keyword | 4 | 1.00 | 1.00 | 0.71 | 0.68 |
+| version | 5 | 1.00 | 0.80 | 0.80 | 0.73 |
+| conflict | 3 | 1.00 | 1.00 | 0.56 | 0.58 |
+| draft | 4 | 1.00 | 1.00 | 0.45 | 0.40 |
+| multi_hop | 4 | 1.00 | 1.00 | 0.65 | 0.62 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.69 |
+| ambiguous | 3 | 1.00 | 1.00 | 0.67 | 0.34 |
+| long_doc | 4 | 1.00 | 0.75 | 0.83 | 0.60 |
+| cross_lingual | 4 | 0.25 | 0.75 | 0.06 | 0.24 |
+| follow_up | 4 | 1.00 | 0.75 | 0.52 | 0.44 |
+| personalized | 4 | 0.75 | 0.50 | 0.31 | 0.42 |
+
+Questions in/out of the top 5: 19 lost, 24 lost, 4 lost, 6 lost, 3 lost, 17 gained, n12 lost, n16 gained, s25 gained, 36 lost, n25 lost.
+
+**Hypothesis confirmed?** **Half. cross_lingual rose as predicted (0.25 → 0.75: n16 and s25 now
+found), but the cost to English was far bigger than "a little MRR".**
+- **The cost:** recall@5 **−0.083** (net five questions lost) and MRR −0.055. Nine English questions
+  dropped out of the top 5:
+  - `factual` 1.00 → 0.60: sick days, doctor's note, phone, R2 outdoors.
+  - `version`: 60-day wait. `long_doc`: battery storage. `follow_up`: standard plan.
+    `personalized`: n25.
+- **Why:** paraphrase-multilingual-MiniLM-L12-v2 is a paraphrase model distilled for cross-language
+  similarity. On English question → English passage retrieval it is clearly weaker than the
+  English-only MiniLM. One model can't serve 4 Arabic questions without costing 9 English ones.
+- **Also:** the Arabic pages are 3 of 190 documents.
+
+**What I learned:** the trap in the brief ("averages hide trade-offs") ran the other way here. The
+category the change was *for* improved, and the average shows the price. The right fix for Arabic is
+not a global model swap. Options:
+- Translate the 4 Cairo documents at ingest (store an English rendering next to the Arabic).
+- Route Arabic-script chunks to a multilingual model in a second index.
+
+Both are Task 5/RFC material.
+
+**Decision:** revert.
 
 ---
 
