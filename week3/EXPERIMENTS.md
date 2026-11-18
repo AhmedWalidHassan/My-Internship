@@ -299,7 +299,49 @@ index, and removing it hurt most where the chunk is a fragment (table rows, manu
 CHUNK_SIZE: 800 -> 400, CHUNK_OVERLAP: 100 -> 50   (own index)
 ```
 
-**Result** *(committed after running)*: *(pending)*
+**Result** *(committed after running)*: `hybrid (BM25 + dense), depth 10 per retriever`, 588 chunks, index rebuilt in 6.24 s.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.933 | +0.017 | no |
+| MRR (all) | 0.612 | 0.639 | +0.027 | yes |
+| recall@1 (all) | 0.417 | 0.417 | +0.000 | no (identical) |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 1.0 / 1.5 ms | | – |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 1.00 | 0.64 | 0.50 |
+| table | 4 | 1.00 | 1.00 | 0.83 | 1.00 |
+| keyword | 4 | 1.00 | 1.00 | 0.71 | 0.69 |
+| conflict | 3 | 1.00 | 1.00 | 0.56 | 0.78 |
+| draft | 4 | 1.00 | 1.00 | 0.45 | 0.68 |
+| multi_hop | 4 | 1.00 | 1.00 | 0.65 | 0.67 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.56 |
+| ambiguous | 3 | 1.00 | 1.00 | 0.67 | 0.50 |
+| long_doc | 4 | 1.00 | 1.00 | 0.83 | 1.00 |
+| follow_up | 4 | 1.00 | 1.00 | 0.52 | 0.58 |
+| personalized | 4 | 0.75 | 0.75 | 0.31 | 0.38 |
+
+Questions in/out of the top 5: 17 gained.
+
+**Hypothesis confirmed?** **No: "no clear win" was too pessimistic, and the losers aren't the ones I
+named.**
+- **Gains:** recall@5 +0.017 (#17 returned) and MRR +0.027.
+  - `table`, `long_doc` and `draft`/`conflict` MRR rose (0.83 → 1.00, 0.83 → 1.00, 0.45 → 0.68,
+    0.56 → 0.78): a smaller chunk is dominated by its one fact.
+- **Losses:** `factual` and `ambiguous` MRR fell (0.64 → 0.50, 0.67 → 0.50).
+  - Smaller wiki and handbook chunks let several fragments of the same stale legacy page outrank the
+    policy.
+  - `multi_part`/`multi_hop`, which I expected to suffer, held: the context line keeps each half
+    findable.
+- **Cost:** 1.7× the chunks (348 → 588), so 1.7× the embedding and index size, and more, shorter
+  passages for `grade_documents` to read.
+
+**Decision:** follow up. A modest net gain with a real cost in grading calls. It goes into EXP-08 only
+if it still adds on top of the cheaper levers.
 
 ---
 
