@@ -778,7 +778,35 @@ HYBRID_BM25_WEIGHT: 0.5 -> 0.3
 SOURCE_PRIOR: (none) -> meetings/:0.5,newsletters/:0.5
 ```
 
-**Result** *(committed after running)*: *(pending)*
+**Result** *(committed after running)*: full pipeline, dev (70), judge gemma3:4b.
+
+| | Baseline (Task 3) | EXP-12 (= EXP-08 retriever) | EXP-09 (winner) |
+|---|---:|---:|---:|
+| Retrieval recall@5 / MRR (dev) | 0.917 / 0.612 | 0.933 / 0.723 | 0.933 / 0.793 |
+| **Deterministic (dev)** | **0.743** | 0.714 | 0.686 |
+| Correctness / groundedness | 0.500 / 0.986 | 0.457 / 0.943 | 0.400 / 0.971 |
+| Refused / rewrite loop fired (of 70) | 15 / 20 | 16 / 21 | 17 / 24 |
+| Cost / question (dev) | $0.000698 | $0.000720 | $0.000606 |
+
+**Hypothesis confirmed?** **No.** With 800/100 chunks the fragmentation losses are gone, but EXP-12
+still answers two fewer questions than the baseline:
+- s07 ("daily meal allowance in Cairo"): refused after a rewrite.
+- #32 ("rules for booking business travel"): answered from the expense policy instead of the travel
+  policy.
+
+Both gold documents are retrieved, so those are grader and generator decisions on a differently
+ordered context. #17, which the retriever now finds, was already answered correctly at baseline from
+the wiki mirror.
+
+**What I learned:** these runs are deterministic, so the −2 is real *for these configurations*. But the
+generation stage is chaotic around small context changes: a different passage order flips borderline
+answers both ways. Better document ranking (MRR +0.11 to +0.18) does not buy better answers here,
+because on this system the answers are limited downstream: 4B relevance grading, the fact-check, and
+the generator picking among versions (Task 5). A retrieval metric is necessary, not sufficient.
+
+**Decision:** revert. No retrieval change ships in Task 4 (see the decision under the summary).
+
+
 
 ---
 
@@ -786,10 +814,26 @@ SOURCE_PRIOR: (none) -> meetings/:0.5,newsletters/:0.5
 
 | ID | Change | R@5 Δ | MRR Δ | Latency Δ | Decision |
 |---|---|---:|---:|---:|---|
-| EXP-01 | BM25 weight 0.5 → 0.3 | | | | |
-| EXP-02 | dense only | | | | |
-| EXP-03 | no context header | | | | |
-| EXP-04 | chunks 800 → 400 | | | | |
-| EXP-05 | multilingual embeddings | | | | |
-| EXP-06 | cross-encoder re-ranker | | | | |
-| EXP-07 | source prior | | | | |
+| EXP-01 | BM25 weight 0.5 → 0.3 | 0.000 | +0.073 | 0 | follow up (EXP-08) |
+| EXP-02 | dense only | **−0.017** | +0.140 | −0.4 ms | revert: lost a price lookup BM25 finds |
+| EXP-03 | no context header | **−0.033** | **−0.031** | 0 | revert: **made it worse**, as predicted (the header earns its place) |
+| EXP-04 | chunks 800 → 400 | +0.017 | +0.027 | +0.4 ms | follow up (EXP-09) |
+| EXP-05 | multilingual embeddings | **−0.083** | **−0.055** | 0 (index 2× slower) | revert: **made it worse**: +2 Arabic, −9 English |
+| EXP-06 | cross-encoder re-ranker | 0.000 | +0.136 | **+57 ms GPU / +488 ms CPU** | follow up (EXP-10) |
+| EXP-07 | source prior (chatter ×0.5) | +0.017 | +0.031 | 0 | keep → EXP-08 |
+| EXP-08 | EXP-01 + EXP-07 | +0.017 | +0.111 | 0 | retrieval: keep; generation: see EXP-12 |
+| EXP-09 | EXP-08 + 400/50 chunks | +0.017 | **+0.181** | +0.1 ms | **retrieval winner on dev**, confirmed on test; not shipped (EXP-11, EXP-12) |
+| EXP-10 | EXP-08 + re-ranker | 0.000 | +0.136 | +51 ms GPU / ~+490 ms CPU | revert: below EXP-09, too slow on CPU |
+| EXP-11 | EXP-09 + grade 3 passages (generation) | – | – | −1.0 s end-to-end | revert: −26% cost, −5 answers |
+| EXP-12 | EXP-08 on the generation side | – | – | 0 | revert: −2 answers vs baseline |
+
+**Winner and decision.**
+- **Retrieval winner on dev:** **EXP-09** (BM25 0.3, meetings and newsletters × 0.5, 400/50 chunks):
+  recall@5 0.933, MRR 0.793. **Confirmed once on test:** recall@5 0.885 → 0.923, MRR 0.603 → 0.740.
+  That's the same direction and a similar size to dev.
+- **Shipped:** nothing. Measured end to end on dev, EXP-09 answers 4 fewer questions than the baseline
+  (deterministic 0.743 → 0.686) and EXP-08 two fewer (0.714). The cause is passage fragmentation (EXP-11)
+  and downstream sensitivity (EXP-12), not retrieval. A config that ranks better and answers worse isn't
+  an improvement for users, so the production defaults stay the Task 3 baseline.
+- **What stays:** every lever is now a setting (`HYBRID_BM25_WEIGHT`, `SOURCE_PRIOR`, `RERANKER_MODEL`,
+  `CHUNK_*`, `CHUNK_CONTEXT_HEADER`), ready for Task 5, where ranking by version and status should matter more.
