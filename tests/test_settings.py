@@ -129,7 +129,10 @@ def real_utils(clean_env, tmp_path):
 def test_switching_provider_needs_only_env_changes(real_utils, clean_env, preset):
     for k, v in PRESETS[preset].items():
         clean_env.setenv(k, v)
-    llm = real_utils.get_llm()
+    wrapped = real_utils.get_llm()
+    # every provider is behind the resilience wrapper (Task 8): timeouts, retries, budget, breaker
+    assert type(wrapped).__name__ == "ResilientLLM"
+    llm = wrapped.inner
     env = PRESETS[preset]
 
     if env["LLM_PROVIDER"] == "openai":
@@ -138,6 +141,8 @@ def test_switching_provider_needs_only_env_changes(real_utils, clean_env, preset
         assert llm.openai_api_base == env.get("OPENAI_BASE_URL")      # None = official API
         # sent only when configured: gpt-4o-mini would reject the parameter
         assert llm.reasoning_effort == env.get("OPENAI_REASONING_EFFORT")
+        assert llm.max_retries == 0, "the SDK's own retries would multiply with ours"
+        assert llm.request_timeout == 30
     elif env["LLM_PROVIDER"] == "groq":
         assert type(llm).__name__ == "ChatGroq"
         assert llm.model_name == env["GROQ_MODEL"]

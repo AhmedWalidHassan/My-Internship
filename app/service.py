@@ -17,6 +17,7 @@ from app.cache import AnswerCache, CachedAnswer, config_fingerprint
 from app.capstone import CAPSTONE_PATH, load_capstone
 from app.config import get_settings
 from app.observability import Observer, RunTelemetry
+from common.resilience import ProviderUnavailable, RequestBudget
 from app.schemas import (
     ChatResponse,
     DoneEvent,
@@ -130,6 +131,8 @@ class ChatService:
 
         settings = get_settings()
         telemetry = RunTelemetry()
+        # Task 8: one budget for ALL LLM calls of this request (logical x transport retries)
+        budget = RequestBudget(settings.max_llm_calls_per_request, settings.request_timeout_seconds)
         drafted = False
         first_token_ms = None
         final, status, error = None, "error", None
@@ -137,7 +140,7 @@ class ChatService:
 
         try:
             for ev in self.assistant.stream(question, session_id, run_id=trace_id, tokens=tokens,
-                                            metadata=metadata, callbacks=[telemetry]):
+                                            metadata=metadata, callbacks=[telemetry], llm_budget=budget):
                 kind = ev["event"]
                 if kind == "token":
                     drafted = True
@@ -153,7 +156,8 @@ class ChatService:
                 elif kind == "final":
                     final, status = ev, "ok"
                     usage = telemetry.totals()
-                    if key is not None and ev["answer"].strip():
+                    # never cache a degraded answer (Task 8): it was made with a weaker guarantee
+                    if key is not None and ev["answer"].strip() and not ev.get("degraded"):
                         self.cache.put(key, CachedAnswer(
                             answer=ev["answer"], sources=list(ev["sources"]), node_path=list(ev["path"]),
                             retries=ev["retries"], refused=self._capstone.is_refusal(ev["answer"]),
@@ -164,10 +168,13 @@ class ChatService:
                         session_id=session_id, trace_id=str(trace_id),
                         standalone_question=ev["standalone"], retries=ev["retries"], elapsed_ms=ms(),
                         llm_calls=usage["llm_calls"], tokens_in=usage["tokens_in"],
-                        tokens_out=usage["tokens_out"],
+                        tokens_out=usage["tokens_out"], degraded=ev.get("degraded", []),
                         estimated_cost_usd=round(settings.cost_usd(usage["tokens_in"], usage["tokens_out"]), 6))
         except GeneratorExit:                   # the client went away mid-stream
             status = "cancelled" if final is None else status
+            raise
+        except ProviderUnavailable as exc:        # Task 8: a provider failure the graph couldn't absorb
+            error = f"{exc.code}: {exc}"[:300]
             raise
         except Exception as exc:
             error = f"{type(exc).__name__}: {exc}"[:300]
@@ -176,10 +183,10 @@ class ChatService:
             self.observer.request_finished(self._record(
                 endpoint=endpoint, status=status, error=error, final=final, telemetry=telemetry,
                 latency_ms=ms(), first_token_ms=first_token_ms, request_id=request_id,
-                session_id=session_id, trace_id=str(trace_id), settings=settings))
+                session_id=session_id, trace_id=str(trace_id), settings=settings, budget=budget))
 
     def _record(self, *, endpoint, status, error, final, telemetry, latency_ms, first_token_ms,
-                request_id, session_id, trace_id, settings) -> dict:
+                request_id, session_id, trace_id, settings, budget=None) -> dict:
         """The one structured log line of a request (see app/observability.py)."""
         usage = telemetry.totals()
         path = (final or {}).get("path", [])
@@ -198,6 +205,8 @@ class ChatService:
             "per_node": telemetry.nodes(),
             "retrieved_ids": (final or {}).get("retrieved_ids", []),
             "kept_ids": (final or {}).get("kept_ids", []),
+            "degraded": (final or {}).get("degraded", []),
+            "llm_attempts": budget.calls if budget else None,      # incl. transport retries (Task 8)
         }
         if first_token_ms is not None:
             rec["ttft_ms"] = first_token_ms

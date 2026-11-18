@@ -1,0 +1,352 @@
+[
+ {
+  "i": 0,
+  "sent_at": 0.0,
+  "latency_s": 4.17,
+  "status": 200,
+  "code": "ok"
+ },
+ {
+  "i": 1,
+  "sent_at": 0.6,
+  "latency_s": 12.9,
+  "status": 200,
+  "code": "ok"
+ },
+ {
+  "i": 2,
+  "sent_at": 1.2,
+  "latency_s": 60.83,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 3,
+  "sent_at": 1.8,
+  "latency_s": 64.19,
+  "status": 200,
+  "code": "ok"
+ },
+ {
+  "i": 4,
+  "sent_at": 2.4,
+  "latency_s": 63.59,
+  "status": 200,
+  "code": "ok"
+ },
+ {
+  "i": 5,
+  "sent_at": 3.0,
+  "latency_s": 62.99,
+  "status": 200,
+  "code": "ok"
+ },
+ {
+  "i": 6,
+  "sent_at": 3.6,
+  "latency_s": 62.39,
+  "status": 200,
+  "code": "ok"
+ },
+ {
+  "i": 7,
+  "sent_at": 4.2,
+  "latency_s": 61.79,
+  "status": 200,
+  "code": "ok"
+ },
+ {
+  "i": 8,
+  "sent_at": 4.8,
+  "latency_s": 61.19,
+  "status": 200,
+  "code": "ok"
+ },
+ {
+  "i": 9,
+  "sent_at": 5.4,
+  "latency_s": 60.58,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 10,
+  "sent_at": 6.0,
+  "latency_s": 61.24,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 11,
+  "sent_at": 6.6,
+  "latency_s": 61.32,
+  "status": 503,
+  "code": "verification_unavailable"
+ },
+ {
+  "i": 12,
+  "sent_at": 7.2,
+  "latency_s": 60.88,
+  "status": 503,
+  "code": "verification_unavailable"
+ },
+ {
+  "i": 13,
+  "sent_at": 7.8,
+  "latency_s": 60.72,
+  "status": 503,
+  "code": "verification_unavailable"
+ },
+ {
+  "i": 14,
+  "sent_at": 8.4,
+  "latency_s": 60.59,
+  "status": 503,
+  "code": "verification_unavailable"
+ },
+ {
+  "i": 15,
+  "sent_at": 9.0,
+  "latency_s": 56.99,
+  "status": 200,
+  "code": "ok"
+ },
+ {
+  "i": 16,
+  "sent_at": 9.6,
+  "latency_s": 61.44,
+  "status": 503,
+  "code": "verification_unavailable"
+ },
+ {
+  "i": 17,
+  "sent_at": 10.2,
+  "latency_s": 60.53,
+  "status": 503,
+  "code": "verification_unavailable"
+ },
+ {
+  "i": 18,
+  "sent_at": 10.8,
+  "latency_s": 60.62,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 19,
+  "sent_at": 11.4,
+  "latency_s": 60.75,
+  "status": 503,
+  "code": "verification_unavailable"
+ },
+ {
+  "i": 20,
+  "sent_at": 12.0,
+  "latency_s": 60.92,
+  "status": 503,
+  "code": "verification_unavailable"
+ },
+ {
+  "i": 21,
+  "sent_at": 12.6,
+  "latency_s": 61.28,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 22,
+  "sent_at": 13.2,
+  "latency_s": 61.36,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 23,
+  "sent_at": 13.8,
+  "latency_s": 63.18,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 24,
+  "sent_at": 14.4,
+  "latency_s": 60.83,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 25,
+  "sent_at": 15.0,
+  "latency_s": 60.61,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 26,
+  "sent_at": 15.6,
+  "latency_s": 60.65,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 27,
+  "sent_at": 16.2,
+  "latency_s": 61.35,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 28,
+  "sent_at": 16.8,
+  "latency_s": 61.25,
+  "status": 503,
+  "code": "verification_unavailable"
+ },
+ {
+  "i": 29,
+  "sent_at": 17.4,
+  "latency_s": 60.59,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 30,
+  "sent_at": 18.0,
+  "latency_s": 61.16,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 31,
+  "sent_at": 18.6,
+  "latency_s": 61.31,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 32,
+  "sent_at": 19.2,
+  "latency_s": 61.15,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 33,
+  "sent_at": 19.8,
+  "latency_s": 60.79,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 34,
+  "sent_at": 20.4,
+  "latency_s": 62.78,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 35,
+  "sent_at": 21.0,
+  "latency_s": 61.16,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 36,
+  "sent_at": 21.6,
+  "latency_s": 60.78,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 37,
+  "sent_at": 22.2,
+  "latency_s": 61.08,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 38,
+  "sent_at": 22.8,
+  "latency_s": 60.79,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 39,
+  "sent_at": 23.4,
+  "latency_s": 60.9,
+  "status": 503,
+  "code": "verification_unavailable"
+ },
+ {
+  "i": 40,
+  "sent_at": 24.0,
+  "latency_s": 60.81,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 41,
+  "sent_at": 24.6,
+  "latency_s": 60.57,
+  "status": 503,
+  "code": "verification_unavailable"
+ },
+ {
+  "i": 42,
+  "sent_at": 25.2,
+  "latency_s": 67.63,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 43,
+  "sent_at": 25.8,
+  "latency_s": 68.64,
+  "status": 504,
+  "code": "request_timeout"
+ },
+ {
+  "i": 44,
+  "sent_at": 26.4,
+  "latency_s": 71.93,
+  "status": 200,
+  "code": "ok"
+ },
+ {
+  "i": 45,
+  "sent_at": 27.0,
+  "latency_s": 74.82,
+  "status": 200,
+  "code": "ok"
+ },
+ {
+  "i": 46,
+  "sent_at": 27.6,
+  "latency_s": 74.46,
+  "status": 200,
+  "code": "ok"
+ },
+ {
+  "i": 47,
+  "sent_at": 28.2,
+  "latency_s": 79.99,
+  "status": 200,
+  "code": "ok"
+ },
+ {
+  "i": 48,
+  "sent_at": 28.8,
+  "latency_s": 76.08,
+  "status": 200,
+  "code": "ok"
+ },
+ {
+  "i": 49,
+  "sent_at": 29.4,
+  "latency_s": 75.59,
+  "status": 200,
+  "code": "ok"
+ }
+]

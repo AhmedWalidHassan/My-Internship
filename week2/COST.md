@@ -150,20 +150,62 @@ these 20 chunks once per rebuild, and $0 on every warm start.
 ## Task 8 — Worst case for a single request
 
 Logical retries (`MAX_RETRIES`) × transport retries (`LLM_MAX_RETRIES`) × LLM calls per path.
+Design: [`task_08_resilience/RESILIENCE.md`](task_08_resilience/RESILIENCE.md).
+
+**Logical worst path** (no provider failure, the documents just never satisfy the graders):
+a follow-up question, every passage graded, every draft rejected, so it runs all 3 rounds
+(1 + `MAX_RETRIES`=2 rewrites):
+
+| Step | Calls |
+|---|---:|
+| `contextualize` (follow-ups only) | 1 |
+| `route_question` | 1 |
+| per round: `grade_documents` (`MAX_DOCS_TO_GRADE`=6) + `generate` (1) + `grade_generation` (grounded: 1, re-asked once if the verdict is unparseable = 2; addresses: 1) | 6 + 1 + 3 = 10 |
+| × 3 rounds | 30 |
+| `rewrite_query` × 2 | 2 |
+| **Total logical calls** | **34** |
+
+Every call can then take up to 1 + `LLM_MAX_RETRIES` = **3 transport attempts**:
+34 × 3 = **102 attempts uncapped**, each up to 30 s, so ≈ 51 min of waiting in theory.
+That is why the **total** is capped per request: `MAX_LLM_CALLS_PER_REQUEST=40` attempts
+(the 34-call logical path plus a few retries) and `REQUEST_TIMEOUT_SECONDS=60`.
 
 | | Value |
 |---|---:|
-| Max LLM calls in one request (show the arithmetic) | |
-| Worst-case cost of one request | |
-| Worst-case latency (with timeouts) | |
+| Max LLM calls in one request (show the arithmetic) | **40 attempts** (hard cap). Uncapped it would be 34 logical × 3 transport = 102. Observed max in the Task 5 cost run: 25 calls |
+| Worst-case cost of one request | **≤ $0.0041** = 40 attempts × $0.000102 (the most expensive call measured: `generate`, ~400 in / 70 out tokens, gpt-4o-mini prices), counting every attempt as billed (a timed-out call may still be billed). The 34-call logical path without failures ≈ $0.0016. Mean question: $0.000433, so the worst case is **~9.5× the mean** |
+| Worst-case latency (with timeouts) | **≈ 60 s** (`REQUEST_TIMEOUT_SECONDS`): every attempt's timeout is `min(30 s, time left)`. Measured: hanging provider → 504 at **61.8 s** (2 × 30 s attempts + retrieval/overhead). Down provider: 503 in 6.3 s, then **18 ms** while the circuit is open |
+
+What a bad day costs at 1,000 questions/day: if *every* question hit the cap, $4.10/day
+instead of $0.43/day. That's 9.5× the bill, but bounded, and the circuit breaker stops the
+retries after 5 consecutive failures, so a provider outage costs ~7 attempts once per 30 s,
+not 40 per question.
 
 ---
 
 ## Task 8 stretch — Load test (50 requests over 30 s)
 
+Answer cache off (every request runs the full graph), local GPU Ollama `qwen3.5:4b`, one
+session per request, questions cycling through the 24 answerable eval questions.
+[Evidence](task_08_resilience/evidence/load_test.md).
+
 | p50 | p95 | Error rate | Point where it degrades |
 |---:|---:|---:|---|
-| | | | |
+| 63.6 s (successful requests) | 77.3 s | **70%** (35/50: 24 `request_timeout`, 11 `verification_unavailable`) | **request #3**, sent 1.2 s in (~2.5 req/s offered so far): `request_timeout` after 60.8 s. Requests 1–2: 4.2 s, 12.9 s |
+
+The model server answers one call at a time: ~3.3 s and ~10 calls per question, so
+**~0.3 questions/s (~18/min) capacity**. 1.67 req/s is 5.5× that. Calls from all in-flight
+requests interleave, so overload slows *every* request, and they hit the 60 s deadline
+together. Served throughput fell to 0.14 answers/s, below capacity, because abandoned calls
+still occupy the GPU. The fact-check fails closed under the deadline (11 ×
+`verification_unavailable`), so no unchecked answer went out.
+
+**Can we roll out to 200 people?** 1,000 questions/day. Even with 20% in the peak hour,
+that's 0.06 questions/s, a fifth of capacity, and the answer cache takes most repeats. So
+yes for steady load on this setup. Not for bursts above ~0.3 questions/s. The first fix is
+admission control (cap in-flight graphs at the model server's concurrency, 503 +
+`Retry-After` immediately beyond a short queue). A hosted provider moves the limit to its
+rate limits and to cost.
 
 ---
 
@@ -180,7 +222,7 @@ Fill one row per merged PR. "No change" is a valid and useful entry.
 | #5 | Task 5 observability | **+0.43 ms per request** (callbacks on every node and LLM call + one log line + metrics; median over 400 runs with an instant fake model, so ≈0.01% of a 3.3 s answer). Startup: one extra LangSmith call to build trace links | none: no extra LLM calls. Now **measured**: $0.000433/question, $12.99/month at 1,000/day (gpt-4o-mini prices) | verification: 2 × 28-question cost reports, 2 × 28-example evals (judge included) and ~6 demo requests, all on local Ollama, $0 |
 | #6 | Task 6 caching | **hit: <1 ms in-process / 1.8 ms over HTTP instead of 3.6 s mean (7.9 s p95)**. Miss: unchanged (one hash + dict lookup). Index rebuild with a warm embedding cache: 0.68 s → 0.004 s | **hit: $0 instead of $0.000444**. Workload: −72% spend at a 72% hit rate (~$3.60/month instead of $12.99 at 1,000/day, if traffic repeats like the workload). Optional pre-warm costs ~32 s of LLM work per restart for 10 questions | verification: cold/warm (40 requests), workload (120), pre-warm (30), API demo (3); local Ollama, $0 |
 | #7 | Task 7 eval gate | none at runtime (CI only). **Fast CI: 18–21 s per PR**, free. **Eval CI: ~5.5 min** on the self-hosted GPU runner, for `run-eval`-labelled PRs and nightly | **$0 per eval run** (local model on the laptop: ~510 pipeline LLM calls + ~100 judge calls per run). On gpt-4o-mini pricing the 38 pipeline runs would be ~$0.018 + judge calls. GitHub minutes: fast tier only (~0.35 min/PR) | the free GitHub CPU runner was tried first: 11/38 examples in 67 min, then the runner crashed. Nightly there would have needed ~75 h/month of the 33 free |
-| #8 | Task 8 resilience | | | retries add cost on failure paths |
+| #8 | Task 8 resilience | **none on the happy path**: **+24 µs per LLM call** (timeout thread hand-off + retry loop; median of 3,000 calls on an instant fake), so ≈ +0.24 ms per 10-call question (0.007% of 3.3 s); the input guard is one regex pass. On failure: **bounded** at 60 s per request (was unbounded: a hanging provider held the request ~5 min, the client's timeout); provider down → 503 in 6.3 s, then 18 ms with the circuit open. Load (50 req/30 s, cache off): p50 63.6 s, 70% errors, degrades from request #3 | none per question on the happy path (same calls). Failure paths: ≤ 40 attempts per request (≤ $0.0041, ~9.5× the $0.000433 mean) instead of up to 102. Degraded answers are not cached (a cache miss next time). Over-refusal: injection-like real questions are refused by design (#6) | retries add cost on failure paths. Verification: ~25 live requests (provider down/hang, 2 × 7 injections × 2 runs, 22 rate-limit), 50-request load test; local Ollama, $0 |
 
 ---
 

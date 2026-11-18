@@ -43,6 +43,11 @@ Settings come from the environment or `week1/.env`, through the typed settings o
 | `MAX_SESSIONS` | `10000` | least recently used sessions are dropped beyond this |
 | `MAX_QUESTION_CHARS` | `2000` | longer questions get a 422 |
 | `API_URL` (UI only) | `http://127.0.0.1:8000` | where the Streamlit UI sends requests |
+| `LLM_TIMEOUT_SECONDS` / `LLM_MAX_RETRIES` | `30` / `2` | hard timeout per model call; transport retries (transient errors only, exponential backoff) |
+| `REQUEST_TIMEOUT_SECONDS` / `MAX_LLM_CALLS_PER_REQUEST` | `60` / `40` | deadline and attempt budget for **all** model calls of one request |
+| `CIRCUIT_FAILURE_THRESHOLD` / `CIRCUIT_COOLDOWN_SECONDS` | `5` / `30` | after N consecutive provider failures, refuse fast for this long |
+| `RATE_LIMIT_PER_MINUTE` | `20` | per `session_id` (per client IP without one) on `/chat` and `/chat/stream` |
+| `INJECTION_GUARD_ENABLED` | `true` | reject obvious prompt-injection phrasing with a 400 |
 
 Model and LangSmith settings are unchanged: `week1/.env` (see the capstone README).
 
@@ -57,10 +62,16 @@ Model and LangSmith settings are unchanged: `week1/.env` (see the capstone READM
 | `POST` | `/feedback` | `{trace_id, rating: -1\|0\|1, comment?}` → LangSmith feedback `user_rating` on that trace |
 | `GET` | `/session/{session_id}` | the turns this session remembers (lets the UI redraw after a refresh) |
 | `DELETE` | `/session/{session_id}` | `{session_id, cleared}`. Idempotent: an unknown session is still 200 |
-| `GET` | `/metrics` | Prometheus text: requests by endpoint/status, refusals, retries, cache hits, LLM calls by node, tokens, estimated cost, time per node, latency histogram, and rolling p50/p95, refusal rate, mean retries, cache-hit rate. Never calls the model |
+| `GET` | `/metrics` | Prometheus text: requests by endpoint/status, refusals, retries, cache hits, LLM calls by node, tokens, estimated cost, time per node, latency histogram, and rolling p50/p95, refusal rate, mean retries, cache-hit rate; errors by code, degraded steps, rejected requests (rate limit, injection), circuit state. Never calls the model |
 
 `/chat` and `done` also report what the answer cost: `llm_calls`, `tokens_in`, `tokens_out`,
 `estimated_cost_usd` (tokens × `COST_PER_1K_*_TOKENS`).
+
+**Resilience** (Task 8): `degraded` lists the steps that were skipped because the model provider
+failed (e.g. `"route_question: searched by default (llm_unavailable)"`). An answer with a non-empty
+`degraded` is still fact-checked, but it is never cached. If the fact-check itself can't run, there is
+no answer: 503 `verification_unavailable`. Policy and reasons:
+[`week2/task_08_resilience/RESILIENCE.md`](../week2/task_08_resilience/RESILIENCE.md).
 
 **Answer cache** ([`cache.py`](cache.py), Task 6): a session's *first* question is looked up by
 normalised text + corpus version + config fingerprint. A hit returns `cache_hit: true`,
@@ -130,11 +141,19 @@ Every error, from any endpoint, has one shape, and never contains a stack trace:
 
 | Status | `error` | Meaning |
 |---|---|---|
-| 422 | `validation_error` | bad input (the input itself is not echoed back) |
+| 422 | `validation_error` | bad input: empty, whitespace-only or too long (the input itself is not echoed back) |
+| 400 | `input_rejected` | the question looks like a prompt-injection attempt (`INJECTION_GUARD_ENABLED`) |
+| 429 | `rate_limited` (+ `Retry-After`) | more than `RATE_LIMIT_PER_MINUTE` requests in this session |
 | 404 / 405 | `not_found` / `method_not_allowed` | no such route / method |
 | 503 | `not_ready` (+ `Retry-After`) | still loading the index and models |
 | 503 | `startup_failed` | loading failed. `detail` says why; the process stays up so you can read it |
 | 503 | `feedback_unavailable` | no LangSmith key configured |
+| 503 | `llm_unavailable` (+ `Retry-After`) | the model provider kept failing after retries |
+| 503 | `llm_circuit_open` (+ `Retry-After`) | the provider failed repeatedly, so calls are paused (refused in ms) |
+| 503 | `retrieval_unavailable` | the search (index / embeddings) failed; no answer is made up |
+| 503 | `verification_unavailable` | the answer couldn't be fact-checked, so it isn't returned |
+| 503 | `request_budget_exceeded` | the request used up its `MAX_LLM_CALLS_PER_REQUEST` attempts |
+| 504 | `llm_timeout` / `request_timeout` (+ `Retry-After`) | the provider didn't answer in time / the request hit `REQUEST_TIMEOUT_SECONDS` |
 | 502 | `feedback_failed` | LangSmith rejected the feedback |
 | 500 | `internal_error` | anything unexpected. The traceback is in the server log under the same `request_id` |
 
@@ -170,4 +189,5 @@ taken out of rotation instead of returning 503s to users. Liveness decides wheth
 startup or a provider outage would get healthy processes killed in a loop, and
 every probe would cost a model call. `/readyz` deliberately does **not** call the
 LLM either. If the provider is down, the error shows up on `/chat` (structured,
-with a request id); Task 8 adds timeouts and a degradation path for that.
+with a request id). Since Task 8 that error is a 503/504 within `REQUEST_TIMEOUT_SECONDS`, and
+after 5 consecutive failures it comes back in milliseconds (circuit breaker).

@@ -242,7 +242,8 @@ def test_cache_disabled_also_turns_off_the_embedding_cache(fresh_settings, tmp_p
     assert type(utils.get_embeddings()).__name__ == "CacheBackedEmbeddings"
     fresh_settings.setenv("CACHE_ENABLED", "false")
     settings_mod.get_settings.cache_clear()
-    assert type(utils.get_embeddings()).__name__ == "OpenAIEmbeddings"
+    emb = utils.get_embeddings()
+    assert type(emb).__name__ == "ResilientEmbeddings" and type(emb.inner).__name__ == "OpenAIEmbeddings"
 
 
 def test_eval_path_never_sees_the_answer_cache(api):

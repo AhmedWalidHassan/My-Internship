@@ -22,7 +22,9 @@ the lifespan handler: the process answers /healthz immediately, and /readyz turn
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
+import math
 import os
 import re
 import time
@@ -37,6 +39,9 @@ from fastapi import Path as PathParam
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, PlainTextResponse
 from prometheus_client import CONTENT_TYPE_LATEST
+from slowapi import Limiter
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 from sse_starlette.sse import EventSourceResponse
 from starlette.datastructures import MutableHeaders
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -44,6 +49,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from app.cache import AnswerCache
 from app.capstone import load_capstone
 from app.config import get_settings
+from common.resilience import ProviderUnavailable  # noqa: E402  (app.config puts week1 on sys.path)
 from app.schemas import (
     SESSION_ID_PATTERN,
     ChatRequest,
@@ -60,6 +66,7 @@ from app.schemas import (
     StatusEvent,
     TokenEvent,
 )
+from app.guardrails import check_question
 from app.observability import Observer, configure_structlog
 from app.service import ChatService
 from app.sessions import SessionStore
@@ -186,6 +193,43 @@ def default_feedback_client():
     return Client()
 
 
+# ---------------------------------------------------------------------------
+# Task 8: provider failures -> structured errors, rate limiting, injection guard
+# ---------------------------------------------------------------------------
+PROVIDER_ERRORS = {   # code -> (status, what the client is told). Never a 500, never a stack trace.
+    "llm_timeout": (504, "The model provider did not answer in time. Please retry."),
+    "request_timeout": (504, "The model provider did not finish within this request's time limit. "
+                             "Please retry shortly."),
+    "request_budget_exceeded": (503, "This question needed more model calls than one request may use. "
+                                     "Please retry or rephrase."),
+    "llm_circuit_open": (503, "The model provider is failing, so the assistant is pausing calls to it. "
+                              "Please retry after the indicated time."),
+    "retrieval_unavailable": (503, "Document search is unavailable right now, so no answer can be grounded. "
+                                   "Please retry shortly."),
+    "verification_unavailable": (503, "An answer was drafted but could not be fact-checked, so it is not shown. "
+                                      "Please retry."),
+    "llm_unavailable": (503, "The model provider is unavailable right now. Please retry shortly."),
+}
+
+
+def provider_error(exc) -> ApiError:
+    status, message = PROVIDER_ERRORS.get(exc.code, PROVIDER_ERRORS["llm_unavailable"])
+    return ApiError(status, exc.code, message,
+                    headers={"Retry-After": str(max(1, math.ceil(getattr(exc, "retry_after", 5))))})
+
+
+def rate_limit_key(request: Request) -> str:
+    """Per session: the body's session_id (FastAPI has already read and cached the body
+    when the limit is checked). Without one, per client address, so leaving out
+    session_id is not a way around the limit."""
+    try:
+        body = json.loads(getattr(request, "_body", b"") or b"{}")
+    except (ValueError, TypeError):
+        body = {}
+    sid = body.get("session_id") if isinstance(body, dict) else None
+    return f"session:{sid}" if sid else f"ip:{get_remote_address(request)}"
+
+
 def build_cache(settings) -> AnswerCache | None:
     """The answer cache, or None with CACHE_ENABLED=false."""
     if not settings.cache_enabled:
@@ -268,9 +312,40 @@ def create_app(backend_factory: Callable | None = None,
         lifespan=lifespan,
     )
     app.add_middleware(RequestIdMiddleware)
+    limiter = Limiter(key_func=rate_limit_key, storage_uri="memory://")
+    app.state.limiter = limiter
+
+    async def _rate_limited(request: Request, exc: RateLimitExceeded) -> JSONResponse:
+        retry = 60
+        try:                                  # seconds until this key's window frees a slot
+            item, args = request.state.view_rate_limit
+            reset, _remaining = limiter.limiter.get_window_stats(item, *args)
+            retry = max(1, math.ceil(reset - time.time()))
+        except Exception:
+            pass
+        observer.metrics.rejections.labels("rate_limited").inc()
+        return _error(request, 429, "rate_limited",
+                      f"Too many requests for this session ({exc.detail}). Retry in {retry} s.",
+                      headers={"Retry-After": str(retry)})
+
+    app.add_exception_handler(RateLimitExceeded, _rate_limited)
     app.add_exception_handler(ApiError, _api_error)
     app.add_exception_handler(StarletteHTTPException, _http_error)
     app.add_exception_handler(RequestValidationError, _validation_error)
+
+    def guard(question: str) -> None:
+        """Reject obvious prompt-injection attempts before they cost a model call."""
+        if not get_settings().injection_guard_enabled:
+            return
+        verdict = check_question(question)
+        if not verdict.allowed:
+            observer.metrics.rejections.labels(f"injection:{verdict.rule}").inc()
+            log.warning("input rejected (%s): %r", verdict.rule, question[:120])
+            raise ApiError(400, "input_rejected",
+                           "This looks like an attempt to change the assistant's instructions. Ask a question "
+                           "about Northwind's policies, IT or products instead.")
+
+    rate_limit = limiter.limit(lambda: f"{get_settings().rate_limit_per_minute}/minute")
 
     def service(request: Request) -> ChatService:
         runtime: Runtime = request.app.state.runtime
@@ -283,14 +358,19 @@ def create_app(backend_factory: Callable | None = None,
 
     # -- chat -----------------------------------------------------------------
     @app.post("/chat", response_model=ChatResponse, responses=ERROR_RESPONSES, tags=["chat"])
+    @rate_limit
     def chat(req: ChatRequest, request: Request) -> ChatResponse:
         """Ask one question; get the answer, its sources and the node path the graph took.
 
         Pass the returned `session_id` with the next question to continue the conversation.
         """
+        guard(req.question)
         svc = service(request)
-        return svc.ask(req.question, req.session_id or str(uuid.uuid4()),
-                       trace_id=str(uuid.uuid4()), request_id=_request_id(request))
+        try:
+            return svc.ask(req.question, req.session_id or str(uuid.uuid4()),
+                           trace_id=str(uuid.uuid4()), request_id=_request_id(request))
+        except ProviderUnavailable as exc:      # degradation could not absorb it: structured 503/504
+            raise provider_error(exc) from None
 
     @app.post("/chat/stream", tags=["chat"], responses={
         200: {"content": {"text/event-stream": {}}, "description": (
@@ -302,8 +382,10 @@ def create_app(backend_factory: Callable | None = None,
             "authoritative answer. Always last on success.\n"
             "* `error` {error, detail, request_id}: something failed mid-stream. Always last on failure.")},
         **ERROR_RESPONSES})
+    @rate_limit
     def chat_stream(req: ChatRequest, request: Request):
         """Same input as /chat; streams the answer token by token (see the 200 response)."""
+        guard(req.question)
         svc = service(request)                   # not ready -> a normal 503 JSON error, not a stream
         session_id = req.session_id or str(uuid.uuid4())
         trace_id, request_id = str(uuid.uuid4()), _request_id(request)
@@ -312,6 +394,10 @@ def create_app(backend_factory: Callable | None = None,
             try:
                 for ev in svc.events(req.question, session_id, trace_id=trace_id, request_id=request_id):
                     yield {"event": EVENT_NAMES[type(ev)], "data": ev.model_dump_json()}
+            except ProviderUnavailable as exc:
+                api = provider_error(exc)
+                err = ErrorResponse(error=api.error, detail=api.detail, request_id=request_id)
+                yield {"event": "error", "data": err.model_dump_json()}
             except Exception:
                 log.exception("stream failed request_id=%s trace_id=%s", request_id, trace_id)
                 err = ErrorResponse(error="internal_error", request_id=request_id,

@@ -20,6 +20,8 @@ httpx
 structlog                  # one JSON log line per request (Task 5)
 prometheus-client          # GET /metrics (Task 5)
 cachetools                 # answer cache (Task 6)
+slowapi                    # per-session rate limit, 429 + Retry-After (Task 8)
+tenacity                   # bounded LLM/embedding retries with backoff (Task 8)
 
 # --- RAG: index, retriever, graph, tracing ---
 langchain-core
