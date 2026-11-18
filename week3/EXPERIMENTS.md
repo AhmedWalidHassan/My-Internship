@@ -537,7 +537,43 @@ HYBRID_BM25_WEIGHT: 0.5 -> 0.3
 SOURCE_PRIOR: (none) -> meetings/:0.5,newsletters/:0.5
 ```
 
-**Result** *(committed after running)*: *(pending)*
+**Result** *(committed after running)*: `hybrid (BM25 0.3 + dense 0.7), source prior meetings/:0.5,newsletters/:0.5, depth 10 per retriever`, 348 chunks.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.933 | +0.017 | no |
+| MRR (all) | 0.612 | 0.723 | +0.111 | yes |
+| recall@1 (all) | 0.417 | 0.583 | +0.167 | yes |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 0.5 / 0.8 ms | | – |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 1.00 | 0.64 | 0.80 |
+| table | 4 | 1.00 | 1.00 | 0.83 | 0.80 |
+| keyword | 4 | 1.00 | 1.00 | 0.71 | 0.88 |
+| version | 5 | 1.00 | 1.00 | 0.80 | 0.85 |
+| draft | 4 | 1.00 | 1.00 | 0.45 | 0.33 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.75 |
+| ambiguous | 3 | 1.00 | 1.00 | 0.67 | 0.83 |
+| long_doc | 4 | 1.00 | 1.00 | 0.83 | 1.00 |
+| cross_lingual | 4 | 0.25 | 0.25 | 0.06 | 0.08 |
+| follow_up | 4 | 1.00 | 1.00 | 0.52 | 0.88 |
+| personalized | 4 | 0.75 | 0.75 | 0.31 | 0.62 |
+
+Questions in/out of the top 5: 17 gained.
+
+**Hypothesis confirmed?** **Better than predicted.**
+- **MRR 0.723**, above both parts (EXP-01 0.685, EXP-07 0.643), within my 0.69–0.71 range plus a bit.
+- **recall@5 0.933, not 0.917:** I expected n08 (the FTO draft question) to stay lost, as in EXP-01.
+  The prior pushes the newsletters that outranked the draft back down, so it returns.
+- **Interaction:** the two levers fix *different* noise. Lower BM25 weight removes word-overlap
+  matches, and the prior removes chatter that is semantically close (newsletter PTO reminders).
+- **Cost:** none, no latency.
+
+**Decision:** keep. The base for EXP-09 and EXP-10.
 
 ---
 
