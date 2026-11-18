@@ -719,6 +719,65 @@ Measured on the full pipeline, dev (70), same judge, against the winner at 6.
 MAX_DOCS_TO_GRADE: 6 -> 3
 ```
 
+**Result** *(committed after running)*: full pipeline, dev (70), judge gemma3:4b. Cost from the same runs
+and from `make cost` on the seed set ([`cost_seed_*.md`](task_04_retrieval_experiments/evidence/)).
+
+| | Baseline (Task 3) | EXP-09 (winner, grade 6) | EXP-11 (winner, grade 3) |
+|---|---:|---:|---:|
+| Deterministic (dev) | 0.743 | 0.686 | **0.614** |
+| Correctness (dev, judge) | 0.500 | 0.400 | 0.429 |
+| Groundedness (dev) | 0.986 | 0.971 | 0.986 |
+| Refused (of 70) | 15 | 17 | 20 |
+| LLM calls / question (dev) | 13.9 | 14.7 | **10.0** |
+| Cost / question (dev, gpt-4o-mini prices) | $0.000698 | $0.000606 | **$0.000449** |
+| Mean latency (dev) | 5.7 s | 5.2 s | 4.3 s |
+
+**Hypothesis confirmed?** **No.**
+- **Right about cost:** −26% against the winner at 6 graded passages, LLM calls 14.7 → 10.0,
+  `grade_documents` 9.4 → 4.7 calls per question on the seed set.
+- **Wrong about "no answers lost":** deterministic fell by 5 more questions (0.686 → 0.614). Losses in
+  `version` (0.6 → 0.4), `personalized` (0.75 → 0.25), `multi_hop` (0.25 → 0) and `cross_lingual`.
+- **Why:** recall@3 is measured at depth 10 per retriever, per *document*. The graph sees the
+  production retriever (4 per retriever) and grades *passages*. With 400-character chunks, the top 3
+  passages often hold the right document but not the sentence with the answer. Version questions need
+  both v2 and v3 passages, and personalized ones need the tenure table and the user's band.
+  Document-level recall@3 promised more than passage-level grading could deliver.
+
+**The bigger finding, from the same runs:** EXP-09 itself, the retrieval winner, **made answers worse**
+than the Task 3 baseline (deterministic 0.743 → 0.686, −4 questions), although its MRR is +0.18.
+- **The losses are not retrieval misses.** The gold document is in the top 5 for all of them. The
+  answers come out wrong because 400-character chunks split the facts:
+  - PTO v3's "reduced to 60 days" lands apart from the accrual text, so #3 answers v2's 90 days.
+  - The draft's "NOT APPROVED" banner sits in another chunk from the 15-day minimum, so n09 presents
+    the proposal as policy.
+  - Manual fragments push the R2 data sheet out of the graph's top 4, so #24 is refused.
+- **Retrieval metrics can't see this:** they score documents, and a smaller chunk is still "the right
+  document".
+
+**Decision:** revert (keep grading 6). And **the chunk-size part of EXP-09 can't ship on the strength of
+recall alone**. EXP-12 tests the same retriever levers without it.
+
+
+
+---
+
+### EXP-12 — Generation check of EXP-08 (BM25 0.3 + source prior, 800/100 chunks)
+
+**Hypothesis** *(committed before running)*: The generation regression of EXP-09 comes from the 400/50
+chunks, not from the fusion changes. So EXP-08, the same BM25 0.3 and source prior on the Task 3
+800/100 chunks (retrieval: MRR 0.723, recall@5 0.933), answers **at least as well as the Task 3
+baseline**: deterministic ≥ 0.729 (baseline 0.743, minus one question), gaining #17 (password rules,
+now retrieved) and losing nothing structural. Cost per question at or below the baseline's $0.000698:
+better ranking means fewer rewrite loops.
+
+**The one change (vs EXP-09):** chunks back to 800/100 (= EXP-08's config, on the generation side).
+
+**Config diff (vs Task 3 baseline):**
+```
+HYBRID_BM25_WEIGHT: 0.5 -> 0.3
+SOURCE_PRIOR: (none) -> meetings/:0.5,newsletters/:0.5
+```
+
 **Result** *(committed after running)*: *(pending)*
 
 ---

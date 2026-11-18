@@ -1,0 +1,4116 @@
+{
+ "summary": {
+  "n": 40,
+  "ok": 40,
+  "errors": 0,
+  "mean_latency_s": 3.961475,
+  "p50_latency_s": 3.939,
+  "p95_latency_s": 6.422599999999992,
+  "mean_llm_calls": 9.4,
+  "p95_llm_calls": 17.049999999999997,
+  "max_llm_calls": 18,
+  "mean_tokens_in": 2058.125,
+  "mean_tokens_out": 185.6,
+  "mean_cost_usd": 0.00042009999999999997,
+  "total_cost_usd": 0.016804,
+  "projected_monthly_usd_at_1000_per_day": 12.603,
+  "refusal_rate": 0.175,
+  "mean_retries": 0.55,
+  "wall_clock_s": 158.48915946099805,
+  "model": "ollama:qwen3.5:4b",
+  "price_per_1k": [
+   0.00015,
+   0.0006
+  ],
+  "max_docs_to_grade": 3,
+  "retriever_k": 4,
+  "nodes": [
+   {
+    "node": "grade_generation",
+    "calls_per_q": 2.05,
+    "runs_per_q": 1.15,
+    "tokens_in_per_q": 567.1,
+    "tokens_out_per_q": 95.35,
+    "cost_per_q": 0.000142275,
+    "pct_cost": 33.86864962819471,
+    "ms_per_q": 1746.2924999999996,
+    "pct_time": 44.116983899113826
+   },
+   {
+    "node": "grade_documents",
+    "calls_per_q": 4.65,
+    "runs_per_q": 1.55,
+    "tokens_in_per_q": 825.9,
+    "tokens_out_per_q": 9.3,
+    "cost_per_q": 0.000129465,
+    "pct_cost": 30.819221395988254,
+    "ms_per_q": 603.4550000000002,
+    "pct_time": 15.245220671130264
+   },
+   {
+    "node": "generate",
+    "calls_per_q": 1.15,
+    "runs_per_q": 1.15,
+    "tokens_in_per_q": 455.625,
+    "tokens_out_per_q": 66.275,
+    "cost_per_q": 0.00010810874999999999,
+    "pct_cost": 25.735353192704938,
+    "ms_per_q": 1215.9199999999996,
+    "pct_time": 30.718063017856682
+   },
+   {
+    "node": "route_question",
+    "calls_per_q": 1.0,
+    "runs_per_q": 1.0,
+    "tokens_in_per_q": 148.75,
+    "tokens_out_per_q": 5.0,
+    "cost_per_q": 2.53125e-05,
+    "pct_cost": 6.0256559038037505,
+    "ms_per_q": 180.59000000000006,
+    "pct_time": 4.5622861704674165
+   },
+   {
+    "node": "rewrite_query",
+    "calls_per_q": 0.55,
+    "runs_per_q": 0.55,
+    "tokens_in_per_q": 60.75,
+    "tokens_out_per_q": 9.675,
+    "cost_per_q": 1.4917499999999997e-05,
+    "pct_cost": 3.551119879308344,
+    "ms_per_q": 191.15500000000003,
+    "pct_time": 4.829192164104872
+   },
+   {
+    "node": "contextualize",
+    "calls_per_q": 0.0,
+    "runs_per_q": 1.0,
+    "tokens_in_per_q": 0.0,
+    "tokens_out_per_q": 0.0,
+    "cost_per_q": 0.0,
+    "pct_cost": 0.0,
+    "ms_per_q": 0.0325,
+    "pct_time": 0.0008210548786765102
+   },
+   {
+    "node": "retrieve",
+    "calls_per_q": 0.0,
+    "runs_per_q": 1.55,
+    "tokens_in_per_q": 0.0,
+    "tokens_out_per_q": 0.0,
+    "cost_per_q": 0.0,
+    "pct_cost": 0.0,
+    "ms_per_q": 20.8725,
+    "pct_time": 0.5273067063130911
+   },
+   {
+    "node": "refuse",
+    "calls_per_q": 0.0,
+    "runs_per_q": 0.175,
+    "tokens_in_per_q": 0.0,
+    "tokens_out_per_q": 0.0,
+    "cost_per_q": 0.0,
+    "pct_cost": 0.0,
+    "ms_per_q": 0.005,
+    "pct_time": 0.00012631613518100158
+   }
+  ],
+  "paths": {
+   "route \u2192 retrieve \u2192 grade \u2192 generate \u2192 check \u2192 END (answered)": 28,
+   "\u2026with 1 rewrite loop (answered)": 2,
+   "\u2026with 2 rewrite loops (refused)": 7,
+   "\u2026with 2 rewrite loops (answered)": 3
+  },
+  "rewrite_triggers": {
+   "fact-check rejected the answer": 6,
+   "doc grader rejected every passage": 16
+  },
+  "rewrite_fired": 12
+ },
+ "requests": [
+  {
+   "request_id": "cost-report-01",
+   "session_id": "cost-fec5c060-c1b7-4f0f-9adb-82ee6fb5b225",
+   "trace_id": "6af66203-1edd-4131-8ba2-d8b84bbaf4b6",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 4083,
+   "tokens_in": 1738,
+   "tokens_out": 206,
+   "estimated_cost_usd": 0.000384,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 179.7,
+     "llm_calls": 1,
+     "llm_ms": 178.9,
+     "tokens_in": 149,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 3.3,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 428.0,
+     "llm_calls": 3,
+     "llm_ms": 426.1,
+     "tokens_in": 530,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 1143.8,
+     "llm_calls": 1,
+     "llm_ms": 1143.0,
+     "tokens_in": 467,
+     "tokens_out": 61
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 2326.4,
+     "llm_calls": 2,
+     "llm_ms": 2325.0,
+     "tokens_in": 592,
+     "tokens_out": 134
+    }
+   },
+   "retrieved_ids": [
+    "policies/hr/HR-POL-005_sick_leave.pdf::0",
+    "legacy_intranet/employee_handbook.md::4",
+    "wiki/people/Benefits_Overview.html::0",
+    "legacy_intranet/employee_handbook.md::2",
+    "legacy_intranet/it_faq.md::6",
+    "scanned_archive/PTO_Policy_2017_scan.txt::0"
+   ],
+   "kept_ids": [
+    "policies/hr/HR-POL-005_sick_leave.pdf::0",
+    "legacy_intranet/employee_handbook.md::4",
+    "wiki/people/Benefits_Overview.html::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "How many paid sick days do employees get per year?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-02",
+   "session_id": "cost-738036db-bae4-468a-8c29-7c896c8ddbd3",
+   "trace_id": "4b454b8f-8342-485f-833e-499a456c456d",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 4576,
+   "tokens_in": 2107,
+   "tokens_out": 228,
+   "estimated_cost_usd": 0.000453,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 181.6,
+     "llm_calls": 1,
+     "llm_ms": 180.9,
+     "tokens_in": 151,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 3.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 447.2,
+     "llm_calls": 3,
+     "llm_ms": 445.4,
+     "tokens_in": 601,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 2007.4,
+     "llm_calls": 1,
+     "llm_ms": 2006.9,
+     "tokens_in": 561,
+     "tokens_out": 115
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1934.7,
+     "llm_calls": 2,
+     "llm_ms": 1933.3,
+     "tokens_in": 794,
+     "tokens_out": 102
+    }
+   },
+   "retrieved_ids": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf::4",
+    "policies/hr/HR-POL-004_PTO_v2.pdf::2",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt::0",
+    "newsletters/Northwind_Dispatch_2026-02.html::0",
+    "legacy_intranet/employee_handbook.md::2"
+   ],
+   "kept_ids": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf::4",
+    "policies/hr/HR-POL-004_PTO_v2.pdf::2",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "How many PTO days can I carry over into next year?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-03",
+   "session_id": "cost-d7246d75-75e4-4a0a-8128-c1e0e00b51d7",
+   "trace_id": "cc609afb-2fcb-4b4d-9e77-c926b08dd378",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 1,
+   "latency_ms": 5456,
+   "tokens_in": 2893,
+   "tokens_out": 257,
+   "estimated_cost_usd": 0.000588,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 13,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 183.7,
+     "llm_calls": 1,
+     "llm_ms": 183.0,
+     "tokens_in": 149,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 2,
+     "ms": 7.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 2,
+     "ms": 789.8,
+     "llm_calls": 6,
+     "llm_ms": 786.4,
+     "tokens_in": 1123,
+     "tokens_out": 12
+    },
+    "generate": {
+     "runs": 2,
+     "ms": 1847.3,
+     "llm_calls": 2,
+     "llm_ms": 1846.0,
+     "tokens_in": 715,
+     "tokens_out": 98
+    },
+    "grade_generation": {
+     "runs": 2,
+     "ms": 2321.2,
+     "llm_calls": 3,
+     "llm_ms": 2319.2,
+     "tokens_in": 798,
+     "tokens_out": 127
+    },
+    "rewrite_query": {
+     "runs": 1,
+     "ms": 302.3,
+     "llm_calls": 1,
+     "llm_ms": 301.6,
+     "tokens_in": 108,
+     "tokens_out": 15
+    }
+   },
+   "retrieved_ids": [
+    "policies/hr/HR-POL-006_parental_leave.pdf::0",
+    "wiki/people/Benefits_Overview.html::0",
+    "legacy_intranet/employee_handbook.md::7",
+    "policies/hr/HR-POL-006_parental_leave.pdf::1",
+    "legacy_intranet/it_faq.md::1",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md::3",
+    "policies/hr/HR-POL-004_PTO_v2.pdf::0",
+    "policies/hr/HR-POL-004_PTO_v3.pdf::0",
+    "policies/hr/HR-POL-004_PTO_v3.pdf::1"
+   ],
+   "kept_ids": [
+    "policies/hr/HR-POL-006_parental_leave.pdf::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 13,
+   "question": "How long is parental leave for an adoptive parent?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-04",
+   "session_id": "cost-82c70e15-bb15-4171-9556-70492a7cc858",
+   "trace_id": "2d72ef37-485f-4de5-bfb4-64ec800b14ff",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 2065,
+   "tokens_in": 1515,
+   "tokens_out": 77,
+   "estimated_cost_usd": 0.000273,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 179.9,
+     "llm_calls": 1,
+     "llm_ms": 179.2,
+     "tokens_in": 148,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 4.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 431.1,
+     "llm_calls": 3,
+     "llm_ms": 429.6,
+     "tokens_in": 520,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 673.9,
+     "llm_calls": 1,
+     "llm_ms": 673.3,
+     "tokens_in": 389,
+     "tokens_out": 33
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 773.5,
+     "llm_calls": 2,
+     "llm_ms": 772.4,
+     "tokens_in": 458,
+     "tokens_out": 33
+    }
+   },
+   "retrieved_ids": [
+    "wiki/it/Password_Policy.html::1",
+    "policies/it/IT-STD-003_password_and_authentication.pdf::0",
+    "wiki/it/Password_Policy.html::0",
+    "wiki/sales/Sales_IT_Tips.html::0",
+    "legacy_intranet/it_faq.md::0",
+    "legacy_intranet/it_faq.md::2",
+    "legacy_intranet/it_faq.md::5"
+   ],
+   "kept_ids": [
+    "policies/it/IT-STD-003_password_and_authentication.pdf::0",
+    "wiki/it/Password_Policy.html::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "What is the minimum length for a corporate password?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-05",
+   "session_id": "cost-f33ee82b-1a47-4a43-bf33-ebef59b6f272",
+   "trace_id": "76a4cd67-a067-4bf4-a7c8-359832330f5d",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 5312,
+   "tokens_in": 1893,
+   "tokens_out": 280,
+   "estimated_cost_usd": 0.000452,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 180.5,
+     "llm_calls": 1,
+     "llm_ms": 179.8,
+     "tokens_in": 148,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 2.9,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 431.1,
+     "llm_calls": 3,
+     "llm_ms": 429.2,
+     "tokens_in": 530,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 2283.9,
+     "llm_calls": 1,
+     "llm_ms": 2283.3,
+     "tokens_in": 470,
+     "tokens_out": 136
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 2411.1,
+     "llm_calls": 2,
+     "llm_ms": 2409.8,
+     "tokens_in": 745,
+     "tokens_out": 133
+    }
+   },
+   "retrieved_ids": [
+    "legacy_intranet/it_faq.md::4",
+    "wiki/it/VPN_Setup_Guide.html::0",
+    "policies/it/IT-STD-007_remote_access.pdf::0",
+    "policies/it/IT-STD-007_remote_access.pdf::1",
+    "legacy_intranet/it_faq.md::1",
+    "legacy_intranet/it_faq.md::6",
+    "legacy_intranet/it_faq.md::0"
+   ],
+   "kept_ids": [
+    "legacy_intranet/it_faq.md::4",
+    "wiki/it/VPN_Setup_Guide.html::0",
+    "policies/it/IT-STD-007_remote_access.pdf::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "How do I connect to the VPN from home?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-06",
+   "session_id": "cost-efe878ca-209a-42ae-a24e-76f6207d6fcc",
+   "trace_id": "48720274-b690-47a6-9d75-2c0d378b63c5",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 4583,
+   "tokens_in": 1891,
+   "tokens_out": 234,
+   "estimated_cost_usd": 0.000424,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 182.8,
+     "llm_calls": 1,
+     "llm_ms": 182.0,
+     "tokens_in": 152,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 3.8,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 417.0,
+     "llm_calls": 3,
+     "llm_ms": 415.0,
+     "tokens_in": 538,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 1923.8,
+     "llm_calls": 1,
+     "llm_ms": 1922.9,
+     "tokens_in": 487,
+     "tokens_out": 112
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 2053.8,
+     "llm_calls": 2,
+     "llm_ms": 2052.7,
+     "tokens_in": 714,
+     "tokens_out": 111
+    }
+   },
+   "retrieved_ids": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::1",
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::2",
+    "scanned_archive/Travel_Policy_2018_scan.txt::0",
+    "legacy_intranet/hr_policies.md::1",
+    "legacy_intranet/it_faq.md::2",
+    "legacy_intranet/it_faq.md::5"
+   ],
+   "kept_ids": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::1",
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::2",
+    "scanned_archive/Travel_Policy_2018_scan.txt::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "What is the hotel cap per night for a business trip to Germany?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-07",
+   "session_id": "cost-934b3e28-2f9c-456d-a094-888c3af94797",
+   "trace_id": "30fdecbf-8a95-43a3-a9b2-61ea2d2793f5",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 9386,
+   "tokens_in": 3901,
+   "tokens_out": 494,
+   "estimated_cost_usd": 0.000882,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 18,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 181.4,
+     "llm_calls": 1,
+     "llm_ms": 180.6,
+     "tokens_in": 150,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 10.3,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1118.8,
+     "llm_calls": 9,
+     "llm_ms": 1113.6,
+     "tokens_in": 1617,
+     "tokens_out": 18
+    },
+    "generate": {
+     "runs": 3,
+     "ms": 2383.0,
+     "llm_calls": 3,
+     "llm_ms": 2381.2,
+     "tokens_in": 988,
+     "tokens_out": 133
+    },
+    "grade_generation": {
+     "runs": 3,
+     "ms": 5038.9,
+     "llm_calls": 3,
+     "llm_ms": 5036.7,
+     "tokens_in": 923,
+     "tokens_out": 306
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 646.3,
+     "llm_calls": 2,
+     "llm_ms": 645.2,
+     "tokens_in": 223,
+     "tokens_out": 32
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::3",
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::1",
+    "scanned_archive/Expense_Policy_2019_scan.txt::0",
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::2",
+    "legacy_intranet/it_faq.md::4",
+    "policies/hr/HR-POL-016_learning_development.pdf::1",
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::0",
+    "policies/hr/HR-POL-005_sick_leave.pdf::1",
+    "wiki/people/Benefits_Overview.html::0",
+    "legacy_intranet/employee_handbook.md::5"
+   ],
+   "kept_ids": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::3"
+   ],
+   "degraded": [],
+   "llm_attempts": 18,
+   "question": "What is the daily meal allowance when I travel to Cairo?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-08",
+   "session_id": "cost-7f574816-173d-4b57-ac98-4bc00f8c7d0b",
+   "trace_id": "4f9d03a9-a516-42ad-a9f1-ebdd40979750",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 2551,
+   "tokens_in": 1331,
+   "tokens_out": 116,
+   "estimated_cost_usd": 0.000269,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 180.8,
+     "llm_calls": 1,
+     "llm_ms": 180.2,
+     "tokens_in": 149,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 2.6,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 399.7,
+     "llm_calls": 3,
+     "llm_ms": 398.2,
+     "tokens_in": 489,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 749.2,
+     "llm_calls": 1,
+     "llm_ms": 748.6,
+     "tokens_in": 305,
+     "tokens_out": 40
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1216.1,
+     "llm_calls": 2,
+     "llm_ms": 1215.1,
+     "tokens_in": 388,
+     "tokens_out": 65
+    }
+   },
+   "retrieved_ids": [
+    "product/Rover_Error_Codes_2026.xlsx::48",
+    "product/Rover_Error_Codes_2026.xlsx::59",
+    "product/Rover_Error_Codes_2026.xlsx::28",
+    "product/Rover_Error_Codes_2026.xlsx::103",
+    "legacy_intranet/it_faq.md::5",
+    "legacy_intranet/it_faq.md::2",
+    "product/Rover_Error_Codes_2026.xlsx::49"
+   ],
+   "kept_ids": [
+    "product/Rover_Error_Codes_2026.xlsx::48"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "What does error code E-217 mean?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-09",
+   "session_id": "cost-da482f03-f356-4505-8f05-5c596039138b",
+   "trace_id": "af794f58-0888-414a-88c0-8dd8d7736aaf",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 2,
+   "latency_ms": 3911,
+   "tokens_in": 3041,
+   "tokens_out": 166,
+   "estimated_cost_usd": 0.000556,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 15,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 180.0,
+     "llm_calls": 1,
+     "llm_ms": 179.3,
+     "tokens_in": 154,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 9.5,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 886.5,
+     "llm_calls": 9,
+     "llm_ms": 881.5,
+     "tokens_in": 1605,
+     "tokens_out": 18
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 1096.6,
+     "llm_calls": 2,
+     "llm_ms": 1095.5,
+     "tokens_in": 245,
+     "tokens_out": 62
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 870.6,
+     "llm_calls": 1,
+     "llm_ms": 870.1,
+     "tokens_in": 474,
+     "tokens_out": 43
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 864.0,
+     "llm_calls": 2,
+     "llm_ms": 862.7,
+     "tokens_in": 563,
+     "tokens_out": 38
+    }
+   },
+   "retrieved_ids": [
+    "product/Spare_Parts_Catalog_2026.pdf::1",
+    "product/Spare_Parts_Catalog_2026.pdf::0",
+    "product/Spare_Parts_Catalog_2026.pdf::4",
+    "product/Spare_Parts_Catalog_2026.pdf::3",
+    "meetings/2026-07-13_fleet_software_073.txt::2",
+    "meetings/2026-07-16_marketing_051.txt::2",
+    "meetings/2026-04-13_hardware_sustaining_055.txt::2",
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf::0",
+    "policies/it/IT-STD-007_remote_access.pdf::3",
+    "legacy_intranet/it_faq.md::5",
+    "product/fleet_manager/release_notes_5.0.md::0",
+    "meetings/2026-08-14_firmware_093.txt::2",
+    "policies/hr/HR-POL-014_referral_bonus.pdf::2",
+    "policies/it/IT-STD-007_remote_access.pdf::2"
+   ],
+   "kept_ids": [
+    "product/Spare_Parts_Catalog_2026.pdf::1",
+    "product/Spare_Parts_Catalog_2026.pdf::0",
+    "product/Spare_Parts_Catalog_2026.pdf::4"
+   ],
+   "degraded": [],
+   "llm_attempts": 15,
+   "question": "Is part NW-BAT-4830 compatible with the R2?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-10",
+   "session_id": "cost-3e10afde-6a44-48dd-9deb-fe57468cd073",
+   "trace_id": "5eafdcb4-78e2-4241-9d11-4f9fcb2bf8c0",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 2458,
+   "tokens_in": 1511,
+   "tokens_out": 106,
+   "estimated_cost_usd": 0.00029,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 180.7,
+     "llm_calls": 1,
+     "llm_ms": 180.0,
+     "tokens_in": 151,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 3.4,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 421.5,
+     "llm_calls": 3,
+     "llm_ms": 419.5,
+     "tokens_in": 529,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 784.5,
+     "llm_calls": 1,
+     "llm_ms": 784.0,
+     "tokens_in": 373,
+     "tokens_out": 41
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1065.8,
+     "llm_calls": 2,
+     "llm_ms": 1064.4,
+     "tokens_in": 458,
+     "tokens_out": 54
+    }
+   },
+   "retrieved_ids": [
+    "product/R3/R3_Operator_Manual_RevC.pdf::10",
+    "legacy_intranet/product_specs.md::5",
+    "meetings/2026-04-24_data_platform_086.txt::1",
+    "meetings/2026-07-18_people_operations_021.txt::1",
+    "legacy_intranet/it_faq.md::2",
+    "legacy_intranet/it_faq.md::5"
+   ],
+   "kept_ids": [
+    "product/R3/R3_Operator_Manual_RevC.pdf::10",
+    "legacy_intranet/product_specs.md::5"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "What is the maximum ramp incline for a loaded R3?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-11",
+   "session_id": "cost-017496be-81f7-4907-aab2-9700354de208",
+   "trace_id": "00073f5e-542e-4844-ac66-7b881e758e14",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 3004,
+   "tokens_in": 1497,
+   "tokens_out": 140,
+   "estimated_cost_usd": 0.000309,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 177.4,
+     "llm_calls": 1,
+     "llm_ms": 176.5,
+     "tokens_in": 150,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 3.3,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 404.2,
+     "llm_calls": 3,
+     "llm_ms": 402.7,
+     "tokens_in": 480,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 1216.0,
+     "llm_calls": 1,
+     "llm_ms": 1215.2,
+     "tokens_in": 363,
+     "tokens_out": 69
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1201.1,
+     "llm_calls": 2,
+     "llm_ms": 1199.9,
+     "tokens_in": 504,
+     "tokens_out": 60
+    }
+   },
+   "retrieved_ids": [
+    "product/R3/R3_Operator_Manual_RevC.pdf::8",
+    "product/Rover_Error_Codes_2026.xlsx::46",
+    "product/Rover_Error_Codes_2026.xlsx::96",
+    "product/Rover_Error_Codes_2026.xlsx::50",
+    "legacy_intranet/it_faq.md::1",
+    "legacy_intranet/it_faq.md::0",
+    "legacy_intranet/it_faq.md::6"
+   ],
+   "kept_ids": [
+    "product/R3/R3_Operator_Manual_RevC.pdf::8",
+    "product/Rover_Error_Codes_2026.xlsx::96"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "How do I reset the emergency stop on an R3?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-12",
+   "session_id": "cost-02a43661-222a-4322-be2b-7a86d2996d50",
+   "trace_id": "4351bff1-8350-486b-b7e8-41e3510b6448",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 3802,
+   "tokens_in": 2040,
+   "tokens_out": 179,
+   "estimated_cost_usd": 0.000413,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 181.6,
+     "llm_calls": 1,
+     "llm_ms": 180.8,
+     "tokens_in": 147,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 3.2,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 458.0,
+     "llm_calls": 3,
+     "llm_ms": 456.3,
+     "tokens_in": 628,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 1195.7,
+     "llm_calls": 1,
+     "llm_ms": 1195.1,
+     "tokens_in": 570,
+     "tokens_out": 61
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1961.0,
+     "llm_calls": 2,
+     "llm_ms": 1959.8,
+     "tokens_in": 695,
+     "tokens_out": 107
+    }
+   },
+   "retrieved_ids": [
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf::0",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf::0",
+    "legacy_intranet/product_specs.md::1",
+    "product/R3/R3_Operator_Manual_RevC.pdf::2",
+    "legacy_intranet/it_faq.md::2",
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::3",
+    "product/R3/R3_Operator_Manual_RevC.pdf::5",
+    "legacy_intranet/it_faq.md::5"
+   ],
+   "kept_ids": [
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf::0",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf::0",
+    "legacy_intranet/product_specs.md::1"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "What is the payload capacity of the rover?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-13",
+   "session_id": "cost-846697e7-d156-45f0-9e4d-1dde61a9a8d1",
+   "trace_id": "d69a5919-1807-4b3d-8d76-1ed52dee9ee6",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 4994,
+   "tokens_in": 1779,
+   "tokens_out": 265,
+   "estimated_cost_usd": 0.000426,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 178.9,
+     "llm_calls": 1,
+     "llm_ms": 178.3,
+     "tokens_in": 144,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 3.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 407.3,
+     "llm_calls": 3,
+     "llm_ms": 405.4,
+     "tokens_in": 508,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 1822.2,
+     "llm_calls": 1,
+     "llm_ms": 1821.4,
+     "tokens_in": 456,
+     "tokens_out": 106
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 2580.7,
+     "llm_calls": 2,
+     "llm_ms": 2579.3,
+     "tokens_in": 671,
+     "tokens_out": 148
+    }
+   },
+   "retrieved_ids": [
+    "policies/it/IT-STD-003_password_and_authentication.pdf::0",
+    "wiki/it/Password_Policy.html::1",
+    "wiki/it/Password_Policy.html::0",
+    "wiki/sales/Sales_IT_Tips.html::0",
+    "legacy_intranet/it_faq.md::2",
+    "meetings/2026-03-23_it_operations_049.txt::0",
+    "meetings/2026-02-22_data_platform_028.txt::0",
+    "meetings/2026-09-27_data_platform_019.txt::1"
+   ],
+   "kept_ids": [
+    "policies/it/IT-STD-003_password_and_authentication.pdf::0",
+    "wiki/it/Password_Policy.html::1",
+    "wiki/it/Password_Policy.html::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "What are the password requirements?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-14",
+   "session_id": "cost-4897fd4e-a210-475c-b6e3-3d8e5ff93c89",
+   "trace_id": "64cfe73f-a628-4a6a-a509-20b52333ba7f",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 4645,
+   "tokens_in": 1799,
+   "tokens_out": 243,
+   "estimated_cost_usd": 0.000416,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 182.1,
+     "llm_calls": 1,
+     "llm_ms": 181.6,
+     "tokens_in": 150,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 3.6,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 414.2,
+     "llm_calls": 3,
+     "llm_ms": 412.8,
+     "tokens_in": 508,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 1991.1,
+     "llm_calls": 1,
+     "llm_ms": 1990.4,
+     "tokens_in": 451,
+     "tokens_out": 118
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 2051.6,
+     "llm_calls": 2,
+     "llm_ms": 2050.4,
+     "tokens_in": 690,
+     "tokens_out": 114
+    }
+   },
+   "retrieved_ids": [
+    "policies/hr/HR-POL-014_referral_bonus.pdf::1",
+    "legacy_intranet/hr_policies.md::3",
+    "policies/hr/HR-POL-014_referral_bonus.pdf::0",
+    "policies/hr/HR-POL-014_referral_bonus.pdf::2",
+    "legacy_intranet/it_faq.md::4",
+    "wiki/it/VPN_Setup_Guide.html::0",
+    "product/R3/R3_Operator_Manual_RevC.pdf::6"
+   ],
+   "kept_ids": [
+    "policies/hr/HR-POL-014_referral_bonus.pdf::1",
+    "legacy_intranet/hr_policies.md::3",
+    "policies/hr/HR-POL-014_referral_bonus.pdf::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "How much is the referral bonus and when is it paid?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-15",
+   "session_id": "cost-d07694ef-3ce8-445d-9402-5cde8c5f259a",
+   "trace_id": "7e590ca2-0162-48c9-ba7a-b115be692dfb",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 6208,
+   "tokens_in": 3412,
+   "tokens_out": 277,
+   "estimated_cost_usd": 0.000678,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 17,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 182.3,
+     "llm_calls": 1,
+     "llm_ms": 181.6,
+     "tokens_in": 150,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 10.7,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1209.8,
+     "llm_calls": 9,
+     "llm_ms": 1204.7,
+     "tokens_in": 1446,
+     "tokens_out": 18
+    },
+    "generate": {
+     "runs": 2,
+     "ms": 1734.5,
+     "llm_calls": 2,
+     "llm_ms": 1733.3,
+     "tokens_in": 742,
+     "tokens_out": 91
+    },
+    "grade_generation": {
+     "runs": 2,
+     "ms": 2111.3,
+     "llm_calls": 3,
+     "llm_ms": 2109.2,
+     "tokens_in": 848,
+     "tokens_out": 110
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 953.8,
+     "llm_calls": 2,
+     "llm_ms": 952.5,
+     "tokens_in": 226,
+     "tokens_out": 53
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "policies/hr/HR-POL-010_remote_work.pdf::0",
+    "policies/hr/HR-POL-001_code_of_conduct.pdf::1",
+    "meetings/2026-08-14_facilities_office_ops_201.txt::0",
+    "meetings/2026-08-14_facilities_office_ops_201.txt::1",
+    "legacy_intranet/it_faq.md::5",
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf::0",
+    "legacy_intranet/it_faq.md::2",
+    "newsletters/Northwind_Dispatch_2026-02.html::0",
+    "policies/it/IT-STD-001_data_classification.pdf::0",
+    "policies/it/IT-STD-001_data_classification.pdf::2",
+    "policies/hr/HR-POL-011_work_from_abroad.pdf::2",
+    "product/R3/R3_Operator_Manual_RevC.pdf::9",
+    "policies/hr/HR-POL-020_performance_reviews.pdf::1",
+    "newsletters/Northwind_Dispatch_2026-04.html::0",
+    "policies/it/IT-STD-001_data_classification.pdf::1",
+    "product/Rover_Error_Codes_2026.xlsx::51",
+    "product/Rover_Error_Codes_2026.xlsx::53",
+    "product/Rover_Error_Codes_2026.xlsx::90"
+   ],
+   "kept_ids": [
+    "policies/it/IT-STD-001_data_classification.pdf::0",
+    "policies/it/IT-STD-001_data_classification.pdf::2",
+    "policies/it/IT-STD-001_data_classification.pdf::1"
+   ],
+   "degraded": [],
+   "llm_attempts": 17,
+   "question": "What is the company policy on bringing dogs to the office?",
+   "out_of_scope": true
+  },
+  {
+   "request_id": "cost-report-16",
+   "session_id": "cost-94b7a5c5-b4a1-4dba-99f3-257e99b733cd",
+   "trace_id": "62972b25-d262-402e-a511-1042b89223fa",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3210,
+   "tokens_in": 2897,
+   "tokens_out": 103,
+   "estimated_cost_usd": 0.000496,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 14,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 183.0,
+     "llm_calls": 1,
+     "llm_ms": 182.3,
+     "tokens_in": 146,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 9.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1208.0,
+     "llm_calls": 9,
+     "llm_ms": 1203.0,
+     "tokens_in": 1641,
+     "tokens_out": 18
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 555.8,
+     "llm_calls": 2,
+     "llm_ms": 554.4,
+     "tokens_in": 207,
+     "tokens_out": 26
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 418.6,
+     "llm_calls": 1,
+     "llm_ms": 418.0,
+     "tokens_in": 476,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 831.6,
+     "llm_calls": 1,
+     "llm_ms": 830.9,
+     "tokens_in": 427,
+     "tokens_out": 41
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "meetings/2026-03-23_it_operations_049.txt::0",
+    "meetings/2026-04-25_sales_engineering_067.txt::0",
+    "meetings/2026-06-28_motion_planning_062.txt::1",
+    "meetings/2026-05-01_finance_050.txt::1",
+    "legacy_intranet/it_faq.md::2",
+    "wiki/it/VPN_Setup_Guide.html::0",
+    "legacy_intranet/it_faq.md::5",
+    "meetings/2026-03-17_people_operations_085.txt::1",
+    "wiki/facilities/Offices.html::0",
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::4",
+    "meetings/2026-08-14_facilities_office_ops_201.txt::0",
+    "newsletters/Northwind_Dispatch_2026-04.html::0",
+    "policies/finance/FIN-POL-001_expense_reimbursement.pdf::1",
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf::0",
+    "wiki/people/US_Holidays_2026.html::0",
+    "wiki/teams/Team_People_Operations.html::0",
+    "legacy_intranet/it_faq.md::4",
+    "product/R3/R3_Operator_Manual_RevC.pdf::7",
+    "product/Rover_Error_Codes_2026.xlsx::11"
+   ],
+   "kept_ids": [
+    "wiki/facilities/Offices.html::0",
+    "wiki/people/US_Holidays_2026.html::0",
+    "wiki/teams/Team_People_Operations.html::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 14,
+   "question": "What is the CEO's home address?",
+   "out_of_scope": true
+  },
+  {
+   "request_id": "cost-report-17",
+   "session_id": "cost-f73e42a5-8d72-4a2f-b5b2-4132ad1e7fa2",
+   "trace_id": "f8f57806-558e-4faa-bbe5-5f9ed230d0bc",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 3983,
+   "tokens_in": 1480,
+   "tokens_out": 207,
+   "estimated_cost_usd": 0.000346,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 185.4,
+     "llm_calls": 1,
+     "llm_ms": 184.7,
+     "tokens_in": 145,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 2.2,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 438.0,
+     "llm_calls": 3,
+     "llm_ms": 436.6,
+     "tokens_in": 554,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 1450.1,
+     "llm_calls": 1,
+     "llm_ms": 1449.4,
+     "tokens_in": 303,
+     "tokens_out": 86
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1905.2,
+     "llm_calls": 2,
+     "llm_ms": 1903.8,
+     "tokens_in": 478,
+     "tokens_out": 110
+    }
+   },
+   "retrieved_ids": [
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md::1",
+    "policies/hr/HR-POL-004_PTO_v2.pdf::1",
+    "policies/hr/HR-POL-004_PTO_v2.pdf::2",
+    "newsletters/Northwind_Dispatch_2026-02.html::0",
+    "hr_restricted/Salary_Bands_2026.xlsx::7",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md::0",
+    "legacy_intranet/it_faq.md::5",
+    "product/Support_SLA_2026.pdf::1"
+   ],
+   "kept_ids": [
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md::1"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "Do we have unlimited PTO?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-18",
+   "session_id": "cost-b645583c-643f-4aac-9728-df24a15461a8",
+   "trace_id": "5c8e51aa-fffe-4c86-ab36-2f54f6f0fc81",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 2235,
+   "tokens_in": 1371,
+   "tokens_out": 93,
+   "estimated_cost_usd": 0.000261,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 180.3,
+     "llm_calls": 1,
+     "llm_ms": 179.6,
+     "tokens_in": 151,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 3.7,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 435.7,
+     "llm_calls": 3,
+     "llm_ms": 433.9,
+     "tokens_in": 545,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 786.7,
+     "llm_calls": 1,
+     "llm_ms": 786.1,
+     "tokens_in": 294,
+     "tokens_out": 42
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 826.4,
+     "llm_calls": 2,
+     "llm_ms": 825.0,
+     "tokens_in": 381,
+     "tokens_out": 40
+    }
+   },
+   "retrieved_ids": [
+    "hr_restricted/Salary_Bands_2026.xlsx::3",
+    "hr_restricted/Salary_Bands_2026.xlsx::5",
+    "hr_restricted/Salary_Bands_2026.xlsx::1",
+    "hr_restricted/Salary_Bands_2026.xlsx::4",
+    "product/R3/R3_Operator_Manual_RevC.pdf::9",
+    "legacy_intranet/it_faq.md::2",
+    "wiki/it/Password_Policy.html::1",
+    "product/Support_SLA_2026.pdf::1"
+   ],
+   "kept_ids": [
+    "hr_restricted/Salary_Bands_2026.xlsx::3"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "What is the salary range for an L4 engineer in Austin?",
+   "out_of_scope": true
+  },
+  {
+   "request_id": "cost-report-19",
+   "session_id": "cost-a37a655e-649c-4d20-bc4c-86dd87471e4d",
+   "trace_id": "e79090da-9dbf-44e8-a6af-b58f445ba816",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 1723,
+   "tokens_in": 1371,
+   "tokens_out": 93,
+   "estimated_cost_usd": 0.000261,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 118.3,
+     "llm_calls": 1,
+     "llm_ms": 117.6,
+     "tokens_in": 151,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 1.5,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 232.8,
+     "llm_calls": 3,
+     "llm_ms": 230.8,
+     "tokens_in": 545,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 664.0,
+     "llm_calls": 1,
+     "llm_ms": 663.4,
+     "tokens_in": 294,
+     "tokens_out": 42
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 704.0,
+     "llm_calls": 2,
+     "llm_ms": 702.8,
+     "tokens_in": 381,
+     "tokens_out": 40
+    }
+   },
+   "retrieved_ids": [
+    "hr_restricted/Salary_Bands_2026.xlsx::3",
+    "hr_restricted/Salary_Bands_2026.xlsx::5",
+    "hr_restricted/Salary_Bands_2026.xlsx::1",
+    "hr_restricted/Salary_Bands_2026.xlsx::4",
+    "product/R3/R3_Operator_Manual_RevC.pdf::9",
+    "legacy_intranet/it_faq.md::2",
+    "wiki/it/Password_Policy.html::1",
+    "product/Support_SLA_2026.pdf::1"
+   ],
+   "kept_ids": [
+    "hr_restricted/Salary_Bands_2026.xlsx::3"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "What is the salary range for an L4 engineer in Austin?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-20",
+   "session_id": "cost-711dc2d4-26d0-413f-8c9b-97e9bdd8053f",
+   "trace_id": "763aef24-12c1-41dc-966f-b02da65a4fcd",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 2662,
+   "tokens_in": 1183,
+   "tokens_out": 126,
+   "estimated_cost_usd": 0.000253,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 179.6,
+     "llm_calls": 1,
+     "llm_ms": 178.9,
+     "tokens_in": 144,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 2.8,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 385.6,
+     "llm_calls": 3,
+     "llm_ms": 383.9,
+     "tokens_in": 456,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 835.8,
+     "llm_calls": 1,
+     "llm_ms": 835.2,
+     "tokens_in": 243,
+     "tokens_out": 47
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1256.1,
+     "llm_calls": 2,
+     "llm_ms": 1254.7,
+     "tokens_in": 340,
+     "tokens_out": 68
+    }
+   },
+   "retrieved_ids": [
+    "hr_restricted/Project_Juniper_Workforce_Plan.md::0",
+    "hr_restricted/Project_Juniper_Workforce_Plan.md::1",
+    "wiki/teams/Team_Product_Management.html::0",
+    "meetings/2026-09-22_leadership_sync_202.txt::0",
+    "legacy_intranet/it_faq.md::2",
+    "legacy_intranet/it_faq.md::5"
+   ],
+   "kept_ids": [
+    "hr_restricted/Project_Juniper_Workforce_Plan.md::1"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "What is Project Juniper?",
+   "out_of_scope": true
+  },
+  {
+   "request_id": "cost-report-21",
+   "session_id": "cost-40da149d-8b96-4488-ad65-b3b1f6dbed68",
+   "trace_id": "0fbf8db7-2857-486c-adfe-30b629eb75fa",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 2970,
+   "tokens_in": 1333,
+   "tokens_out": 140,
+   "estimated_cost_usd": 0.000284,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 180.6,
+     "llm_calls": 1,
+     "llm_ms": 179.8,
+     "tokens_in": 149,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 2.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 417.9,
+     "llm_calls": 3,
+     "llm_ms": 416.3,
+     "tokens_in": 485,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 1208.4,
+     "llm_calls": 1,
+     "llm_ms": 1207.9,
+     "tokens_in": 278,
+     "tokens_out": 70
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1158.7,
+     "llm_calls": 2,
+     "llm_ms": 1157.7,
+     "tokens_in": 421,
+     "tokens_out": 59
+    }
+   },
+   "retrieved_ids": [
+    "hr_restricted/Performance_Calibration_Guide_2026.md::0",
+    "policies/hr/HR-POL-020_performance_reviews.pdf::0",
+    "policies/hr/HR-POL-020_performance_reviews.pdf::1",
+    "hr_restricted/Comp_Review_2026_Guidance.md::0",
+    "legacy_intranet/hr_policies.md::2",
+    "hr_restricted/Disciplinary_Procedure.pdf::0"
+   ],
+   "kept_ids": [
+    "hr_restricted/Performance_Calibration_Guide_2026.md::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "What target rating distribution should I use in performance calibration?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-22",
+   "session_id": "cost-f2c5488b-51f5-4f14-8b03-14cb3fac985c",
+   "trace_id": "280a76e9-ce3d-4eea-9262-6b888f64daed",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 2392,
+   "tokens_in": 1255,
+   "tokens_out": 104,
+   "estimated_cost_usd": 0.000251,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 181.5,
+     "llm_calls": 1,
+     "llm_ms": 180.9,
+     "tokens_in": 146,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 3.5,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 422.7,
+     "llm_calls": 3,
+     "llm_ms": 421.2,
+     "tokens_in": 482,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 717.5,
+     "llm_calls": 1,
+     "llm_ms": 717.0,
+     "tokens_in": 274,
+     "tokens_out": 38
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1064.1,
+     "llm_calls": 2,
+     "llm_ms": 1063.1,
+     "tokens_in": 353,
+     "tokens_out": 55
+    }
+   },
+   "retrieved_ids": [
+    "hr_restricted/Disciplinary_Procedure.pdf::0",
+    "policies/hr/HR-POL-020_performance_reviews.pdf::1",
+    "policies/hr/HR-POL-020_performance_reviews.pdf::0",
+    "hr_restricted/Performance_Calibration_Guide_2026.md::0",
+    "legacy_intranet/it_faq.md::1",
+    "legacy_intranet/hr_policies.md::2",
+    "legacy_intranet/it_faq.md::6"
+   ],
+   "kept_ids": [
+    "hr_restricted/Disciplinary_Procedure.pdf::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "How long is a performance improvement plan?",
+   "out_of_scope": true
+  },
+  {
+   "request_id": "cost-report-23",
+   "session_id": "cost-63112d49-efcc-4dea-8cb4-e67147192ed5",
+   "trace_id": "b07c4298-357c-4124-aeb7-2afe29a197ed",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3428,
+   "tokens_in": 2994,
+   "tokens_out": 134,
+   "estimated_cost_usd": 0.00053,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 14,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 184.6,
+     "llm_calls": 1,
+     "llm_ms": 184.0,
+     "tokens_in": 148,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 7.2,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 913.1,
+     "llm_calls": 9,
+     "llm_ms": 908.6,
+     "tokens_in": 1668,
+     "tokens_out": 18
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 658.1,
+     "llm_calls": 2,
+     "llm_ms": 657.1,
+     "tokens_in": 213,
+     "tokens_out": 32
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 424.9,
+     "llm_calls": 1,
+     "llm_ms": 424.4,
+     "tokens_in": 508,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1236.0,
+     "llm_calls": 1,
+     "llm_ms": 1235.3,
+     "tokens_in": 457,
+     "tokens_out": 66
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "wiki/facilities/Offices.html::0",
+    "policies/hr/HR-POL-005_sick_leave.pdf::1",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md::3",
+    "cairo/\u0627\u0644\u0625\u062c\u0627\u0632\u0627\u062a_\u0627\u0644\u0631\u0633\u0645\u064a\u0629_2026.csv::10",
+    "legacy_intranet/employee_handbook.md::0",
+    "meetings/2026-07-09_sales_engineering_001.txt::2",
+    "meetings/2026-07-26_manufacturing_058.txt::1",
+    "meetings/2026-05-18_hardware_sustaining_012.txt::2",
+    "legacy_intranet/product_specs.md::4",
+    "policies/hr/HR-POL-010_remote_work.pdf::2"
+   ],
+   "kept_ids": [
+    "wiki/facilities/Offices.html::0",
+    "policies/hr/HR-POL-005_sick_leave.pdf::1",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md::3"
+   ],
+   "degraded": [],
+   "llm_attempts": 14,
+   "question": "What are the Cairo office working hours during Ramadan?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-24",
+   "session_id": "cost-34fb7f4d-efd1-4132-b377-19ddc836279a",
+   "trace_id": "087ae4c2-1882-4a29-88b9-4a6f081dc495",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 6279,
+   "tokens_in": 2810,
+   "tokens_out": 322,
+   "estimated_cost_usd": 0.000615,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 14,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 189.3,
+     "llm_calls": 1,
+     "llm_ms": 188.6,
+     "tokens_in": 149,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 6.9,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 964.6,
+     "llm_calls": 9,
+     "llm_ms": 960.0,
+     "tokens_in": 1574,
+     "tokens_out": 18
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 518.8,
+     "llm_calls": 2,
+     "llm_ms": 517.6,
+     "tokens_in": 215,
+     "tokens_out": 23
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 421.2,
+     "llm_calls": 1,
+     "llm_ms": 420.7,
+     "tokens_in": 462,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 4174.0,
+     "llm_calls": 1,
+     "llm_ms": 4173.2,
+     "tokens_in": 410,
+     "tokens_out": 263
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "policies/hr/HR-POL-005_sick_leave.pdf::1",
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::2",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md::3",
+    "meetings/2026-07-09_sales_engineering_001.txt::2",
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::4",
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::3",
+    "meetings/2026-05-18_hardware_sustaining_012.txt::2",
+    "meetings/2026-03-16_legal_003.txt::1",
+    "hr_restricted/Disciplinary_Procedure.pdf::1",
+    "policies/hr/HR-POL-004_PTO_v2.pdf::0",
+    "newsletters/Northwind_Dispatch_2026-02.html::0",
+    "policies/it/IT-STD-007_remote_access.pdf::2"
+   ],
+   "kept_ids": [
+    "policies/hr/HR-POL-005_sick_leave.pdf::1",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md::3",
+    "meetings/2026-07-09_sales_engineering_001.txt::2"
+   ],
+   "degraded": [],
+   "llm_attempts": 14,
+   "question": "How much is the monthly transport allowance for Cairo employees?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-25",
+   "session_id": "cost-13ac3317-1e4c-4133-966b-26ccdde6b180",
+   "trace_id": "7b092164-8b32-4435-986a-c83fb83e39a6",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4095,
+   "tokens_in": 3207,
+   "tokens_out": 166,
+   "estimated_cost_usd": 0.000581,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 15,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 190.3,
+     "llm_calls": 1,
+     "llm_ms": 189.6,
+     "tokens_in": 150,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 10.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 946.7,
+     "llm_calls": 9,
+     "llm_ms": 942.6,
+     "tokens_in": 1686,
+     "tokens_out": 18
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 562.2,
+     "llm_calls": 2,
+     "llm_ms": 561.2,
+     "tokens_in": 218,
+     "tokens_out": 26
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 1232.5,
+     "llm_calls": 1,
+     "llm_ms": 1231.9,
+     "tokens_in": 510,
+     "tokens_out": 65
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1149.1,
+     "llm_calls": 2,
+     "llm_ms": 1147.8,
+     "tokens_in": 643,
+     "tokens_out": 52
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "policies/hr/HR-POL-005_sick_leave.pdf::1",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md::3",
+    "wiki/facilities/Offices.html::0",
+    "cairo/\u0627\u0644\u0625\u062c\u0627\u0632\u0627\u062a_\u0627\u0644\u0631\u0633\u0645\u064a\u0629_2026.csv::10",
+    "legacy_intranet/employee_handbook.md::5",
+    "policies/hr/HR-POL-010_remote_work.pdf::0",
+    "wiki/eng/Robotics_Lab_Safety.html::0",
+    "newsletters/Northwind_Dispatch_2026-04.html::0",
+    "meetings/2026-07-09_sales_engineering_001.txt::2",
+    "policies/hr/HR-POL-005_sick_leave.pdf::0",
+    "policies/hr/HR-POL-011_work_from_abroad.pdf::0",
+    "policies/hr/HR-POL-006_parental_leave.pdf::1"
+   ],
+   "kept_ids": [
+    "policies/hr/HR-POL-005_sick_leave.pdf::1",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md::3",
+    "wiki/facilities/Offices.html::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 15,
+   "question": "Which days make up the work week in the Cairo office?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-26",
+   "session_id": "cost-6f1f80db-9ec1-4bd6-929e-7d80ac9d5704",
+   "trace_id": "373a4150-4986-41c4-997f-86d3c1eceff0",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 2,
+   "latency_ms": 9151,
+   "tokens_in": 4077,
+   "tokens_out": 410,
+   "estimated_cost_usd": 0.000858,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 18,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 179.5,
+     "llm_calls": 1,
+     "llm_ms": 178.8,
+     "tokens_in": 148,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 654.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1285.1,
+     "llm_calls": 9,
+     "llm_ms": 1280.6,
+     "tokens_in": 1751,
+     "tokens_out": 18
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 728.1,
+     "llm_calls": 2,
+     "llm_ms": 727.0,
+     "tokens_in": 222,
+     "tokens_out": 38
+    },
+    "generate": {
+     "runs": 2,
+     "ms": 2486.4,
+     "llm_calls": 2,
+     "llm_ms": 2485.2,
+     "tokens_in": 837,
+     "tokens_out": 138
+    },
+    "grade_generation": {
+     "runs": 2,
+     "ms": 3812.3,
+     "llm_calls": 4,
+     "llm_ms": 3809.6,
+     "tokens_in": 1119,
+     "tokens_out": 211
+    }
+   },
+   "retrieved_ids": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::2",
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::1",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf::0",
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf::0",
+    "policies/hr/HR-POL-004_PTO_v2.pdf::0",
+    "policies/hr/HR-POL-004_PTO_v3.pdf::0",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt::0",
+    "newsletters/Northwind_Dispatch_2026-02.html::0",
+    "policies/hr/HR-POL-004_PTO_v3.pdf::1",
+    "policies/hr/HR-POL-004_PTO_v3.pdf::2",
+    "policies/hr/HR-POL-005_sick_leave.pdf::0",
+    "policies/hr/HR-POL-004_PTO_v3.pdf::5",
+    "wiki/people/Benefits_Overview.html::0",
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf::0",
+    "wiki/finance/How_to_submit_expenses.html::0",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md::3",
+    "policies/hr/HR-POL-004_PTO_v3.pdf::4",
+    "policies/hr/HR-POL-004_PTO_v2.pdf::2",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md::1",
+    "legacy_intranet/hr_policies.md::4"
+   ],
+   "kept_ids": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf::1",
+    "policies/hr/HR-POL-004_PTO_v3.pdf::4",
+    "policies/hr/HR-POL-004_PTO_v3.pdf::5"
+   ],
+   "degraded": [],
+   "llm_attempts": 18,
+   "question": "And how many of them can I carry over?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-27",
+   "session_id": "cost-a2713ead-19de-4bff-a587-bb95b845df0c",
+   "trace_id": "8034eb28-3700-48f3-bf64-2d0ed8ec7d86",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 2119,
+   "tokens_in": 1287,
+   "tokens_out": 85,
+   "estimated_cost_usd": 0.000244,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 179.3,
+     "llm_calls": 1,
+     "llm_ms": 178.6,
+     "tokens_in": 142,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 2.9,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 394.9,
+     "llm_calls": 3,
+     "llm_ms": 393.3,
+     "tokens_in": 406,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 874.2,
+     "llm_calls": 1,
+     "llm_ms": 873.7,
+     "tokens_in": 321,
+     "tokens_out": 47
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 663.0,
+     "llm_calls": 2,
+     "llm_ms": 661.7,
+     "tokens_in": 418,
+     "tokens_out": 27
+    }
+   },
+   "retrieved_ids": [
+    "cairo/\u0627\u0644\u0625\u062c\u0627\u0632\u0627\u062a_\u0627\u0644\u0631\u0633\u0645\u064a\u0629_2026.csv::4",
+    "policies/hr/HR-POL-005_sick_leave.pdf::1",
+    "cairo/\u0627\u0644\u0625\u062c\u0627\u0632\u0627\u062a_\u0627\u0644\u0631\u0633\u0645\u064a\u0629_2026.csv::3",
+    "wiki/facilities/Offices.html::0",
+    "legacy_intranet/it_faq.md::2",
+    "legacy_intranet/it_faq.md::5",
+    "meetings/2026-09-20_motion_planning_059.txt::2",
+    "meetings/2026-06-13_hardware_sustaining_060.txt::2"
+   ],
+   "kept_ids": [
+    "cairo/\u0627\u0644\u0625\u062c\u0627\u0632\u0627\u062a_\u0627\u0644\u0631\u0633\u0645\u064a\u0629_2026.csv::4",
+    "policies/hr/HR-POL-005_sick_leave.pdf::1"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "What about Egypt?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-28",
+   "session_id": "cost-9654edad-e120-4bb4-a5b7-7421e4fbed2a",
+   "trace_id": "443935fe-971c-4dbc-baee-d36781c10057",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 4514,
+   "tokens_in": 1832,
+   "tokens_out": 225,
+   "estimated_cost_usd": 0.00041,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 179.1,
+     "llm_calls": 1,
+     "llm_ms": 178.4,
+     "tokens_in": 150,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 3.8,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 520.3,
+     "llm_calls": 3,
+     "llm_ms": 518.9,
+     "tokens_in": 601,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 1763.4,
+     "llm_calls": 1,
+     "llm_ms": 1762.9,
+     "tokens_in": 435,
+     "tokens_out": 104
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 2045.2,
+     "llm_calls": 2,
+     "llm_ms": 2043.4,
+     "tokens_in": 646,
+     "tokens_out": 110
+    }
+   },
+   "retrieved_ids": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf::1",
+    "policies/hr/HR-POL-004_PTO_v2.pdf::1",
+    "policies/hr/HR-POL-004_PTO_v3.pdf::4",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt::0",
+    "legacy_intranet/it_faq.md::1",
+    "wiki/finance/How_to_submit_expenses.html::0",
+    "legacy_intranet/it_faq.md::6"
+   ],
+   "kept_ids": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf::1",
+    "policies/hr/HR-POL-004_PTO_v2.pdf::1"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "How many PTO days am I entitled to this year?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-29",
+   "session_id": "cost-65ab7490-8ed0-4258-b5c7-4ff761a661e2",
+   "trace_id": "31e8a803-8c19-484a-9c3e-3b85cdab9cae",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 1,
+   "latency_ms": 5771,
+   "tokens_in": 3216,
+   "tokens_out": 267,
+   "estimated_cost_usd": 0.000643,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 13,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 186.5,
+     "llm_calls": 1,
+     "llm_ms": 185.8,
+     "tokens_in": 149,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 2,
+     "ms": 5.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 2,
+     "ms": 737.4,
+     "llm_calls": 6,
+     "llm_ms": 734.3,
+     "tokens_in": 1044,
+     "tokens_out": 12
+    },
+    "generate": {
+     "runs": 2,
+     "ms": 1824.6,
+     "llm_calls": 2,
+     "llm_ms": 1823.2,
+     "tokens_in": 924,
+     "tokens_out": 91
+    },
+    "grade_generation": {
+     "runs": 2,
+     "ms": 2648.1,
+     "llm_calls": 3,
+     "llm_ms": 2646.1,
+     "tokens_in": 991,
+     "tokens_out": 141
+    },
+    "rewrite_query": {
+     "runs": 1,
+     "ms": 364.7,
+     "llm_calls": 1,
+     "llm_ms": 364.1,
+     "tokens_in": 108,
+     "tokens_out": 18
+    }
+   },
+   "retrieved_ids": [
+    "legacy_intranet/it_faq.md::3",
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf::0",
+    "wiki/sales/Sales_IT_Tips.html::0",
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf::1",
+    "legacy_intranet/it_faq.md::6",
+    "legacy_intranet/it_faq.md::1",
+    "legacy_intranet/it_faq.md::4",
+    "legacy_intranet/it_faq.md::5",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md::1"
+   ],
+   "kept_ids": [
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf::0",
+    "legacy_intranet/it_faq.md::3",
+    "wiki/sales/Sales_IT_Tips.html::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 13,
+   "question": "How quickly do I have to report a lost laptop?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-30",
+   "session_id": "cost-143b1823-fa64-48f5-89e7-cbef563763da",
+   "trace_id": "c164205a-4282-4482-8e19-5186629a9340",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 4324,
+   "tokens_in": 1521,
+   "tokens_out": 224,
+   "estimated_cost_usd": 0.000363,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 191.6,
+     "llm_calls": 1,
+     "llm_ms": 190.8,
+     "tokens_in": 147,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 2.6,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 436.9,
+     "llm_calls": 3,
+     "llm_ms": 435.3,
+     "tokens_in": 483,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 1436.7,
+     "llm_calls": 1,
+     "llm_ms": 1436.2,
+     "tokens_in": 361,
+     "tokens_out": 83
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 2254.0,
+     "llm_calls": 2,
+     "llm_ms": 2252.6,
+     "tokens_in": 530,
+     "tokens_out": 130
+    }
+   },
+   "retrieved_ids": [
+    "policies/hr/HR-POL-016_learning_development.pdf::0",
+    "legacy_intranet/hr_policies.md::4",
+    "policies/hr/HR-POL-016_learning_development.pdf::1",
+    "hr_restricted/Comp_Review_2026_Guidance.md::0",
+    "meetings/2026-05-25_fleet_software_069.txt::2",
+    "meetings/2026-03-16_legal_003.txt::2"
+   ],
+   "kept_ids": [
+    "policies/hr/HR-POL-016_learning_development.pdf::0",
+    "legacy_intranet/hr_policies.md::4"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "What is the annual learning budget per employee?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-31",
+   "session_id": "cost-6d316740-807f-4e89-bb89-70b76803037a",
+   "trace_id": "4597dc2b-8acb-48b0-8a7f-1561f7beb38c",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 3967,
+   "tokens_in": 1771,
+   "tokens_out": 194,
+   "estimated_cost_usd": 0.000382,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 180.1,
+     "llm_calls": 1,
+     "llm_ms": 179.4,
+     "tokens_in": 147,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 2.2,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 449.1,
+     "llm_calls": 3,
+     "llm_ms": 447.6,
+     "tokens_in": 543,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 1086.8,
+     "llm_calls": 1,
+     "llm_ms": 1086.1,
+     "tokens_in": 483,
+     "tokens_out": 56
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 2245.7,
+     "llm_calls": 2,
+     "llm_ms": 2244.5,
+     "tokens_in": 598,
+     "tokens_out": 127
+    }
+   },
+   "retrieved_ids": [
+    "policies/hr/HR-POL-010_remote_work.pdf::1",
+    "wiki/eng/On_Call.html::0",
+    "legacy_intranet/employee_handbook.md::5",
+    "wiki/people/Benefits_Overview.html::0",
+    "legacy_intranet/it_faq.md::4",
+    "legacy_intranet/it_faq.md::1",
+    "wiki/finance/How_to_submit_expenses.html::0"
+   ],
+   "kept_ids": [
+    "policies/hr/HR-POL-010_remote_work.pdf::1",
+    "wiki/eng/On_Call.html::0",
+    "legacy_intranet/employee_handbook.md::5"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "How much is the home-office stipend?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-32",
+   "session_id": "cost-ea916a15-bc73-4417-8b6f-fb58c888b296",
+   "trace_id": "18822514-6f11-42b6-b07e-a16073ce38e8",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 4038,
+   "tokens_in": 1781,
+   "tokens_out": 197,
+   "estimated_cost_usd": 0.000385,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 187.4,
+     "llm_calls": 1,
+     "llm_ms": 186.4,
+     "tokens_in": 149,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 4.6,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 470.2,
+     "llm_calls": 3,
+     "llm_ms": 468.6,
+     "tokens_in": 513,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 1608.0,
+     "llm_calls": 1,
+     "llm_ms": 1607.5,
+     "tokens_in": 466,
+     "tokens_out": 92
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1765.0,
+     "llm_calls": 2,
+     "llm_ms": 1763.8,
+     "tokens_in": 653,
+     "tokens_out": 94
+    }
+   },
+   "retrieved_ids": [
+    "policies/hr/HR-POL-011_work_from_abroad.pdf::0",
+    "policies/hr/HR-POL-010_remote_work.pdf::3",
+    "policies/hr/HR-POL-011_work_from_abroad.pdf::2",
+    "newsletters/Northwind_Dispatch_2026-04.html::0",
+    "newsletters/Northwind_Dispatch_2026-04.html::1"
+   ],
+   "kept_ids": [
+    "policies/hr/HR-POL-011_work_from_abroad.pdf::0",
+    "policies/hr/HR-POL-010_remote_work.pdf::3",
+    "policies/hr/HR-POL-011_work_from_abroad.pdf::2"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "Can I work from another country for a few weeks?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-33",
+   "session_id": "cost-be27abc7-b63a-4703-b70f-81762f54e64a",
+   "trace_id": "eeaf5726-0ff5-4670-95bb-154f51f33948",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 1749,
+   "tokens_in": 1382,
+   "tokens_out": 58,
+   "estimated_cost_usd": 0.000242,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 178.0,
+     "llm_calls": 1,
+     "llm_ms": 177.3,
+     "tokens_in": 148,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 2.8,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 450.0,
+     "llm_calls": 3,
+     "llm_ms": 448.5,
+     "tokens_in": 557,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 479.7,
+     "llm_calls": 1,
+     "llm_ms": 479.1,
+     "tokens_in": 316,
+     "tokens_out": 21
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 636.4,
+     "llm_calls": 2,
+     "llm_ms": 635.3,
+     "tokens_in": 361,
+     "tokens_out": 26
+    }
+   },
+   "retrieved_ids": [
+    "wiki/eng/On_Call.html::0",
+    "policies/hr/HR-POL-010_remote_work.pdf::1",
+    "policies/hr/HR-POL-014_referral_bonus.pdf::0",
+    "legacy_intranet/employee_handbook.md::5",
+    "legacy_intranet/it_faq.md::4",
+    "legacy_intranet/it_faq.md::1",
+    "wiki/eng/New_Engineer_Onboarding.html::0"
+   ],
+   "kept_ids": [
+    "wiki/eng/On_Call.html::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "How much is the primary on-call stipend?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-34",
+   "session_id": "cost-ecbbbf2c-ec29-4185-9db8-315b585c32b5",
+   "trace_id": "8b1b7a70-472d-44c5-a43f-0b335d86a381",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 4220,
+   "tokens_in": 1362,
+   "tokens_out": 223,
+   "estimated_cost_usd": 0.000338,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 179.9,
+     "llm_calls": 1,
+     "llm_ms": 179.3,
+     "tokens_in": 148,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 3.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 405.8,
+     "llm_calls": 3,
+     "llm_ms": 404.2,
+     "tokens_in": 465,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 1519.0,
+     "llm_calls": 1,
+     "llm_ms": 1518.4,
+     "tokens_in": 282,
+     "tokens_out": 91
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 2109.6,
+     "llm_calls": 2,
+     "llm_ms": 2108.1,
+     "tokens_in": 467,
+     "tokens_out": 121
+    }
+   },
+   "retrieved_ids": [
+    "product/Rover_Error_Codes_2026.xlsx::68",
+    "product/Rover_Error_Codes_2026.xlsx::86",
+    "product/Rover_Error_Codes_2026.xlsx::89",
+    "product/Rover_Error_Codes_2026.xlsx::70",
+    "legacy_intranet/it_faq.md::2",
+    "legacy_intranet/it_faq.md::5",
+    "legacy_intranet/hr_policies.md::4"
+   ],
+   "kept_ids": [
+    "product/Rover_Error_Codes_2026.xlsx::68"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "What does error E-271 indicate?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-35",
+   "session_id": "cost-5bab49be-2529-45a3-8c9f-9bec8dcc4c72",
+   "trace_id": "971f64ec-0475-416f-a697-14e70eddf67e",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 2562,
+   "tokens_in": 1413,
+   "tokens_out": 111,
+   "estimated_cost_usd": 0.000279,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 185.1,
+     "llm_calls": 1,
+     "llm_ms": 184.5,
+     "tokens_in": 151,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 4.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 478.9,
+     "llm_calls": 3,
+     "llm_ms": 477.4,
+     "tokens_in": 565,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 907.9,
+     "llm_calls": 1,
+     "llm_ms": 907.4,
+     "tokens_in": 297,
+     "tokens_out": 50
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 983.3,
+     "llm_calls": 2,
+     "llm_ms": 981.9,
+     "tokens_in": 400,
+     "tokens_out": 50
+    }
+   },
+   "retrieved_ids": [
+    "product/Support_SLA_2026.pdf::1",
+    "product/Support_SLA_2026.pdf::0",
+    "newsletters/Northwind_Dispatch_2026-02.html::0",
+    "meetings/2026-02-11_firmware_023.txt::0",
+    "legacy_intranet/product_specs.md::4",
+    "product/Spare_Parts_Catalog_2026.pdf::0",
+    "newsletters/Northwind_Dispatch_2025-06.html::0"
+   ],
+   "kept_ids": [
+    "product/Support_SLA_2026.pdf::1"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "What is the first response time on the Premium Plus support plan?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-36",
+   "session_id": "cost-7c251e04-455a-45d4-b01e-f1cc12a26696",
+   "trace_id": "a3479430-04e9-44ff-9927-3537ba948626",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 2,
+   "latency_ms": 3519,
+   "tokens_in": 3051,
+   "tokens_out": 124,
+   "estimated_cost_usd": 0.000532,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 15,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 188.3,
+     "llm_calls": 1,
+     "llm_ms": 187.6,
+     "tokens_in": 152,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 9.9,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1116.6,
+     "llm_calls": 9,
+     "llm_ms": 1111.4,
+     "tokens_in": 1631,
+     "tokens_out": 18
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 763.5,
+     "llm_calls": 2,
+     "llm_ms": 762.4,
+     "tokens_in": 233,
+     "tokens_out": 40
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 740.2,
+     "llm_calls": 1,
+     "llm_ms": 739.7,
+     "tokens_in": 481,
+     "tokens_out": 35
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 695.4,
+     "llm_calls": 2,
+     "llm_ms": 694.1,
+     "tokens_in": 554,
+     "tokens_out": 26
+    }
+   },
+   "retrieved_ids": [
+    "product/R2/R2_End_of_Life_Notice.md::1",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf::1",
+    "product/fleet_manager/release_notes_5.0.md::0",
+    "product/fleet_manager/release_notes_5.0.md::1",
+    "legacy_intranet/product_specs.md::3",
+    "product/Rover_Error_Codes_2026.xlsx::80",
+    "product/fleet_manager/release_notes_4.3.md::0"
+   ],
+   "kept_ids": [
+    "product/fleet_manager/release_notes_5.0.md::0",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf::1",
+    "product/fleet_manager/release_notes_5.0.md::1"
+   ],
+   "degraded": [],
+   "llm_attempts": 15,
+   "question": "Can an R2 be managed by Fleet Manager 5.0?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-37",
+   "session_id": "cost-ca6d650d-d021-4739-811a-dfe3a58bcee0",
+   "trace_id": "7fc6b1c4-1920-42f1-afc0-6180d9978c4c",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 2077,
+   "tokens_in": 1379,
+   "tokens_out": 82,
+   "estimated_cost_usd": 0.000256,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 179.1,
+     "llm_calls": 1,
+     "llm_ms": 178.4,
+     "tokens_in": 149,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 3.8,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 440.9,
+     "llm_calls": 3,
+     "llm_ms": 439.3,
+     "tokens_in": 577,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 632.1,
+     "llm_calls": 1,
+     "llm_ms": 631.5,
+     "tokens_in": 293,
+     "tokens_out": 32
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 818.0,
+     "llm_calls": 2,
+     "llm_ms": 814.8,
+     "tokens_in": 360,
+     "tokens_out": 39
+    }
+   },
+   "retrieved_ids": [
+    "product/fleet_manager/release_notes_5.0.md::1",
+    "product/fleet_manager/release_notes_5.0.md::0",
+    "product/fleet_manager/release_notes_4.3.md::0",
+    "wiki/teams/Team_Fleet_Software.html::0",
+    "legacy_intranet/product_specs.md::3"
+   ],
+   "kept_ids": [
+    "product/fleet_manager/release_notes_5.0.md::1"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "When will Fleet Manager REST API v1 be removed?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-38",
+   "session_id": "cost-f6973a22-7778-455b-9a1f-e66dd499260f",
+   "trace_id": "f8910629-05d0-4365-8294-fc9d20b8e83e",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 2202,
+   "tokens_in": 1306,
+   "tokens_out": 91,
+   "estimated_cost_usd": 0.00025,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 178.9,
+     "llm_calls": 1,
+     "llm_ms": 178.1,
+     "tokens_in": 151,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 3.4,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 434.2,
+     "llm_calls": 3,
+     "llm_ms": 432.7,
+     "tokens_in": 510,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 624.8,
+     "llm_calls": 1,
+     "llm_ms": 624.2,
+     "tokens_in": 289,
+     "tokens_out": 32
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 958.2,
+     "llm_calls": 2,
+     "llm_ms": 957.1,
+     "tokens_in": 356,
+     "tokens_out": 48
+    }
+   },
+   "retrieved_ids": [
+    "legacy_intranet/it_faq.md::0",
+    "wiki/sales/Sales_IT_Tips.html::0",
+    "wiki/it/Password_Policy.html::1",
+    "policies/it/IT-STD-003_password_and_authentication.pdf::0",
+    "legacy_intranet/it_faq.md::3",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt::0"
+   ],
+   "kept_ids": [
+    "wiki/sales/Sales_IT_Tips.html::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "Do I need to change my password every 90 days?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-39",
+   "session_id": "cost-03026562-76bc-4675-a013-56a9263a8c72",
+   "trace_id": "186155ea-a692-42b8-8a22-2ec3614cba2f",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "latency_ms": 5267,
+   "tokens_in": 1842,
+   "tokens_out": 279,
+   "estimated_cost_usd": 0.000444,
+   "refused": false,
+   "cache_hit": false,
+   "llm_calls": 7,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 181.5,
+     "llm_calls": 1,
+     "llm_ms": 180.7,
+     "tokens_in": 150,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 1,
+     "ms": 3.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 1,
+     "ms": 454.3,
+     "llm_calls": 3,
+     "llm_ms": 452.8,
+     "tokens_in": 541,
+     "tokens_out": 6
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 1449.2,
+     "llm_calls": 1,
+     "llm_ms": 1448.7,
+     "tokens_in": 494,
+     "tokens_out": 80
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 3176.7,
+     "llm_calls": 2,
+     "llm_ms": 3175.4,
+     "tokens_in": 657,
+     "tokens_out": 188
+    }
+   },
+   "retrieved_ids": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::3",
+    "scanned_archive/Expense_Policy_2019_scan.txt::0",
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::1",
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::2",
+    "wiki/eng/On_Call.html::0",
+    "legacy_intranet/employee_handbook.md::5",
+    "policies/hr/HR-POL-010_remote_work.pdf::1"
+   ],
+   "kept_ids": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::3",
+    "scanned_archive/Expense_Policy_2019_scan.txt::0",
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf::1"
+   ],
+   "degraded": [],
+   "llm_attempts": 7,
+   "question": "How much are meals reimbursed per day on international trips?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-40",
+   "session_id": "cost-e2bd68da-ea7a-4753-9b3d-fd56007214a8",
+   "trace_id": "92bf43be-881c-4861-86dd-b617201a9f4e",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 2968,
+   "tokens_in": 2856,
+   "tokens_out": 98,
+   "estimated_cost_usd": 0.000487,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 14,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 183.0,
+     "llm_calls": 1,
+     "llm_ms": 182.4,
+     "tokens_in": 148,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 7.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1034.3,
+     "llm_calls": 9,
+     "llm_ms": 1029.2,
+     "tokens_in": 1561,
+     "tokens_out": 18
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 496.0,
+     "llm_calls": 2,
+     "llm_ms": 494.9,
+     "tokens_in": 212,
+     "tokens_out": 22
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 417.2,
+     "llm_calls": 1,
+     "llm_ms": 416.6,
+     "tokens_in": 493,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 824.4,
+     "llm_calls": 1,
+     "llm_ms": 823.7,
+     "tokens_in": 442,
+     "tokens_out": 40
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "legacy_intranet/hr_policies.md::4",
+    "newsletters/Northwind_Dispatch_2025-10.html::0",
+    "newsletters/Northwind_Dispatch_2025-06.html::0",
+    "newsletters/Northwind_Dispatch_2026-01.html::0",
+    "legacy_intranet/it_faq.md::2",
+    "legacy_intranet/it_faq.md::5",
+    "policies/it/IT-STD-007_remote_access.pdf::2",
+    "hr_restricted/Salary_Bands_2026.xlsx::7",
+    "product/R2/R2_End_of_Life_Notice.md::0",
+    "newsletters/Northwind_Dispatch_2026-08.html::0",
+    "scanned_archive/Handbook_2016_cover_scan.txt::0",
+    "legacy_intranet/employee_handbook.md::6",
+    "legacy_intranet/employee_handbook.md::1"
+   ],
+   "kept_ids": [
+    "product/R2/R2_End_of_Life_Notice.md::0",
+    "newsletters/Northwind_Dispatch_2025-10.html::0",
+    "newsletters/Northwind_Dispatch_2026-08.html::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 14,
+   "question": "What is Northwind Robotics' current share price?",
+   "out_of_scope": true
+  }
+ ]
+}
