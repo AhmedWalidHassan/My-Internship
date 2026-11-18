@@ -700,6 +700,29 @@ earn its place here. That's a reason to reject it, written down rather than tune
 
 ---
 
+### EXP-11 — Generation side: grade 3 passages instead of 6, on the winner
+
+**Hypothesis** *(committed before running)*: With the EXP-09 retriever, cutting `MAX_DOCS_TO_GRADE` from
+6 to 3 makes the graph **cheaper without losing answers**. `grade_documents` is the most expensive
+node: one LLM call per graded passage, 56% of spend in Task 1. Halving its calls per search should
+take LLM calls per question down ~25% (≈ 13 → ≈ 10) and cost per question down 15–20%. The
+deterministic pass rate stays within ±2 questions of the winner at 6, because the winner's
+**recall@3 (0.917) equals the old retriever's recall@5**: the gold passage is in the top 3 as often as
+it used to be in the top 5. Week 2's version of this (`MAX_DOCS_TO_GRADE=2` on the old retriever)
+cost 0.14 correctness. The difference is the ranking, and this experiment tests exactly that.
+Measured on the full pipeline, dev (70), same judge, against the winner at 6.
+
+**The one change:** MAX_DOCS_TO_GRADE on top of EXP-09.
+
+**Config diff (vs EXP-09):**
+```
+MAX_DOCS_TO_GRADE: 6 -> 3
+```
+
+**Result** *(committed after running)*: *(pending)*
+
+---
+
 ## Summary
 
 | ID | Change | R@5 Δ | MRR Δ | Latency Δ | Decision |
