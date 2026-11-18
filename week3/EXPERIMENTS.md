@@ -654,7 +654,49 @@ side, not here.
 RERANKER_MODEL: (none) -> cross-encoder/ms-marco-MiniLM-L-6-v2, RERANK_TOP_N: 20
 ```
 
-**Result** *(committed after running)*: *(pending)*
+**Result** *(committed after running)*: `hybrid (BM25 0.3 + dense 0.7), source prior meetings/:0.5,newsletters/:0.5, re-ranked by cross-encoder/ms-marco-MiniLM-L-6-v2 (top 20), depth 10 per retriever`, 348 chunks.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.917 | +0.000 | no (identical) |
+| MRR (all) | 0.612 | 0.748 | +0.136 | yes |
+| recall@1 (all) | 0.417 | 0.633 | +0.217 | yes |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 51.2 / 58.5 ms | | yes: +51 ms GPU (≈ +490 ms CPU, as EXP-06-cpu) |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 1.00 | 0.64 | 0.83 |
+| table | 4 | 1.00 | 1.00 | 0.83 | 0.88 |
+| keyword | 4 | 1.00 | 1.00 | 0.71 | 0.88 |
+| version | 5 | 1.00 | 1.00 | 0.80 | 0.72 |
+| conflict | 3 | 1.00 | 1.00 | 0.56 | 0.58 |
+| draft | 4 | 1.00 | 1.00 | 0.45 | 1.00 |
+| multi_hop | 4 | 1.00 | 1.00 | 0.65 | 0.88 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.75 |
+| ambiguous | 3 | 1.00 | 1.00 | 0.67 | 0.78 |
+| long_doc | 4 | 1.00 | 1.00 | 0.83 | 1.00 |
+| cross_lingual | 4 | 0.25 | 0.00 | 0.06 | 0.00 |
+| follow_up | 4 | 1.00 | 1.00 | 0.52 | 0.71 |
+| personalized | 4 | 0.75 | 0.75 | 0.31 | 0.38 |
+
+Questions in/out of the top 5: 17 gained, n17 lost.
+
+**Hypothesis confirmed?** **Yes on direction, no on size.**
+- **Quality:** MRR 0.748 (≥ 0.75 predicted, essentially reached). It still loses n17 (`cross_lingual`
+  → 0) and costs 51 ms GPU / ~490 ms CPU per query.
+- **Against EXP-09:** it's *below* EXP-09 (0.793) on MRR and recall@1, and a question worse on
+  recall@5. On this corpus, after Task 3's clean chunks and EXP-08's noise control, the cross-encoder
+  mostly re-orders what the fusion already ranks well. It also brings two penalties: it prefers
+  wordier older versions (`version` MRR down, as in EXP-06), and it can't read Arabic.
+
+**What I learned:** a re-ranker is the obvious lever, but the cheap levers got further for free. At
+500 ms per query on the container's CPU, ~90 MB of model, and no torch in the slim image, it doesn't
+earn its place here. That's a reason to reject it, written down rather than tuned around.
+
+**Decision:** revert. Rejected: no quality gain over EXP-09, at a large CPU latency cost.
 
 ---
 
