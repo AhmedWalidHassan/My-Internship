@@ -1,0 +1,17 @@
+# Week 3 Task 1 — run the UNCHANGED Week 2 images against the new corpus.
+#
+#   docker compose -f week2/task_04_containerize/docker-compose.yml \
+#                  -f week3/task_01_meet_the_corpus/docker-compose.corpus.yml up -d --wait
+#
+# Why an override file: the Week 2 compose file pins DATA_DIR=/app/week1/data in `environment:`,
+# which beats env_file, so DATA_DIR in week1/.env is ignored, and the corpus is not in the image.
+# This file changes only the corpus path (a read-only mount) and gives the index its own path,
+# so the Week 2 index in the same volume is not rewritten (see evidence/loader_behaviour.log).
+# Relative paths resolve from the first compose file's folder (week2/task_04_containerize/).
+services:
+  api:
+    environment:
+      DATA_DIR: /corpus
+      INDEX_PATH: /data/faiss_index_w3
+    volumes:
+      - ../../week3/corpus:/corpus:ro

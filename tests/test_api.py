@@ -16,7 +16,7 @@ import time
 import uuid
 
 import pytest
-from conftest import REPO_ROOT, FakeRetriever, prefix, scripted_llm, wait_until_ready
+from conftest import REPO_ROOT, FakeRetriever, corpus_facts, prefix, scripted_llm, wait_until_ready
 from fastapi.testclient import TestClient
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import AIMessage, AIMessageChunk
@@ -472,7 +472,8 @@ def test_live_stream_delivers_real_model_tokens():
     assert kinds.count("token") > 5, f"expected a token stream, got {kinds}"
     done = events[-1][1]
     assert re.search(r"\b10\b|\bten\b", done["answer"], re.I), done["answer"]
-    assert any(s.startswith("employee_handbook.md") for s in done["sources"]), done["sources"]
+    source = corpus_facts()["sick_days_source"]           # depends on the corpus (Week 3 Task 1 triage)
+    assert any(s.startswith(source) for s in done["sources"]), done["sources"]
 
 
 # ===========================================================================

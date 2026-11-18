@@ -16,7 +16,7 @@ import time
 import uuid
 
 import pytest
-from conftest import DATA_DIR, load_app
+from conftest import DATA_DIR, corpus_facts, load_app
 
 pytestmark = pytest.mark.live
 
@@ -44,7 +44,8 @@ def cited_files(result):
 def test_grounded_answer_with_citation(backend):
     r = ask(backend, "How many sick days do I get per year?")
     assert re.search(r"\b10\b|\bten\b", r["answer"], re.I), r["answer"]
-    assert "employee_handbook.md" in cited_files(r), r["sources"]
+    # Week 1 corpus: the handbook. Week 3 corpus: the policy that is authoritative now (Task 1 triage).
+    assert corpus_facts()["sick_days_source"] in cited_files(r), r["sources"]
     assert "retrieve" in r["path"]
 
 
@@ -59,10 +60,19 @@ def test_out_of_scope_question_is_refused(backend):
 
 
 def test_plausible_sounding_out_of_scope_is_refused(backend):
-    """Sounds internal, but the corpus only covers remote work from HOME (3 days a
-    week), not from abroad. It must refuse rather than stretch the home policy."""
+    """Week 1 corpus: sounds internal, but the corpus only covers remote work from HOME
+    (3 days a week), not from abroad. It must refuse rather than stretch the home policy.
+
+    Week 3 corpus (Task 1 triage, "the world changed"): HR-POL-011 Work From Abroad
+    (2026-04-01) now answers it: up to 30 days a year. Refusing is now the wrong answer."""
+    facts = corpus_facts()
     r = ask(backend, "What's our policy on remote work from abroad?")
-    assert REFUSAL in r["answer"], f"answered instead of refusing: {r['answer']!r} (path {r['path']})"
+    if not facts["abroad_answerable"]:
+        assert REFUSAL in r["answer"], f"answered instead of refusing: {r['answer']!r} (path {r['path']})"
+    else:
+        assert REFUSAL not in r["answer"], f"refused a question HR-POL-011 answers (path {r['path']})"
+        assert re.search(facts["abroad_fact"], r["answer"], re.I), r["answer"]
+        assert facts["abroad_source"] in cited_files(r), r["sources"]
 
 
 # ===========================================================================
@@ -78,8 +88,9 @@ def test_two_turn_follow_up_resolves_pronoun(backend):
     r = ask(backend, follow_up, session)
     assert re.search(r"\b(PTO|paid time off|vacation)\b", r["standalone"], re.I), (
         f"'it' was not resolved: understood as {r['standalone']!r}")
-    assert re.search(r"\b5\b|\bfive\b", r["answer"], re.I), r["answer"]
-    assert "employee_handbook.md" in cited_files(r)
+    facts = corpus_facts()       # Week 3: HR-POL-004 v3 says 3 days, not 5 (Task 1 triage)
+    assert re.search(facts["pto_carry_over"], r["answer"], re.I), r["answer"]
+    assert facts["pto_source"] in cited_files(r), r["sources"]
 
 
 def test_sessions_are_isolated(backend):

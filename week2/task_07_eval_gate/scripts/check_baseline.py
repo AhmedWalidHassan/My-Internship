@@ -26,6 +26,7 @@ import sys
 from pathlib import Path
 
 GATED = ("correctness", "groundedness")
+ARCHIVED_BASELINES = {"eval_baseline_w2.json"}     # Week 3 Task 1: kept for history, never a gate
 SHOWN = ("correctness", "groundedness", "retrieval_hit")
 
 
@@ -126,6 +127,26 @@ def main(argv=None) -> int:
     p.add_argument("--baseline", type=Path, default=here / "eval_baseline.json")
     p.add_argument("--report", type=Path, default=Path("regression_report.md"))
     args = p.parse_args(argv)
+
+    # Week 3 Task 1: the Week 2 baseline was measured on the 4-file Week 1 corpus and no longer
+    # describes the system. It is archived (renamed, not edited) and must never gate a run again;
+    # Week 3 Task 2 commits the new eval_baseline.json. Until then the gate is red, with this reason.
+    problem = None
+    if args.baseline.name in ARCHIVED_BASELINES:
+        problem = (f"`{args.baseline.name}` is an ARCHIVED baseline (Week 2 corpus). It must not be used to "
+                   "gate a run: compare against the current eval_baseline.json.")
+    elif not args.baseline.exists():
+        problem = (f"No current baseline at `{args.baseline}`. The Week 2 baseline was archived as "
+                   "eval_baseline_w2.json in Week 3 Task 1 (it describes the old corpus); Week 3 Task 2 "
+                   "sets the new one (make_baseline.py). The gate cannot vouch for quality until then.")
+    if problem:
+        text = f"## Eval gate: ❌ NO BASELINE\n\n{problem}"
+        args.report.write_text(text + "\n", encoding="utf-8")
+        print(text)
+        if os.getenv("GITHUB_STEP_SUMMARY"):
+            with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
+                f.write(text + "\n")
+        return 1
 
     results, baseline = load(args.results), load(args.baseline)
     passed, failures, details = check(results, baseline)

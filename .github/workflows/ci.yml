@@ -143,6 +143,8 @@ jobs:
 
       - name: Compare against baseline
         id: gate
+        # Week 3 Task 1: the Week 2 baseline is archived (eval_baseline_w2.json) and never compared
+        # against. Until Week 3 Task 2 commits a new eval_baseline.json this step is red: "NO BASELINE".
         run: .venv/bin/python week2/task_07_eval_gate/scripts/check_baseline.py --results eval_results.json --report regression_report.md
 
       - name: Post regression report on the PR

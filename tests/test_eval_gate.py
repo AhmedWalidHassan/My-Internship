@@ -150,6 +150,21 @@ def test_gate_main_exit_codes_and_report(gate, baseline, tmp_path):
     assert "groundedness" in rep.read_text()
 
 
+def test_gate_never_compares_against_the_archived_week2_baseline(gate, baseline, tmp_path):
+    """Week 3 Task 1: the Week 2 baseline describes the 4-file corpus. It is archived as
+    eval_baseline_w2.json and must not gate a run, even an identical one; with no current
+    baseline the gate is red and says why, instead of comparing against stale numbers."""
+    archived = GATE_DIR / "eval_baseline_w2.json"
+    assert archived.exists(), "the Week 2 baseline is kept for history"
+    r, rep = tmp_path / "r.json", tmp_path / "report.md"
+    r.write_text(json.dumps(json.loads(archived.read_text())))          # a run identical to it
+    assert gate.main(["--results", str(r), "--baseline", str(archived), "--report", str(rep)]) == 1
+    assert "ARCHIVED" in rep.read_text()
+    assert gate.main(["--results", str(r), "--baseline", str(tmp_path / "eval_baseline.json"),
+                      "--report", str(rep)]) == 1
+    assert "NO BASELINE" in rep.read_text() and "eval_baseline_w2.json" in rep.read_text()
+
+
 def test_baseline_uses_majority_and_marks_flaky_examples(tmp_path):
     make = load_script("make_baseline")
     runs = []

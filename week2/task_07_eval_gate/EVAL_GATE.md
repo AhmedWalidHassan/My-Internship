@@ -10,16 +10,23 @@ in [`week2/RESULTS.md`](../RESULTS.md#task-7--eval-gate).
 |---|---|
 | The workflow (the README places it there) | [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml), linted with actionlint ([`.github/actionlint.yaml`](../../.github/actionlint.yaml)) |
 | Dataset: 38 examples, 6 categories | [`eval_dataset.jsonl`](eval_dataset.jsonl) |
-| Baseline + tolerance + justification | [`eval_baseline.json`](eval_baseline.json), [`tolerance_justification.md`](tolerance_justification.md) |
+| Baseline + tolerance + justification | [`eval_baseline_w2.json`](eval_baseline_w2.json) (**archived** in Week 3 Task 1, see below), [`tolerance_justification.md`](tolerance_justification.md) |
 | Eval runner (real pipeline, no cache, category split, LangSmith publish) | [`scripts/run_eval.py`](scripts/run_eval.py) |
 | The gate (thresholds, cost, flips by id, report) | [`scripts/check_baseline.py`](scripts/check_baseline.py) |
 | Baseline builder (majority over runs, flaky flags, noise) | [`scripts/make_baseline.py`](scripts/make_baseline.py) |
 | PR comment / nightly issue | [`scripts/post_report.py`](scripts/post_report.py) |
 | Fast-CI dependencies (no torch) | [`requirements-ci.txt`](requirements-ci.txt) |
 | Evidence: baseline runs, CPU run, judge check | [`evidence/`](evidence/) |
-| Tests of the gate itself (12) | [`tests/test_eval_gate.py`](../../tests/test_eval_gate.py) |
+| Tests of the gate itself (13) | [`tests/test_eval_gate.py`](../../tests/test_eval_gate.py) |
 
 Run it by hand: `make eval-gate` runs the eval, then the gate, against the committed baseline.
+
+> **Week 3 Task 1 (2026-11-18): the Week 2 baseline is archived.** It was measured on the 4-file Week 1
+> corpus and no longer describes the system, so it was renamed (not edited) to `eval_baseline_w2.json`.
+> `check_baseline.py` refuses to gate against it, and with no current `eval_baseline.json` the gate is
+> red with the reason "NO BASELINE" rather than comparing against stale numbers. Week 3 Task 2 commits
+> the new baseline (dataset v3). The Week 2 run on the new corpus is in
+> [`week3/RESULTS.md`](../../week3/RESULTS.md#the-week-2-toolchain-against-the-new-corpus).
 
 ## The two jobs
 

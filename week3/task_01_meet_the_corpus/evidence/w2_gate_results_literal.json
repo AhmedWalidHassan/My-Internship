@@ -1,0 +1,1675 @@
+{
+ "meta": {
+  "date": "2026-11-18T08:39:33+00:00",
+  "git_sha": "9ca3dcc005ee1ee3d910a0531a4f672587a3f096",
+  "model": "ollama:qwen3.5:4b",
+  "judge": "ollama:qwen3.5:4b (same model as the generator)",
+  "dataset_version": "58fefe13fc23",
+  "n": 38,
+  "retriever_k": 4,
+  "max_docs_to_grade": 6,
+  "embeddings": "ollama/sentence-transformers",
+  "runner": "Linux x86_64 py3.14.10",
+  "wall_clock_s": 150.7
+ },
+ "scores": {
+  "correctness": 0.1579,
+  "groundedness": 1.0,
+  "retrieval_hit": 0.1579
+ },
+ "by_category": {
+  "factual": {
+   "n": 19,
+   "correctness": 0.0,
+   "groundedness": 1.0,
+   "retrieval_hit": 0.0
+  },
+  "multi-hop": {
+   "n": 2,
+   "correctness": 0.0,
+   "groundedness": 1.0,
+   "retrieval_hit": 0.0
+  },
+  "multi-part": {
+   "n": 7,
+   "correctness": 0.0,
+   "groundedness": 1.0,
+   "retrieval_hit": 0.0
+  },
+  "refusal": {
+   "n": 6,
+   "correctness": 1.0,
+   "groundedness": 1.0,
+   "retrieval_hit": 1.0
+  },
+  "follow-up": {
+   "n": 2,
+   "correctness": 0.0,
+   "groundedness": 1.0,
+   "retrieval_hit": 0.0
+  },
+  "keyword": {
+   "n": 2,
+   "correctness": 0.0,
+   "groundedness": 1.0,
+   "retrieval_hit": 0.0
+  }
+ },
+ "cost": {
+  "mean_cost_usd": 0.0007738,
+  "mean_llm_calls": 20.5789,
+  "mean_latency_s": 3.965
+ },
+ "examples": [
+  {
+   "id": 1,
+   "category": "factual",
+   "question": "How many vacation days do I get a year?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How many vacation days do I get a year?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 6.64,
+   "llm_calls": 22,
+   "tokens_in": 5358,
+   "tokens_out": 161,
+   "cost_usd": 0.0009,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. | fact-check said: The answer states \"I don't know based on the provided documents,\" which is fully supported by the context because the context explicitly mentions that the export has not been cleaned, deduplicated, or reviewed for accuracy and leaves verification to the user.\nANSWER: YES\n[grounded, bu",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents."
+   ]
+  },
+  {
+   "id": 2,
+   "category": "factual",
+   "question": "time off carry rules?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "time off carry rules?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.28,
+   "llm_calls": 21,
+   "tokens_in": 5128,
+   "tokens_out": 132,
+   "cost_usd": 0.000848,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is not supported because the context explicitly provides information about the files and their contents.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 3,
+   "category": "factual",
+   "question": "Can I take time off in my first months?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Can I take time off in my first months?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.25,
+   "llm_calls": 23,
+   "tokens_in": 5273,
+   "tokens_out": 133,
+   "cost_usd": 0.000871,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the context explicitly provides detailed information about the CSV files and their contents.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 4,
+   "category": "factual",
+   "question": "How far ahead do I have to ask for PTO?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How far ahead do I have to ask for PTO?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.17,
+   "llm_calls": 23,
+   "tokens_in": 5322,
+   "tokens_out": 118,
+   "cost_usd": 0.000869,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is not supported because the context explicitly provides information about the document contents and known issues.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 5,
+   "category": "factual",
+   "question": "How many sick days are there per year?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How many sick days are there per year?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.77,
+   "llm_calls": 20,
+   "tokens_in": 5064,
+   "tokens_out": 110,
+   "cost_usd": 0.000826,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the context explicitly provides detailed information about the Northwind Knowledge Export.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 6,
+   "category": "factual",
+   "question": "When do I need a doctor's note?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "When do I need a doctor's note?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.73,
+   "llm_calls": 20,
+   "tokens_in": 4437,
+   "tokens_out": 113,
+   "cost_usd": 0.000733,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the context explicitly provides detailed information about the CSV files and their contents.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 7,
+   "category": "factual",
+   "question": "How many days a week can I work from home?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How many days a week can I work from home?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.06,
+   "llm_calls": 20,
+   "tokens_in": 5079,
+   "tokens_out": 124,
+   "cost_usd": 0.000836,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: README.md, _metadata.csv, _directory.csv | fact-check said: The context does not contain any information to support the statement \"I don't know based on the provided documents.\"\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources: README.md, _metadata.csv, _directory.csv"
+   ]
+  },
+  {
+   "id": 8,
+   "category": "factual",
+   "question": "What is the home-office stipend?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the home-office stipend?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.28,
+   "llm_calls": 22,
+   "tokens_in": 5079,
+   "tokens_out": 134,
+   "cost_usd": 0.000842,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The statement \"I don't know based on the provided documents\" is not supported because the context explicitly details the contents of various folders and systems.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 9,
+   "category": "factual",
+   "question": "How long is paid leave for an adoptive parent?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How long is paid leave for an adoptive parent?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.78,
+   "llm_calls": 21,
+   "tokens_in": 4369,
+   "tokens_out": 121,
+   "cost_usd": 0.000728,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the documents clearly provide information about the export contents and classification rules.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 10,
+   "category": "factual",
+   "question": "What is the daily meal limit when travelling abroad?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the daily meal limit when travelling abroad?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.4,
+   "llm_calls": 19,
+   "tokens_in": 4502,
+   "tokens_out": 107,
+   "cost_usd": 0.000739,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The statement \"I don't know based on the provided documents\" is not supported because the context explicitly details the contents of various folders and systems.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 11,
+   "category": "factual",
+   "question": "Is alcohol reimbursable?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Is alcohol reimbursable?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.71,
+   "llm_calls": 23,
+   "tokens_in": 5053,
+   "tokens_out": 113,
+   "cost_usd": 0.000826,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know,\" which contradicts the context that explicitly lists all available files and their contents in the README.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 12,
+   "category": "factual",
+   "question": "How long do I have to file an expense report?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How long do I have to file an expense report?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.04,
+   "llm_calls": 22,
+   "tokens_in": 5124,
+   "tokens_out": 128,
+   "cost_usd": 0.000845,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the context explicitly provides information about the export files and their contents.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 13,
+   "category": "multi-part",
+   "question": "How much is the referral bonus and when is it paid?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How much is the referral bonus and when is it paid?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.23,
+   "llm_calls": 22,
+   "tokens_in": 4782,
+   "tokens_out": 133,
+   "cost_usd": 0.000797,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. | fact-check said: The answer states \"I don't know based on the provided documents,\" which is not a factual claim about the content of the context and therefore cannot be verified as supported or unsupported by the text itself.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents."
+   ]
+  },
+  {
+   "id": 14,
+   "category": "factual",
+   "question": "How often are performance reviews held?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How often are performance reviews held?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.07,
+   "llm_calls": 22,
+   "tokens_in": 4758,
+   "tokens_out": 123,
+   "cost_usd": 0.000787,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The context does not contain any information regarding the assistant's current knowledge level or its ability to answer questions.\nThe provided documents only describe the scope of data available for export and specific classification rules.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 15,
+   "category": "factual",
+   "question": "What is my annual learning budget?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is my annual learning budget?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.73,
+   "llm_calls": 20,
+   "tokens_in": 4468,
+   "tokens_out": 111,
+   "cost_usd": 0.000737,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know,\" which is not supported because the context explicitly provides detailed information about the Northwind Knowledge Export.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 16,
+   "category": "multi-part",
+   "question": "My laptop got stolen, what do I do?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "My laptop got stolen, what do I do?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.21,
+   "llm_calls": 19,
+   "tokens_in": 4467,
+   "tokens_out": 142,
+   "cost_usd": 0.000755,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is not explicitly stated in the context; the context provides specific details about the files and data but does not express uncertainty or lack of knowledge.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 17,
+   "category": "multi-part",
+   "question": "What are the password rules?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What are the password rules?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.84,
+   "llm_calls": 21,
+   "tokens_in": 4720,
+   "tokens_out": 117,
+   "cost_usd": 0.000778,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer claims ignorance and cites sources, which contradicts the context where the source document itself is explicitly identified as [README.md].\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 18,
+   "category": "multi-part",
+   "question": "How do I get on the VPN from home?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How do I get on the VPN from home?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.23,
+   "llm_calls": 22,
+   "tokens_in": 4955,
+   "tokens_out": 136,
+   "cost_usd": 0.000825,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is not supported because the context does provide information about `_directory.csv`.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 19,
+   "category": "factual",
+   "question": "Can I open our source code on my personal phone?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Can I open our source code on my personal phone?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.15,
+   "llm_calls": 23,
+   "tokens_in": 5512,
+   "tokens_out": 116,
+   "cost_usd": 0.000896,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer claims ignorance and cites sources, which contradicts the context where the document explicitly states it is from the Knowledge Platform team.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 20,
+   "category": "factual",
+   "question": "Do I need approval for a Figma license?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Do I need approval for a Figma license?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.68,
+   "llm_calls": 21,
+   "tokens_in": 4655,
+   "tokens_out": 114,
+   "cost_usd": 0.000767,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The context does not contain any information regarding the assistant's current knowledge level or its ability to answer questions.\nThe provided documents only describe the scope of data available for export and specific classification rules.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 21,
+   "category": "factual",
+   "question": "How much weight can the Warehouse Rover R2 carry?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How much weight can the Warehouse Rover R2 carry?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.06,
+   "llm_calls": 20,
+   "tokens_in": 4645,
+   "tokens_out": 120,
+   "cost_usd": 0.000769,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is not supported because the context does provide specific information about the CSV files and known issues.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 22,
+   "category": "factual",
+   "question": "How fast does the rover go with a load?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How fast does the rover go with a load?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.16,
+   "llm_calls": 22,
+   "tokens_in": 5296,
+   "tokens_out": 123,
+   "cost_usd": 0.000868,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the context clearly provides information about the files and folders.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 23,
+   "category": "multi-part",
+   "question": "What does premium support include?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What does premium support include?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.81,
+   "llm_calls": 22,
+   "tokens_in": 4564,
+   "tokens_out": 119,
+   "cost_usd": 0.000756,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer claims ignorance and cites sources, which contradicts the context where specific details about the export are clearly stated.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 24,
+   "category": "factual",
+   "question": "Can the R2 be used outdoors?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Can the R2 be used outdoors?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.05,
+   "llm_calls": 23,
+   "tokens_in": 4630,
+   "tokens_out": 114,
+   "cost_usd": 0.000763,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is not supported because the context does provide specific information about the files and issues.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 25,
+   "category": "refusal",
+   "question": "What is the capital of France?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the capital of France?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "direct_answer"
+   ],
+   "retries": 0,
+   "sources": [],
+   "refused": true,
+   "latency_s": 0.24,
+   "llm_calls": 2,
+   "tokens_in": 210,
+   "tokens_out": 4,
+   "cost_usd": 3.4e-05,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "no citations shown"
+   },
+   "rejected_attempts": []
+  },
+  {
+   "id": 26,
+   "category": "refusal",
+   "question": "What is the CEO's home address?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the CEO's home address?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.16,
+   "llm_calls": 23,
+   "tokens_in": 4875,
+   "tokens_out": 118,
+   "cost_usd": 0.000802,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "no citations shown"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 27,
+   "category": "refusal",
+   "question": "What dental insurance plan does Northwind offer?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What dental insurance plan does Northwind offer?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.97,
+   "llm_calls": 22,
+   "tokens_in": 4993,
+   "tokens_out": 115,
+   "cost_usd": 0.000818,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "no citations shown"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 28,
+   "category": "refusal",
+   "question": "Who won the football match last night?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Who won the football match last night?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "direct_answer"
+   ],
+   "retries": 0,
+   "sources": [],
+   "refused": true,
+   "latency_s": 0.24,
+   "llm_calls": 2,
+   "tokens_in": 212,
+   "tokens_out": 4,
+   "cost_usd": 3.4e-05,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "no citations shown"
+   },
+   "rejected_attempts": []
+  },
+  {
+   "id": 29,
+   "category": "multi-hop",
+   "question": "I just referred a friend who got hired. When do I get my referral bonus, and when will my friend be allowed to use their PTO?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "I just referred a friend who got hired. When do I get my referral bonus, and when will my friend be allowed to use their PTO?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.38,
+   "llm_calls": 19,
+   "tokens_in": 4566,
+   "tokens_out": 139,
+   "cost_usd": 0.000768,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the context explicitly defines `_directory.csv` as an export from the identity provider containing user details like id, name, title, department, office, groups, and hire d",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "only 0/2 key facts were in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 30,
+   "category": "multi-hop",
+   "question": "I want to work fully remote. What do I need to get approved, and how do I reach internal systems from home?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "I want to work fully remote. What do I need to get approved, and how do I reach internal systems from home?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 5.03,
+   "llm_calls": 21,
+   "tokens_in": 5294,
+   "tokens_out": 167,
+   "cost_usd": 0.000894,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer claims ignorance and cites sources, which contradicts the context where the source files are explicitly listed in the README.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "only 0/2 key facts were in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 31,
+   "category": "multi-part",
+   "question": "What are the known limitations of the Warehouse Rover R2?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What are the known limitations of the Warehouse Rover R2?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.1,
+   "llm_calls": 22,
+   "tokens_in": 5329,
+   "tokens_out": 145,
+   "cost_usd": 0.000886,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the context clearly provides information about the files and folders.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 32,
+   "category": "multi-part",
+   "question": "What are the rules for booking business travel?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What are the rules for booking business travel?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 3.71,
+   "llm_calls": 20,
+   "tokens_in": 4812,
+   "tokens_out": 126,
+   "cost_usd": 0.000797,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the context explicitly provides detailed information about the files and their contents.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 33,
+   "category": "refusal",
+   "question": "How many days of bereavement leave do I get?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How many days of bereavement leave do I get?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.21,
+   "llm_calls": 23,
+   "tokens_in": 4976,
+   "tokens_out": 129,
+   "cost_usd": 0.000824,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "no citations shown"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 34,
+   "category": "refusal",
+   "question": "What is the maximum operating temperature of the Warehouse Rover R2?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the maximum operating temperature of the Warehouse Rover R2?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.07,
+   "llm_calls": 22,
+   "tokens_in": 5057,
+   "tokens_out": 116,
+   "cost_usd": 0.000828,
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "retrieval_hit": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "no citations shown"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 35,
+   "category": "follow-up",
+   "question": "Do they carry over?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Do the paid sick days carry over?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 5.08,
+   "llm_calls": 23,
+   "tokens_in": 5260,
+   "tokens_out": 182,
+   "cost_usd": 0.000898,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is fully supported by the context because the text explicitly describes this as a one-off export of specific data sources and notes that it has not been cleaned or reviewed for accuracy, implying uncertai",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 36,
+   "category": "follow-up",
+   "question": "And what does the standard plan cover?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "And what does the standard plan cover?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.83,
+   "llm_calls": 24,
+   "tokens_in": 5112,
+   "tokens_out": 171,
+   "cost_usd": 0.000869,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is incorrect because the context does provide specific information about known issues.\nThe context explicitly lists two known issues: wiki pages including navigation elements and some PDFs having repeated",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 37,
+   "category": "keyword",
+   "question": "What does Fleet Manager 4.2 handle?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What does Fleet Manager 4.2 handle?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.17,
+   "llm_calls": 23,
+   "tokens_in": 5178,
+   "tokens_out": 126,
+   "cost_usd": 0.000852,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which contradicts the context because the documents clearly provide information about the Northwind Knowledge Export.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  },
+  {
+   "id": 38,
+   "category": "keyword",
+   "question": "Does the R2 support 5G?",
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Does the R2 support 5G?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.15,
+   "llm_calls": 23,
+   "tokens_in": 4452,
+   "tokens_out": 119,
+   "cost_usd": 0.000739,
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "retrieval_hit": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents. Sources: | fact-check said: The answer states \"I don't know based on the provided documents,\" which is not supported because the context does provide specific information about data classification and known issues.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "retrieval_hit": "key fact was NOT in the search results"
+   },
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ]
+  }
+ ]
+}

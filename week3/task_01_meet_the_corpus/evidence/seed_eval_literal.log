@@ -1,0 +1,47 @@
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 25606.86it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-11-18 10:34:03,765 INFO northwind: Index LOADED from /mnt/games/coding/My-Internship/week3/task_01_meet_the_corpus/faiss_index_w2_literal in 0.02s: 7 chunks from 1 files, 0 chunks embedded
+Seed eval [literal]: 40 examples, 1 files / 7 chunks indexed from /mnt/games/coding/My-Internship/week3/corpus, model ollama:qwen3.5:4b
+   s01 factual       det ✗ C0 G1 gold idx/ret/kept 000   4.1s  "I don't know based on the provided documents."
+   s02 version       det ✗ C0 G1 gold idx/ret/kept 000   3.9s  "I don't know based on the provided documents."
+   s03 version       det ✗ C0 G1 gold idx/ret/kept 000   3.7s  "I don't know based on the provided documents."
+   s04 version       det ✗ C0 G1 gold idx/ret/kept 000   3.5s  "I don't know based on the provided documents."
+   s05 conflict      det ✗ C0 G1 gold idx/ret/kept 000   4.0s  "I don't know based on the provided documents."
+   s06 table         det ✗ C0 G1 gold idx/ret/kept 000   3.8s  "I don't know based on the provided documents."
+   s07 multi_hop     det ✗ C0 G1 gold idx/ret/kept 000   3.8s  "I don't know based on the provided documents."
+   s08 keyword       det ✗ C0 G1 gold idx/ret/kept 000   4.4s  "I don't know based on the provided documents."
+   s09 keyword       det ✗ C0 G1 gold idx/ret/kept 000   4.6s  "I don't know based on the provided documents."
+   s10 long_doc      det ✗ C0 G1 gold idx/ret/kept 000   4.2s  "I don't know based on the provided documents."
+   s11 long_doc      det ✗ C0 G1 gold idx/ret/kept 000   4.9s  "I don't know based on the provided documents."
+   s12 ambiguous     det ✗ C0 G1 gold idx/ret/kept 000   4.0s  "I don't know based on the provided documents."
+   s13 multi_part    det ✗ C0 G1 gold idx/ret/kept 000   3.8s  "I don't know based on the provided documents."
+   s14 multi_part    det ✗ C0 G1 gold idx/ret/kept 000   4.2s  "I don't know based on the provided documents."
+   s15 out_of_scope  det ✓ C1 G1 gold idx/ret/kept 000   4.1s  "I don't know based on the provided documents."
+   s16 out_of_scope  det ✓ C1 G1 gold idx/ret/kept 000   4.2s  "I don't know based on the provided documents."
+   s17 draft         det ✗ C0 G1 gold idx/ret/kept 000   4.4s  "I don't know based on the provided documents."
+   s18 access        det ✓ C1 G1 gold idx/ret/kept 000   3.8s  "I don't know based on the provided documents."
+   s19 access        det ✗ C0 G1 gold idx/ret/kept 000   3.0s  "I don't know based on the provided documents."
+   s20 access        det ✓ C1 G1 gold idx/ret/kept 000   4.3s  "I don't know based on the provided documents."
+   s21 access        det ✗ C0 G1 gold idx/ret/kept 000   3.9s  "I don't know based on the provided documents."
+   s22 access        det ✓ C1 G1 gold idx/ret/kept 000   3.7s  "I don't know based on the provided documents."
+   s23 cross_lingual det ✗ C0 G1 gold idx/ret/kept 000   4.7s  "I don't know based on the provided documents."
+   s24 cross_lingual det ✗ C0 G1 gold idx/ret/kept 000   3.5s  "I don't know based on the provided documents."
+   s25 cross_lingual det ✗ C0 G1 gold idx/ret/kept 000   4.3s  "I don't know based on the provided documents."
+   s26 follow_up     det ✗ C0 G1 gold idx/ret/kept 000   4.1s  "I don't know based on the provided documents."
+   s27 follow_up     det ✗ C0 G1 gold idx/ret/kept 000   4.4s  "I don't know based on the provided documents."
+   s28 personalized  det ✗ C0 G1 gold idx/ret/kept 000   4.7s  "I don't know based on the provided documents."
+   s29 factual       det ✗ C0 G1 gold idx/ret/kept 000   4.2s  "I don't know based on the provided documents."
+   s30 version       det ✗ C0 G1 gold idx/ret/kept 000   3.6s  "I don't know based on the provided documents."
+   s31 version       det ✗ C0 G1 gold idx/ret/kept 000   4.0s  "I don't know based on the provided documents."
+   s32 version       det ✗ C0 G1 gold idx/ret/kept 000   4.4s  "I don't know based on the provided documents."
+   s33 factual       det ✗ C0 G1 gold idx/ret/kept 000   4.4s  "I don't know based on the provided documents."
+   s34 keyword       det ✗ C0 G1 gold idx/ret/kept 000   4.3s  "I don't know based on the provided documents."
+   s35 table         det ✗ C0 G1 gold idx/ret/kept 000   3.9s  "I don't know based on the provided documents."
+   s36 multi_hop     det ✗ C0 G1 gold idx/ret/kept 000   4.3s  "I don't know based on the provided documents."
+   s37 factual       det ✗ C0 G1 gold idx/ret/kept 000   4.5s  "I don't know based on the provided documents."
+   s38 conflict      det ✗ C0 G1 gold idx/ret/kept 000   4.1s  "I don't know based on the provided documents."
+   s39 table         det ✗ C0 G1 gold idx/ret/kept 000   3.9s  "I don't know based on the provided documents."
+   s40 out_of_scope  det ✓ C1 G1 gold idx/ret/kept 000   3.9s  "I don't know based on the provided documents."
+
+[literal] deterministic 15%  correctness 0.15  groundedness 1.00  (40 examples, 163 s)
+wrote week3/task_01_meet_the_corpus/evidence/seed_eval_literal.json and week3/task_01_meet_the_corpus/evidence/seed_eval_literal.md

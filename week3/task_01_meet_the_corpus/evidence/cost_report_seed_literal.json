@@ -1,0 +1,4740 @@
+{
+ "summary": {
+  "n": 40,
+  "ok": 40,
+  "errors": 0,
+  "mean_latency_s": 4.0542,
+  "p50_latency_s": 4.018000000000001,
+  "p95_latency_s": 4.61555,
+  "mean_llm_calls": 21.2,
+  "p95_llm_calls": 23.0,
+  "max_llm_calls": 24,
+  "mean_tokens_in": 4790.475,
+  "mean_tokens_out": 127.275,
+  "mean_cost_usd": 0.0007948749999999999,
+  "total_cost_usd": 0.031795,
+  "projected_monthly_usd_at_1000_per_day": 23.846249999999998,
+  "refusal_rate": 1.0,
+  "mean_retries": 2.0,
+  "wall_clock_s": 162.19409311500021,
+  "model": "ollama:qwen3.5:4b",
+  "price_per_1k": [
+   0.00015,
+   0.0006
+  ],
+  "max_docs_to_grade": 6,
+  "retriever_k": 4,
+  "nodes": [
+   {
+    "node": "grade_documents",
+    "calls_per_q": 16.1,
+    "runs_per_q": 3.0,
+    "tokens_in_per_q": 3343.1,
+    "tokens_out_per_q": 32.2,
+    "cost_per_q": 0.000520785,
+    "pct_cost": 65.51280055476147,
+    "ms_per_q": 1914.5775000000008,
+    "pct_time": 47.28107765377305
+   },
+   {
+    "node": "grade_generation",
+    "calls_per_q": 1.1,
+    "runs_per_q": 1.0,
+    "tokens_in_per_q": 518.4,
+    "tokens_out_per_q": 40.625,
+    "cost_per_q": 0.00010213499999999998,
+    "pct_cost": 12.848200091516771,
+    "ms_per_q": 837.3399999999998,
+    "pct_time": 20.678367714344443
+   },
+   {
+    "node": "generate",
+    "calls_per_q": 1.0,
+    "runs_per_q": 1.0,
+    "tokens_in_per_q": 560.3,
+    "tokens_out_per_q": 14.35,
+    "cost_per_q": 9.265499999999999e-05,
+    "pct_cost": 11.655651632442224,
+    "ms_per_q": 417.0775,
+    "pct_time": 10.299856582009095
+   },
+   {
+    "node": "rewrite_query",
+    "calls_per_q": 2.0,
+    "runs_per_q": 2.0,
+    "tokens_in_per_q": 219.925,
+    "tokens_out_per_q": 35.1,
+    "cost_per_q": 5.404875000000001e-05,
+    "pct_cost": 6.799130118924632,
+    "ms_per_q": 687.4525000000001,
+    "pct_time": 16.976850002562134
+   },
+   {
+    "node": "route_question",
+    "calls_per_q": 1.0,
+    "runs_per_q": 1.0,
+    "tokens_in_per_q": 148.75,
+    "tokens_out_per_q": 5.0,
+    "cost_per_q": 2.53125e-05,
+    "pct_cost": 3.184217602354906,
+    "ms_per_q": 179.18250000000003,
+    "pct_time": 4.424966707640295
+   },
+   {
+    "node": "contextualize",
+    "calls_per_q": 0.0,
+    "runs_per_q": 1.0,
+    "tokens_in_per_q": 0.0,
+    "tokens_out_per_q": 0.0,
+    "cost_per_q": 0.0,
+    "pct_cost": 0.0,
+    "ms_per_q": 0.027499999999999997,
+    "pct_time": 0.0006791209211843126
+   },
+   {
+    "node": "retrieve",
+    "calls_per_q": 0.0,
+    "runs_per_q": 3.0,
+    "tokens_in_per_q": 0.0,
+    "tokens_out_per_q": 0.0,
+    "cost_per_q": 0.0,
+    "pct_cost": 0.0,
+    "ms_per_q": 13.659999999999997,
+    "pct_time": 0.33733788303191664
+   },
+   {
+    "node": "refuse",
+    "calls_per_q": 0.0,
+    "runs_per_q": 1.0,
+    "tokens_in_per_q": 0.0,
+    "tokens_out_per_q": 0.0,
+    "cost_per_q": 0.0,
+    "pct_cost": 0.0,
+    "ms_per_q": 0.035,
+    "pct_time": 0.0008643357178709434
+   }
+  ],
+  "paths": {
+   "\u2026with 2 rewrite loops (refused)": 40
+  },
+  "rewrite_triggers": {
+   "doc grader rejected every passage": 80
+  },
+  "rewrite_fired": 40
+ },
+ "requests": [
+  {
+   "request_id": "cost-report-01",
+   "session_id": "cost-215d1291-0050-405d-86b1-8b0f52cba9ba",
+   "trace_id": "868ef991-f663-4d72-8a10-c237abb9e213",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4327,
+   "tokens_in": 5164,
+   "tokens_out": 138,
+   "estimated_cost_usd": 0.000857,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 21,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 183.9,
+     "llm_calls": 1,
+     "llm_ms": 183.3,
+     "tokens_in": 149,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 10.8,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1809.5,
+     "llm_calls": 15,
+     "llm_ms": 1802.0,
+     "tokens_in": 3329,
+     "tokens_out": 30
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 506.0,
+     "llm_calls": 2,
+     "llm_ms": 504.9,
+     "tokens_in": 215,
+     "tokens_out": 22
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 443.9,
+     "llm_calls": 1,
+     "llm_ms": 443.5,
+     "tokens_in": 721,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1368.7,
+     "llm_calls": 2,
+     "llm_ms": 1367.1,
+     "tokens_in": 750,
+     "tokens_out": 68
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::3",
+    "README.md::4",
+    "README.md::6",
+    "README.md::1",
+    "README.md::0",
+    "README.md::5"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::1",
+    "README.md::3"
+   ],
+   "degraded": [],
+   "llm_attempts": 21,
+   "question": "How many paid sick days do employees get per year?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-02",
+   "session_id": "cost-f266d232-c049-4b2b-972f-dfbc4b7f08a7",
+   "trace_id": "cd88f4b4-1f54-4058-91fa-8155a6294f61",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3754,
+   "tokens_in": 4461,
+   "tokens_out": 129,
+   "estimated_cost_usd": 0.000747,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 20,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 178.3,
+     "llm_calls": 1,
+     "llm_ms": 177.6,
+     "tokens_in": 151,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 6.2,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1703.4,
+     "llm_calls": 15,
+     "llm_ms": 1695.2,
+     "tokens_in": 3238,
+     "tokens_out": 30
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 726.3,
+     "llm_calls": 2,
+     "llm_ms": 725.1,
+     "tokens_in": 226,
+     "tokens_out": 38
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 340.8,
+     "llm_calls": 1,
+     "llm_ms": 340.2,
+     "tokens_in": 450,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 794.5,
+     "llm_calls": 1,
+     "llm_ms": 793.6,
+     "tokens_in": 396,
+     "tokens_out": 43
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::1",
+    "README.md::5",
+    "README.md::4",
+    "README.md::0",
+    "README.md::6",
+    "README.md::3"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::6",
+    "README.md::5"
+   ],
+   "degraded": [],
+   "llm_attempts": 20,
+   "question": "How many PTO days can I carry over into next year?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-03",
+   "session_id": "cost-d6b87bed-cc92-4566-ae38-d9067eddd332",
+   "trace_id": "f899022e-2f39-4ced-9d89-57838db03e21",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3758,
+   "tokens_in": 4061,
+   "tokens_out": 123,
+   "estimated_cost_usd": 0.000683,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 20,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 174.6,
+     "llm_calls": 1,
+     "llm_ms": 173.8,
+     "tokens_in": 149,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 5.7,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1780.5,
+     "llm_calls": 15,
+     "llm_ms": 1772.1,
+     "tokens_in": 2863,
+     "tokens_out": 30
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 626.5,
+     "llm_calls": 2,
+     "llm_ms": 625.3,
+     "tokens_in": 219,
+     "tokens_out": 30
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 341.8,
+     "llm_calls": 1,
+     "llm_ms": 341.0,
+     "tokens_in": 441,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 824.4,
+     "llm_calls": 1,
+     "llm_ms": 823.7,
+     "tokens_in": 389,
+     "tokens_out": 45
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::4",
+    "README.md::3",
+    "README.md::2",
+    "README.md::6",
+    "README.md::1"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::6",
+    "README.md::4"
+   ],
+   "degraded": [],
+   "llm_attempts": 20,
+   "question": "How long is parental leave for an adoptive parent?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-04",
+   "session_id": "cost-9e373012-563c-4e72-908a-c0b74f5e7b95",
+   "trace_id": "811e8227-17a4-41a2-a840-a9a1f88bbe7e",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3510,
+   "tokens_in": 4206,
+   "tokens_out": 96,
+   "estimated_cost_usd": 0.000688,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 19,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 177.1,
+     "llm_calls": 1,
+     "llm_ms": 176.5,
+     "tokens_in": 148,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 5.7,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1791.7,
+     "llm_calls": 14,
+     "llm_ms": 1783.5,
+     "tokens_in": 3018,
+     "tokens_out": 28
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 504.9,
+     "llm_calls": 2,
+     "llm_ms": 503.8,
+     "tokens_in": 211,
+     "tokens_out": 23
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 420.3,
+     "llm_calls": 1,
+     "llm_ms": 419.9,
+     "tokens_in": 440,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 605.9,
+     "llm_calls": 1,
+     "llm_ms": 605.3,
+     "tokens_in": 389,
+     "tokens_out": 27
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::4",
+    "README.md::1",
+    "README.md::6",
+    "README.md::0",
+    "README.md::3"
+   ],
+   "kept_ids": [
+    "README.md::6",
+    "README.md::0",
+    "README.md::4"
+   ],
+   "degraded": [],
+   "llm_attempts": 19,
+   "question": "What is the minimum length for a corporate password?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-05",
+   "session_id": "cost-1a555ca3-0a11-433e-aff0-055eef215afa",
+   "trace_id": "68aef6d7-81e1-4863-a560-3c35e483cfb1",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4001,
+   "tokens_in": 5048,
+   "tokens_out": 132,
+   "estimated_cost_usd": 0.000836,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 20,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 179.6,
+     "llm_calls": 1,
+     "llm_ms": 179.0,
+     "tokens_in": 148,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 6.5,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1691.9,
+     "llm_calls": 15,
+     "llm_ms": 1684.0,
+     "tokens_in": 3286,
+     "tokens_out": 30
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 842.0,
+     "llm_calls": 2,
+     "llm_ms": 840.9,
+     "tokens_in": 225,
+     "tokens_out": 45
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 439.9,
+     "llm_calls": 1,
+     "llm_ms": 439.2,
+     "tokens_in": 720,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 836.0,
+     "llm_calls": 1,
+     "llm_ms": 835.3,
+     "tokens_in": 669,
+     "tokens_out": 39
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::4",
+    "README.md::2",
+    "README.md::3",
+    "README.md::1",
+    "README.md::6"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::3",
+    "README.md::1"
+   ],
+   "degraded": [],
+   "llm_attempts": 20,
+   "question": "How do I connect to the VPN from home?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-06",
+   "session_id": "cost-e869dc1d-ded1-4c0b-9437-07a9ae0f2255",
+   "trace_id": "a02808c1-6924-4eff-99f0-c83fae1f9286",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3804,
+   "tokens_in": 4857,
+   "tokens_out": 102,
+   "estimated_cost_usd": 0.00079,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 20,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 178.3,
+     "llm_calls": 1,
+     "llm_ms": 177.6,
+     "tokens_in": 152,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 6.2,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1885.0,
+     "llm_calls": 15,
+     "llm_ms": 1877.7,
+     "tokens_in": 3360,
+     "tokens_out": 30
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 520.6,
+     "llm_calls": 2,
+     "llm_ms": 519.5,
+     "tokens_in": 224,
+     "tokens_out": 24
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 481.2,
+     "llm_calls": 1,
+     "llm_ms": 480.7,
+     "tokens_in": 588,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 727.9,
+     "llm_calls": 1,
+     "llm_ms": 727.2,
+     "tokens_in": 533,
+     "tokens_out": 30
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::3",
+    "README.md::1",
+    "README.md::4",
+    "README.md::6"
+   ],
+   "kept_ids": [
+    "README.md::6",
+    "README.md::1",
+    "README.md::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 20,
+   "question": "What is the hotel cap per night for a business trip to Germany?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-07",
+   "session_id": "cost-41b4e2f4-cff8-4b9b-8873-70d255c7765f",
+   "trace_id": "a3bb7209-9b98-4c99-8224-efffbc71ea3b",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3851,
+   "tokens_in": 5004,
+   "tokens_out": 122,
+   "estimated_cost_usd": 0.000824,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 20,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 179.4,
+     "llm_calls": 1,
+     "llm_ms": 178.6,
+     "tokens_in": 150,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 7.9,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1622.7,
+     "llm_calls": 15,
+     "llm_ms": 1615.1,
+     "tokens_in": 3330,
+     "tokens_out": 30
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 625.6,
+     "llm_calls": 2,
+     "llm_ms": 624.5,
+     "tokens_in": 223,
+     "tokens_out": 32
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 485.6,
+     "llm_calls": 1,
+     "llm_ms": 485.0,
+     "tokens_in": 677,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 924.8,
+     "llm_calls": 1,
+     "llm_ms": 924.1,
+     "tokens_in": 624,
+     "tokens_out": 42
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::1",
+    "README.md::6",
+    "README.md::3",
+    "README.md::0",
+    "README.md::4"
+   ],
+   "kept_ids": [
+    "README.md::1",
+    "README.md::3",
+    "README.md::4"
+   ],
+   "degraded": [],
+   "llm_attempts": 20,
+   "question": "What is the daily meal allowance when I travel to Cairo?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-08",
+   "session_id": "cost-14616574-b563-4075-862b-aa1c4ab48129",
+   "trace_id": "2162880c-6243-4259-bd3b-8d4a51b7514f",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4372,
+   "tokens_in": 4802,
+   "tokens_out": 120,
+   "estimated_cost_usd": 0.000792,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 23,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 191.0,
+     "llm_calls": 1,
+     "llm_ms": 190.4,
+     "tokens_in": 149,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 4.9,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 2380.6,
+     "llm_calls": 18,
+     "llm_ms": 2371.9,
+     "tokens_in": 3393,
+     "tokens_out": 36
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 577.7,
+     "llm_calls": 2,
+     "llm_ms": 576.7,
+     "tokens_in": 218,
+     "tokens_out": 28
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 390.5,
+     "llm_calls": 1,
+     "llm_ms": 389.9,
+     "tokens_in": 547,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 821.6,
+     "llm_calls": 1,
+     "llm_ms": 820.8,
+     "tokens_in": 495,
+     "tokens_out": 38
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::6",
+    "README.md::4",
+    "README.md::1",
+    "README.md::5",
+    "README.md::2",
+    "README.md::0"
+   ],
+   "kept_ids": [
+    "README.md::6",
+    "README.md::1",
+    "README.md::5"
+   ],
+   "degraded": [],
+   "llm_attempts": 23,
+   "question": "What does error code E-217 mean?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-09",
+   "session_id": "cost-e8e20cdb-eb4a-4ccb-9a33-9fd186e4d236",
+   "trace_id": "ed99723c-f6ee-469b-a405-8bf17de740b7",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4542,
+   "tokens_in": 5059,
+   "tokens_out": 155,
+   "estimated_cost_usd": 0.000852,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 23,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 181.3,
+     "llm_calls": 1,
+     "llm_ms": 180.5,
+     "tokens_in": 154,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 7.6,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 2200.7,
+     "llm_calls": 18,
+     "llm_ms": 2192.5,
+     "tokens_in": 3825,
+     "tokens_out": 36
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 1088.0,
+     "llm_calls": 2,
+     "llm_ms": 1086.7,
+     "tokens_in": 245,
+     "tokens_out": 62
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 328.0,
+     "llm_calls": 1,
+     "llm_ms": 327.4,
+     "tokens_in": 446,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 731.0,
+     "llm_calls": 1,
+     "llm_ms": 730.3,
+     "tokens_in": 389,
+     "tokens_out": 39
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::4",
+    "README.md::1",
+    "README.md::2",
+    "README.md::3",
+    "README.md::6"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::4",
+    "README.md::6"
+   ],
+   "degraded": [],
+   "llm_attempts": 23,
+   "question": "Is part NW-BAT-4830 compatible with the R2?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-10",
+   "session_id": "cost-6e93f05d-fd08-4a94-b4f0-53443495c18c",
+   "trace_id": "75055a53-8c4a-43eb-bf35-dc262a221af8",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4079,
+   "tokens_in": 4882,
+   "tokens_out": 130,
+   "estimated_cost_usd": 0.00081,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 22,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 175.0,
+     "llm_calls": 1,
+     "llm_ms": 174.3,
+     "tokens_in": 151,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 8.6,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1980.3,
+     "llm_calls": 17,
+     "llm_ms": 1971.7,
+     "tokens_in": 3430,
+     "tokens_out": 34
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 742.7,
+     "llm_calls": 2,
+     "llm_ms": 741.7,
+     "tokens_in": 227,
+     "tokens_out": 39
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 378.3,
+     "llm_calls": 1,
+     "llm_ms": 377.8,
+     "tokens_in": 564,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 788.7,
+     "llm_calls": 1,
+     "llm_ms": 788.0,
+     "tokens_in": 510,
+     "tokens_out": 39
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::1",
+    "README.md::5",
+    "README.md::4",
+    "README.md::2",
+    "README.md::6",
+    "README.md::3"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::3",
+    "README.md::6"
+   ],
+   "degraded": [],
+   "llm_attempts": 22,
+   "question": "What is the maximum ramp incline for a loaded R3?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-11",
+   "session_id": "cost-d848d4b1-51c5-4819-ba86-3b31d208c52d",
+   "trace_id": "af2bcf95-c207-41f7-b1d9-fe0432033ab9",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4916,
+   "tokens_in": 5525,
+   "tokens_out": 164,
+   "estimated_cost_usd": 0.000927,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 24,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 174.9,
+     "llm_calls": 1,
+     "llm_ms": 174.2,
+     "tokens_in": 150,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 6.6,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 2108.0,
+     "llm_calls": 18,
+     "llm_ms": 2099.9,
+     "tokens_in": 3674,
+     "tokens_out": 36
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 791.8,
+     "llm_calls": 2,
+     "llm_ms": 790.5,
+     "tokens_in": 228,
+     "tokens_out": 42
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 447.7,
+     "llm_calls": 1,
+     "llm_ms": 447.1,
+     "tokens_in": 722,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1382.1,
+     "llm_calls": 2,
+     "llm_ms": 1380.8,
+     "tokens_in": 751,
+     "tokens_out": 68
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::5",
+    "README.md::0",
+    "README.md::4",
+    "README.md::6",
+    "README.md::3",
+    "README.md::2",
+    "README.md::1"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::1",
+    "README.md::3"
+   ],
+   "degraded": [],
+   "llm_attempts": 24,
+   "question": "How do I reset the emergency stop on an R3?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-12",
+   "session_id": "cost-ab35d801-649c-44d3-99e9-e3905f036ee1",
+   "trace_id": "a08c780b-64b9-406c-9f66-3eabc63f30fd",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3724,
+   "tokens_in": 4970,
+   "tokens_out": 98,
+   "estimated_cost_usd": 0.000804,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 22,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 173.5,
+     "llm_calls": 1,
+     "llm_ms": 172.9,
+     "tokens_in": 147,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 5.6,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 2065.0,
+     "llm_calls": 17,
+     "llm_ms": 2057.5,
+     "tokens_in": 3619,
+     "tokens_out": 34
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 519.1,
+     "llm_calls": 2,
+     "llm_ms": 518.1,
+     "tokens_in": 210,
+     "tokens_out": 24
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 390.8,
+     "llm_calls": 1,
+     "llm_ms": 390.2,
+     "tokens_in": 522,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 564.7,
+     "llm_calls": 1,
+     "llm_ms": 563.9,
+     "tokens_in": 472,
+     "tokens_out": 22
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::1",
+    "README.md::4",
+    "README.md::3",
+    "README.md::6",
+    "README.md::5"
+   ],
+   "kept_ids": [
+    "README.md::6",
+    "README.md::3",
+    "README.md::5"
+   ],
+   "degraded": [],
+   "llm_attempts": 22,
+   "question": "What is the payload capacity of the rover?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-13",
+   "session_id": "cost-cc83a50e-4d9e-4c78-ada6-e42d5377dc93",
+   "trace_id": "bbc1a26e-4169-4741-9fa7-b808e937a7fa",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3770,
+   "tokens_in": 4605,
+   "tokens_out": 112,
+   "estimated_cost_usd": 0.000758,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 21,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 179.0,
+     "llm_calls": 1,
+     "llm_ms": 178.4,
+     "tokens_in": 144,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 5.8,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1845.9,
+     "llm_calls": 16,
+     "llm_ms": 1837.6,
+     "tokens_in": 3147,
+     "tokens_out": 32
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 615.6,
+     "llm_calls": 2,
+     "llm_ms": 614.1,
+     "tokens_in": 201,
+     "tokens_out": 32
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 415.5,
+     "llm_calls": 1,
+     "llm_ms": 414.8,
+     "tokens_in": 580,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 703.5,
+     "llm_calls": 1,
+     "llm_ms": 702.7,
+     "tokens_in": 533,
+     "tokens_out": 30
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::4",
+    "README.md::1",
+    "README.md::5",
+    "README.md::6",
+    "README.md::0",
+    "README.md::3",
+    "README.md::2"
+   ],
+   "kept_ids": [
+    "README.md::6",
+    "README.md::1",
+    "README.md::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 21,
+   "question": "What are the password requirements?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-14",
+   "session_id": "cost-1c64c2f5-8c46-419a-be7f-ae2174e956be",
+   "trace_id": "9db7db77-ee59-448e-bce2-1666b2cb9e2b",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4211,
+   "tokens_in": 4782,
+   "tokens_out": 133,
+   "estimated_cost_usd": 0.000797,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 22,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 178.9,
+     "llm_calls": 1,
+     "llm_ms": 178.2,
+     "tokens_in": 150,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 5.3,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 2073.9,
+     "llm_calls": 17,
+     "llm_ms": 2066.2,
+     "tokens_in": 3533,
+     "tokens_out": 34
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 644.6,
+     "llm_calls": 2,
+     "llm_ms": 643.6,
+     "tokens_in": 222,
+     "tokens_out": 33
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 385.1,
+     "llm_calls": 1,
+     "llm_ms": 384.5,
+     "tokens_in": 464,
+     "tokens_out": 15
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 914.3,
+     "llm_calls": 1,
+     "llm_ms": 913.7,
+     "tokens_in": 413,
+     "tokens_out": 46
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::6",
+    "README.md::4",
+    "README.md::3",
+    "README.md::1",
+    "README.md::5"
+   ],
+   "kept_ids": [
+    "README.md::4",
+    "README.md::0",
+    "README.md::5"
+   ],
+   "degraded": [],
+   "llm_attempts": 22,
+   "question": "How much is the referral bonus and when is it paid?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-15",
+   "session_id": "cost-eac81954-20c4-4aad-a499-985277c10cc4",
+   "trace_id": "23f6c422-369d-44a0-bc13-51831b869286",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4123,
+   "tokens_in": 5032,
+   "tokens_out": 136,
+   "estimated_cost_usd": 0.000836,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 21,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 194.4,
+     "llm_calls": 1,
+     "llm_ms": 193.7,
+     "tokens_in": 150,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 6.8,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1823.9,
+     "llm_calls": 16,
+     "llm_ms": 1815.9,
+     "tokens_in": 3507,
+     "tokens_out": 32
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 959.0,
+     "llm_calls": 2,
+     "llm_ms": 958.1,
+     "tokens_in": 226,
+     "tokens_out": 53
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 413.3,
+     "llm_calls": 1,
+     "llm_ms": 412.7,
+     "tokens_in": 601,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 722.2,
+     "llm_calls": 1,
+     "llm_ms": 721.6,
+     "tokens_in": 548,
+     "tokens_out": 33
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::6",
+    "README.md::1",
+    "README.md::3",
+    "README.md::4",
+    "README.md::5",
+    "README.md::2"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::1",
+    "README.md::4"
+   ],
+   "degraded": [],
+   "llm_attempts": 21,
+   "question": "What is the company policy on bringing dogs to the office?",
+   "out_of_scope": true
+  },
+  {
+   "request_id": "cost-report-16",
+   "session_id": "cost-68966b38-596d-4b70-8ca5-aede29016080",
+   "trace_id": "c563fde8-ba65-4274-9c03-ddccb9a3b354",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4045,
+   "tokens_in": 4875,
+   "tokens_out": 118,
+   "estimated_cost_usd": 0.000802,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 23,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 175.3,
+     "llm_calls": 1,
+     "llm_ms": 174.8,
+     "tokens_in": 146,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 4.6,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 2090.2,
+     "llm_calls": 18,
+     "llm_ms": 2080.7,
+     "tokens_in": 3453,
+     "tokens_out": 36
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 550.0,
+     "llm_calls": 2,
+     "llm_ms": 548.9,
+     "tokens_in": 207,
+     "tokens_out": 26
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 405.8,
+     "llm_calls": 1,
+     "llm_ms": 405.2,
+     "tokens_in": 559,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 814.6,
+     "llm_calls": 1,
+     "llm_ms": 813.9,
+     "tokens_in": 510,
+     "tokens_out": 38
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::1",
+    "README.md::4",
+    "README.md::6",
+    "README.md::3",
+    "README.md::2",
+    "README.md::5"
+   ],
+   "kept_ids": [
+    "README.md::1",
+    "README.md::4",
+    "README.md::5"
+   ],
+   "degraded": [],
+   "llm_attempts": 23,
+   "question": "What is the CEO's home address?",
+   "out_of_scope": true
+  },
+  {
+   "request_id": "cost-report-17",
+   "session_id": "cost-c6758083-7bb4-4d5e-ae64-a5d569ca1191",
+   "trace_id": "b5cbac62-87ca-4d17-8ba7-930048c5290d",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4614,
+   "tokens_in": 4945,
+   "tokens_out": 156,
+   "estimated_cost_usd": 0.000835,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 22,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 187.0,
+     "llm_calls": 1,
+     "llm_ms": 186.3,
+     "tokens_in": 145,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 5.3,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 2002.2,
+     "llm_calls": 17,
+     "llm_ms": 1993.8,
+     "tokens_in": 3442,
+     "tokens_out": 34
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 880.9,
+     "llm_calls": 2,
+     "llm_ms": 879.8,
+     "tokens_in": 214,
+     "tokens_out": 49
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 423.6,
+     "llm_calls": 1,
+     "llm_ms": 423.0,
+     "tokens_in": 596,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1110.3,
+     "llm_calls": 1,
+     "llm_ms": 1109.6,
+     "tokens_in": 548,
+     "tokens_out": 55
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::6",
+    "README.md::4",
+    "README.md::5",
+    "README.md::1",
+    "README.md::3",
+    "README.md::2"
+   ],
+   "kept_ids": [
+    "README.md::4",
+    "README.md::1",
+    "README.md::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 22,
+   "question": "Do we have unlimited PTO?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-18",
+   "session_id": "cost-266575da-61db-4db2-94bf-eb8596f5031d",
+   "trace_id": "16bc2050-9e31-4df2-afcf-98c75eded82f",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3763,
+   "tokens_in": 4364,
+   "tokens_out": 113,
+   "estimated_cost_usd": 0.000722,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 20,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 179.2,
+     "llm_calls": 1,
+     "llm_ms": 178.6,
+     "tokens_in": 151,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 9.2,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1800.4,
+     "llm_calls": 15,
+     "llm_ms": 1793.4,
+     "tokens_in": 2997,
+     "tokens_out": 30
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 734.0,
+     "llm_calls": 2,
+     "llm_ms": 733.1,
+     "tokens_in": 232,
+     "tokens_out": 37
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 379.7,
+     "llm_calls": 1,
+     "llm_ms": 379.1,
+     "tokens_in": 519,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 656.1,
+     "llm_calls": 1,
+     "llm_ms": 655.3,
+     "tokens_in": 465,
+     "tokens_out": 28
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::4",
+    "README.md::0",
+    "README.md::1",
+    "README.md::2",
+    "README.md::3",
+    "README.md::5",
+    "README.md::6"
+   ],
+   "kept_ids": [
+    "README.md::6",
+    "README.md::3",
+    "README.md::4"
+   ],
+   "degraded": [],
+   "llm_attempts": 20,
+   "question": "What is the salary range for an L4 engineer in Austin?",
+   "out_of_scope": true
+  },
+  {
+   "request_id": "cost-report-19",
+   "session_id": "cost-7f7f3a18-2b08-4275-8e2c-a31bc6e146c8",
+   "trace_id": "db567628-47f9-4146-a0f4-f58afebd84dc",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 2961,
+   "tokens_in": 4364,
+   "tokens_out": 113,
+   "estimated_cost_usd": 0.000722,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 20,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 117.1,
+     "llm_calls": 1,
+     "llm_ms": 116.4,
+     "tokens_in": 151,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 2.9,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1431.4,
+     "llm_calls": 15,
+     "llm_ms": 1424.2,
+     "tokens_in": 2997,
+     "tokens_out": 30
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 697.6,
+     "llm_calls": 2,
+     "llm_ms": 696.5,
+     "tokens_in": 232,
+     "tokens_out": 37
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 240.9,
+     "llm_calls": 1,
+     "llm_ms": 240.3,
+     "tokens_in": 519,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 465.6,
+     "llm_calls": 1,
+     "llm_ms": 464.9,
+     "tokens_in": 465,
+     "tokens_out": 28
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::4",
+    "README.md::0",
+    "README.md::1",
+    "README.md::2",
+    "README.md::3",
+    "README.md::5",
+    "README.md::6"
+   ],
+   "kept_ids": [
+    "README.md::6",
+    "README.md::3",
+    "README.md::4"
+   ],
+   "degraded": [],
+   "llm_attempts": 20,
+   "question": "What is the salary range for an L4 engineer in Austin?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-20",
+   "session_id": "cost-1078e1b8-d267-4626-96c6-b8414362601e",
+   "trace_id": "ae30bbcf-fed9-426e-b25d-40d3fc9dc9e2",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4207,
+   "tokens_in": 4981,
+   "tokens_out": 134,
+   "estimated_cost_usd": 0.000828,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 23,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 178.7,
+     "llm_calls": 1,
+     "llm_ms": 178.0,
+     "tokens_in": 144,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 6.8,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 2073.3,
+     "llm_calls": 18,
+     "llm_ms": 2065.5,
+     "tokens_in": 3530,
+     "tokens_out": 36
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 771.9,
+     "llm_calls": 2,
+     "llm_ms": 770.8,
+     "tokens_in": 210,
+     "tokens_out": 41
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 396.7,
+     "llm_calls": 1,
+     "llm_ms": 396.2,
+     "tokens_in": 572,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 774.5,
+     "llm_calls": 1,
+     "llm_ms": 773.7,
+     "tokens_in": 525,
+     "tokens_out": 39
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::1",
+    "README.md::0",
+    "README.md::4",
+    "README.md::2",
+    "README.md::6",
+    "README.md::3",
+    "README.md::5"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::4",
+    "README.md::3"
+   ],
+   "degraded": [],
+   "llm_attempts": 23,
+   "question": "What is Project Juniper?",
+   "out_of_scope": true
+  },
+  {
+   "request_id": "cost-report-21",
+   "session_id": "cost-873260f2-1f65-462d-a85d-decc0dc8d6f4",
+   "trace_id": "5d340793-65c0-462a-a55c-14fe180e28a5",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3905,
+   "tokens_in": 5040,
+   "tokens_out": 121,
+   "estimated_cost_usd": 0.000829,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 22,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 176.4,
+     "llm_calls": 1,
+     "llm_ms": 175.7,
+     "tokens_in": 149,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 7.5,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1879.0,
+     "llm_calls": 17,
+     "llm_ms": 1871.1,
+     "tokens_in": 3675,
+     "tokens_out": 34
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 840.0,
+     "llm_calls": 2,
+     "llm_ms": 838.9,
+     "tokens_in": 232,
+     "tokens_out": 45
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 411.1,
+     "llm_calls": 1,
+     "llm_ms": 410.5,
+     "tokens_in": 517,
+     "tokens_out": 15
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 586.4,
+     "llm_calls": 1,
+     "llm_ms": 585.7,
+     "tokens_in": 467,
+     "tokens_out": 22
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::5",
+    "README.md::3",
+    "README.md::1",
+    "README.md::4",
+    "README.md::6",
+    "README.md::0"
+   ],
+   "kept_ids": [
+    "README.md::3",
+    "README.md::4",
+    "README.md::6"
+   ],
+   "degraded": [],
+   "llm_attempts": 22,
+   "question": "What target rating distribution should I use in performance calibration?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-22",
+   "session_id": "cost-76432988-4939-49bd-af1c-389d472d6ca2",
+   "trace_id": "964cfc32-8e49-45bc-87c6-b7706dc998b9",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3755,
+   "tokens_in": 4596,
+   "tokens_out": 110,
+   "estimated_cost_usd": 0.000755,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 21,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 186.2,
+     "llm_calls": 1,
+     "llm_ms": 185.5,
+     "tokens_in": 146,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 7.3,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1879.8,
+     "llm_calls": 16,
+     "llm_ms": 1871.9,
+     "tokens_in": 3128,
+     "tokens_out": 32
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 592.3,
+     "llm_calls": 2,
+     "llm_ms": 591.4,
+     "tokens_in": 207,
+     "tokens_out": 28
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 409.5,
+     "llm_calls": 1,
+     "llm_ms": 409.0,
+     "tokens_in": 582,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 675.4,
+     "llm_calls": 1,
+     "llm_ms": 674.5,
+     "tokens_in": 533,
+     "tokens_out": 32
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::6",
+    "README.md::5",
+    "README.md::3",
+    "README.md::2",
+    "README.md::1",
+    "README.md::4"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::1",
+    "README.md::6"
+   ],
+   "degraded": [],
+   "llm_attempts": 21,
+   "question": "How long is a performance improvement plan?",
+   "out_of_scope": true
+  },
+  {
+   "request_id": "cost-report-23",
+   "session_id": "cost-dc3b9487-9ddf-46ba-b70d-0e3222e01143",
+   "trace_id": "faf9bc41-2c08-4d09-b00f-6b1b9c0a6853",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4517,
+   "tokens_in": 5104,
+   "tokens_out": 151,
+   "estimated_cost_usd": 0.000856,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 21,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 174.8,
+     "llm_calls": 1,
+     "llm_ms": 174.1,
+     "tokens_in": 148,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 6.6,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1870.0,
+     "llm_calls": 16,
+     "llm_ms": 1862.3,
+     "tokens_in": 3354,
+     "tokens_out": 32
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 628.8,
+     "llm_calls": 2,
+     "llm_ms": 627.5,
+     "tokens_in": 213,
+     "tokens_out": 32
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 485.0,
+     "llm_calls": 1,
+     "llm_ms": 484.4,
+     "tokens_in": 720,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1347.1,
+     "llm_calls": 1,
+     "llm_ms": 1346.2,
+     "tokens_in": 669,
+     "tokens_out": 69
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::1",
+    "README.md::4",
+    "README.md::5",
+    "README.md::0",
+    "README.md::6",
+    "README.md::3"
+   ],
+   "kept_ids": [
+    "README.md::1",
+    "README.md::3",
+    "README.md::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 21,
+   "question": "What are the Cairo office working hours during Ramadan?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-24",
+   "session_id": "cost-67c76c77-f794-470a-bc64-3ae9defe8161",
+   "trace_id": "d0b229f7-20f2-4df0-88b5-a7002a06f8a9",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3543,
+   "tokens_in": 4555,
+   "tokens_out": 107,
+   "estimated_cost_usd": 0.000747,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 20,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 180.9,
+     "llm_calls": 1,
+     "llm_ms": 180.4,
+     "tokens_in": 149,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 5.9,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1730.3,
+     "llm_calls": 15,
+     "llm_ms": 1723.5,
+     "tokens_in": 3163,
+     "tokens_out": 30
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 505.7,
+     "llm_calls": 2,
+     "llm_ms": 504.7,
+     "tokens_in": 215,
+     "tokens_out": 23
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 376.1,
+     "llm_calls": 1,
+     "llm_ms": 375.5,
+     "tokens_in": 540,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 739.5,
+     "llm_calls": 1,
+     "llm_ms": 738.8,
+     "tokens_in": 488,
+     "tokens_out": 36
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::1",
+    "README.md::0",
+    "README.md::4",
+    "README.md::6",
+    "README.md::5",
+    "README.md::3"
+   ],
+   "kept_ids": [
+    "README.md::1",
+    "README.md::6",
+    "README.md::4"
+   ],
+   "degraded": [],
+   "llm_attempts": 20,
+   "question": "How much is the monthly transport allowance for Cairo employees?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-25",
+   "session_id": "cost-ba4db93b-ca86-45d3-b871-119695528700",
+   "trace_id": "85916300-3c23-4ca8-81cd-337b86c681d4",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4385,
+   "tokens_in": 5457,
+   "tokens_out": 137,
+   "estimated_cost_usd": 0.000901,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 23,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 181.8,
+     "llm_calls": 1,
+     "llm_ms": 181.1,
+     "tokens_in": 150,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 6.2,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1947.7,
+     "llm_calls": 17,
+     "llm_ms": 1939.6,
+     "tokens_in": 3692,
+     "tokens_out": 34
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 551.5,
+     "llm_calls": 2,
+     "llm_ms": 550.4,
+     "tokens_in": 218,
+     "tokens_out": 26
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 438.5,
+     "llm_calls": 1,
+     "llm_ms": 437.9,
+     "tokens_in": 684,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1254.1,
+     "llm_calls": 2,
+     "llm_ms": 1252.9,
+     "tokens_in": 713,
+     "tokens_out": 59
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::4",
+    "README.md::1",
+    "README.md::0",
+    "README.md::3",
+    "README.md::5",
+    "README.md::6"
+   ],
+   "kept_ids": [
+    "README.md::1",
+    "README.md::5",
+    "README.md::3"
+   ],
+   "degraded": [],
+   "llm_attempts": 23,
+   "question": "Which days make up the work week in the Cairo office?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-26",
+   "session_id": "cost-7e94f3c1-421a-453c-a864-22d6e8486938",
+   "trace_id": "a3be6660-c69a-4427-b8eb-f84df6d7ca16",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4035,
+   "tokens_in": 4353,
+   "tokens_out": 129,
+   "estimated_cost_usd": 0.00073,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 19,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 188.7,
+     "llm_calls": 1,
+     "llm_ms": 188.1,
+     "tokens_in": 148,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 298.7,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1632.8,
+     "llm_calls": 14,
+     "llm_ms": 1626.4,
+     "tokens_in": 3154,
+     "tokens_out": 28
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 730.9,
+     "llm_calls": 2,
+     "llm_ms": 729.8,
+     "tokens_in": 222,
+     "tokens_out": 38
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 354.3,
+     "llm_calls": 1,
+     "llm_ms": 353.8,
+     "tokens_in": 440,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 825.1,
+     "llm_calls": 1,
+     "llm_ms": 824.4,
+     "tokens_in": 389,
+     "tokens_out": 45
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::4",
+    "README.md::1",
+    "README.md::0",
+    "README.md::3",
+    "README.md::6"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::6",
+    "README.md::4"
+   ],
+   "degraded": [],
+   "llm_attempts": 19,
+   "question": "And how many of them can I carry over?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-27",
+   "session_id": "cost-8d14d706-aa53-4f3d-afb9-a937e14bc4e5",
+   "trace_id": "69580f79-ddc6-43cf-b2ba-8af0f7e0ec4a",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4245,
+   "tokens_in": 4780,
+   "tokens_out": 135,
+   "estimated_cost_usd": 0.000798,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 22,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 175.6,
+     "llm_calls": 1,
+     "llm_ms": 174.6,
+     "tokens_in": 142,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 5.9,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1879.8,
+     "llm_calls": 16,
+     "llm_ms": 1872.4,
+     "tokens_in": 3305,
+     "tokens_out": 32
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 540.2,
+     "llm_calls": 2,
+     "llm_ms": 539.1,
+     "tokens_in": 196,
+     "tokens_out": 26
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 697.4,
+     "llm_calls": 1,
+     "llm_ms": 696.9,
+     "tokens_in": 533,
+     "tokens_out": 34
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 941.6,
+     "llm_calls": 2,
+     "llm_ms": 940.4,
+     "tokens_in": 604,
+     "tokens_out": 38
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::1",
+    "README.md::6",
+    "README.md::5",
+    "README.md::2",
+    "README.md::4",
+    "README.md::3",
+    "README.md::0"
+   ],
+   "kept_ids": [
+    "README.md::6",
+    "README.md::1",
+    "README.md::4"
+   ],
+   "degraded": [],
+   "llm_attempts": 22,
+   "question": "What about Egypt?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-28",
+   "session_id": "cost-5b7cc9ab-10e9-47d1-8ea2-8dbaaf736258",
+   "trace_id": "4e56878a-c104-4669-ba9d-1100e8534593",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4645,
+   "tokens_in": 4901,
+   "tokens_out": 171,
+   "estimated_cost_usd": 0.000838,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 20,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 177.0,
+     "llm_calls": 1,
+     "llm_ms": 176.4,
+     "tokens_in": 150,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 7.9,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1716.4,
+     "llm_calls": 15,
+     "llm_ms": 1709.6,
+     "tokens_in": 3345,
+     "tokens_out": 30
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 1020.9,
+     "llm_calls": 2,
+     "llm_ms": 1019.8,
+     "tokens_in": 230,
+     "tokens_out": 56
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 813.2,
+     "llm_calls": 1,
+     "llm_ms": 812.5,
+     "tokens_in": 601,
+     "tokens_out": 40
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 903.6,
+     "llm_calls": 1,
+     "llm_ms": 902.9,
+     "tokens_in": 575,
+     "tokens_out": 40
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::3",
+    "README.md::6",
+    "README.md::1",
+    "README.md::4",
+    "README.md::5",
+    "README.md::2"
+   ],
+   "kept_ids": [
+    "README.md::4",
+    "README.md::0",
+    "README.md::1"
+   ],
+   "degraded": [],
+   "llm_attempts": 20,
+   "question": "How many PTO days am I entitled to this year?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-29",
+   "session_id": "cost-b8655e6f-9899-48f9-99e8-3cf9a486cfc7",
+   "trace_id": "f84c7041-1fc6-421d-9bf9-679cd6e9e004",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4442,
+   "tokens_in": 4621,
+   "tokens_out": 154,
+   "estimated_cost_usd": 0.000786,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 20,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 195.0,
+     "llm_calls": 1,
+     "llm_ms": 194.3,
+     "tokens_in": 149,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 7.8,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1814.4,
+     "llm_calls": 15,
+     "llm_ms": 1806.6,
+     "tokens_in": 3178,
+     "tokens_out": 30
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 716.4,
+     "llm_calls": 2,
+     "llm_ms": 715.2,
+     "tokens_in": 222,
+     "tokens_out": 37
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 405.0,
+     "llm_calls": 1,
+     "llm_ms": 404.3,
+     "tokens_in": 562,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 1298.1,
+     "llm_calls": 1,
+     "llm_ms": 1297.4,
+     "tokens_in": 510,
+     "tokens_out": 69
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::6",
+    "README.md::3",
+    "README.md::5",
+    "README.md::4",
+    "README.md::1"
+   ],
+   "kept_ids": [
+    "README.md::6",
+    "README.md::0",
+    "README.md::3"
+   ],
+   "degraded": [],
+   "llm_attempts": 20,
+   "question": "How quickly do I have to report a lost laptop?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-30",
+   "session_id": "cost-348f8061-9280-43bc-803b-3c13e2b91f8f",
+   "trace_id": "1495001f-f22d-4738-b4dd-ef03e83debe3",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3511,
+   "tokens_in": 4790,
+   "tokens_out": 111,
+   "estimated_cost_usd": 0.000785,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 20,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 181.3,
+     "llm_calls": 1,
+     "llm_ms": 180.5,
+     "tokens_in": 147,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 6.5,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1579.9,
+     "llm_calls": 15,
+     "llm_ms": 1572.0,
+     "tokens_in": 3285,
+     "tokens_out": 30
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 614.9,
+     "llm_calls": 2,
+     "llm_ms": 613.8,
+     "tokens_in": 212,
+     "tokens_out": 30
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 409.7,
+     "llm_calls": 1,
+     "llm_ms": 409.1,
+     "tokens_in": 598,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 714.5,
+     "llm_calls": 1,
+     "llm_ms": 713.7,
+     "tokens_in": 548,
+     "tokens_out": 33
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::1",
+    "README.md::6",
+    "README.md::3",
+    "README.md::4"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::4",
+    "README.md::1"
+   ],
+   "degraded": [],
+   "llm_attempts": 20,
+   "question": "What is the annual learning budget per employee?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-31",
+   "session_id": "cost-ef5b230a-339b-4e2b-b1d2-f5f337580091",
+   "trace_id": "2d253225-668d-42ea-8104-d2038e3a5635",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3974,
+   "tokens_in": 4935,
+   "tokens_out": 133,
+   "estimated_cost_usd": 0.00082,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 21,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 180.4,
+     "llm_calls": 1,
+     "llm_ms": 179.7,
+     "tokens_in": 147,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 6.9,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1736.4,
+     "llm_calls": 16,
+     "llm_ms": 1728.8,
+     "tokens_in": 3423,
+     "tokens_out": 32
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 879.1,
+     "llm_calls": 2,
+     "llm_ms": 878.1,
+     "tokens_in": 219,
+     "tokens_out": 48
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 410.0,
+     "llm_calls": 1,
+     "llm_ms": 409.4,
+     "tokens_in": 598,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 756.9,
+     "llm_calls": 1,
+     "llm_ms": 756.2,
+     "tokens_in": 548,
+     "tokens_out": 35
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::4",
+    "README.md::6",
+    "README.md::3",
+    "README.md::1",
+    "README.md::2"
+   ],
+   "kept_ids": [
+    "README.md::1",
+    "README.md::0",
+    "README.md::4"
+   ],
+   "degraded": [],
+   "llm_attempts": 21,
+   "question": "How much is the home-office stipend?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-32",
+   "session_id": "cost-453766f0-7a95-4949-b041-8e697d37c2da",
+   "trace_id": "7f95ce61-0162-4d63-be1d-1e859f081c70",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4453,
+   "tokens_in": 5019,
+   "tokens_out": 139,
+   "estimated_cost_usd": 0.000836,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 21,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 185.9,
+     "llm_calls": 1,
+     "llm_ms": 185.2,
+     "tokens_in": 149,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 6.3,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 2130.0,
+     "llm_calls": 16,
+     "llm_ms": 2122.7,
+     "tokens_in": 3477,
+     "tokens_out": 32
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 923.1,
+     "llm_calls": 2,
+     "llm_ms": 922.2,
+     "tokens_in": 231,
+     "tokens_out": 51
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 414.4,
+     "llm_calls": 1,
+     "llm_ms": 413.9,
+     "tokens_in": 607,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 787.7,
+     "llm_calls": 1,
+     "llm_ms": 786.9,
+     "tokens_in": 555,
+     "tokens_out": 38
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::4",
+    "README.md::0",
+    "README.md::3",
+    "README.md::1",
+    "README.md::2",
+    "README.md::6",
+    "README.md::5"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::1",
+    "README.md::5"
+   ],
+   "degraded": [],
+   "llm_attempts": 21,
+   "question": "Can I work from another country for a few weeks?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-33",
+   "session_id": "cost-0eb2a622-8068-4d10-af02-a1eaffceb612",
+   "trace_id": "545d17c9-023e-4cef-b57f-61b73f88d214",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3984,
+   "tokens_in": 4140,
+   "tokens_out": 125,
+   "estimated_cost_usd": 0.000696,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 19,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 180.5,
+     "llm_calls": 1,
+     "llm_ms": 179.8,
+     "tokens_in": 148,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 2.7,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1870.0,
+     "llm_calls": 14,
+     "llm_ms": 1863.8,
+     "tokens_in": 2904,
+     "tokens_out": 28
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 591.2,
+     "llm_calls": 2,
+     "llm_ms": 590.2,
+     "tokens_in": 215,
+     "tokens_out": 29
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 352.0,
+     "llm_calls": 1,
+     "llm_ms": 351.6,
+     "tokens_in": 462,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 984.0,
+     "llm_calls": 1,
+     "llm_ms": 983.3,
+     "tokens_in": 411,
+     "tokens_out": 50
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::4",
+    "README.md::6",
+    "README.md::3",
+    "README.md::1",
+    "README.md::5"
+   ],
+   "kept_ids": [
+    "README.md::5",
+    "README.md::0",
+    "README.md::4"
+   ],
+   "degraded": [],
+   "llm_attempts": 19,
+   "question": "How much is the primary on-call stipend?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-34",
+   "session_id": "cost-c9e75986-6578-47cb-a324-ac8166e2f41a",
+   "trace_id": "6f8eb198-88b6-4709-9a13-2af95050b69f",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4237,
+   "tokens_in": 4534,
+   "tokens_out": 126,
+   "estimated_cost_usd": 0.000756,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 23,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 198.1,
+     "llm_calls": 1,
+     "llm_ms": 197.3,
+     "tokens_in": 148,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 4.4,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 2243.9,
+     "llm_calls": 18,
+     "llm_ms": 2234.6,
+     "tokens_in": 3329,
+     "tokens_out": 36
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 562.2,
+     "llm_calls": 2,
+     "llm_ms": 561.2,
+     "tokens_in": 214,
+     "tokens_out": 26
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 336.2,
+     "llm_calls": 1,
+     "llm_ms": 335.7,
+     "tokens_in": 447,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 887.7,
+     "llm_calls": 1,
+     "llm_ms": 887.1,
+     "tokens_in": 396,
+     "tokens_out": 46
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::6",
+    "README.md::5",
+    "README.md::1",
+    "README.md::0",
+    "README.md::2",
+    "README.md::4",
+    "README.md::3"
+   ],
+   "kept_ids": [
+    "README.md::6",
+    "README.md::5",
+    "README.md::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 23,
+   "question": "What does error E-271 indicate?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-35",
+   "session_id": "cost-cd217b76-4ccf-47f8-9c09-99689a3b77ec",
+   "trace_id": "1864de75-d78a-4a7e-8857-5bdf6077975a",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3734,
+   "tokens_in": 4754,
+   "tokens_out": 103,
+   "estimated_cost_usd": 0.000775,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 22,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 180.4,
+     "llm_calls": 1,
+     "llm_ms": 179.7,
+     "tokens_in": 151,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 11.7,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 2046.6,
+     "llm_calls": 17,
+     "llm_ms": 2038.9,
+     "tokens_in": 3550,
+     "tokens_out": 34
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 538.8,
+     "llm_calls": 2,
+     "llm_ms": 537.9,
+     "tokens_in": 221,
+     "tokens_out": 25
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 355.3,
+     "llm_calls": 1,
+     "llm_ms": 354.7,
+     "tokens_in": 443,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 596.1,
+     "llm_calls": 1,
+     "llm_ms": 595.3,
+     "tokens_in": 389,
+     "tokens_out": 26
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::5",
+    "README.md::1",
+    "README.md::6",
+    "README.md::4",
+    "README.md::3"
+   ],
+   "kept_ids": [
+    "README.md::6",
+    "README.md::4",
+    "README.md::0"
+   ],
+   "degraded": [],
+   "llm_attempts": 22,
+   "question": "What is the first response time on the Premium Plus support plan?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-36",
+   "session_id": "cost-e8220077-a618-44ac-914e-a1f022939dd1",
+   "trace_id": "6aa3de74-b396-44ea-a2f9-e675bbfa8297",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4318,
+   "tokens_in": 5216,
+   "tokens_out": 132,
+   "estimated_cost_usd": 0.000862,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 23,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 179.1,
+     "llm_calls": 1,
+     "llm_ms": 178.3,
+     "tokens_in": 152,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 5.6,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 2299.9,
+     "llm_calls": 18,
+     "llm_ms": 2291.0,
+     "tokens_in": 3666,
+     "tokens_out": 36
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 777.9,
+     "llm_calls": 2,
+     "llm_ms": 776.7,
+     "tokens_in": 233,
+     "tokens_out": 40
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 430.2,
+     "llm_calls": 1,
+     "llm_ms": 429.5,
+     "tokens_in": 610,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 621.0,
+     "llm_calls": 1,
+     "llm_ms": 620.3,
+     "tokens_in": 555,
+     "tokens_out": 38
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::4",
+    "README.md::6",
+    "README.md::3",
+    "README.md::2",
+    "README.md::5",
+    "README.md::1"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::1",
+    "README.md::5"
+   ],
+   "degraded": [],
+   "llm_attempts": 23,
+   "question": "Can an R2 be managed by Fleet Manager 5.0?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-37",
+   "session_id": "cost-15b6e788-1ade-4fda-9e7e-088dc5af8e9d",
+   "trace_id": "25b28c8c-ebbc-41fe-afcb-d95c00d03722",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 4417,
+   "tokens_in": 4796,
+   "tokens_out": 138,
+   "estimated_cost_usd": 0.000802,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 22,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 179.6,
+     "llm_calls": 1,
+     "llm_ms": 178.9,
+     "tokens_in": 149,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 5.7,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 2175.0,
+     "llm_calls": 17,
+     "llm_ms": 2167.2,
+     "tokens_in": 3315,
+     "tokens_out": 34
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 860.8,
+     "llm_calls": 2,
+     "llm_ms": 859.7,
+     "tokens_in": 226,
+     "tokens_out": 46
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 431.9,
+     "llm_calls": 1,
+     "llm_ms": 431.4,
+     "tokens_in": 578,
+     "tokens_out": 15
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 758.1,
+     "llm_calls": 1,
+     "llm_ms": 757.3,
+     "tokens_in": 528,
+     "tokens_out": 38
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::4",
+    "README.md::6",
+    "README.md::2",
+    "README.md::5",
+    "README.md::1",
+    "README.md::3"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::1",
+    "README.md::2"
+   ],
+   "degraded": [],
+   "llm_attempts": 22,
+   "question": "When will Fleet Manager REST API v1 be removed?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-38",
+   "session_id": "cost-ecc437cc-0036-4808-bf88-7f97b3c71e61",
+   "trace_id": "481f879f-90fb-4402-bfea-efd3a0d9a9b3",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3993,
+   "tokens_in": 4419,
+   "tokens_out": 118,
+   "estimated_cost_usd": 0.000734,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 20,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 178.3,
+     "llm_calls": 1,
+     "llm_ms": 177.6,
+     "tokens_in": 151,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 4.4,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1999.1,
+     "llm_calls": 15,
+     "llm_ms": 1991.6,
+     "tokens_in": 2922,
+     "tokens_out": 30
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 708.4,
+     "llm_calls": 2,
+     "llm_ms": 707.3,
+     "tokens_in": 226,
+     "tokens_out": 37
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 411.4,
+     "llm_calls": 1,
+     "llm_ms": 410.8,
+     "tokens_in": 587,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 686.0,
+     "llm_calls": 1,
+     "llm_ms": 685.3,
+     "tokens_in": 533,
+     "tokens_out": 33
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::6",
+    "README.md::3",
+    "README.md::0",
+    "README.md::5",
+    "README.md::4",
+    "README.md::1",
+    "README.md::2"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::6",
+    "README.md::1"
+   ],
+   "degraded": [],
+   "llm_attempts": 20,
+   "question": "Do I need to change my password every 90 days?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-39",
+   "session_id": "cost-02eacba2-8b4d-4d6c-95d5-1496e2590613",
+   "trace_id": "0dc4fc96-45af-45d0-8360-c91f23b4dfa4",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3859,
+   "tokens_in": 5208,
+   "tokens_out": 112,
+   "estimated_cost_usd": 0.000848,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 22,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 175.3,
+     "llm_calls": 1,
+     "llm_ms": 174.7,
+     "tokens_in": 150,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 3.8,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 1949.8,
+     "llm_calls": 17,
+     "llm_ms": 1942.2,
+     "tokens_in": 3677,
+     "tokens_out": 34
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 494.1,
+     "llm_calls": 2,
+     "llm_ms": 493.2,
+     "tokens_in": 218,
+     "tokens_out": 22
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 429.0,
+     "llm_calls": 1,
+     "llm_ms": 428.5,
+     "tokens_in": 608,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 802.8,
+     "llm_calls": 1,
+     "llm_ms": 802.0,
+     "tokens_in": 555,
+     "tokens_out": 38
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::5",
+    "README.md::4",
+    "README.md::1",
+    "README.md::3",
+    "README.md::6",
+    "README.md::0"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::1",
+    "README.md::5"
+   ],
+   "degraded": [],
+   "llm_attempts": 22,
+   "question": "How much are meals reimbursed per day on international trips?",
+   "out_of_scope": false
+  },
+  {
+   "request_id": "cost-report-40",
+   "session_id": "cost-6aa4014f-8068-40cc-b3b8-d97e7ece3be2",
+   "trace_id": "2ec2996a-edbe-47da-9e0e-574e0fd6ff82",
+   "endpoint": "chat",
+   "status": "ok",
+   "route": "retrieve",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "latency_ms": 3884,
+   "tokens_in": 4414,
+   "tokens_out": 115,
+   "estimated_cost_usd": 0.000731,
+   "refused": true,
+   "cache_hit": false,
+   "llm_calls": 21,
+   "model": "ollama:qwen3.5:4b",
+   "per_node": {
+    "contextualize": {
+     "runs": 1,
+     "ms": 0.1,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "route_question": {
+     "runs": 1,
+     "ms": 175.5,
+     "llm_calls": 1,
+     "llm_ms": 174.7,
+     "tokens_in": 148,
+     "tokens_out": 5
+    },
+    "retrieve": {
+     "runs": 3,
+     "ms": 5.6,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    },
+    "grade_documents": {
+     "runs": 3,
+     "ms": 2041.8,
+     "llm_calls": 16,
+     "llm_ms": 2034.6,
+     "tokens_in": 3211,
+     "tokens_out": 32
+    },
+    "rewrite_query": {
+     "runs": 2,
+     "ms": 496.1,
+     "llm_calls": 2,
+     "llm_ms": 495.1,
+     "tokens_in": 212,
+     "tokens_out": 22
+    },
+    "generate": {
+     "runs": 1,
+     "ms": 363.5,
+     "llm_calls": 1,
+     "llm_ms": 363.0,
+     "tokens_in": 447,
+     "tokens_out": 13
+    },
+    "grade_generation": {
+     "runs": 1,
+     "ms": 796.5,
+     "llm_calls": 1,
+     "llm_ms": 795.8,
+     "tokens_in": 396,
+     "tokens_out": 43
+    },
+    "refuse": {
+     "runs": 1,
+     "ms": 0.0,
+     "llm_calls": 0,
+     "llm_ms": 0.0,
+     "tokens_in": 0,
+     "tokens_out": 0
+    }
+   },
+   "retrieved_ids": [
+    "README.md::0",
+    "README.md::1",
+    "README.md::6",
+    "README.md::2",
+    "README.md::3",
+    "README.md::4",
+    "README.md::5"
+   ],
+   "kept_ids": [
+    "README.md::0",
+    "README.md::5",
+    "README.md::6"
+   ],
+   "degraded": [],
+   "llm_attempts": 21,
+   "question": "What is Northwind Robotics' current share price?",
+   "out_of_scope": true
+  }
+ ]
+}
