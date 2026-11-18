@@ -127,7 +127,7 @@ def aggregate(rows: list[dict]) -> dict:
         by_cat[r["category"]].append(r)
     categories = {c: {"n": len(by_cat[c]), **{m: mean([r["scores"][m] for r in by_cat[c]]) for m in METRICS}}
                   for c in CATEGORIES if by_cat.get(c)}
-    cost = {"mean_cost_usd": mean([r["cost_usd"] for r in rows]),
+    cost = {"mean_cost_usd": round(sum(r["cost_usd"] for r in rows) / len(rows), 7) if rows else None,
             "mean_llm_calls": mean([r["llm_calls"] for r in rows]),
             "mean_latency_s": mean([r["latency_s"] for r in rows])}
     return {"scores": scores, "by_category": categories, "cost": cost}

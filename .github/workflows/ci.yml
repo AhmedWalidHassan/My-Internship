@@ -1,7 +1,7 @@
 # Week 2 Task 7 — CI: two gates with very different economics.
 #   fast-checks  every PR and push: ruff + the fast tests. No secrets, no model, < 60 s.
 #   eval-gate    nightly, on demand, and on PRs labelled `run-eval`: the 38-example eval on
-#                the real model (qwen3.5:4b on Ollama, CPU), compared with the committed
+#                the real model (qwen3.5:4b on Ollama, on a self-hosted GPU runner), compared with the committed
 #                baseline; red on a regression beyond the tolerance; posts which examples flipped.
 # Scripts, dataset, baseline and write-up: week2/task_07_eval_gate/ (see EVAL_GATE.md there).
 
@@ -62,15 +62,28 @@ jobs:
   # Nightly, on demand, or on a PR labelled `run-eval`. Runs the real model, so it
   # takes minutes; red when quality drops below the committed baseline.
   # Independent of fast-checks on purpose: a broken PR shows BOTH gates red.
+  #
+  # WHERE: a self-hosted runner in a Docker container on the maintainer's laptop
+  # (labels self-hosted + northwind-eval), calling the laptop's Ollama on its GPU:
+  # the same model and hardware the baseline was measured on, ~5 min per eval.
+  # (Measured first on GitHub's free runner: qwen3.5:4b on 2 CPUs took ~3 min per
+  # example and the runner was starved to death after 67 min. EVAL_GATE.md.)
+  #
+  # SAFETY: this job runs repository code on that laptop, so it only runs for events
+  # the repo owner triggered (their push/label, their dispatch, the nightly schedule)
+  # and never for a PR from a fork. The container has no host mounts and no Docker
+  # socket; it can reach the host's Ollama and the internet, nothing else of the host.
   # ===========================================================================
   eval-gate:
     if: >-
       github.event_name == 'schedule' ||
-      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_dispatch' && github.actor == github.repository_owner) ||
       (github.event_name == 'pull_request' &&
-       contains(github.event.pull_request.labels.*.name, 'run-eval'))
-    runs-on: ubuntu-latest
-    timeout-minutes: 150
+       contains(github.event.pull_request.labels.*.name, 'run-eval') &&
+       github.event.pull_request.head.repo.full_name == github.repository &&
+       github.actor == github.repository_owner)
+    runs-on: [self-hosted, northwind-eval]
+    timeout-minutes: 60
     permissions:
       contents: read
       pull-requests: write      # the regression report comment
@@ -79,16 +92,16 @@ jobs:
       group: eval-gate-${{ github.ref }}
       cancel-in-progress: true
     env:
-      # The same model as every local number and the baseline. Ollama on the runner's CPU.
+      # The same model as every local number and the baseline: qwen3.5:4b on the
+      # laptop's Ollama (bound to the Docker bridge; ufw admits Docker networks to 11434).
       LLM_PROVIDER: ollama
       OLLAMA_MODEL: qwen3.5:4b
-      OLLAMA_BASE_URL: http://127.0.0.1:11434
-      OLLAMA_VERSION: v0.40.16
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
       # all-MiniLM-L6-v2 on ONNX Runtime: identical vectors to the PyTorch path (Task 4:
       # cosine 1.000000, same top-4 on 28/28 questions) without installing torch.
       EMBEDDING_PROVIDER: ollama
       LOCAL_EMBEDDINGS_BACKEND: fastembed
-      FASTEMBED_CACHE_PATH: ${{ github.workspace }}/.cache/fastembed
+      FASTEMBED_CACHE_PATH: /home/runner/.cache/fastembed     # persists in the runner's volume
       CACHE_ENABLED: "false"    # belt and braces: run_eval.py never goes through the answer cache
       # LangSmith: publish the run as an experiment and trace it (only if the secret exists).
       LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}
@@ -112,29 +125,15 @@ jobs:
           uv venv
           uv pip install -c "$CONSTRAINTS" -r week2/task_04_containerize/requirements-api-slim.txt
 
-      - name: Cache Ollama and the model weights
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/ollama
-            ~/.ollama/models
-            .cache/fastembed
-          key: models-ollama-${{ env.OLLAMA_VERSION }}-${{ env.OLLAMA_MODEL }}-minilm-onnx-v1
-
-      - name: Install Ollama ${{ env.OLLAMA_VERSION }} (pinned, checksum-verified) and start it
+      - name: Check the laptop's Ollama is up and has the model
         run: |
-          if [ ! -x "$HOME/ollama/bin/ollama" ]; then
-            base="https://github.com/ollama/ollama/releases/download/${OLLAMA_VERSION}"
-            curl -fsSL -o ollama-linux-amd64.tar.zst "$base/ollama-linux-amd64.tar.zst"
-            curl -fsSL -o sha256sum.txt "$base/sha256sum.txt"
-            grep " ./ollama-linux-amd64.tar.zst$" sha256sum.txt | sed 's# \./# #' | sha256sum -c -
-            mkdir -p "$HOME/ollama" && tar --use-compress-program=unzstd -xf ollama-linux-amd64.tar.zst -C "$HOME/ollama"
-            rm ollama-linux-amd64.tar.zst
+          if ! curl -sf -m 5 "$OLLAMA_BASE_URL/api/tags" -o tags.json; then
+            echo "::error::Ollama is not reachable at $OLLAMA_BASE_URL. On the laptop: OLLAMA_HOST=172.17.0.1:11434 ollama serve"
+            exit 1
           fi
-          nohup "$HOME/ollama/bin/ollama" serve > ollama.log 2>&1 &
-          for i in $(seq 1 60); do curl -sf "$OLLAMA_BASE_URL/api/version" && break; sleep 1; done
-          "$HOME/ollama/bin/ollama" pull "$OLLAMA_MODEL"
-          nproc; free -g
+          .venv/bin/python -c "import json,sys; names=[m['name'] for m in json.load(open('tags.json'))['models']]; print('models:', names); sys.exit(0 if '$OLLAMA_MODEL' in names else 1)" \
+            || { echo "::error::$OLLAMA_MODEL is not pulled on the laptop's Ollama"; exit 1; }
+          curl -s "$OLLAMA_BASE_URL/api/version"
 
       - name: Run evaluation (real pipeline, no cache)
         env:
@@ -169,4 +168,3 @@ jobs:
           path: |
             eval_results.json
             regression_report.md
-            ollama.log

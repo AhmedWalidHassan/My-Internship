@@ -75,7 +75,8 @@ def main(argv=None) -> int:
                   "examples_with_disagreeing_runs": {m: [e["id"] for e in examples if e["flaky"][m]] for m in GATED}},
         "by_category": {c: {"n": runs[0]["by_category"][c]["n"],
                             **{m: mean([r["by_category"][c][m] for r in runs]) for m in METRICS}} for c in cats},
-        "cost": {k: mean([r["cost"][k] for r in runs]) for k in ("mean_cost_usd", "mean_llm_calls", "mean_latency_s")},
+        "cost": {"mean_cost_usd": round(sum(r["cost"]["mean_cost_usd"] for r in runs) / len(runs), 7),
+                 **{k: mean([r["cost"][k] for r in runs]) for k in ("mean_llm_calls", "mean_latency_s")}},
         "examples": examples,
     }
     args.out.write_text(json.dumps(baseline, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
