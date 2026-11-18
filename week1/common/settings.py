@@ -71,7 +71,7 @@ class Settings(BaseSettings):
 
     # ---- retrieval & index (changing chunking or the embedding model rebuilds the index) ----
     retriever_k: int = Field(4, ge=1, le=50, description="passages per retriever (BM25 and dense)")
-    max_docs_to_grade: int = Field(6, ge=1, le=50, description="retrieved passages the relevance "
+    max_docs_to_grade: int = Field(1, ge=1, le=50, description="retrieved passages the relevance "
                                    "grader checks per search (one LLM call each)")
     chunk_size: int = Field(800, ge=100, le=8000)
     chunk_overlap: int = Field(100, ge=0)
