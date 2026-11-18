@@ -185,7 +185,47 @@ cost a question.
 HYBRID_BM25_WEIGHT: 0.5 -> 0.0
 ```
 
-**Result** *(committed after running)*: *(pending)*
+**Result** *(committed after running)*: `dense only, depth 10 per retriever`, 348 chunks.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.900 | -0.017 | yes |
+| MRR (all) | 0.612 | 0.752 | +0.140 | yes |
+| recall@1 (all) | 0.417 | 0.633 | +0.217 | yes |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 0.2 / 0.3 ms | | – |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 1.00 | 0.64 | 0.78 |
+| table | 4 | 1.00 | 0.75 | 0.83 | 0.75 |
+| keyword | 4 | 1.00 | 1.00 | 0.71 | 0.75 |
+| version | 5 | 1.00 | 1.00 | 0.80 | 0.90 |
+| draft | 4 | 1.00 | 0.75 | 0.45 | 0.59 |
+| multi_hop | 4 | 1.00 | 1.00 | 0.65 | 0.71 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.88 |
+| ambiguous | 3 | 1.00 | 1.00 | 0.67 | 0.83 |
+| long_doc | 4 | 1.00 | 1.00 | 0.83 | 0.88 |
+| cross_lingual | 4 | 0.25 | 0.25 | 0.06 | 0.25 |
+| follow_up | 4 | 1.00 | 1.00 | 0.52 | 0.88 |
+| personalized | 4 | 0.75 | 0.75 | 0.31 | 0.75 |
+
+Questions in/out of the top 5: n02 lost, n08 lost, 17 gained.
+
+**Hypothesis confirmed?** **Partly. Recall@5 got worse, as predicted, but by one question, not "at
+least one keyword", and MRR went *up* a lot, the opposite of what I predicted.**
+- **The losses:** n02 (the 5G module's price: `table` 1.00 → 0.75, the parts-catalog row only BM25
+  finds) and n08 (the FTO draft question).
+- **The gains:** dense alone ranks the right document first far more often (MRR 0.612 → 0.752,
+  recall@1 0.417 → 0.633). BM25's equal vote was pulling chatty, word-sharing chunks up.
+- **What I learned:** in this corpus BM25 is a *recall* safety net for exact strings and rare words,
+  not a ranking signal. It should keep a small weight, not zero: EXP-01's 0.3 kept n02. This is also
+  the one experiment whose average hides a trade-off. MRR says "big win", recall@5 says "lost a
+  question", and the question lost is a price lookup a user would care about.
+
+**Decision:** revert (don't drop BM25). Keep its weight as a lever for EXP-08.
 
 ---
 
