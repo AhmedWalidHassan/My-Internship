@@ -521,6 +521,64 @@ not removed: 0.5 is a demotion, not a filter.
 
 ---
 
+### EXP-08 — Combine the cheap levers: BM25 0.3 + source prior
+
+**Hypothesis** *(committed before running)*: If I apply EXP-01 (BM25 0.3) and EXP-07 (meetings and
+newsletters × 0.5) together, the gains overlap rather than add. Both recovered #17, so recall@5 stays
+**0.917** (#17 in, n08 still out because of the lower BM25 weight). **MRR ≈ 0.69–0.71**, above either
+alone (0.685, 0.643), because the prior removes the chatter that dense still lets through
+(`personalized`, `follow_up`). Latency unchanged, cost 0. Relative to EXP-01, this is one change: the prior.
+
+**The one change:** add `SOURCE_PRIOR` on top of EXP-01.
+
+**Config diff (vs baseline):**
+```
+HYBRID_BM25_WEIGHT: 0.5 -> 0.3
+SOURCE_PRIOR: (none) -> meetings/:0.5,newsletters/:0.5
+```
+
+**Result** *(committed after running)*: *(pending)*
+
+---
+
+### EXP-09 — EXP-08 + smaller chunks (400/50)
+
+**Hypothesis** *(committed before running)*: If I add EXP-04's 400/50 chunks on top of EXP-08, then
+`table`/`long_doc`/`draft` MRR improve again (as in EXP-04), and the `factual` loss EXP-04 showed
+(stale legacy fragments outranking the policy) is partly absorbed by the dense weighting and the
+prior. Net MRR +0.01 to +0.03 over EXP-08, recall@5 unchanged, at 1.7× the chunks. If the gain is
+under 0.02 MRR I won't keep it: more, shorter chunks mean more `grade_documents` calls per answer.
+
+**The one change:** CHUNK_SIZE / CHUNK_OVERLAP on top of EXP-08.
+
+**Config diff (vs EXP-08):**
+```
+CHUNK_SIZE: 800 -> 400, CHUNK_OVERLAP: 100 -> 50   (own index)
+```
+
+**Result** *(committed after running)*: *(pending)*
+
+---
+
+### EXP-10 — EXP-08 + cross-encoder re-ranker
+
+**Hypothesis** *(committed before running)*: If I re-rank EXP-08's candidates with the cross-encoder,
+MRR reaches **≥ 0.75**. The re-ranker overrides most of the fusion order, so the gain over EXP-08 is
+smaller than EXP-06's +0.136 over the baseline. The costs are the same: cross_lingual R@5 → 0
+(n17 out), +~57 ms GPU / ~490 ms CPU per query. Whether it's worth it is decided by the generation
+side, not here.
+
+**The one change:** RERANKER_MODEL on top of EXP-08.
+
+**Config diff (vs EXP-08):**
+```
+RERANKER_MODEL: (none) -> cross-encoder/ms-marco-MiniLM-L-6-v2, RERANK_TOP_N: 20
+```
+
+**Result** *(committed after running)*: *(pending)*
+
+---
+
 ## Summary
 
 | ID | Change | R@5 Δ | MRR Δ | Latency Δ | Decision |
