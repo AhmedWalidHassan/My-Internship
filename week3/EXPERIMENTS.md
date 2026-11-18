@@ -240,7 +240,51 @@ least one keyword", and MRR went *up* a lot, the opposite of what I predicted.**
 CHUNK_CONTEXT_HEADER: true -> false   (own index)
 ```
 
-**Result** *(committed after running)*: *(pending)*
+**Result** *(committed after running)*: `hybrid (BM25 + dense), depth 10 per retriever`, 344 chunks, index rebuilt in 6.35 s.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.883 | -0.033 | yes |
+| MRR (all) | 0.612 | 0.580 | -0.031 | yes |
+| recall@1 (all) | 0.417 | 0.400 | -0.017 | yes |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 4.5 / 8.1 ms | | – |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 1.00 | 0.64 | 0.63 |
+| keyword | 4 | 1.00 | 1.00 | 0.71 | 0.52 |
+| version | 5 | 1.00 | 1.00 | 0.80 | 0.74 |
+| conflict | 3 | 1.00 | 1.00 | 0.56 | 0.75 |
+| draft | 4 | 1.00 | 1.00 | 0.45 | 0.43 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.56 |
+| long_doc | 4 | 1.00 | 0.75 | 0.83 | 0.61 |
+| cross_lingual | 4 | 0.25 | 0.00 | 0.06 | 0.02 |
+| follow_up | 4 | 1.00 | 0.75 | 0.52 | 0.48 |
+| personalized | 4 | 0.75 | 0.75 | 0.31 | 0.30 |
+
+Questions in/out of the top 5: 17 gained, n12 lost, n17 lost, 36 lost.
+
+**Hypothesis confirmed?** **Yes. This is the experiment that made things worse, and for the reason
+predicted, but not equally everywhere.**
+- **Lost questions:** recall@5 −0.033 (two net) and MRR −0.031. Four questions changed:
+  - n12 (R3 battery storage, `long_doc` 1.00 → 0.75): the manual chunk no longer says "Warehouse
+    Rover R3 - Operator Manual › 10. Battery care".
+  - n17 (Eid al-Fitr, `cross_lingual` → 0.00): without the header, the CSV row is bare Arabic.
+  - #36 (the standard plan, `follow_up`): the SLA's table rows no longer say "Customer Support
+    Service Levels".
+  - #17 returned, because meeting notes lost their "Leadership sync…" titles too.
+- **Biggest MRR drop:** `keyword` 0.71 → 0.52. An error-code row without "Rover Error Codes 2026"
+  competes with every other row that says "Restart the rover".
+- **The surprise:** `conflict` MRR *rose* (0.56 → 0.75). The header puts "Password Policy" and
+  "IT-STD-003" on equal terms, and without it the policy's own text wins.
+
+**What I learned:** the Task 3 context line is earning its place. It's the cheapest lever in the
+index, and removing it hurt most where the chunk is a fragment (table rows, manual sections).
+
+**Decision:** revert (keep the header).
 
 ---
 
