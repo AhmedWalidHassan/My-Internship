@@ -10,20 +10,32 @@
 
 ## Noise floor
 
-Three runs of the unchanged baseline on dev.
+Three runs of the unchanged baseline on dev: the Task 3 ingestion, the hybrid retriever (BM25 0.5 /
+dense 0.5, weighted RRF), all-MiniLM-L6-v2, depth 10, 60 answerable dev questions.
+`week3/task_04_retrieval_experiments/scripts/run_experiment.py baseline-N` (2026-11-18).
 
 | Run | recall@5 | MRR | Notes |
-|---|---:|---:|---|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| **Spread (max − min)** | | | |
+|---:|---:|---:|---|
+| 1 | 0.917 | 0.612 | laptop GPU, PyTorch (the baseline everything below is compared with) |
+| 2 | 0.917 | 0.612 | same: identical document rankings for all 60 questions |
+| 3 | 0.917 | 0.612 | same |
+| **Spread (max − min)** | **0.000** | **0.000** | |
+| *extra:* fastembed / ONNX, index rebuilt (what CI runs) | 0.917 | 0.612 | identical rankings for 60/60 |
+| *extra:* CPU PyTorch, index rebuilt (what the container runs) | 0.917 | 0.612 | identical rankings for 60/60 |
 
 **Is retrieval deterministic? Why or why not?**
 
->
+> **Yes, fully, on every backend this project runs.** No LLM is involved (no multi-query, no HyDE). The
+> FAISS index is a flat, exact search, not approximate. BM25 is pure counting. The embedding model is a
+> fixed function, and its float differences between GPU PyTorch, CPU PyTorch and ONNX Runtime are too
+> small to flip any rank in the top 10 (checked on rebuilt indexes, embedding cache off). Two kinds of
+> change *could* move it: a library upgrade that changes tie-breaking or tokenisation, or anything
+> stochastic in the retriever. None is in the baseline.
 
-**Smallest difference I'll treat as real:** recall@5 ± ___ · MRR ± ___
+**Smallest difference I'll treat as real:** recall@5 ± **0.017** (one of 60 questions) · MRR ± **0.008**
+(one question moving from rank 1 to rank 2: 0.5/60). With zero noise, every change of at least one
+question is real, so the resolution of the metric *is* the threshold. With n = 60, though, one question
+is 1.7 points, so a difference of one or two questions says little about the holdout.
 
 ---
 

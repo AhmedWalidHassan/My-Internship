@@ -209,7 +209,7 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
     if export:
         from ingest import LOADER_VERSION, build_chunks, read_metadata
         rows = read_metadata(data_dir)
-        signature += f"/{LOADER_VERSION}"
+        signature += f"/{LOADER_VERSION}" + ("" if SETTINGS.chunk_context_header else "/no-context-header")
 
     store, manifest = None, {"signature": signature, "files": {}}
     if not force and MANIFEST_PATH.exists() and (INDEX_DIR / "index.faiss").exists():
@@ -244,7 +244,8 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
         report = None
         try:
             if export:
-                chunks, report = build_chunks(path, name, rows[name], CHUNK_SIZE, CHUNK_OVERLAP)
+                chunks, report = build_chunks(path, name, rows[name], CHUNK_SIZE, CHUNK_OVERLAP,
+                                              context_header=SETTINGS.chunk_context_header)
             else:
                 chunks = chunk_file(path, rel=name)
         except Exception as e:                       # one bad file never stops the ingest, and is listed
@@ -358,20 +359,15 @@ def _write_ingestion_report(data_dir: Path, manifest: dict, stats: dict) -> None
 # 2. RETRIEVER — hybrid BM25 + dense (Task 6)
 # ===========================================================================
 def build_retriever(store, k: int = TOP_K):
-    dense = store.as_retriever(search_kwargs={"k": k})
-    docs = list(store.docstore._dict.values())
+    """Hybrid BM25 + dense (weighted reciprocal-rank fusion), with the Week 3 Task 4 levers read
+    from the settings: HYBRID_BM25_WEIGHT, SOURCE_PRIOR, RERANKER_MODEL / RERANK_TOP_N
+    (common/retrievers.py). With the defaults: the Week 2 retriever, rank for rank."""
+    from common.retrievers import build
     try:
-        from langchain_community.retrievers import BM25Retriever
-        try:
-            from langchain_classic.retrievers.ensemble import EnsembleRetriever
-        except ImportError:
-            from langchain.retrievers import EnsembleRetriever
-        bm25 = BM25Retriever.from_documents(docs)
-        bm25.k = k
-        return EnsembleRetriever(retrievers=[bm25, dense], weights=[0.5, 0.5]), "hybrid (BM25 + dense)"
+        return build(store, k, SETTINGS)
     except ImportError as e:   # e.g. rank_bm25 missing
         log.warning("Hybrid retriever unavailable (%s); using dense only.", e)
-        return dense, "dense only"
+        return store.as_retriever(search_kwargs={"k": k}), "dense only"
 
 
 # ===========================================================================
