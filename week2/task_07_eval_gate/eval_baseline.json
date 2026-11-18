@@ -1,0 +1,2180 @@
+{
+ "meta": {
+  "date": "2026-11-18T10:06:00+00:00",
+  "dataset_version": "5d9544921fd6",
+  "n": 70,
+  "runs": 2,
+  "model": "ollama:qwen3.5:4b",
+  "judge": "ollama:gemma3:4b",
+  "runners": [
+   "Linux x86_64 py3.14.10"
+  ],
+  "git_sha": "daea10ff5594e5d15dd8e51161fae9d933f8566e",
+  "experiment_urls": [],
+  "dataset_name": "northwind-eval-v3",
+  "split": "dev"
+ },
+ "scores": {
+  "correctness": 0.3571,
+  "groundedness": 1.0,
+  "deterministic": 0.3143
+ },
+ "tolerance": {
+  "correctness": 0.08,
+  "groundedness": 0.08,
+  "cost_increase": 0.2
+ },
+ "tolerance_justification": "Tolerance 0.08 for correctness and groundedness, kept from Week 2 (the brief: keep it unless Task 4's noise floor says otherwise). On the 70-example dev split that is 5.6 examples: the gate fires on a drop of 6 or more (>= 0.086).\n\nMeasured 2026-11-18, dataset northwind-eval-v3 (dev, 70), generator qwen3.5:4b, judge gemma3:4b (a different model, as Week 3 requires), laptop GPU:\n\n1. Same hardware, repeated: dev runs 2 and 3 were identical, answer for answer and verdict for verdict (spread 0.000 on every metric).\n2. The judge alone, replayed on the same 70 answers: at most 1 verdict of 70 moved (0.014) between replays, so the judge is close to, but not exactly, deterministic.\n3. Week 2's hardware-change evidence still applies (GPU vs CPU/ONNX moved 3 verdicts of 38: ~0.08), and CI builds its index with fastembed (ONNX) rather than PyTorch.\n4. Real regressions on this set are large: the Week 2 loader as shipped (README only) scores 0.15 deterministic on the seed set; losing the 118 readable documents would drop correctness by far more than 0.08.\n\nWhy not tighter: 0.03 (2 examples) is within the judge replay noise plus a hardware change. Why not looser: 0.10+ would let 7 examples (10% of dev) regress unseen.\n\nKnown weakness of what is gated: groundedness is 1.000 on every run because 32/70 answers are refusals (trivially grounded) and the gemma3:4b judge said YES to all 38 non-refusals; on six probes it caught only 1 of 3 planted unsupported claims. A groundedness drop is therefore unlikely to be seen until the judge is stronger. Correctness and the deterministic score carry the gate.\n\nCost: +20% mean cost per question fails the gate (kept from Week 2).",
+ "noise": {
+  "per_run_scores": [
+   {
+    "correctness": 0.3571,
+    "groundedness": 1.0,
+    "deterministic": 0.3143
+   },
+   {
+    "correctness": 0.3571,
+    "groundedness": 1.0,
+    "deterministic": 0.3143
+   }
+  ],
+  "max_spread": {
+   "correctness": 0.0,
+   "groundedness": 0.0,
+   "deterministic": 0.0
+  },
+  "examples_with_disagreeing_runs": {
+   "correctness": [],
+   "groundedness": []
+  }
+ },
+ "by_category": {
+  "factual": {
+   "n": 10,
+   "correctness": 0.7,
+   "groundedness": 1.0,
+   "deterministic": 0.7
+  },
+  "table": {
+   "n": 4,
+   "correctness": 0.0,
+   "groundedness": 1.0,
+   "deterministic": 0.0
+  },
+  "keyword": {
+   "n": 4,
+   "correctness": 0.5,
+   "groundedness": 1.0,
+   "deterministic": 0.5
+  },
+  "version": {
+   "n": 5,
+   "correctness": 0.0,
+   "groundedness": 1.0,
+   "deterministic": 0.0
+  },
+  "conflict": {
+   "n": 3,
+   "correctness": 0.0,
+   "groundedness": 1.0,
+   "deterministic": 0.0
+  },
+  "draft": {
+   "n": 4,
+   "correctness": 0.5,
+   "groundedness": 1.0,
+   "deterministic": 0.5
+  },
+  "multi_hop": {
+   "n": 4,
+   "correctness": 0.25,
+   "groundedness": 1.0,
+   "deterministic": 0.0
+  },
+  "multi_part": {
+   "n": 4,
+   "correctness": 0.25,
+   "groundedness": 1.0,
+   "deterministic": 0.0
+  },
+  "ambiguous": {
+   "n": 3,
+   "correctness": 0.6667,
+   "groundedness": 1.0,
+   "deterministic": 0.3333
+  },
+  "long_doc": {
+   "n": 4,
+   "correctness": 0.0,
+   "groundedness": 1.0,
+   "deterministic": 0.0
+  },
+  "cross_lingual": {
+   "n": 4,
+   "correctness": 0.0,
+   "groundedness": 1.0,
+   "deterministic": 0.0
+  },
+  "follow_up": {
+   "n": 4,
+   "correctness": 0.25,
+   "groundedness": 1.0,
+   "deterministic": 0.25
+  },
+  "personalized": {
+   "n": 4,
+   "correctness": 0.0,
+   "groundedness": 1.0,
+   "deterministic": 0.0
+  },
+  "access": {
+   "n": 7,
+   "correctness": 0.4286,
+   "groundedness": 1.0,
+   "deterministic": 0.4286
+  },
+  "out_of_scope": {
+   "n": 6,
+   "correctness": 1.0,
+   "groundedness": 1.0,
+   "deterministic": 1.0
+  }
+ },
+ "cost": {
+  "mean_cost_usd": 0.0006867,
+  "mean_llm_calls": 17.9286,
+  "mean_latency_s": 5.3848
+ },
+ "examples": [
+  {
+   "id": "10",
+   "category": "table",
+   "question": "What is the daily meal limit when travelling abroad?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "11",
+   "category": "factual",
+   "question": "Is alcohol reimbursable?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "12",
+   "category": "factual",
+   "question": "How long do I have to file an expense report?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "13",
+   "category": "multi_part",
+   "question": "How much is the referral bonus and when is it paid?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "15",
+   "category": "version",
+   "question": "What is my annual learning budget?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "16",
+   "category": "multi_part",
+   "question": "My laptop got stolen, what do I do?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "17",
+   "category": "multi_part",
+   "question": "What are the password rules?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "18",
+   "category": "conflict",
+   "question": "How do I get on the VPN from home?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "19",
+   "category": "factual",
+   "question": "Can I open our source code on my personal phone?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "20",
+   "category": "factual",
+   "question": "Do I need approval for a Figma license?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "24",
+   "category": "factual",
+   "question": "Can the R2 be used outdoors?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "25",
+   "category": "out_of_scope",
+   "question": "What is the capital of France?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "26",
+   "category": "out_of_scope",
+   "question": "What is the CEO's home address?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "27",
+   "category": "out_of_scope",
+   "question": "What dental insurance plan does Northwind offer?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "29",
+   "category": "multi_hop",
+   "question": "I just referred a friend who got hired. When do I get my referral bonus, and when will my friend be allowed to use their PTO?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "3",
+   "category": "version",
+   "question": "Can I take time off in my first months?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "30",
+   "category": "multi_hop",
+   "question": "I want to work fully remote. What do I need to get approved, and how do I reach internal systems from home?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "32",
+   "category": "multi_part",
+   "question": "What are the rules for booking business travel?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "33",
+   "category": "out_of_scope",
+   "question": "How many days of bereavement leave do I get?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "36",
+   "category": "follow_up",
+   "question": "And what does the standard plan cover?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "37",
+   "category": "keyword",
+   "question": "What did Fleet Manager 4.3 add?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "38",
+   "category": "keyword",
+   "question": "Does the R2 support 5G?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "4",
+   "category": "factual",
+   "question": "How far ahead do I have to ask for PTO?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "5",
+   "category": "factual",
+   "question": "How many sick days are there per year?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "6",
+   "category": "factual",
+   "question": "When do I need a doctor's note?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "7",
+   "category": "factual",
+   "question": "How many days a week can I work from home?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "8",
+   "category": "version",
+   "question": "What is the home-office stipend?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "9",
+   "category": "version",
+   "question": "How long is paid leave for an adoptive parent?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n01",
+   "category": "table",
+   "question": "What is the hotel cap per night for a business trip to India?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n02",
+   "category": "table",
+   "question": "How much does the 5G connectivity module cost?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n04",
+   "category": "keyword",
+   "question": "How do I fix error E-301?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n06",
+   "category": "conflict",
+   "question": "The sales IT tips say passwords need 12 characters and must be changed every 90 days. Is that right?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n07",
+   "category": "conflict",
+   "question": "How many days a week can I work remotely during Ramadan?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n08",
+   "category": "draft",
+   "question": "Is Northwind switching to flexible time off?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "n09",
+   "category": "draft",
+   "question": "What is the minimum amount of time off I must take under the flexible time off policy?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n10",
+   "category": "draft",
+   "question": "By when can I send comments on the flexible time off proposal?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "n11",
+   "category": "draft",
+   "question": "Has PTO carry-over been abolished?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n12",
+   "category": "long_doc",
+   "question": "How should I prepare an R3 for storage of more than a month?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n13",
+   "category": "long_doc",
+   "question": "How high a threshold can the R3 cross?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n14",
+   "category": "long_doc",
+   "question": "Can the R3 work on an outdoor loading dock in hot weather?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n15",
+   "category": "cross_lingual",
+   "question": "What are the Cairo office's opening hours?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n16",
+   "category": "cross_lingual",
+   "question": "How much does it cost to replace a lost access badge at the Cairo office?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n17",
+   "category": "cross_lingual",
+   "question": "How many days off is Eid al-Fitr in 2026 for the Cairo office?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n20",
+   "category": "ambiguous",
+   "question": "Which battery pack does the rover use?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n21",
+   "category": "ambiguous",
+   "question": "Which Fleet Manager version do I need for the rover?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "n22",
+   "category": "follow_up",
+   "question": "And how fast does it go when it's loaded?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n23",
+   "category": "multi_hop",
+   "question": "My rover has shown E-217 three times today. Which part should be replaced, and what does it cost?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n24",
+   "category": "personalized",
+   "question": "How many PTO days do I get this year?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n25",
+   "category": "personalized",
+   "question": "How much annual PTO am I entitled to?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n26",
+   "category": "personalized",
+   "question": "Do I get the monthly transport allowance?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n28",
+   "category": "access",
+   "question": "What is the merit budget for the 2026 compensation review?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "n32",
+   "category": "access",
+   "question": "How long is a performance improvement plan?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "s06",
+   "category": "table",
+   "question": "What is the hotel cap per night for a business trip to Germany?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "s07",
+   "category": "multi_hop",
+   "question": "What is the daily meal allowance when I travel to Cairo?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "s10",
+   "category": "long_doc",
+   "question": "What is the maximum ramp incline for a loaded R3?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "s12",
+   "category": "ambiguous",
+   "question": "What is the payload capacity of the rover?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "s15",
+   "category": "out_of_scope",
+   "question": "What is the company policy on bringing dogs to the office?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "s18",
+   "category": "access",
+   "question": "What is the salary range for an L4 engineer in Austin?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "s19",
+   "category": "access",
+   "question": "What is the salary range for an L4 engineer in Austin?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "s20",
+   "category": "access",
+   "question": "What is Project Juniper?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "s21",
+   "category": "access",
+   "question": "What target rating distribution should I use in performance calibration?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "s22",
+   "category": "access",
+   "question": "How long is a performance improvement plan?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "s25",
+   "category": "cross_lingual",
+   "question": "Which days make up the work week in the Cairo office?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "s26",
+   "category": "follow_up",
+   "question": "And how many of them can I carry over?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "s27",
+   "category": "follow_up",
+   "question": "What about Egypt?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "s28",
+   "category": "personalized",
+   "question": "How many PTO days am I entitled to this year?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "s29",
+   "category": "factual",
+   "question": "How quickly do I have to report a lost laptop?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "s32",
+   "category": "version",
+   "question": "Can I work from another country for a few weeks?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "s34",
+   "category": "keyword",
+   "question": "What does error E-271 indicate?",
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     0,
+     0
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "s40",
+   "category": "out_of_scope",
+   "question": "What is Northwind Robotics' current share price?",
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "flaky": {
+    "correctness": false,
+    "groundedness": false,
+    "deterministic": false
+   },
+   "votes": {
+    "correctness": [
+     1,
+     1
+    ],
+    "groundedness": [
+     1,
+     1
+    ],
+    "deterministic": [
+     1,
+     1
+    ]
+   }
+  }
+ ]
+}

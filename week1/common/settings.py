@@ -32,6 +32,7 @@ from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 WEEK1_DIR = Path(__file__).resolve().parents[1]
+REPO_DIR = WEEK1_DIR.parent
 ENV_FILE = WEEK1_DIR / ".env"
 CAPSTONE_DIR = WEEK1_DIR / "capstone_internal_docs_assistant"
 
@@ -75,8 +76,13 @@ class Settings(BaseSettings):
                                    "grader checks per search (one LLM call each)")
     chunk_size: int = Field(800, ge=100, le=8000)
     chunk_overlap: int = Field(100, ge=0)
-    index_path: Path = Field(CAPSTONE_DIR / "faiss_index", description="where the FAISS index is persisted")
-    data_dir: Path = Field(WEEK1_DIR / "data", description="the corpus (.md / .txt files)")
+    # Week 3 Task 2: the system under test is the Week 3 corpus. It gets its OWN index path: pointing
+    # an existing index at a different corpus makes the incremental ingest delete the old files from it
+    # (Week 3 Task 1, loader_behaviour.log). The Week 1 corpus stays one setting away:
+    # DATA_DIR=week1/data INDEX_PATH=.../faiss_index (what the Week 2 container still pins).
+    index_path: Path = Field(CAPSTONE_DIR / "faiss_index_w3", description="where the FAISS index is persisted")
+    data_dir: Path = Field(REPO_DIR / "week3" / "corpus", description="the corpus: a folder of .md/.txt files, "
+                           "or a corpus export with _metadata.csv (documents listed there, in sub-folders)")
 
     # ---- service -----------------------------------------------------------------
     api_host: str = Field("127.0.0.1", description="0.0.0.0 in a container; localhost otherwise (no auth yet)")

@@ -21,7 +21,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 GATED = ("correctness", "groundedness")
-METRICS = ("correctness", "groundedness", "retrieval_hit")
 
 
 def main(argv=None) -> int:
@@ -41,6 +40,9 @@ def main(argv=None) -> int:
 
     def mean(xs):
         return round(sum(xs) / len(xs), 4)
+
+    # The metrics the runs have: Week 2 sets add retrieval_hit, Week 3 sets the deterministic scorer.
+    METRICS = tuple(m for m in runs[0]["scores"] if all(m in r["scores"] for r in runs))
 
     by_id = {}
     for run in runs:
@@ -64,7 +66,8 @@ def main(argv=None) -> int:
                  "model": runs[0]["meta"]["model"], "judge": runs[0]["meta"]["judge"],
                  "runners": sorted({r["meta"]["runner"] for r in runs}),
                  "git_sha": runs[-1]["meta"]["git_sha"],
-                 "experiment_urls": [r["meta"].get("experiment_url") for r in runs if r["meta"].get("experiment_url")]},
+                 "experiment_urls": [r["meta"].get("experiment_url") for r in runs if r["meta"].get("experiment_url")],
+                 "dataset_name": runs[0]["meta"].get("dataset_name"), "split": runs[0]["meta"].get("split")},
         "scores": {m: mean([r["scores"][m] for r in runs]) for m in METRICS},
         "tolerance": {"correctness": args.tolerance, "groundedness": args.tolerance,
                       "cost_increase": args.cost_tolerance},

@@ -1,0 +1,95 @@
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 21702.67it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-11-18 11:29:36,681 WARNING northwind: Corpus /mnt/games/coding/My-Internship/week3/corpus: indexing 118 of 190 listed documents; SKIPPED 72 (unsupported format: .html 46, .pdf 23, .xlsx 2, .csv 1)
+2026-11-18 11:29:36,697 INFO northwind: Index LOADED from /mnt/games/coding/My-Internship/week1/capstone_internal_docs_assistant/faiss_index_w3 in 0.02s: 139 chunks from 118 files, 0 chunks embedded
+Eval: 70 examples (dev), model ollama:qwen3.5:4b, judge ollama:gemma3:4b, dataset northwind-eval-v3 5d9544921fd6, 139 chunks indexed
+    11 factual        21.7s  Is alcohol reimbursable?
+    12 factual        12.1s  How long do I have to file an expense report?
+    19 factual         5.0s  Can I open our source code on my personal phone?
+    20 factual         8.0s  Do I need approval for a Figma license?
+    24 factual         4.9s  Can the R2 be used outdoors?
+     4 factual         2.2s  How far ahead do I have to ask for PTO?
+     5 factual         2.5s  How many sick days are there per year?
+     6 factual         2.2s  When do I need a doctor's note?
+     7 factual         2.9s  How many days a week can I work from home?
+   s29 factual         2.4s  How quickly do I have to report a lost laptop?
+    10 table           9.1s  What is the daily meal limit when travelling abroad?
+   n01 table           8.9s  What is the hotel cap per night for a business trip to India
+   n02 table           8.3s  How much does the 5G connectivity module cost?
+   s06 table           7.7s  What is the hotel cap per night for a business trip to Germa
+    37 keyword         5.0s  What did Fleet Manager 4.3 add?
+    38 keyword         3.3s  Does the R2 support 5G?
+   n04 keyword         5.9s  How do I fix error E-301?
+   s34 keyword         5.2s  What does error E-271 indicate?
+    15 version         3.1s  What is my annual learning budget?
+     3 version         2.4s  Can I take time off in my first months?
+     8 version         2.3s  What is the home-office stipend?
+     9 version         3.2s  How long is paid leave for an adoptive parent?
+   s32 version         4.8s  Can I work from another country for a few weeks?
+    18 conflict        4.1s  How do I get on the VPN from home?
+   n06 conflict        6.6s  The sales IT tips say passwords need 12 characters and must 
+   n07 conflict        8.1s  How many days a week can I work remotely during Ramadan?
+   n08 draft           5.9s  Is Northwind switching to flexible time off?
+   n09 draft           3.5s  What is the minimum amount of time off I must take under the
+   n10 draft           2.5s  By when can I send comments on the flexible time off proposa
+   n11 draft          12.2s  Has PTO carry-over been abolished?
+    29 multi_hop      10.0s  I just referred a friend who got hired. When do I get my ref
+    30 multi_hop       4.0s  I want to work fully remote. What do I need to get approved,
+   n23 multi_hop       6.5s  My rover has shown E-217 three times today. Which part shoul
+   s07 multi_hop       7.7s  What is the daily meal allowance when I travel to Cairo?
+    13 multi_part      2.7s  How much is the referral bonus and when is it paid?
+    16 multi_part      3.2s  My laptop got stolen, what do I do?
+    17 multi_part      3.4s  What are the password rules?
+    32 multi_part     11.3s  What are the rules for booking business travel?
+   n20 ambiguous       2.2s  Which battery pack does the rover use?
+   n21 ambiguous       5.6s  Which Fleet Manager version do I need for the rover?
+   s12 ambiguous       2.5s  What is the payload capacity of the rover?
+   n12 long_doc        7.1s  How should I prepare an R3 for storage of more than a month?
+   n13 long_doc        6.4s  How high a threshold can the R3 cross?
+   n14 long_doc        8.1s  Can the R3 work on an outdoor loading dock in hot weather?
+   s10 long_doc        6.9s  What is the maximum ramp incline for a loaded R3?
+   n15 cross_lingual   4.3s  What are the Cairo office's opening hours?
+   n16 cross_lingual   5.2s  How much does it cost to replace a lost access badge at the 
+   n17 cross_lingual   5.4s  How many days off is Eid al-Fitr in 2026 for the Cairo offic
+   s25 cross_lingual   7.2s  Which days make up the work week in the Cairo office?
+    36 follow_up       5.0s  And what does the standard plan cover?
+   n22 follow_up       2.9s  And how fast does it go when it's loaded?
+   s26 follow_up       4.6s  And how many of them can I carry over?
+   s27 follow_up      12.4s  What about Egypt?
+   n24 personalized    6.0s  How many PTO days do I get this year?
+   n25 personalized    5.4s  How much annual PTO am I entitled to?
+   n26 personalized    4.4s  Do I get the monthly transport allowance?
+   s28 personalized    5.5s  How many PTO days am I entitled to this year?
+   n28 access          2.8s  What is the merit budget for the 2026 compensation review?
+   n32 access          4.8s  How long is a performance improvement plan?
+   s18 access          4.4s  What is the salary range for an L4 engineer in Austin?
+   s19 access          3.5s  What is the salary range for an L4 engineer in Austin?
+   s20 access          3.0s  What is Project Juniper?
+   s21 access          3.6s  What target rating distribution should I use in performance 
+   s22 access          4.3s  How long is a performance improvement plan?
+    25 out_of_scope    0.2s  What is the capital of France?
+    26 out_of_scope    4.6s  What is the CEO's home address?
+    27 out_of_scope    4.1s  What dental insurance plan does Northwind offer?
+    33 out_of_scope    4.8s  How many days of bereavement leave do I get?
+   s15 out_of_scope   11.8s  What is the company policy on bringing dogs to the office?
+   s40 out_of_scope    4.1s  What is Northwind Robotics' current share price?
+pipeline done in 392 s; judging with gemma3:4b ...
+
+correctness 0.471  groundedness 1.000  deterministic 0.314   (70 examples, 528 s)
+category         n correctn grounded determin
+factual         10     0.80     1.00     0.70
+table            4     0.00     1.00     0.00
+keyword          4     0.50     1.00     0.50
+version          5     0.20     1.00     0.00
+conflict         3     0.33     1.00     0.00
+draft            4     0.75     1.00     0.50
+multi_hop        4     0.50     1.00     0.00
+multi_part       4     0.25     1.00     0.00
+ambiguous        3     0.67     1.00     0.33
+long_doc         4     0.00     1.00     0.00
+cross_lingual    4     0.00     1.00     0.00
+follow_up        4     0.75     1.00     0.25
+personalized     4     0.25     1.00     0.00
+access           7     0.43     1.00     0.43
+out_of_scope     6     1.00     1.00     1.00
+wrote week3/task_02_eval_at_scale/evidence/dev_full_run1.json

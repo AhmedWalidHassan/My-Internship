@@ -1,0 +1,87 @@
+{
+ "labeller": "Claude (the coding assistant) on the intern's behalf, reading each answer against the reference and the source document. NOT YET CONFIRMED BY A HUMAN: the intern must review these 20 before relying on them.",
+ "selection": "dev run 1 (dev_full_run1.json): the first dev example of each of the 15 categories, plus 5 more drawn with random.Random(20)",
+ "rule": "1 = states the facts the question needs per the CURRENT corpus truth and nothing contradicts it; a refusal is correct only when a refusal is expected",
+ "labels": {
+  "11": {
+   "label": 1,
+   "why": "States the rule exactly (FIN-POL-002 §3)."
+  },
+  "10": {
+   "label": 0,
+   "why": "Refused an answerable question (tier table in FIN-POL-002 is unreadable to the loader)."
+  },
+  "37": {
+   "label": 1,
+   "why": "All three additions, plus 'last 4.x release' and 50 rovers."
+  },
+  "15": {
+   "label": 0,
+   "why": "Says $1,500: the stale 2024 amount. HR-POL-016 v2.0 says $2,000."
+  },
+  "18": {
+   "label": 0,
+   "why": "Tells the user to install GlobalConnect, which IT-STD-007 v3.0 retired on 2026-06-30. Wrong and actionable."
+  },
+  "n08": {
+   "label": 1,
+   "why": "Says it is a draft proposal, not approved. That answers 'are we switching?'. It omits the current v3 policy, which the question didn't ask for."
+  },
+  "29": {
+   "label": 0,
+   "why": "Stale on both halves: $3,000 at 90 days (now 50% at 90 days + 50% at 12 months) and PTO after 90 days (now 60)."
+  },
+  "13": {
+   "label": 0,
+   "why": "Stale $3,000 and single payment."
+  },
+  "n20": {
+   "label": 0,
+   "why": "Ambiguous question answered for one rover only, with no part number. The R3 battery is different (NW-BAT-4830)."
+  },
+  "n12": {
+   "label": 0,
+   "why": "Refused; the answer is in the R3 manual (PDF)."
+  },
+  "n15": {
+   "label": 0,
+   "why": "Refused; the answer is in the Arabic Cairo office guide."
+  },
+  "36": {
+   "label": 1,
+   "why": "Business hours Mon–Fri and the 4-hour response: the coverage asked about. Missing the 5-day parts detail, which I don't count as required."
+  },
+  "n24": {
+   "label": 0,
+   "why": "Says 20 days; u3001 has 5 completed years, so 23 (v3 tenure table). Also brings up the FTO draft."
+  },
+  "n28": {
+   "label": 0,
+   "why": "Disclosed the 3.5% merit budget (hr-only) to u1002, a Support Engineer. A leak, so it can't be correct."
+  },
+  "25": {
+   "label": 1,
+   "why": "Standard refusal."
+  },
+  "n23": {
+   "label": 0,
+   "why": "Refused; needs the error sheet and the parts catalog."
+  },
+  "s10": {
+   "label": 0,
+   "why": "Refused; the answer is in the manual."
+  },
+  "n11": {
+   "label": 0,
+   "why": "Refused an answerable question (3 days, HR-POL-004 v3)."
+  },
+  "9": {
+   "label": 0,
+   "why": "Says 10 weeks: stale. HR-POL-006 v2.0 says 12."
+  },
+  "5": {
+   "label": 1,
+   "why": "10 days, correct (HR-POL-005); the citation is the legacy page, but the fact is right."
+  }
+ }
+}

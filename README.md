@@ -11,7 +11,7 @@ don't contain the answer, and it remembers the conversation.
 | [`week1/`](week1/) | Tasks 1–8 and the capstone: [`week1/capstone_internal_docs_assistant/`](week1/capstone_internal_docs_assistant/), where the RAG logic (index, graph, memory) lives |
 | [`week2/`](week2/) | Week 2 briefs, plus [`RESULTS.md`](week2/RESULTS.md) and [`COST.md`](week2/COST.md), where every measurement goes |
 | [`tests/`](tests/) | The test suite (fast tier and live tier) |
-| `week3/` | Week 3 briefs and corpus |
+| [`week3/`](week3/) | Week 3 briefs, the 190-document corpus (`week3/corpus/`, **the default `DATA_DIR` since Week 3 Task 2**), the eval set v3 (`week3/eval/eval_v3.jsonl`), and [`RESULTS.md`](week3/RESULTS.md) / [`COST.md`](week3/COST.md) |
 
 ## Setup
 
@@ -42,12 +42,16 @@ chunking, index path, API host and port. Switching provider is an `.env` edit; s
 | `make bench-api` | p50/p95 latency of `/chat` and `/chat/stream` over 20 questions | a running API |
 | `make cost` | Runs the eval set through the service code and prints latency, LLM calls, tokens and cost per question, per graph node and per node path, plus the monthly projection ([Task 5](week2/task_05_observability/OBSERVABILITY.md)) | same as live |
 | `make find-trace RID=<request_id>` | The LangSmith trace of a request, from the `request_id` in its log line | a LangSmith key |
-| `make eval-gate` | The 38-example eval on the real model, then the gate against `eval_baseline.json` (what CI's eval job runs) ([Task 7](week2/task_07_eval_gate/EVAL_GATE.md)). **Red until Week 3 Task 2:** the Week 2 baseline is archived as `eval_baseline_w2.json` and is never compared against | same as live |
+| `make eval` | The Week 3 eval: dataset v3, **dev** split (70), full pipeline, judged by `JUDGE_MODEL` (default `gemma3:4b`, never the generator). Per-category correctness, groundedness and the deterministic score; results in `week3/eval/runs/dev/` ([Week 3 Task 2](week3/task_02_eval_at_scale/RUN.md)) | same as live, plus the judge model pulled |
+| `make eval-retrieval` | Retrieval only on dev: recall@1/3/5/10 and MRR by category, no LLM call (~8 s, $0) | the embedding model |
+| `make eval-test` | The frozen **test** split (30). Run only to confirm a decision; commit the run file in `week3/eval/runs/test/` | same as `make eval` |
+| `make eval-gate` | `make eval`, then the gate against `eval_baseline.json` (dataset v3, dev). What CI's eval job runs ([Task 7](week2/task_07_eval_gate/EVAL_GATE.md)) | same as `make eval` |
+| `make ingest` / `make ingest-full` | Update / rebuild the index from `DATA_DIR` (logs every document it can't parse yet) | the embedding model |
 | `make cache-bench MODE=cold-warm\|workload\|prewarm` | Proves the answer cache's savings: cold vs warm, hit rate on a defined workload, startup pre-warm ([Task 6](week2/task_06_caching/CACHING.md)) | same as live |
 | `make injection-test` | 7 prompt-injection attempts against the running API, judged automatically: no system-prompt text leaked, no out-of-scope answer ([Task 8](week2/task_08_resilience/RESILIENCE.md)) | a running API |
 | `make load-test N=50 SECONDS=30` | Load test: p50/p95, error rate by code, where it degrades. Start the API with `CACHE_ENABLED=false` to load the real graph ([Task 8](week2/task_08_resilience/RESILIENCE.md)) | a running API |
 | `make run-ui-capstone` | The Week 1 Streamlit UI that runs the graph in-process (kept for reference) | same as live |
-| `make eval` | Run the LangSmith evaluation and update `EVAL_RESULTS.md` | same as live, plus a LangSmith key |
+| `make eval-capstone` | The Week 1 LangSmith evaluation of the capstone's 28 built-in examples (was `make eval`) | same as live, plus a LangSmith key |
 | `make test-durations` | The fast tier with its 5 slowest tests listed | nothing |
 
 **CI** ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)):

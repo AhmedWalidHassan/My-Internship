@@ -50,8 +50,10 @@ def test_defaults_match_the_previous_hardcoded_values(clean_env):
     """Moving to settings must not change behaviour (or invalidate the saved index)."""
     s = settings()
     assert (s.retriever_k, s.chunk_size, s.chunk_overlap) == (4, 800, 100)
-    assert s.index_path == settings_mod.CAPSTONE_DIR / "faiss_index"
-    assert s.data_dir == settings_mod.WEEK1_DIR / "data"
+    # Changed on purpose in Week 3 Task 2: the default corpus is the Week 3 export, with its own index
+    # (so the Week 2 index at faiss_index/ is never rewritten by the corpus switch).
+    assert s.index_path == settings_mod.CAPSTONE_DIR / "faiss_index_w3"
+    assert s.data_dir == settings_mod.REPO_DIR / "week3" / "corpus"
     assert (s.api_host, s.api_port) == ("127.0.0.1", 8000)
     assert s.llm_provider == "openai" and s.openai_base_url is None
 
