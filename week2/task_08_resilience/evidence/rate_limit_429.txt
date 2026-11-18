@@ -1,0 +1,31 @@
+# Rate limit live: RATE_LIMIT_PER_MINUTE=20 (default), 22 requests in one session within a minute (2026-11-18T10:03:25+02:00)
+request  1: HTTP 200  cache_hit=False
+request  2: HTTP 200  cache_hit=False
+request  3: HTTP 200  cache_hit=False
+request  4: HTTP 200  cache_hit=False
+request  5: HTTP 200  cache_hit=False
+request  6: HTTP 200  cache_hit=False
+request  7: HTTP 200  cache_hit=False
+request  8: HTTP 200  cache_hit=False
+request  9: HTTP 200  cache_hit=False
+request 10: HTTP 200  cache_hit=False
+request 11: HTTP 200  cache_hit=False
+request 12: HTTP 200  cache_hit=False
+request 13: HTTP 200  cache_hit=False
+request 14: HTTP 200  cache_hit=False
+request 15: HTTP 200  cache_hit=False
+request 16: HTTP 200  cache_hit=False
+request 17: HTTP 200  cache_hit=False
+request 18: HTTP 200  cache_hit=False
+request 19: HTTP 200  cache_hit=False
+request 20: HTTP 200  cache_hit=False
+request 21: HTTP 429  Retry-After: 17  body: {"error":"rate_limited","detail":"Too many requests for this session (20 per 1 minute). Retry in 17 s.","request_id":"43a443cdfdae4631b29cadd5de6d674c"}
+request 22: HTTP 429  Retry-After: 17  body: {"error":"rate_limited","detail":"Too many requests for this session (20 per 1 minute). Retry in 17 s.","request_id":"c279364a5eca4047bf42b26bb470fc0f"}
+other session:  HTTP 200
+$ curl -i (raw headers of a 429)
+HTTP/1.1 429 Too Many Requests
+retry-after: 17
+x-request-id: d5ee77058b4a4bec9c907e93420a7a1b
+{"error":"rate_limited","detail":"Too many requests for this session (20 per 1 minute). Retry in 17 s.","request_id":"d5ee77058b4a4bec9c907e93420a7a1b"}
+# /metrics
+northwind_rejected_requests_total{reason="rate_limited"} 3.0

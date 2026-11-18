@@ -34,7 +34,7 @@ chunking, index path, API host and port. Switching provider is an `.env` edit; s
 
 | Command | What it does | Needs |
 |---|---|---|
-| `make check` | Lint (ruff) plus the **fast** tests: graph wiring, prompts, memory wiring, index persistence and the HTTP API (all endpoints, streaming, session isolation, error shape), with a fake model. Under 5 s. Run before every PR. | Nothing: no API key, no network (the tests block both) |
+| `make check` | Lint (ruff) plus the **fast** tests: graph wiring, prompts, memory wiring, index persistence the HTTP API (all endpoints, streaming, session isolation, error shape), and failure injection (provider down or hanging, every degradation rule, rate limit, injection guard), with a fake model. 4–5 s of tests (≈5.5 s wall). Run before every PR. | Nothing: no API key, no network (the tests block both) |
 | `make check-live` | The **live** golden-path tests through the real app: cited answer, refusals, two-turn follow-up, session isolation, warm start, rewrite loop, real token streaming through the API. About 60 s on local Ollama. | `week1/.env` and the model server running (e.g. `ollama serve`) |
 | `make up` / `make down` | **API + UI in Docker** (one command, from a clean checkout; the index lives in a named volume). `API_VARIANT=slim make up` for the 575 MB image. See [`week2/task_04_containerize/DEPLOY.md`](week2/task_04_containerize/DEPLOY.md) | Docker and `week1/.env` |
 | `make run` | Start the API on http://127.0.0.1:8000 (OpenAPI docs at `/docs`). Host and port come from `API_HOST` / `API_PORT` | same as live |
@@ -44,6 +44,8 @@ chunking, index path, API host and port. Switching provider is an `.env` edit; s
 | `make find-trace RID=<request_id>` | The LangSmith trace of a request, from the `request_id` in its log line | a LangSmith key |
 | `make eval-gate` | The 38-example eval on the real model, then the gate against `eval_baseline.json` (what CI's eval job runs) ([Task 7](week2/task_07_eval_gate/EVAL_GATE.md)) | same as live |
 | `make cache-bench MODE=cold-warm\|workload\|prewarm` | Proves the answer cache's savings: cold vs warm, hit rate on a defined workload, startup pre-warm ([Task 6](week2/task_06_caching/CACHING.md)) | same as live |
+| `make injection-test` | 7 prompt-injection attempts against the running API, judged automatically: no system-prompt text leaked, no out-of-scope answer ([Task 8](week2/task_08_resilience/RESILIENCE.md)) | a running API |
+| `make load-test N=50 SECONDS=30` | Load test: p50/p95, error rate by code, where it degrades. Start the API with `CACHE_ENABLED=false` to load the real graph ([Task 8](week2/task_08_resilience/RESILIENCE.md)) | a running API |
 | `make run-ui-capstone` | The Week 1 Streamlit UI that runs the graph in-process (kept for reference) | same as live |
 | `make eval` | Run the LangSmith evaluation and update `EVAL_RESULTS.md` | same as live, plus a LangSmith key |
 | `make test-durations` | The fast tier with its 5 slowest tests listed | nothing |

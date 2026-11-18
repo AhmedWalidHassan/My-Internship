@@ -5,10 +5,10 @@
 PY ?= $(if $(wildcard week1/.venv/bin/python),week1/.venv/bin/python,python)
 APP := week1/capstone_internal_docs_assistant/app.py
 
-.PHONY: help check check-live test-durations run run-dev run-ui run-ui-capstone bench-api up down logs eval cost find-trace cache-bench eval-gate fmt
+.PHONY: help check check-live test-durations run run-dev run-ui run-ui-capstone bench-api up down logs eval cost find-trace cache-bench eval-gate injection-test load-test fmt
 
 help:
-	@echo "make check       lint + fast tests   (no API key, no network, < 5s)"
+	@echo "make check       lint + fast tests   (no API key, no network, ~5 s)"
 	@echo "make check-live  live golden-path tests (real model calls; needs week1/.env + model server)"
 	@echo "make run         start the API on http://127.0.0.1:8000  (docs at /docs)"
 	@echo "make run-ui      start the Streamlit UI (talks to the API over HTTP)"
@@ -17,6 +17,8 @@ help:
 	@echo "make cost        cost/latency per question, per node and per path over the eval set"
 	@echo "make find-trace RID=<request_id>   LangSmith trace URL for a request log line"
 	@echo "make cache-bench MODE=cold-warm|workload|prewarm   prove the cache's savings"
+	@echo "make injection-test   7 prompt-injection attempts against a running API, judged (leak? bypass?)"
+	@echo "make load-test        50 requests over 30 s against a running API (N=, SECONDS=)"
 	@echo "make eval        run the LangSmith eval suite"
 	@echo "make fmt         autofix lint"
 
@@ -84,3 +86,10 @@ eval-gate:     ## the 38-example eval on the real model, then the gate vs eval_b
 # --- Task 6: caching (files in week2/task_06_caching/) --------------------
 cache-bench:   ## make cache-bench MODE=cold-warm|workload|prewarm
 	$(PY) week2/task_06_caching/scripts/cache_benchmark.py $(or $(MODE),cold-warm)
+
+# --- Task 8: resilience (files in week2/task_08_resilience/) ---------------
+injection-test: ## 7 prompt-injection attempts against a running API; exit 1 if any leaks or bypasses
+	$(PY) week2/task_08_resilience/scripts/injection_attempts.py
+
+load-test:     ## make load-test N=50 SECONDS=30  (start the API with CACHE_ENABLED=false to load the graph)
+	$(PY) week2/task_08_resilience/scripts/load_test.py --n $(or $(N),50) --seconds $(or $(SECONDS),30)

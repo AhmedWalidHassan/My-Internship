@@ -1,0 +1,23 @@
+# Week 2 Task 8: the provider forced to fail, against the real API at DEFAULT settings
+# (LLM_TIMEOUT_SECONDS=30, LLM_MAX_RETRIES=2, REQUEST_TIMEOUT_SECONDS=60, circuit 5 failures / 30 s). 2026-11-18T09:55:14+02:00
+
+## 1. Provider DOWN (connection refused: OLLAMA_BASE_URL=http://127.0.0.1:9)
+$ POST /chat 'How many sick days do I get per year?'
+  HTTP 503 6.302624  -> {"error":"llm_circuit_open","detail":"The model provider is failing, so the assistant is pausing calls to it. Please retry after the indicated time.","request_id":"0884f82d31b64d5686f2de8c535fde3e"}  Retry-After: 29
+$ POST /chat again (circuit now open)
+  HTTP 503 0.017701  -> {"error":"llm_circuit_open","detail":"The model provider is failing, so the assistant is pausing calls to it. Please retry after the indicated time.","request_id":"f9f6197cb2cf49af97046a7b649cee9c"}  Retry-After: 29
+$ GET /metrics (resilience lines)
+  northwind_request_errors_total{code="llm_circuit_open"} 2.0
+  northwind_llm_circuit_state 2.0
+# request log lines:
+   {"status": "error", "error": "llm_circuit_open: provider failing: 5 consecutive errors; not calling it for 30s", "latency_ms": 6279, "llm_attempts": 7, "degraded": [], "node_path": []}
+   {"status": "error", "error": "llm_circuit_open: provider failing: 5 consecutive errors; not calling it for 30s", "latency_ms": 15, "llm_attempts": 3, "degraded": [], "node_path": []}
+
+## 2. Provider HANGING (accepts the connection, never answers: OLLAMA_BASE_URL=http://127.0.0.1:18999)
+$ POST /chat 'How many sick days do I get per year?'   (curl itself would wait 5 min)
+  HTTP 504 61.781299  -> {"error":"request_timeout","detail":"The model provider did not finish within this request's time limit. Please retry shortly.","request_id":"9152bb9a5a624b36a91cc6c18069ea71"}  Retry-After: 5
+# request log line:
+   {"status": "error", "error": "request_timeout: request deadline reached", "latency_ms": 61764, "llm_attempts": 2}
+# resilience log:
+  2026-11-18 09:58:07,389 WARNING northwind.resilience: LLM call failed (LLMTimeout: no answer within 30.0s); retry 1/2
+  2026-11-18 09:58:37,380 WARNING northwind.resilience: LLM call failed (LLMTimeout: no answer within 29.2s); retry 2/2

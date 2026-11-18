@@ -194,6 +194,12 @@ class Metrics:
                                     ["node"], registry=r)
         self.latency = Histogram("northwind_request_latency_seconds", "End-to-end latency (ok requests)",
                                  buckets=LATENCY_BUCKETS, registry=r)
+        # Task 8: resilience
+        self.errors = Counter("northwind_request_errors", "Failed requests by error code", ["code"], registry=r)
+        self.degraded = Counter("northwind_degraded_steps", "Steps skipped because the provider failed",
+                                ["step"], registry=r)
+        self.rejections = Counter("northwind_rejected_requests", "Requests rejected before the model "
+                                  "(rate limit, prompt-injection guard)", ["reason"], registry=r)
         self._lock = threading.Lock()
         self._recent: deque = deque(maxlen=window)        # (latency_s, refused, retries, cache_hit)
         self._cache = None
@@ -214,6 +220,8 @@ class Metrics:
              lambda: _embedding_cache_stats().get("hits", 0)),
             ("northwind_embedding_cache_misses", "Texts that had to be embedded",
              lambda: _embedding_cache_stats().get("misses", 0)),
+            ("northwind_llm_circuit_state", "Provider circuit breaker: 0 closed, 1 half-open, 2 open",
+             _circuit_state),
         ]:
             Gauge(name, doc, registry=r).set_function(fn)
 
@@ -239,7 +247,11 @@ class Metrics:
         self.tokens.labels("in").inc(rec.get("tokens_in", 0))
         self.tokens.labels("out").inc(rec.get("tokens_out", 0))
         self.cost.inc(rec.get("estimated_cost_usd", 0.0))
+        for note in rec.get("degraded") or []:
+            self.degraded.labels(note.split(":", 1)[0]).inc()
         if rec["status"] != "ok":
+            if rec.get("error"):
+                self.errors.labels(rec["error"].split(":", 1)[0]).inc()
             return
         self.latency.observe(rec["latency_ms"] / 1000)
         self.retries.inc(rec["retries"])
@@ -252,6 +264,15 @@ class Metrics:
 
     def render(self) -> bytes:
         return generate_latest(self.registry)
+
+
+def _circuit_state() -> float:
+    try:
+        import common.utils as utils
+        breaker = getattr(utils, "_BREAKER", None)
+        return {"closed": 0, "half-open": 1, "open": 2}[breaker.state] if breaker else 0
+    except Exception:
+        return 0
 
 
 def _embedding_cache_stats() -> dict:

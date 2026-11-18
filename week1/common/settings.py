@@ -86,6 +86,19 @@ class Settings(BaseSettings):
     max_question_chars: int = Field(2000, ge=1)
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
 
+    # ---- resilience & guardrails (Task 8): see common/resilience.py ------------------
+    llm_timeout_seconds: float = Field(30, gt=0, description="per LLM/embedding attempt")
+    llm_max_retries: int = Field(2, ge=0, le=5, description="transport retries after the first attempt")
+    llm_backoff_initial_seconds: float = Field(0.5, ge=0)
+    llm_backoff_max_seconds: float = Field(4.0, ge=0)
+    request_timeout_seconds: float = Field(60, gt=0, description="wall-clock budget for ONE request")
+    max_llm_calls_per_request: int = Field(40, ge=1, description="attempts budget for ONE request "
+                                           "(logical x transport retries never exceed it)")
+    circuit_failure_threshold: int = Field(5, ge=1)
+    circuit_cooldown_seconds: float = Field(30, gt=0)
+    rate_limit_per_minute: int = Field(20, ge=1, description="requests per session (or per IP without one)")
+    injection_guard_enabled: bool = True
+
     # ---- caching (Task 6) ------------------------------------------------------------
     cache_enabled: bool = Field(True, description="false = no answer cache AND no embedding cache")
     cache_ttl_seconds: float = Field(3600, gt=0, description="how long a cached ANSWER is served")

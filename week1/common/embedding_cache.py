@@ -51,6 +51,7 @@ class CountingStore(BaseStore[str, bytes]):
 
 def model_namespace(embeddings) -> str:
     """"HuggingFaceEmbeddings.sentence-transformers_all-MiniLM-L6-v2": safe as a path."""
+    embeddings = embeddings.__dict__.get("inner", embeddings)   # look through the retry wrapper
     name = (getattr(embeddings, "model_name", None) or getattr(embeddings, "model", None)
             or "default")
     return re.sub(r"[^A-Za-z0-9_.-]", "_", f"{type(embeddings).__name__}.{name}")
