@@ -24,7 +24,7 @@ from common.truth import Catalog, ambiguity_note, curate
 PTO_V2 = Document(
     page_content="Paid Time Off Policy [HR-POL-004 v2.0 · Approved · effective 2025-01-01] › 3. Carry-over\n"
                  "Unused PTO of up to 5 days may be carried into the next calendar year.",
-    id="v2::0", metadata={"source": "HR-POL-004_PTO_v2.pdf", "path": "policies/hr/HR-POL-004_PTO_v2.pdf",
+    id="v2::0", metadata={"acl_groups": "all", "source": "HR-POL-004_PTO_v2.pdf", "path": "policies/hr/HR-POL-004_PTO_v2.pdf",
                           "title": "Paid Time Off Policy", "doc_id": "HR-POL-004", "version": "2.0",
                           "status": "Approved", "effective_date": "2025-01-01", "section": "3. Carry-over",
                           "source_system": "policy-portal"})
@@ -37,18 +37,18 @@ PTO_V3 = Document(
 DRAFT = Document(
     page_content="DRAFT — Flexible Time Off (proposed HR-POL-004 v4.0) [HR-POL-004 v4.0 · DRAFT, not approved] › Proposal\n"
                  "Replace accrued PTO with Flexible Time Off: no fixed entitlement, minimum of 15 days.",
-    id="v4::0", metadata={"source": "DRAFT_HR-POL-004_PTO_v4.md", "path": "policies/hr/DRAFT_HR-POL-004_PTO_v4.md",
+    id="v4::0", metadata={"acl_groups": "all", "source": "DRAFT_HR-POL-004_PTO_v4.md", "path": "policies/hr/DRAFT_HR-POL-004_PTO_v4.md",
                           "title": "DRAFT — Flexible Time Off", "doc_id": "HR-POL-004", "version": "4.0",
                           "status": "draft", "section": "Proposal", "source_system": "policy-portal"})
 LEGACY = Document(
     page_content="Employee Handbook › 2. Paid Time Off (PTO)\nUnused PTO up to 5 days may be carried into the next "
                  "calendar year; anything above 5 days is forfeited on December 31.",
-    id="hb::1", metadata={"source": "employee_handbook.md", "path": "legacy_intranet/employee_handbook.md",
+    id="hb::1", metadata={"acl_groups": "all", "source": "employee_handbook.md", "path": "legacy_intranet/employee_handbook.md",
                           "title": "Employee Handbook", "section": "2. Paid Time Off (PTO)",
                           "source_system": "intranet-legacy"})
 WIKI = Document(
     page_content="Benefits Overview [2025-05-07]\nPTO: 20 days per year, up to 5 days carry over into the next year.",
-    id="wiki::0", metadata={"source": "Benefits_Overview.html", "path": "wiki/people/Benefits_Overview.html",
+    id="wiki::0", metadata={"acl_groups": "all", "source": "Benefits_Overview.html", "path": "wiki/people/Benefits_Overview.html",
                             "title": "Benefits Overview", "content_date": "2025-05-07", "source_system": "wiki"})
 ALL = [PTO_V2, PTO_V3, DRAFT, LEGACY, WIKI]
 CATALOG = Catalog(ALL)
@@ -130,10 +130,10 @@ def test_legacy_copy_on_the_same_topic_is_dropped_and_wiki_is_flagged():
 def test_ambiguity_policy_answers_every_reading_never_one_silently(app):
     """Policy (RESULTS.md Task 5): 'the rover' when the documents cover R2 and R3 -> answer for both."""
     r2 = Document(page_content="Warehouse Rover R2 - Data Sheet\nPayload capacity: 80 kg", id="r2::0",
-                  metadata={"source": "r2.pdf", "path": "product/R2/r2.pdf", "title": "Warehouse Rover R2 - Data Sheet",
+                  metadata={"acl_groups": "all", "source": "r2.pdf", "path": "product/R2/r2.pdf", "title": "Warehouse Rover R2 - Data Sheet",
                             "source_system": "drive"})
     r3 = Document(page_content="Warehouse Rover R3 - Data Sheet\nPayload capacity: 120 kg", id="r3::0",
-                  metadata={"source": "r3.pdf", "path": "product/R3/r3.pdf", "title": "Warehouse Rover R3 - Data Sheet",
+                  metadata={"acl_groups": "all", "source": "r3.pdf", "path": "product/R3/r3.pdf", "title": "Warehouse Rover R3 - Data Sheet",
                             "source_system": "drive"})
     llm = scripted_llm(app, answer="R2: 80 kg. R3: 120 kg.\nSources: r2.pdf, r3.pdf")
     assistant = app.Assistant(FakeRetriever([r2, r3]), llm, curate=curator(date(2026, 10, 1)))

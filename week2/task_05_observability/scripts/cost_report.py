@@ -39,6 +39,10 @@ NODE_ORDER = ["contextualize", "route_question", "retrieve", "grade_documents", 
               "generate", "grade_generation", "direct_answer", "refuse"]
 
 
+# Week 3 Task 6: every request is someone's. A question without a user_id is asked by an ordinary employee.
+DEFAULT_USER = "u1001"
+
+
 def load_questions(n: int | None) -> list[dict]:
     """EVAL_DATASET_PATH (jsonl with a "question" field) if set and present, else the
     capstone's own eval set (the one `make eval` runs: 24 answerable + 4 out-of-scope)."""
@@ -46,9 +50,11 @@ def load_questions(n: int | None) -> list[dict]:
     if path and (REPO_ROOT / path).exists():
         with open(REPO_ROOT / path, encoding="utf-8") as f:
             rows = [json.loads(line) for line in f if line.strip()]
-        qs = [{"question": r["question"], "out_of_scope": bool(r.get("expect_refusal"))} for r in rows]
+        qs = [{"question": r["question"], "out_of_scope": bool(r.get("expect_refusal")),
+               "user_id": r.get("user_id") or DEFAULT_USER} for r in rows]
     else:
-        qs = [{"question": q, "out_of_scope": src is None} for q, _ans, src, _fact in load_capstone().EVAL_EXAMPLES]
+        qs = [{"question": q, "out_of_scope": src is None, "user_id": DEFAULT_USER}
+              for q, _ans, src, _fact in load_capstone().EVAL_EXAMPLES]
     return qs[:n] if n else qs
 
 
@@ -217,17 +223,20 @@ def main(argv=None) -> None:
     backend = default_backend_factory()                 # the API's own startup path
     observer = CollectingObserver()
     service = ChatService(backend, observer)
+    from common.access import Directory
+    directory = Directory(settings.user_directory)
 
     print("Warm-up (not counted) ...", flush=True)
-    service.ask("How many sick days do I get?", f"warmup-{uuid.uuid4()}", trace_id=str(uuid.uuid4()),
-                request_id="cost-report-warmup")
+    service.ask("How many sick days do I get?", f"warmup-{uuid.uuid4()}", user=directory.lookup(DEFAULT_USER),
+                trace_id=str(uuid.uuid4()), request_id="cost-report-warmup")
     observer.records.clear()
 
     t0 = time.perf_counter()
     for i, q in enumerate(questions, 1):
         rid = f"cost-report-{i:02d}"
         try:
-            service.ask(q["question"], f"cost-{uuid.uuid4()}", trace_id=str(uuid.uuid4()), request_id=rid)
+            service.ask(q["question"], f"cost-{uuid.uuid4()}", user=directory.lookup(q["user_id"]),
+                        trace_id=str(uuid.uuid4()), request_id=rid)
         except Exception as exc:                         # a failed question degrades the report, not kills it
             print(f"  {i:2d}. ERROR {type(exc).__name__}: {exc}", flush=True)
         rec = observer.records[-1]

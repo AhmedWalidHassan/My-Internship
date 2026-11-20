@@ -335,7 +335,8 @@ class Observer:
 
     def request_finished(self, rec: dict) -> None:
         rec = dict(rec)
-        rec["trace_url"] = self.linker.url(rec["trace_id"])
+        # a run that was not sent to LangSmith (restricted scope, Task 6) has no trace to link to
+        rec["trace_url"] = self.linker.url(rec["trace_id"]) if rec.get("traced", True) else None
         try:
             self.metrics.observe(rec)
         except Exception:                                # metrics must never fail a request

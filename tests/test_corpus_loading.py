@@ -129,7 +129,7 @@ def test_changing_one_document_reembeds_only_it_and_invalidates_cached_answers(a
     client = start_api(lambda: backend)
 
     def ask():
-        r = client.post("/chat", json={"question": "How many PTO days carry over?", "session_id": str(uuid.uuid4())})
+        r = client.post("/chat", json={"user_id": "u1001", "question": "How many PTO days carry over?", "session_id": str(uuid.uuid4())})
         assert r.status_code == 200, r.text
         return r.json()
 

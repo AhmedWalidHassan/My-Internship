@@ -1,0 +1,90 @@
+{
+ "questions": 70,
+ "k": 8,
+ "questions_losing_slots": 9,
+ "slots_lost_total": 17,
+ "gold_in_top5_pre_not_post": [],
+ "rows": [
+  {
+   "id": "6",
+   "user": "u1001",
+   "category": "factual",
+   "top_k": 8,
+   "dropped_by_post_filter": 1,
+   "left": 7,
+   "pre_filter_returns": 8
+  },
+  {
+   "id": "n02",
+   "user": "u1001",
+   "category": "table",
+   "top_k": 8,
+   "dropped_by_post_filter": 4,
+   "left": 4,
+   "pre_filter_returns": 7
+  },
+  {
+   "id": "13",
+   "user": "u1001",
+   "category": "multi_part",
+   "top_k": 8,
+   "dropped_by_post_filter": 1,
+   "left": 7,
+   "pre_filter_returns": 8
+  },
+  {
+   "id": "n28",
+   "user": "u1002",
+   "category": "access",
+   "top_k": 7,
+   "dropped_by_post_filter": 1,
+   "left": 6,
+   "pre_filter_returns": 7
+  },
+  {
+   "id": "s18",
+   "user": "u1001",
+   "category": "access",
+   "top_k": 8,
+   "dropped_by_post_filter": 4,
+   "left": 4,
+   "pre_filter_returns": 8
+  },
+  {
+   "id": "s20",
+   "user": "u1001",
+   "category": "access",
+   "top_k": 7,
+   "dropped_by_post_filter": 2,
+   "left": 5,
+   "pre_filter_returns": 8
+  },
+  {
+   "id": "s21",
+   "user": "u2001",
+   "category": "access",
+   "top_k": 6,
+   "dropped_by_post_filter": 1,
+   "left": 5,
+   "pre_filter_returns": 6
+  },
+  {
+   "id": "s22",
+   "user": "u1001",
+   "category": "access",
+   "top_k": 6,
+   "dropped_by_post_filter": 2,
+   "left": 4,
+   "pre_filter_returns": 7
+  },
+  {
+   "id": "s40",
+   "user": "u1001",
+   "category": "out_of_scope",
+   "top_k": 8,
+   "dropped_by_post_filter": 1,
+   "left": 7,
+   "pre_filter_returns": 8
+  }
+ ]
+}

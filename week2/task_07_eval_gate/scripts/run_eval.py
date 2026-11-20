@@ -123,6 +123,15 @@ def _files(ids: list[str]) -> list[str]:
     return out
 
 
+def groups_for(ex: dict, settings) -> frozenset:
+    """Week 3 Task 6: the example's user_id, looked up in the directory like the API does. An example
+    without one (the Week 2 set) runs as the public scope. An unknown user_id is a dataset bug: raise."""
+    from common.access import PUBLIC, Directory
+    if not ex.get("user_id"):
+        return PUBLIC
+    return Directory(settings.user_directory).lookup(ex["user_id"]).groups
+
+
 def run_pipeline(assistant, ex: dict, settings, run_tag: str) -> dict:
     """Run one example through the graph. Never raises: an error is recorded on the row."""
     from app.observability import RunTelemetry
@@ -138,7 +147,7 @@ def run_pipeline(assistant, ex: dict, settings, run_tag: str) -> dict:
         row.update(user_id=ex.get("user_id"), split=ex.get("split"), gold_docs=ex["gold_docs"])
     try:
         final = None
-        for ev in assistant.stream(ex["question"], sid, callbacks=[telemetry],
+        for ev in assistant.stream(ex["question"], sid, callbacks=[telemetry], groups=groups_for(ex, settings),
                                    metadata={"eval_example_id": ex["id"], "eval_category": ex["category"],
                                              "eval_run": run_tag}):
             if ev["event"] == "final":
@@ -153,6 +162,7 @@ def run_pipeline(assistant, ex: dict, settings, run_tag: str) -> dict:
             llm_calls=usage["llm_calls"], tokens_in=usage["tokens_in"], tokens_out=usage["tokens_out"],
             cost_usd=round(settings.cost_usd(usage["tokens_in"], usage["tokens_out"]), 6),
             retrieved_docs=_files(final.get("retrieved_ids")), kept_docs=_files(final.get("kept_ids")),
+            restricted_used=bool(final.get("restricted_used")),
             rejected_attempts=[a["answer"][:200] for a in final["attempts"] if not a["ok"]],
             _outputs={"answer": final["answer"], "context": final["context"], "retrieved": final["retrieved"],
                       "kept": final["kept"], "sources": final["sources"], "path": " -> ".join(final["path"]),
@@ -241,11 +251,12 @@ def run_retrieval(examples: list[dict], settings, depth: int = max(RETRIEVAL_KS)
     timings, queries = [], []
 
     def retrieve(ex):
-        # user_id is passed through (Week 3 Task 6 will filter by it); the Week 2 retriever ignores it.
+        # Week 3 Task 6: search as the example's user, exactly like the graph's retrieve node
         q = retrieval_query(ex)
         queries.append(q)
+        scoped = retriever.for_scope(groups_for(ex, settings))
         t = time.perf_counter()
-        docs = retriever.invoke(q)
+        docs = scoped.invoke(q)
         timings.append(time.perf_counter() - t)
         return [d.metadata.get("path") if "/" in (d.metadata.get("path") or "")
                 else by_name.get(d.metadata.get("source", ""), d.metadata.get("source", "?")) for d in docs]

@@ -1,0 +1,168 @@
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 2694.32it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+{"event": "ingest", "level": "info", "ts": "2026-11-20T12:30:57.790Z", "corpus": "/mnt/games/coding/My-Internship/week3/corpus", "snapshot": "2026-10-01", "documents_loaded": 190, "documents_skipped": 0, "chunks": 348, "duplicates": 1, "added": 0, "changed": 0, "removed": 0, "reused": 190, "rebuilt": false, "embedding_calls": 0, "duration_s": 0.14, "corpus_version": "c7ed8ea584fefe93"}
+2026-11-20 14:30:57,790 INFO northwind: Index LOADED from /mnt/games/coding/My-Internship/week1/capstone_internal_docs_assistant/faiss_index_w3 in 0.14s: 348 chunks from 190 files, 0 chunks embedded
+    1. miss exact       8.358s  time off carry rules?
+    2. miss exact       2.662s  How many vacation days do I get a year?
+    3. HIT  exact       0.000s  How many vacation days do I get a year?
+    4. miss follow-up   4.448s  Who do I contact about that?
+    5. miss follow-up  27.799s  Does that apply to contractors too?
+    6. miss exact       3.772s  How much is the referral bonus and when is it paid?
+    7. miss paraphrase  5.384s  How many paid sick days do I get?
+    8. HIT  exact       0.000s  time off carry rules?
+    9. miss follow-up  11.096s  Who do I contact about that?
+   10. miss exact       3.300s  How far ahead do I have to ask for PTO?
+   11. miss exact       4.662s  How many days a week can I work from home?
+   12. HIT  exact       0.000s  How many vacation days do I get a year?
+   13. HIT  variant     0.000s  How far ahead do I have to ask for PTO
+   14. miss exact       9.995s  Can I take time off in my first months?
+   15. HIT  exact       0.000s  Can I take time off in my first months?
+   16. HIT  exact       0.000s  How many days a week can I work from home?
+   17. HIT  exact       0.000s  How far ahead do I have to ask for PTO?
+   18. miss paraphrase  9.277s  How much PTO do I get?
+   19. HIT  variant     0.000s  time off carry rules?
+   20. HIT  exact       0.000s  time off carry rules?
+   21. miss follow-up  23.363s  Who do I contact about that?
+   22. miss exact       3.943s  How many sick days are there per year?
+   23. miss paraphrase  2.457s  When are performance reviews?
+   24. miss exact       2.866s  When do I need a doctor's note?
+   25. HIT  exact       0.000s  When do I need a doctor's note?
+   26. HIT  exact       0.000s  How many vacation days do I get a year?
+   27. HIT  exact       0.000s  How many vacation days do I get a year?
+   28. HIT  exact       0.000s  How many vacation days do I get a year?
+   29. HIT  exact       0.000s  How many vacation days do I get a year?
+   30. miss exact       4.635s  My laptop got stolen, what do I do?
+   31. HIT  exact       0.000s  How far ahead do I have to ask for PTO?
+   32. miss exact       5.848s  What is my annual learning budget?
+   33. HIT  exact       0.000s  time off carry rules?
+   34. HIT  exact       0.000s  How many vacation days do I get a year?
+   35. HIT  exact       0.000s  How many vacation days do I get a year?
+   36. HIT  exact       0.000s  How many vacation days do I get a year?
+   37. HIT  exact       0.000s  time off carry rules?
+   38. HIT  exact       0.000s  How many days a week can I work from home?
+   39. HIT  exact       0.000s  How many days a week can I work from home?
+   40. miss exact      10.724s  What is the daily meal limit when travelling abroad?
+   41. HIT  exact       0.000s  time off carry rules?
+   42. HIT  exact       0.000s  When do I need a doctor's note?
+   43. miss follow-up  10.030s  Who do I contact about that?
+   44. HIT  exact       0.000s  time off carry rules?
+   45. miss follow-up   5.492s  Does that apply to contractors too?
+   46. HIT  exact       0.000s  time off carry rules?
+   47. HIT  exact       0.000s  How many sick days are there per year?
+   48. HIT  exact       0.000s  time off carry rules?
+   49. HIT  paraphrase  0.000s  When are performance reviews?
+   50. HIT  exact       0.000s  Can I take time off in my first months?
+   51. HIT  exact       0.000s  time off carry rules?
+   52. HIT  exact       0.000s  How many vacation days do I get a year?
+   53. HIT  exact       0.000s  How far ahead do I have to ask for PTO?
+   54. HIT  exact       0.000s  How many vacation days do I get a year?
+   55. HIT  variant     0.000s  What is my annual learning budget
+   56. miss exact       4.299s  Can I open our source code on my personal phone?
+   57. HIT  exact       0.000s  How far ahead do I have to ask for PTO?
+   58. HIT  variant     0.000s  how many sick days are there per year?
+   59. miss variant     3.294s  how long do i have to file an expense report?
+   60. HIT  variant     0.000s  can i take time off in my first months?
+   61. HIT  exact       0.000s  Can I take time off in my first months?
+   62. HIT  variant     0.000s  time  off  carry  rules?
+   63. miss exact       4.089s  What does premium support include?
+   64. HIT  exact       0.000s  How many vacation days do I get a year?
+   65. HIT  paraphrase  0.000s  How many paid sick days do I get?
+   66. HIT  variant     0.000s  Can  I  take  time  off  in  my  first  months?
+   67. miss follow-up   9.383s  Are there any exceptions?
+   68. miss variant     5.019s  Is alcohol reimbursable
+   69. HIT  variant     0.000s  can i take time off in my first months?
+   70. miss exact       0.225s  What is the capital of France?
+   71. miss variant     3.924s  how fast does the rover go with a load?
+   72. HIT  exact       0.000s  How many vacation days do I get a year?
+   73. HIT  variant     0.000s  When  do  I  need  a  doctor's  note?
+   74. HIT  exact       0.000s  When do I need a doctor's note?
+   75. HIT  exact       0.000s  How many vacation days do I get a year?
+   76. HIT  exact       0.000s  When do I need a doctor's note?
+   77. HIT  exact       0.000s  Can I take time off in my first months?
+   78. HIT  exact       0.000s  How many vacation days do I get a year?
+   79. HIT  exact       0.000s  How many vacation days do I get a year?
+   80. HIT  exact       0.000s  time off carry rules?
+   81. HIT  exact       0.000s  time off carry rules?
+   82. miss exact      11.477s  How do I get on the VPN from home?
+   83. HIT  exact       0.000s  Can I take time off in my first months?
+   84. HIT  exact       0.000s  How many vacation days do I get a year?
+   85. HIT  variant     0.000s  how many vacation days do i get a year?
+   86. HIT  exact       0.000s  How many sick days are there per year?
+   87. miss follow-up   5.657s  Does that apply to contractors too?
+   88. HIT  exact       0.000s  Is alcohol reimbursable?
+   89. HIT  exact       0.000s  How many vacation days do I get a year?
+   90. HIT  exact       0.000s  Can I take time off in my first months?
+   91. HIT  exact       0.000s  Can I open our source code on my personal phone?
+   92. HIT  exact       0.000s  Can I take time off in my first months?
+   93. HIT  exact       0.000s  Can I take time off in my first months?
+   94. HIT  variant     0.000s  How fast does the rover go with a load
+   95. miss exact      12.313s  What are the password rules?
+   96. HIT  exact       0.000s  time off carry rules?
+   97. HIT  exact       0.000s  How many days a week can I work from home?
+   98. HIT  exact       0.000s  time off carry rules?
+   99. miss variant     2.541s  How much weight can the Warehouse Rover R2 carry
+  100. miss paraphrase  4.733s  What should I do if my laptop is stolen?
+  101. HIT  exact       0.000s  What does premium support include?
+  102. miss variant     4.724s  what dental insurance plan does northwind offer?
+  103. miss exact       0.238s  Who won the football match last night?
+  104. HIT  exact       0.000s  time off carry rules?
+  105. HIT  exact       0.000s  time off carry rules?
+  106. HIT  exact       0.000s  time off carry rules?
+  107. miss exact       4.863s  Can the R2 be used outdoors?
+  108. HIT  paraphrase  0.000s  How much PTO do I get?
+  109. miss follow-up   5.578s  Are there any exceptions?
+  110. HIT  variant     0.000s  How many vacation days do I get a year
+  111. HIT  exact       0.000s  How many days a week can I work from home?
+  112. HIT  exact       0.000s  How far ahead do I have to ask for PTO?
+  113. HIT  exact       0.000s  time off carry rules?
+  114. HIT  paraphrase  0.000s  How much PTO do I get?
+  115. HIT  exact       0.000s  How many vacation days do I get a year?
+  116. HIT  exact       0.000s  How many sick days are there per year?
+  117. HIT  exact       0.000s  How many vacation days do I get a year?
+  118. HIT  exact       0.000s  time off carry rules?
+  119. HIT  variant     0.000s  how many vacation days do i get a year?
+  120. HIT  exact       0.000s  How many vacation days do I get a year?
+
+# Cache hit rate on a repeated-question workload (120 requests, --users one)
+
+**Workload (defined, deterministic: `--seed 7`):** N requests from employees, one at a time.
+- **Which question:** the 28 eval questions (24 answerable + 4 out-of-scope) with Zipf-like
+  popularity (weight 1/rank^1.1, rank = eval-set order), so a few questions dominate, like a
+  real internal FAQ.
+- **How it is asked** (first question of a new session):
+  - 60%: the exact eval wording;
+  - 25%: a trivial variant (lowercase, no question mark, extra spaces), which normalisation
+    should absorb;
+  - 15%: a real paraphrase, for the 10 questions that have one (else exact). Only a semantic
+    cache could hit on those.
+- **Follow-ups:** 10% of requests are instead a SECOND turn in an earlier session ("Are there
+  any exceptions?", ...). They are never cacheable, by design.
+- **Who asks** (Week 3 Task 6, `--users`): `one` = every request from the same employee (u1001):
+  one access scope, what the Week 2 cache saw. `directory` = each new session from one of the six
+  directory users, uniformly (4 access scopes: 3 employees share one). The question plan is the
+  same for both (drawn first, from the same seed); a follow-up stays with its session's user.
+
+**Hit rate: 84/120 = 70%**
+
+| Outcome | Requests | % |
+|---|---:|---:|
+| hit | 84 | 70% |
+| miss: first time this question was asked | 23 | 19% |
+| miss: follow-up (never cached, by design) | 9 | 8% |
+| miss: paraphrase (only a semantic cache could hit) | 4 | 3% |
+
+| Asked as | Requests | Hit rate |
+|---|---:|---:|
+| exact | 85 | 79% |
+| variant | 18 | 72% |
+| paraphrase | 8 | 50% |
+| follow-up | 9 | 0% |
+
+| | With the cache (measured) | Without (estimated: every request at the mean miss cost/latency) |
+|---|---:|---:|
+| Total LLM cost | $0.0308 | $0.1028 |
+| Total answer time | 242 s | 808 s |
+| Mean / p95 latency | 2.02 s / 10.06 s | 6.74 s / 15.08 s (misses only) |
+
+Wall clock 243 s. Embedding cache over the run: 1 hits, 58 misses (query embeddings; the corpus index was loaded, not re-embedded).
+wrote week3/task_06_who_is_asking/evidence/workload_one_user.md

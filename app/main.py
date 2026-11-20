@@ -5,18 +5,23 @@ Northwind Internal Docs Assistant — HTTP service (Week 2, Task 3).
     open http://127.0.0.1:8000/docs
 
 Endpoints
-    POST   /chat                  question + session_id -> answer, sources, node path (JSON)
+    POST   /chat                  question + session_id + user_id -> answer, sources, node path (JSON)
     POST   /chat/stream           same input, Server-Sent Events: status* token* retract? ... done | error
     GET    /healthz               liveness: the process is up (never touches the model or the index)
     GET    /readyz                readiness: index loaded and graph compiled, else 503
     POST   /feedback              {trace_id, rating, comment} -> LangSmith feedback on that trace
-    GET    /session/{session_id}  the conversation so far (lets a UI redraw after a page refresh)
-    DELETE /session/{session_id}  forget that conversation (idempotent)
+    GET    /session/{session_id}?user_id=  the conversation so far (only for the user who started it)
+    DELETE /session/{session_id}?user_id=  forget that conversation (idempotent; same rule)
     GET    /metrics               Prometheus counters: requests, refusals, retries, tokens, cost, p50/p95
 
 The index and graph are built ONCE, at startup, in a background thread started by
 the lifespan handler: the process answers /healthz immediately, and /readyz turns
 200 when loading is done. Errors always have the ErrorResponse shape.
+
+Who's asking (Week 3 Task 6): every chat and session call carries a `user_id`, looked up in the
+directory (DATA_DIR/_directory.csv). Missing or unknown -> 401; directory unreadable -> 503; another
+user's session -> 403. The groups found there decide what retrieval can see. See
+week3/task_06_who_is_asking/ACCESS.md.
 """
 
 from __future__ import annotations
@@ -34,7 +39,7 @@ from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from typing import Annotated
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Query, Request
 from fastapi import Path as PathParam
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, PlainTextResponse
@@ -49,9 +54,11 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from app.cache import AnswerCache
 from app.capstone import load_capstone
 from app.config import get_settings
+from common.access import PUBLIC, Directory, DirectoryUnavailable, UnknownUser, User  # noqa: E402
 from common.resilience import ProviderUnavailable  # noqa: E402  (app.config puts week1 on sys.path)
 from app.schemas import (
     SESSION_ID_PATTERN,
+    USER_ID_PATTERN,
     ChatRequest,
     ChatResponse,
     DoneEvent,
@@ -68,19 +75,23 @@ from app.schemas import (
 )
 from app.guardrails import check_question
 from app.observability import Observer, configure_structlog
-from app.service import ChatService
+from app.service import ChatService, SessionForbidden
 from app.sessions import SessionStore
 
 log = logging.getLogger("northwind.api")
 
 EVENT_NAMES = {StatusEvent: "status", TokenEvent: "token", RetractEvent: "retract", DoneEvent: "done"}
 ERROR_RESPONSES = {
+    401: {"model": ErrorResponse, "description": "user_id missing or not in the directory"},
+    403: {"model": ErrorResponse, "description": "The session belongs to another user"},
     422: {"model": ErrorResponse, "description": "Invalid request"},
     500: {"model": ErrorResponse, "description": "Unexpected server error"},
     503: {"model": ErrorResponse, "description": "Still starting up, or startup failed"},
 }
 _REQUEST_ID_RE = re.compile(r"^[A-Za-z0-9._\-]{1,128}$")
 SessionId = Annotated[str, PathParam(pattern=SESSION_ID_PATTERN)]
+UserIdQuery = Annotated[str | None, Query(pattern=USER_ID_PATTERN, description="Who is asking (see ChatRequest).")]
+PREWARM_USER = User("prewarm", PUBLIC)   # the startup prewarm answers for the public scope only
 
 
 # ---------------------------------------------------------------------------
@@ -219,15 +230,16 @@ def provider_error(exc) -> ApiError:
 
 
 def rate_limit_key(request: Request) -> str:
-    """Per session: the body's session_id (FastAPI has already read and cached the body
-    when the limit is checked). Without one, per client address, so leaving out
-    session_id is not a way around the limit."""
+    """Per user (Week 3 Task 6): the body's user_id (FastAPI has already read and cached the body
+    when the limit is checked). Keyed by session, one user could get round the limit by opening
+    new sessions. Without a user_id, per client address (the request is then refused with a 401
+    anyway, but the attempts still count)."""
     try:
         body = json.loads(getattr(request, "_body", b"") or b"{}")
     except (ValueError, TypeError):
         body = {}
-    sid = body.get("session_id") if isinstance(body, dict) else None
-    return f"session:{sid}" if sid else f"ip:{get_remote_address(request)}"
+    uid = body.get("user_id") if isinstance(body, dict) else None
+    return f"user:{uid}" if isinstance(uid, str) and uid else f"ip:{get_remote_address(request)}"
 
 
 def build_cache(settings) -> AnswerCache | None:
@@ -246,7 +258,7 @@ def prewarm(service: ChatService, n: int) -> None:
     t0 = time.perf_counter()
     for i, q in enumerate(questions, 1):
         try:
-            service.ask(q, f"prewarm-{uuid.uuid4()}", trace_id=str(uuid.uuid4()),
+            service.ask(q, f"prewarm-{uuid.uuid4()}", user=PREWARM_USER, trace_id=str(uuid.uuid4()),
                         request_id=f"prewarm-{i:02d}", endpoint="prewarm")
         except Exception as exc:
             log.warning("prewarm question %d failed: %s: %s", i, type(exc).__name__, exc)
@@ -291,6 +303,7 @@ def create_app(backend_factory: Callable | None = None,
     configure_structlog()
     observer = Observer()   # one per app: the request log line + the /metrics registry
     cache = build_cache(get_settings())
+    directory = Directory(get_settings().user_directory)   # re-read when the file changes
     observer.metrics.bind_cache(cache)
 
     @asynccontextmanager
@@ -325,7 +338,7 @@ def create_app(backend_factory: Callable | None = None,
             pass
         observer.metrics.rejections.labels("rate_limited").inc()
         return _error(request, 429, "rate_limited",
-                      f"Too many requests for this session ({exc.detail}). Retry in {retry} s.",
+                      f"Too many requests for this user ({exc.detail}). Retry in {retry} s.",
                       headers={"Retry-After": str(retry)})
 
     app.add_exception_handler(RateLimitExceeded, _rate_limited)
@@ -347,6 +360,26 @@ def create_app(backend_factory: Callable | None = None,
 
     rate_limit = limiter.limit(lambda: f"{get_settings().rate_limit_per_minute}/minute")
 
+    def identify(user_id: str | None) -> User:
+        """The asker, from the directory. Never a default user."""
+        try:
+            return directory.lookup(user_id)
+        except UnknownUser:
+            observer.metrics.rejections.labels("unknown_user").inc()
+            log.warning("request refused: %s user_id %r", "unknown" if user_id else "no", (user_id or "")[:64])
+            raise ApiError(401, "unauthorized", "Unknown or missing user_id. Every request must say who is "
+                                                "asking; the user must be in the directory.") from None
+        except DirectoryUnavailable as exc:
+            log.error("user directory unavailable: %s", exc)
+            raise ApiError(503, "directory_unavailable", "The user directory can't be read, so nobody can be "
+                                                         "identified and no question is answered. Retry shortly.",
+                           headers={"Retry-After": "30"}) from None
+
+    def forbidden() -> ApiError:
+        observer.metrics.rejections.labels("session_forbidden").inc()
+        return ApiError(403, "session_forbidden", "This session belongs to another user. Start a new session "
+                                                  "(omit session_id).")
+
     def service(request: Request) -> ChatService:
         runtime: Runtime = request.app.state.runtime
         if runtime.service is None:
@@ -364,11 +397,14 @@ def create_app(backend_factory: Callable | None = None,
 
         Pass the returned `session_id` with the next question to continue the conversation.
         """
+        user = identify(req.user_id)
         guard(req.question)
         svc = service(request)
         try:
-            return svc.ask(req.question, req.session_id or str(uuid.uuid4()),
+            return svc.ask(req.question, req.session_id or str(uuid.uuid4()), user=user,
                            trace_id=str(uuid.uuid4()), request_id=_request_id(request))
+        except SessionForbidden:
+            raise forbidden() from None
         except ProviderUnavailable as exc:      # degradation could not absorb it: structured 503/504
             raise provider_error(exc) from None
 
@@ -385,15 +421,25 @@ def create_app(backend_factory: Callable | None = None,
     @rate_limit
     def chat_stream(req: ChatRequest, request: Request):
         """Same input as /chat; streams the answer token by token (see the 200 response)."""
+        user = identify(req.user_id)
         guard(req.question)
         svc = service(request)                   # not ready -> a normal 503 JSON error, not a stream
         session_id = req.session_id or str(uuid.uuid4())
         trace_id, request_id = str(uuid.uuid4()), _request_id(request)
+        try:                                     # checked BEFORE the stream starts: a real 403, not an event
+            svc.check_session(session_id, user, claim=True)
+        except SessionForbidden:
+            raise forbidden() from None
 
         def events():
             try:
-                for ev in svc.events(req.question, session_id, trace_id=trace_id, request_id=request_id):
+                for ev in svc.events(req.question, session_id, user=user, trace_id=trace_id,
+                                     request_id=request_id):
                     yield {"event": EVENT_NAMES[type(ev)], "data": ev.model_dump_json()}
+            except SessionForbidden:             # lost a race with another user's first request
+                err = ErrorResponse(error="session_forbidden", request_id=request_id,
+                                    detail="This session belongs to another user.")
+                yield {"event": "error", "data": err.model_dump_json()}
             except ProviderUnavailable as exc:
                 api = provider_error(exc)
                 err = ErrorResponse(error=api.error, detail=api.detail, request_id=request_id)
@@ -435,6 +481,10 @@ def create_app(backend_factory: Callable | None = None,
         graph_compiled = getattr(backend.assistant, "graph", None) is not None
         if not graph_compiled or backend.n_chunks == 0:
             raise ApiError(503, "not_ready", f"graph_compiled={graph_compiled}, chunks={backend.n_chunks}")
+        try:                                     # Task 6: can't identify anyone -> can't serve anyone
+            users = directory.check()
+        except DirectoryUnavailable as exc:
+            raise ApiError(503, "directory_unavailable", str(exc)) from None
         runtime: Runtime = request.app.state.runtime
         return ReadyResponse(
             graph_compiled=graph_compiled,
@@ -445,7 +495,8 @@ def create_app(backend_factory: Callable | None = None,
             documents_skipped=len(backend.ingest_stats.get("skipped") or {}),
             index_built_at=backend.ingest_stats.get("built_at"),
             index_build_seconds=backend.ingest_stats.get("build_seconds"),
-            index_updated_at=backend.ingest_stats.get("updated_at"))
+            index_updated_at=backend.ingest_stats.get("updated_at"),
+            directory_users=users, documents_without_acl=len(backend.ingest_stats.get("no_acl") or []))
 
     # -- feedback -------------------------------------------------------------
     @app.post("/feedback", response_model=FeedbackResponse, tags=["chat"], responses={
@@ -471,15 +522,23 @@ def create_app(backend_factory: Callable | None = None,
     # -- sessions -------------------------------------------------------------
     @app.get("/session/{session_id}", response_model=SessionResponse, responses=ERROR_RESPONSES,
              tags=["sessions"])
-    def get_session(request: Request, session_id: SessionId) -> SessionResponse:
-        """The turns this session remembers (empty if unknown or expired)."""
-        return SessionResponse(session_id=session_id, turns=service(request).history(session_id))
+    def get_session(request: Request, session_id: SessionId, user_id: UserIdQuery = None) -> SessionResponse:
+        """The turns this session remembers (empty if unknown or expired). Only for its owner."""
+        user = identify(user_id)
+        try:
+            return SessionResponse(session_id=session_id, turns=service(request).history(session_id, user))
+        except SessionForbidden:
+            raise forbidden() from None
 
     @app.delete("/session/{session_id}", response_model=SessionCleared, responses=ERROR_RESPONSES,
                 tags=["sessions"])
-    def reset_session(request: Request, session_id: SessionId) -> SessionCleared:
-        """Forget this session's conversation. Idempotent: an unknown session is still a 200."""
-        return SessionCleared(session_id=session_id, cleared=service(request).reset(session_id))
+    def reset_session(request: Request, session_id: SessionId, user_id: UserIdQuery = None) -> SessionCleared:
+        """Forget this session's conversation. Idempotent: an unknown session is still a 200. Only for its owner."""
+        user = identify(user_id)
+        try:
+            return SessionCleared(session_id=session_id, cleared=service(request).reset(session_id, user))
+        except SessionForbidden:
+            raise forbidden() from None
 
     return app
 

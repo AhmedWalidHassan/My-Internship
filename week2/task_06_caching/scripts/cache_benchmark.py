@@ -55,6 +55,10 @@ WORKLOAD = """\
     cache could hit on those.
 - **Follow-ups:** 10% of requests are instead a SECOND turn in an earlier session ("Are there
   any exceptions?", ...). They are never cacheable, by design.
+- **Who asks** (Week 3 Task 6, `--users`): `one` = every request from the same employee (u1001):
+  one access scope, what the Week 2 cache saw. `directory` = each new session from one of the six
+  directory users, uniformly (4 access scopes: 3 employees share one). The question plan is the
+  same for both (drawn first, from the same seed); a follow-up stays with its session's user.
 """
 
 FOLLOW_UPS = ["Are there any exceptions?", "Who do I contact about that?", "Does that apply to contractors too?"]
@@ -85,8 +89,15 @@ def build(settings):
     return backend, obs, cache, (lambda c=cache: ChatService(backend, obs, c))
 
 
-def ask(service, obs, question, session=None, rid=""):
-    service.ask(question, session or f"bench-{uuid.uuid4()}", trace_id=str(uuid.uuid4()), request_id=rid)
+def bench_user(user_id: str = "u1001"):
+    """Week 3 Task 6: the benchmark asks as a directory user (an ordinary employee by default)."""
+    from common.access import Directory
+    return Directory(get_settings().user_directory).lookup(user_id)
+
+
+def ask(service, obs, question, session=None, rid="", user_id="u1001"):
+    service.ask(question, session or f"bench-{uuid.uuid4()}", user=bench_user(user_id), trace_id=str(uuid.uuid4()),
+                request_id=rid)
     return obs.records[-1]
 
 
@@ -161,7 +172,8 @@ def workload(args, settings):
     plan, sessions = [], []
     for i in range(args.requests):
         if sessions and rng.random() < 0.10:
-            plan.append(("follow-up", rng.choice(FOLLOW_UPS), rng.choice(sessions), None))
+            sid = rng.choice(sessions)
+            plan.append(("follow-up", rng.choice(FOLLOW_UPS), sid, None))
             continue
         q, _oos = rng.choices(examples, weights)[0]
         roll = rng.random()
@@ -175,6 +187,12 @@ def workload(args, settings):
         sessions.append(sid)
         plan.append((kind, text, sid, q))
 
+    # who asks: drawn AFTER the plan, from its own generator, so the questions are identical for --users one/directory
+    who = random.Random(args.seed + 1)
+    ids = ["u1001", "u1002", "u1003", "u2001", "u3001", "u3002"]
+    user_of = {sid: ("u1001" if args.users == "one" else who.choice(ids))
+               for _k, _t, sid, c in plan if c is not None}
+
     backend, obs, cache, make_service = build(settings)
     service = make_service()
     ask(service, obs, "warm-up: what is Northwind?", rid="warmup")
@@ -186,7 +204,7 @@ def workload(args, settings):
     e0 = embedding_cache.stats()
     t0 = time.perf_counter()
     for i, (kind, text, sid, canonical) in enumerate(plan, 1):
-        r = ask(service, obs, text, sid, rid=f"wl-{i:03d}")
+        r = ask(service, obs, text, sid, rid=f"wl-{i:03d}", user_id=user_of[sid])
         by_kind[kind] += 1
         hits_by_kind[kind] += r["cache_hit"]
         if r["cache_hit"]:
@@ -197,12 +215,15 @@ def workload(args, settings):
             outcome["miss: paraphrase (only a semantic cache could hit)"] += 1
         elif canonical not in seen_canonical:
             outcome["miss: first time this question was asked"] += 1
+        elif (canonical, r["access_scope"]) not in seen_canonical:
+            outcome["miss: first time in this access scope (Task 6)"] += 1
         elif r["refused"]:
             outcome["miss: refusal not cached / expired (short TTL)"] += 1
         else:
             outcome["miss: other"] += 1
         if kind != "follow-up" and kind != "paraphrase":
             seen_canonical.add(canonical)
+            seen_canonical.add((canonical, r["access_scope"]))
         print(f"  {i:3d}. {'HIT ' if r['cache_hit'] else 'miss'} {kind:10s} {r['latency_ms'] / 1000:6.3f}s  {text.strip()[:60]}",
               flush=True)
     wall = time.perf_counter() - t0
@@ -211,7 +232,7 @@ def workload(args, settings):
     misses = [r for r in obs.records if not r["cache_hit"]]
     no_cache_cost = mean([r["estimated_cost_usd"] for r in misses]) * len(obs.records)
     no_cache_time = mean([r["latency_ms"] / 1000 for r in misses]) * len(obs.records)
-    L = [f"# Cache hit rate on a repeated-question workload ({len(plan)} requests)\n", WORKLOAD,
+    L = [f"# Cache hit rate on a repeated-question workload ({len(plan)} requests, --users {args.users})\n", WORKLOAD,
          f"**Hit rate: {s['hits']}/{s['n']} = {100 * s['hits'] / s['n']:.0f}%**\n",
          "| Outcome | Requests | % |", "|---|---:|---:|"]
     L += [f"| {k} | {v} | {100 * v / s['n']:.0f}% |" for k, v in outcome.most_common()]
@@ -237,7 +258,8 @@ def prewarm_mode(args, settings):
     from app.service import ChatService
 
     qs = [q for q, _a, src, _f in load_capstone().EVAL_EXAMPLES if src][:args.n]
-    ChatService(backend, obs, None).ask("warm-up: what is Northwind?", "w", trace_id=str(uuid.uuid4()))
+    ChatService(backend, obs, None).ask("warm-up: what is Northwind?", "w", user=bench_user(),
+                                        trace_id=str(uuid.uuid4()))
     rows = {}
     for label, warm in (("no pre-warm", False), (f"pre-warmed ({args.n} questions)", True)):
         cache = build_cache(settings)
@@ -265,6 +287,8 @@ def main(argv=None):
     p.add_argument("--n", type=int, default=None)
     p.add_argument("--requests", type=int, default=120)
     p.add_argument("--seed", type=int, default=7)
+    p.add_argument("--users", choices=["one", "directory"], default="one",
+                   help="workload: every request from u1001, or from the six directory users (Task 6)")
     p.add_argument("--out", type=Path)
     args = p.parse_args(argv)
     settings = get_settings()

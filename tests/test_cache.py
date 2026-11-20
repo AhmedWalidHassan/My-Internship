@@ -45,7 +45,7 @@ def llm_calls(llm):
 
 
 def ask(client, question=Q, session=None, **headers):
-    r = client.post("/chat", json={"question": question, "session_id": session or str(uuid.uuid4())},
+    r = client.post("/chat", json={"user_id": "u1001", "question": question, "session_id": session or str(uuid.uuid4())},
                     headers=headers)
     assert r.status_code == 200, r.text
     return r.json()
@@ -71,12 +71,13 @@ def test_normalisation_makes_trivial_variants_one_key():
     assert normalize("How much PTO do I get?") != normalize("How much sick leave do I get?")
 
 
-def test_key_changes_with_corpus_and_config():
+def test_key_changes_with_corpus_config_and_access_scope():
     k = AnswerCache.key
-    base = k(Q, corpus_version="c1", fingerprint="f1")
-    assert base == k("how much pto do i get", corpus_version="c1", fingerprint="f1")
-    assert base != k(Q, corpus_version="c2", fingerprint="f1"), "a document changed"
-    assert base != k(Q, corpus_version="c1", fingerprint="f2"), "the model, prompts or k changed"
+    base = k(Q, corpus_version="c1", fingerprint="f1", scope="s1")
+    assert base == k("how much pto do i get", corpus_version="c1", fingerprint="f1", scope="s1")
+    assert base != k(Q, corpus_version="c2", fingerprint="f1", scope="s1"), "a document changed"
+    assert base != k(Q, corpus_version="c1", fingerprint="f2", scope="s1"), "the model, prompts or k changed"
+    assert base != k(Q, corpus_version="c1", fingerprint="f1", scope="s2"), "someone who sees other documents"
 
 
 # ===========================================================================
@@ -117,7 +118,7 @@ def test_a_cached_answer_is_remembered_for_the_follow_up(api, app):
     ask(api, Q, "first-user")
     hit = ask(api, Q, "second-user")
     assert hit["cache_hit"] is True
-    assert [t["question"] for t in api.get("/session/second-user").json()["turns"]] == [Q]
+    assert [t["question"] for t in api.get("/session/second-user", params={"user_id": "u1001"}).json()["turns"]] == [Q]
     api.llm.rules[prefix(app.CONTEXTUALIZE_PROMPT)] = "Can I carry unused PTO over to next year?"
     ask(api, "Can I carry it over?", "second-user")
     [ctx] = api.llm.calls_to(prefix(app.CONTEXTUALIZE_PROMPT))
@@ -126,7 +127,7 @@ def test_a_cached_answer_is_remembered_for_the_follow_up(api, app):
 
 def test_stream_serves_a_hit_with_the_same_protocol(api):
     ask(api)
-    with api.stream("POST", "/chat/stream", json={"question": Q}) as r:
+    with api.stream("POST", "/chat/stream", json={"user_id": "u1001", "question": Q}) as r:
         events = sse(r)
     kinds = [k for k, _ in events]
     assert kinds[0] == "status" and events[0][1]["node"] == "cache"
@@ -256,7 +257,9 @@ def test_eval_path_never_sees_the_answer_cache(api):
     assert llm_calls(api.llm) > calls
     service = api.app.state.runtime.service
     calls = llm_calls(api.llm)
-    r = service.ask(Q, f"cost-{uuid.uuid4()}", trace_id=str(uuid.uuid4()), use_cache=False)
+    from common.access import PUBLIC, User
+    r = service.ask(Q, f"cost-{uuid.uuid4()}", user=User("u1001", PUBLIC), trace_id=str(uuid.uuid4()),
+                    use_cache=False)
     assert r.cache_hit is False and llm_calls(api.llm) > calls
 
 

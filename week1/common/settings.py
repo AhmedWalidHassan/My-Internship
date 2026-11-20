@@ -101,6 +101,12 @@ class Settings(BaseSettings):
     index_path: Path = Field(CAPSTONE_DIR / "faiss_index_w3", description="where the FAISS index is persisted")
     data_dir: Path = Field(REPO_DIR / "week3" / "corpus", description="the corpus: a folder of .md/.txt files, "
                            "or a corpus export with _metadata.csv (documents listed there, in sub-folders)")
+    # Week 3 Task 6: who's asking. user_id -> groups. Missing or unreadable = nobody can be served (503).
+    directory_path: Path | None = Field(None, description="the user directory CSV; default: DATA_DIR/_directory.csv")
+
+    @property
+    def user_directory(self) -> Path:
+        return Path(self.directory_path or Path(self.data_dir) / "_directory.csv")
 
     # ---- service -----------------------------------------------------------------
     api_host: str = Field("127.0.0.1", description="0.0.0.0 in a container; localhost otherwise (no auth yet)")
@@ -120,7 +126,7 @@ class Settings(BaseSettings):
                                            "(logical x transport retries never exceed it)")
     circuit_failure_threshold: int = Field(5, ge=1)
     circuit_cooldown_seconds: float = Field(30, gt=0)
-    rate_limit_per_minute: int = Field(20, ge=1, description="requests per session (or per IP without one)")
+    rate_limit_per_minute: int = Field(20, ge=1, description="requests per user_id (or per IP without one)")
     injection_guard_enabled: bool = True
 
     # ---- caching (Task 6) ------------------------------------------------------------

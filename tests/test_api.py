@@ -98,7 +98,7 @@ def sse(response):
 
 
 def stream_chat(client, question, session_id=None, **kwargs):
-    body = {"question": question} | ({"session_id": session_id} if session_id else {})
+    body = {"user_id": "u1001", "question": question} | ({"session_id": session_id} if session_id else {})
     with client.stream("POST", "/chat/stream", json=body, **kwargs) as r:
         assert r.status_code == 200, r.read()
         assert r.headers["content-type"].startswith("text/event-stream")
@@ -142,7 +142,7 @@ def test_healthz_answers_while_loading_and_readyz_does_not(start_api, app_backen
     r = client.get("/readyz")
     assert_error_shape(r, 503, "not_ready")
     assert r.headers["retry-after"] == "5"
-    assert_error_shape(client.post("/chat", json={"question": "How much PTO do I get?"}), 503, "not_ready")
+    assert_error_shape(client.post("/chat", json={"user_id": "u1001", "question": "How much PTO do I get?"}), 503, "not_ready")
 
     release.set()
     ready = wait_until_ready(client).json()
@@ -184,8 +184,8 @@ def test_index_and_graph_are_built_once_not_per_request(start_api, app_backend):
 
     client = start_api(counting_factory)
     for _ in range(3):
-        assert client.post("/chat", json={"question": "How much PTO do I get?"}).status_code == 200
-    with client.stream("POST", "/chat/stream", json={"question": "How much PTO do I get?"}) as r:
+        assert client.post("/chat", json={"user_id": "u1001", "question": "How much PTO do I get?"}).status_code == 200
+    with client.stream("POST", "/chat/stream", json={"user_id": "u1001", "question": "How much PTO do I get?"}) as r:
         r.read()
     assert built == [1]
 
@@ -195,7 +195,7 @@ def test_index_and_graph_are_built_once_not_per_request(start_api, app_backend):
 # ===========================================================================
 
 def test_chat_returns_answer_sources_and_node_path(api):
-    r = api.post("/chat", json={"question": "How much PTO do I get?"})
+    r = api.post("/chat", json={"user_id": "u1001", "question": "How much PTO do I get?"})
     assert r.status_code == 200, r.text
     body = r.json()
     assert body["answer"] == "Full-time employees get 20 days of PTO per year."
@@ -221,7 +221,7 @@ def test_trace_id_is_the_langsmith_root_run_id(api):
         return real_stream(inputs, config=config, **kwargs)
 
     graph.stream = spy
-    body = api.post("/chat", json={"question": "How much PTO do I get?"}).json()
+    body = api.post("/chat", json={"user_id": "u1001", "question": "How much PTO do I get?"}).json()
     assert str(seen["config"]["run_id"]) == body["trace_id"]
     assert seen["config"]["metadata"]["session_id"] == body["session_id"]
 
@@ -239,37 +239,37 @@ def test_two_sessions_hold_independent_conversations(start_api, make_backend, ap
     a, b = f"alice-{uuid.uuid4()}", f"bob-{uuid.uuid4()}"
     ctx = prefix(app.CONTEXTUALIZE_PROMPT)
 
-    assert client.post("/chat", json={"question": "How much PTO do I get?", "session_id": a}).status_code == 200
-    rb = client.post("/chat", json={"question": "Can I carry it over?", "session_id": b}).json()
+    assert client.post("/chat", json={"user_id": "u1001", "question": "How much PTO do I get?", "session_id": a}).status_code == 200
+    rb = client.post("/chat", json={"user_id": "u1001", "question": "Can I carry it over?", "session_id": b}).json()
     assert rb["standalone_question"] == "Can I carry it over?", "B has no history: nothing to resolve"
     assert llm.calls_to(ctx) == [], "B's first question must not be resolved against A's conversation"
 
-    ra = client.post("/chat", json={"question": "Can I carry it over to next year?", "session_id": a}).json()
+    ra = client.post("/chat", json={"user_id": "u1001", "question": "Can I carry it over to next year?", "session_id": a}).json()
     assert ra["standalone_question"] == "Can I carry unused PTO over to next year?"
     [ctx_call] = llm.calls_to(ctx)
     assert "How much PTO do I get?" in ctx_call, "A's follow-up is resolved against A's turn 1"
     assert "Can I carry it over?" not in ctx_call.split("Latest message:")[0], "B's turn leaked into A"
 
-    turns_a = client.get(f"/session/{a}").json()["turns"]
-    turns_b = client.get(f"/session/{b}").json()["turns"]
+    turns_a = client.get(f"/session/{a}", params={"user_id": "u1001"}).json()["turns"]
+    turns_b = client.get(f"/session/{b}", params={"user_id": "u1001"}).json()["turns"]
     assert [t["question"] for t in turns_a] == ["How much PTO do I get?", "Can I carry it over to next year?"]
     assert [t["question"] for t in turns_b] == ["Can I carry it over?"]
 
-    assert client.delete(f"/session/{a}").json() == {"session_id": a, "cleared": True}
-    assert client.get(f"/session/{a}").json()["turns"] == []
-    assert len(client.get(f"/session/{b}").json()["turns"]) == 1, "clearing A must not touch B"
-    assert client.delete(f"/session/{a}").json() == {"session_id": a, "cleared": False}, "idempotent"
+    assert client.delete(f"/session/{a}", params={"user_id": "u1001"}).json() == {"session_id": a, "cleared": True}
+    assert client.get(f"/session/{a}", params={"user_id": "u1001"}).json()["turns"] == []
+    assert len(client.get(f"/session/{b}", params={"user_id": "u1001"}).json()["turns"]) == 1, "clearing A must not touch B"
+    assert client.delete(f"/session/{a}", params={"user_id": "u1001"}).json() == {"session_id": a, "cleared": False}, "idempotent"
 
 
 def test_session_memory_survives_across_requests_and_clients(api):
     """The conversation lives server-side: a brand-new HTTP client (a refreshed tab)
     continues it with just the session_id."""
     sid = str(uuid.uuid4())
-    api.post("/chat", json={"question": "How much PTO do I get?", "session_id": sid})
+    api.post("/chat", json={"user_id": "u1001", "question": "How much PTO do I get?", "session_id": sid})
     # A new client on the SAME running app (a refreshed tab). Not `with TestClient(...)`: that
     # would re-run the startup lifespan, and its request could race the background load (503).
     fresh_tab = TestClient(api.app)
-    r = fresh_tab.get(f"/session/{sid}")
+    r = fresh_tab.get(f"/session/{sid}", params={"user_id": "u1001"})
     assert r.status_code == 200, r.text
     assert [t["question"] for t in r.json()["turns"]] == ["How much PTO do I get?"]
 
@@ -340,7 +340,7 @@ def test_stream_failure_ends_with_a_structured_error_event(api):
         raise RuntimeError("boom at /home/someone/secret/path.py line 12")
 
     api.backend.assistant.stream = broken_stream
-    with api.stream("POST", "/chat/stream", json={"question": "How much PTO?"}) as r:
+    with api.stream("POST", "/chat/stream", json={"user_id": "u1001", "question": "How much PTO?"}) as r:
         raw = r.read().decode()
         request_id = r.headers["x-request-id"]
     events = [(m.group(1), json.loads(m.group(2)))
@@ -362,7 +362,7 @@ def test_unhandled_error_returns_error_shape_not_traceback(api):
         yield
 
     api.backend.assistant.stream = broken_stream
-    r = api.post("/chat", json={"question": "How much PTO do I get?"})
+    r = api.post("/chat", json={"user_id": "u1001", "question": "How much PTO do I get?"})
     body = assert_error_shape(r, 500, "internal_error")
     assert "secret" not in r.text and "boom" not in r.text
     assert body["request_id"]
@@ -411,7 +411,7 @@ class FakeLangSmith:
 def test_feedback_is_attached_to_the_answers_trace(start_api, app_backend):
     ls = FakeLangSmith()
     client = start_api(lambda: app_backend, feedback_client_factory=lambda: ls)
-    trace_id = client.post("/chat", json={"question": "How much PTO do I get?"}).json()["trace_id"]
+    trace_id = client.post("/chat", json={"user_id": "u1001", "question": "How much PTO do I get?"}).json()["trace_id"]
 
     r = client.post("/feedback", json={"trace_id": trace_id, "rating": 1, "comment": "spot on"})
     assert r.status_code == 200 and r.json() == {"status": "recorded", "trace_id": trace_id}

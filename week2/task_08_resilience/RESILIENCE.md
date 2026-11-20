@@ -62,6 +62,9 @@ The rule I used: **degrade a step when a later step still enforces the product's
 | `generate` | **Fail**: 503 `llm_unavailable` | There is no answer to give |
 | `grade_generation` (fact-check) | **Fail closed**: 503 `verification_unavailable` | An unchecked answer is the exact failure the product exists to prevent. I'd rather say "try again" than show an answer nobody could check |
 | `direct_answer` | The fixed refusal | Never a free-form reply |
+| *Week 3 Task 6:* user directory missing, unreadable or malformed | **Fail closed**: 503 `directory_unavailable`, `/readyz` 503 | Nobody can be identified, so nobody can be scoped. "Everyone is an employee" would hide the outage. `test_directory_missing_or_malformed_fails_closed` |
+| *Week 3 Task 6:* unknown `user_id` (or none) | **401** `unauthorized`, no model call | There is no default user. `test_unknown_or_missing_user_gets_401_never_a_default_user` |
+| *Week 3 Task 6:* a chunk with no ACL metadata | **Visible to no one** | The other answer is a security incident: any metadata bug would publish the document. `test_a_chunk_without_acl_metadata_is_visible_to_no_one` |
 
 A degraded answer is still returned, but it is **flagged**: `degraded` in the response lists
 every skipped step, the request log line records it, and
@@ -121,6 +124,9 @@ sick days I get") ends in "I don't know" although the sick-day answer is in the 
 The injection part pollutes the retrieval query. Refusing is the right direction to fail.
 
 ## 4. Rate limiting
+
+*Week 3 Task 6: now keyed by `user_id`, not `session_id`; a user can no longer get round the limit by
+opening new sessions (`test_rate_limit_returns_429_with_retry_after_per_user`). The rest is as it was.*
 
 `slowapi`, `RATE_LIMIT_PER_MINUTE=20` per `session_id` (per client IP when there is none),
 on `/chat` and `/chat/stream`. Over the limit: **429 `rate_limited`** with a `Retry-After`

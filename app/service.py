@@ -9,14 +9,18 @@ from __future__ import annotations
 
 import logging
 import re
+import threading
 import time
 import uuid
 from collections.abc import Iterator
+
+from cachetools import TTLCache
 
 from app.cache import AnswerCache, CachedAnswer, config_fingerprint
 from app.capstone import CAPSTONE_PATH, load_capstone
 from app.config import get_settings
 from app.observability import Observer, RunTelemetry
+from common.access import PUBLIC, User
 from common.resilience import ProviderUnavailable, RequestBudget
 from common.truth import cited_versions
 from app.schemas import (
@@ -54,6 +58,10 @@ def _trace_cache_hit(trace_id, question, hit, request_id, session_id) -> None:
 CACHE_LABEL = "✓ Answered from cache (asked before, documents unchanged)"
 
 
+class SessionForbidden(Exception):
+    """This session belongs to another user (-> 403)."""
+
+
 class ChatService:
     def __init__(self, backend, observer: Observer | None = None, cache: AnswerCache | None = None):
         self.backend = backend                  # capstone Backend: index + retriever + graph + memory
@@ -61,6 +69,25 @@ class ChatService:
         self.cache = cache                      # None = no answer cache (CACHE_ENABLED=false)
         self._capstone = load_capstone()
         self._fingerprint = config_fingerprint(get_settings(), CAPSTONE_PATH.read_bytes())
+        # Week 3 Task 6: session_id -> the user_id that started it. It outlives the session's own TTL
+        # by a margin, so an owner record never expires while the conversation it guards still exists.
+        s = get_settings()
+        self._owners = TTLCache(maxsize=s.max_sessions,
+                                ttl=s.session_ttl_seconds + s.request_timeout_seconds + 60)
+        self._owners_lock = threading.Lock()
+
+    # -- sessions belong to the user who started them (Task 6) -----------------------
+    def check_session(self, session_id: str, user: User, claim: bool) -> None:
+        """403 (SessionForbidden) unless `user` owns this session, or it is new and `claim` is set.
+        A conversation with no recorded owner is nobody's to take over."""
+        with self._owners_lock:
+            owner = self._owners.get(session_id)
+            if owner is None and self.assistant.history(session_id):
+                raise SessionForbidden(session_id)
+            if owner is not None and owner != user.user_id:
+                raise SessionForbidden(session_id)
+            if owner is not None or claim:
+                self._owners[session_id] = user.user_id          # (re)starts the TTL
 
     @property
     def assistant(self):
@@ -68,7 +95,7 @@ class ChatService:
         return self.backend.assistant
 
     # -- answer cache -----------------------------------------------------------
-    def _cache_key(self, question: str, session_id: str) -> str | None:
+    def _cache_key(self, question: str, session_id: str, user: User) -> str | None:
         """The cache key, or None when this request must not use the cache: no cache, or a
         follow-up (the session has history, so the answer depends on the conversation)."""
         if self.cache is None or self.assistant.history(session_id):
@@ -76,13 +103,15 @@ class ChatService:
         version = self.backend.ingest_stats.get("corpus_version", "")
         if self.cache.sync_corpus(version):
             log.info("documents changed (corpus %s): answer cache emptied", version)
-        return self.cache.key(question, corpus_version=version, fingerprint=self._fingerprint)
+        return self.cache.key(question, corpus_version=version, fingerprint=self._fingerprint, scope=user.scope)
 
     def _serve_from_cache(self, hit: CachedAnswer, question, session_id, *, trace_id, request_id,
-                          tokens, endpoint):
+                          tokens, endpoint, user: User):
         t0 = time.perf_counter()
         self.assistant.remember(session_id, question, hit.answer)   # follow-ups keep their context
-        _trace_cache_hit(trace_id, question, hit, request_id, session_id)
+        traced = user.groups <= PUBLIC                              # same rule as a live run (Task 6)
+        if traced:
+            _trace_cache_hit(trace_id, question, hit, request_id, session_id)
         yield StatusEvent(node="cache", label=CACHE_LABEL, elapsed_ms=int((time.perf_counter() - t0) * 1000))
         if tokens:                              # same protocol as a live answer (already fact-checked)
             for piece in re.findall(r"\S+\s*", hit.answer):
@@ -98,12 +127,13 @@ class ChatService:
             "refused": hit.refused, "cache_hit": True, "llm_calls": 0, "model": get_settings().llm_label,
             "per_node": {}, "retrieved_ids": [], "kept_ids": [], "cached_from_trace_id": hit.trace_id,
             "cited_versions": cited_versions(hit.sources),
-            "cache_age_s": round(time.time() - hit.created, 1)})
+            "user_id": user.user_id, "access_scope": user.scope, "restricted_docs_used": hit.restricted_used,
+            "traced": traced, "cache_age_s": round(time.time() - hit.created, 1)})
 
     # -- the one place the graph runs ---------------------------------------------
-    def events(self, question: str, session_id: str, *, trace_id: str, request_id: str | None = None,
-               tokens: bool = True, endpoint: str = "chat/stream", use_cache: bool = True,
-               ) -> Iterator[StatusEvent | TokenEvent | RetractEvent | DoneEvent]:
+    def events(self, question: str, session_id: str, *, user: User, trace_id: str,
+               request_id: str | None = None, tokens: bool = True, endpoint: str = "chat/stream",
+               use_cache: bool = True) -> Iterator[StatusEvent | TokenEvent | RetractEvent | DoneEvent]:
         """Run the graph once, yielding status / token / retract events and a final DoneEvent.
 
         The graph routes and grades BEFORE it generates, so the first seconds are
@@ -117,13 +147,19 @@ class ChatService:
         A session's first question is looked up in the answer cache first (see
         app/cache.py); `use_cache=False` always runs the real pipeline (cost report,
         benchmarks).
+
+        `user` (Week 3 Task 6) comes from the directory, never from the request: retrieval sees
+        only what their groups may see, the cache is keyed by their access scope, and the session
+        must be theirs (SessionForbidden otherwise; checked before anything runs).
         """
-        key = self._cache_key(question, session_id) if use_cache else None
+        self.check_session(session_id, user, claim=True)
+        key = self._cache_key(question, session_id, user) if use_cache else None
         if key is not None:
             hit = self.cache.get(key)
             if hit is not None:
                 yield from self._serve_from_cache(hit, question, session_id, trace_id=trace_id,
-                                                  request_id=request_id, tokens=tokens, endpoint=endpoint)
+                                                  request_id=request_id, tokens=tokens, endpoint=endpoint,
+                                                  user=user)
                 return
 
         t0 = time.perf_counter()
@@ -142,7 +178,8 @@ class ChatService:
 
         try:
             for ev in self.assistant.stream(question, session_id, run_id=trace_id, tokens=tokens,
-                                            metadata=metadata, callbacks=[telemetry], llm_budget=budget):
+                                            metadata=metadata, callbacks=[telemetry], llm_budget=budget,
+                                            groups=user.groups):
                 kind = ev["event"]
                 if kind == "token":
                     drafted = True
@@ -164,7 +201,8 @@ class ChatService:
                             answer=ev["answer"], sources=list(ev["sources"]), node_path=list(ev["path"]),
                             retries=ev["retries"], refused=self._capstone.is_refusal(ev["answer"]),
                             trace_id=str(trace_id), tokens_in=usage["tokens_in"],
-                            tokens_out=usage["tokens_out"], llm_calls=usage["llm_calls"]))
+                            tokens_out=usage["tokens_out"], llm_calls=usage["llm_calls"],
+                            restricted_used=bool(ev.get("restricted_used"))))
                     yield DoneEvent(
                         answer=ev["answer"], sources=ev["sources"], node_path=ev["path"],
                         session_id=session_id, trace_id=str(trace_id),
@@ -185,10 +223,10 @@ class ChatService:
             self.observer.request_finished(self._record(
                 endpoint=endpoint, status=status, error=error, final=final, telemetry=telemetry,
                 latency_ms=ms(), first_token_ms=first_token_ms, request_id=request_id,
-                session_id=session_id, trace_id=str(trace_id), settings=settings, budget=budget))
+                session_id=session_id, trace_id=str(trace_id), settings=settings, budget=budget, user=user))
 
     def _record(self, *, endpoint, status, error, final, telemetry, latency_ms, first_token_ms,
-                request_id, session_id, trace_id, settings, budget=None) -> dict:
+                request_id, session_id, trace_id, settings, user: User, budget=None) -> dict:
         """The one structured log line of a request (see app/observability.py)."""
         usage = telemetry.totals()
         path = (final or {}).get("path", [])
@@ -210,6 +248,11 @@ class ChatService:
             "kept_ids": (final or {}).get("kept_ids", []),
             "degraded": (final or {}).get("degraded", []),
             "llm_attempts": budget.calls if budget else None,      # incl. transport retries (Task 8)
+            # Week 3 Task 6: who asked, with which access (a hash, not the group names), and whether
+            # the answer was written from restricted passages: an audit of who saw what, from logs alone.
+            "user_id": user.user_id, "access_scope": user.scope,
+            "restricted_docs_used": bool((final or {}).get("restricted_used")),
+            "traced": user.groups <= PUBLIC,
         }
         if first_token_ms is not None:
             rec["ttft_ms"] = first_token_ms
@@ -219,11 +262,11 @@ class ChatService:
             rec["error"] = error
         return rec
 
-    def ask(self, question: str, session_id: str, *, trace_id: str, request_id: str | None = None,
+    def ask(self, question: str, session_id: str, *, user: User, trace_id: str, request_id: str | None = None,
             use_cache: bool = True, endpoint: str = "chat") -> ChatResponse:
         """Non-streaming: the same run, keeping only the final event."""
         done = None
-        for ev in self.events(question, session_id, trace_id=trace_id, request_id=request_id,
+        for ev in self.events(question, session_id, user=user, trace_id=trace_id, request_id=request_id,
                               tokens=False, endpoint=endpoint, use_cache=use_cache):
             if isinstance(ev, DoneEvent):
                 done = ev
@@ -231,11 +274,15 @@ class ChatService:
             raise RuntimeError("the assistant returned no answer")
         return ChatResponse(**done.model_dump())
 
-    def history(self, session_id: str) -> list[Turn]:
+    def history(self, session_id: str, user: User) -> list[Turn]:
+        self.check_session(session_id, user, claim=False)
         turns = self.assistant.sessions.get(session_id) or []
         return [Turn(question=q, answer=a) for q, a in turns]
 
-    def reset(self, session_id: str) -> bool:
+    def reset(self, session_id: str, user: User) -> bool:
+        self.check_session(session_id, user, claim=False)
         existed = self.assistant.sessions.get(session_id) is not None
         self.assistant.reset(session_id)
+        with self._owners_lock:
+            self._owners.pop(session_id, None)
         return existed

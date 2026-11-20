@@ -12,16 +12,29 @@ diff, not a code change):
 EnsembleRetriever (score += weight / (rank + 60), documents identified by their text, the BM25 list
 first). With the defaults it returns exactly the Week 2 rankings: checked on all 60 dev questions,
 week3/task_04_retrieval_experiments/evidence/fusion_equivalence.json.
+
+Week 3 Task 6: `for_scope(groups)` returns the same retriever restricted to the chunks those groups may
+see (common/access.py). The filter is applied INSIDE both searches, never to their results:
+  * BM25: one index per access scope, built over the visible chunks only (cached per scope). A
+    restricted chunk is not in the index, so it can't take a top-k slot or shape the term statistics.
+  * dense: FAISS searches with an ID selector over the visible vectors, so the k nearest are the k
+    nearest VISIBLE vectors. (LangChain's `filter=` does the opposite: it fetches `fetch_k` = 20 and
+    filters those, so a user sees fewer than k passages whenever restricted chunks rank high.)
 """
 
 from __future__ import annotations
 
+import threading
 import time
 from typing import Any
+
+import numpy as np
 
 from langchain_core.callbacks import CallbackManagerForRetrieverRun
 from langchain_core.documents import Document
 from langchain_core.retrievers import BaseRetriever
+
+from common.access import can_see
 
 RRF_C = 60
 
@@ -53,8 +66,24 @@ class HybridRetriever(BaseRetriever):
     bm25_weight: float = 0.5
     prior: list = []
     k: int = 8                                # how many fused documents to return
+    store: Any = None                         # the FAISS store, for scoped views (Task 6)
+    depth: int = 8                            # documents per retriever
+    scopes: Any = None                        # {frozenset(groups): HybridRetriever}, built on first use
+    scoped_only: bool = False                 # True for the production retriever: no unscoped search exists
+
+    def for_scope(self, groups) -> "HybridRetriever":
+        """This retriever over the chunks `groups` may see only (cached per group set)."""
+        groups = frozenset(groups)
+        if self.scopes is None:
+            self.scopes = {"_lock": threading.Lock()}
+        with self.scopes["_lock"]:
+            if groups not in self.scopes:
+                self.scopes[groups] = _scoped(self, groups)
+            return self.scopes[groups]
 
     def _get_relevant_documents(self, query: str, *, run_manager: CallbackManagerForRetrieverRun):
+        if self.scoped_only:
+            raise RuntimeError("search through for_scope(groups): there is no search over every chunk")
         lists, weights = [], []
         if self.bm25 is not None and self.bm25_weight > 0:
             lists.append(self.bm25.invoke(query))
@@ -75,6 +104,49 @@ class HybridRetriever(BaseRetriever):
         return [first[key] for key in ranked][: self.k]
 
 
+class ScopedDense(BaseRetriever):
+    """Dense search restricted to a set of FAISS positions (an ID selector): a pre-filter."""
+
+    store: Any = None
+    positions: Any = None                     # np.int64 array of the visible vectors' positions
+    k: int = 8
+
+    def _get_relevant_documents(self, query: str, *, run_manager: CallbackManagerForRetrieverRun):
+        import faiss
+
+        if self.positions is None or not len(self.positions):
+            return []
+        vector = np.array([self.store._embed_query(query)], dtype=np.float32)
+        if self.store._normalize_L2:
+            faiss.normalize_L2(vector)
+        params = faiss.SearchParameters(sel=faiss.IDSelectorBatch(self.positions))
+        _, idx = self.store.index.search(vector, min(self.k, len(self.positions)), params=params)
+        docs = []
+        for i in idx[0]:
+            if i != -1:
+                docs.append(self.store.docstore.search(self.store.index_to_docstore_id[int(i)]))
+        return docs
+
+
+def _scoped(full: HybridRetriever, groups: frozenset) -> HybridRetriever:
+    from langchain_community.retrievers import BM25Retriever
+
+    store = full.store
+    # docstore order, as in build(): BM25 ties then break exactly as in the unscoped index
+    visible_ids = [i for i, d in store.docstore._dict.items() if can_see(d.metadata, groups)]
+    allowed = set(visible_ids)
+    bm25 = None
+    if full.bm25_weight > 0 and visible_ids:
+        bm25 = BM25Retriever.from_documents([store.docstore._dict[i] for i in visible_ids])
+        bm25.k = full.depth
+    dense = None
+    if full.bm25_weight < 1:
+        positions = [pos for pos, doc_id in store.index_to_docstore_id.items() if doc_id in allowed]
+        dense = ScopedDense(store=store, positions=np.array(sorted(positions), dtype=np.int64), k=full.depth)
+    return HybridRetriever(bm25=bm25, dense=dense, bm25_weight=full.bm25_weight, prior=full.prior, k=full.k,
+                           store=store, depth=full.depth)
+
+
 class RerankRetriever(BaseRetriever):
     """Re-score the base retriever's candidates with a cross-encoder; keep the best `k`."""
 
@@ -82,6 +154,9 @@ class RerankRetriever(BaseRetriever):
     model: Any = None
     k: int = 8
     last_rerank_ms: float = 0.0
+
+    def for_scope(self, groups) -> "RerankRetriever":
+        return RerankRetriever(base=self.base.for_scope(groups), model=self.model, k=self.k)
 
     def _get_relevant_documents(self, query: str, *, run_manager: CallbackManagerForRetrieverRun):
         candidates = self.base.invoke(query)
@@ -113,14 +188,12 @@ def build(store, k: int, settings) -> tuple[BaseRetriever, str]:
     w = settings.hybrid_bm25_weight
     rerank = settings.reranker_model
     depth = max(k, settings.rerank_top_n) if rerank else k
-    docs = list(store.docstore._dict.values())
-    bm25 = None
-    if w > 0:
-        bm25 = BM25Retriever.from_documents(docs)
-        bm25.k = depth
-    dense = store.as_retriever(search_kwargs={"k": depth}) if w < 1 else None
+    BM25Retriever  # noqa: B018  (fail here, at startup, if rank_bm25 is missing; the indexes are per scope)
     prior = parse_prior(settings.source_prior)
-    fused = HybridRetriever(bm25=bm25, dense=dense, bm25_weight=w, prior=prior, k=2 * depth)
+    # Week 3 Task 6: only per-scope views search (for_scope). This object holds the settings and the store;
+    # an unscoped BM25 over every chunk is never built, and an unscoped search raises.
+    fused = HybridRetriever(bm25=None, dense=None, bm25_weight=w, prior=prior, k=2 * depth, store=store,
+                            depth=depth, scoped_only=True)
     name = ("hybrid (BM25 + dense)" if 0 < w < 1 and w == 0.5 else
             "dense only" if w == 0 else "BM25 only" if w == 1 else f"hybrid (BM25 {w:g} + dense {1 - w:g})")
     if prior:

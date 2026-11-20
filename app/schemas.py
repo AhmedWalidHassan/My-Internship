@@ -15,6 +15,7 @@ from app.config import get_settings
 
 MAX_QUESTION_CHARS = get_settings().max_question_chars
 SESSION_ID_PATTERN = r"^[A-Za-z0-9._:\-]{1,128}$"
+USER_ID_PATTERN = r"^[A-Za-z0-9._@\-]{1,64}$"
 
 
 # ---------------------------------------------------------------------------
@@ -26,7 +27,12 @@ class ChatRequest(BaseModel):
     session_id: str | None = Field(
         default=None, pattern=SESSION_ID_PATTERN,
         description="Reuse it to continue a conversation. Omit it to start a new one; "
-                    "the response tells you the id that was assigned.")
+                    "the response tells you the id that was assigned. A session belongs to the user "
+                    "who started it: anyone else gets a 403.")
+    user_id: str | None = Field(
+        default=None, pattern=USER_ID_PATTERN, examples=["u1001"],
+        description="Who is asking (stands in for a verified SSO token). The server looks up the user's "
+                    "groups in the directory; the client never sends groups. Missing or unknown: 401.")
 
     @field_validator("question")
     @classmethod
@@ -109,6 +115,10 @@ class ReadyResponse(BaseModel):
     index_built_at: str | None = Field(None, description="When the index was last built from scratch (UTC).")
     index_build_seconds: float | None = Field(None, description="How long that full build took.")
     index_updated_at: str | None = Field(None, description="Last incremental update (UTC).")
+    # Week 3 Task 6
+    directory_users: int = Field(0, description="Users in the directory (who can be served).")
+    documents_without_acl: int = Field(0, description="Indexed documents with no acl_groups: hidden from "
+                                                      "every user (fail closed). Should be 0.")
 
 
 class FeedbackResponse(BaseModel):
