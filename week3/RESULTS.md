@@ -754,7 +754,7 @@ The leak matrix in detail:
 - Without a `user_id` the key is the client IP: those requests get a 401 and still count.
 
 **`make check` wall clock with the leak matrix:** pytest **4.96–5.04 s** warm, 6.3 s cold (193 tests;
-`make check` with ruff: 6.4 s) (budget 5 s) · CI: see the PR (budget 60 s)
+`make check` with ruff: 6.4 s) (budget 5 s) · CI: **32 s** for the `fast-checks` job (pytest 15.4 s for 196 tests, corpus tier included) (budget 60 s)
 - **On the 5 s line, not under it.** Task 6 adds 30 tests:
   - `test_access.py`, 16 tests, ~0.4 s. One shared API serves the read-only tests;
   - 14 guard cases at ~0 ms.
