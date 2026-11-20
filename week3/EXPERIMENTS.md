@@ -189,7 +189,41 @@ answers that mention a conflict or a draft:
 **The one change:** label wording and one sentence in `GROUNDED_PROMPT` (the fact-check and the eval's
 groundedness judge share it).
 
-**Result** *(committed after running)*: *(pending)*
+**Result** *(committed after running)*: full pipeline, dev (70), judge gemma3:4b,
+[`dev_full_TT-02.json`](task_05_time_and_truth/evidence/dev_full_TT-02.json).
+
+| Deterministic (dev) | Before (Task 3) | TT-01 | TT-02 | Predicted |
+|---|---:|---:|---:|---|
+| version (5) | 0.80 | **1.00** | 0.80 | – |
+| conflict (3) | 0.33 | **0.67** | 0.33 | – |
+| draft (4) | 0.75 | 0.75 | **1.00** | 4/4 ✓ |
+| ambiguous (3) | 1.00 | **1.00** | 0.67 | – |
+| **All** | 0.743 | **0.743** | 0.714 | ≥ 0.757 ✗ |
+| `conflict` groundedness | 1.00 | 0.33 | 1.00 | ≥ 0.67 ✓ |
+| Correctness / groundedness (all) | 0.500 / 0.986 | 0.529 / 0.971 | 0.514 / 0.986 | groundedness ≥ 0.95 ✓ |
+| Refused | 15 | 17 | 19 | – |
+| LLM calls / question | 13.9 | 13.7 | 13.8 | +0 ✓ |
+| Cost / question (dev) | $0.000698 | $0.000755 | $0.000797 | – |
+
+**Hypothesis confirmed?** **No.**
+- **The targeted questions came back:** n11 ("No, carry-over has not been abolished; under HR-POL-004
+  v3.0 … up to 3 days") and s29 ("report within 1 hour"). `draft` is 4/4.
+- **But four others were refused instead** (against TT-01): #3, #18, n21, n24.
+  - The rejected drafts are correct: #3 says "60-day waiting period" and #18 says "Northwind Access".
+  - The fact-check still rejected each of them three times.
+  - So the change didn't make the fact-check less strict. It moved which answers the 4B fact-check
+    rejects.
+- **The swings are within noise.** Net −2 against TT-01, and each category is only 3–5 questions.
+  TT-01 itself had n21 rejected twice before it passed.
+- **The real problem stays open.** The `grade_generation` fact-check is the bottleneck: 17–19 dev
+  refusals, mostly correct drafts it rejected three times. A prompt wording change is too weak a lever
+  for it. The lever is the fact-check model or its loop, which is out of scope for Task 5 (EXP-11 in
+  Task 4 looked at the same node).
+
+**Decision: revert TT-02, keep TT-01.**
+- TT-01 is better on three of the four target categories, and overall.
+- TT-02 also edits `GROUNDED_PROMPT`, which the eval's groundedness judge shares. Loosening the
+  instrument that measures groundedness is a bad trade for a change that doesn't win.
 
 ---
 
