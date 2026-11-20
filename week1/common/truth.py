@@ -134,9 +134,10 @@ def classify(d: Document, catalog: Catalog, as_of: date) -> tuple[str, str]:
         return "AUTHORITATIVE", f"{title} ({kind})"
     if rank == 6:
         what = "legacy intranet copy from 2024" if m.get("path", "").startswith("legacy_") else "scanned archive"
-        return "OUTDATED", f"{title}: {what}, superseded wherever the policy portal covers the topic"
+        return "OUTDATED", f"{title}: {what}, OUTDATED (superseded wherever the policy portal covers the topic)"
     when = m.get("content_date") or m.get("last_modified") or "?"
-    return "LOWER_AUTHORITY", f"{title}: {kind} ({when}), lower authority than the policy portal"
+    return "LOWER_AUTHORITY", (f"{title}: {kind} ({when}), lower authority than the policy portal and may be "
+                               "out of date")
 
 
 def curate(docs: list[Document], question: str, catalog: Catalog, as_of: date) -> tuple[list[Document], list[str]]:
@@ -195,7 +196,7 @@ def curate(docs: list[Document], question: str, catalog: Catalog, as_of: date) -
                     notes.append(f"dropped outdated {x.metadata['path']} (same topic as {ref})")
                     continue
                 x.metadata["truth_label"] += (f"; covers the same topic as {ref}: where they differ, {ref} "
-                                              "applies, and the difference is worth mentioning")
+                                              "applies and this page is out of date")
         kept.append(x)
     out = kept
 
