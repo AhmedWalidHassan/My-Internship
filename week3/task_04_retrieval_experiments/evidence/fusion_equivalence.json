@@ -1,0 +1,14 @@
+{
+ "k=4": {
+  "questions": 70,
+  "identical": 70,
+  "different": [],
+  "retriever": "hybrid (BM25 + dense)"
+ },
+ "k=10": {
+  "questions": 70,
+  "identical": 70,
+  "different": [],
+  "retriever": "hybrid (BM25 + dense)"
+ }
+}

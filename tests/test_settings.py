@@ -50,6 +50,9 @@ def test_defaults_match_the_previous_hardcoded_values(clean_env):
     """Moving to settings must not change behaviour (or invalidate the saved index)."""
     s = settings()
     assert (s.retriever_k, s.chunk_size, s.chunk_overlap) == (4, 800, 100)
+    # Week 3 Task 4: the retrieval levers default to the Week 2 retriever (no experiment was shipped).
+    assert s.hybrid_bm25_weight == 0.5 and s.source_prior is None and s.reranker_model is None
+    assert s.chunk_context_header is True
     # Changed on purpose in Week 3 Task 2: the default corpus is the Week 3 export, with its own index
     # (so the Week 2 index at faiss_index/ is never rewritten by the corpus switch).
     assert s.index_path == settings_mod.CAPSTONE_DIR / "faiss_index_w3"

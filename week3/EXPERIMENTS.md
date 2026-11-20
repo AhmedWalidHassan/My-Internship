@@ -10,20 +10,32 @@
 
 ## Noise floor
 
-Three runs of the unchanged baseline on dev.
+Three runs of the unchanged baseline on dev: the Task 3 ingestion, the hybrid retriever (BM25 0.5 /
+dense 0.5, weighted RRF), all-MiniLM-L6-v2, depth 10, 60 answerable dev questions.
+`week3/task_04_retrieval_experiments/scripts/run_experiment.py baseline-N` (2026-11-18).
 
 | Run | recall@5 | MRR | Notes |
-|---|---:|---:|---|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| **Spread (max − min)** | | | |
+|---:|---:|---:|---|
+| 1 | 0.917 | 0.612 | laptop GPU, PyTorch (the baseline everything below is compared with) |
+| 2 | 0.917 | 0.612 | same: identical document rankings for all 60 questions |
+| 3 | 0.917 | 0.612 | same |
+| **Spread (max − min)** | **0.000** | **0.000** | |
+| *extra:* fastembed / ONNX, index rebuilt (what CI runs) | 0.917 | 0.612 | identical rankings for 60/60 |
+| *extra:* CPU PyTorch, index rebuilt (what the container runs) | 0.917 | 0.612 | identical rankings for 60/60 |
 
 **Is retrieval deterministic? Why or why not?**
 
->
+> **Yes, fully, on every backend this project runs.** No LLM is involved (no multi-query, no HyDE). The
+> FAISS index is a flat, exact search, not approximate. BM25 is pure counting. The embedding model is a
+> fixed function, and its float differences between GPU PyTorch, CPU PyTorch and ONNX Runtime are too
+> small to flip any rank in the top 10 (checked on rebuilt indexes, embedding cache off). Two kinds of
+> change *could* move it: a library upgrade that changes tie-breaking or tokenisation, or anything
+> stochastic in the retriever. None is in the baseline.
 
-**Smallest difference I'll treat as real:** recall@5 ± ___ · MRR ± ___
+**Smallest difference I'll treat as real:** recall@5 ± **0.017** (one of 60 questions) · MRR ± **0.008**
+(one question moving from rank 1 to rank 2: 0.5/60). With zero noise, every change of at least one
+question is real, so the resolution of the metric *is* the threshold. With n = 60, though, one question
+is 1.7 points, so a difference of one or two questions says little about the holdout.
 
 ---
 
@@ -104,39 +116,697 @@ against a predicted ≥ 0.60, MRR 0.61 against ≥ 0.45. Lessons:
 
 ## Experiments
 
-Copy this block once per experiment. Commit the top half first.
+Every experiment is the baseline (the noise-floor config) plus ONE change, run with
+`run_experiment.py`, retrieval-only, dev. Per-example results: `week3/task_04_retrieval_experiments/evidence/<ID>_dev.json`.
+The hypotheses for EXP-01 to EXP-07 were committed together, before any of them was run.
 
-### EXP-01 — <short name>
+### EXP-01 — More dense, less BM25 (hybrid weight 0.5 → 0.3)
 
-**Hypothesis** *(committed before running)*: If I change ___, then ___ will
-improve/worsen in categories ___, because ___.
+**Hypothesis** *(committed before running)*: If I lower the BM25 share of the fusion from 0.5 to 0.3, then **multi_part improves** (#17 "What are the password rules?" comes back into the top 5: it is lost today because three meeting notes about a "password reset flow" win on BM25), while **keyword MRR drops** (E-301, NW-BAT-4380, Fleet Manager 4.3 are exact tokens that BM25 ranks first and dense blurs) but keyword recall@5 holds. Overall recall@5 +0.017 (one question), MRR within ±0.03.
 
-**The one change:** 
+**The one change:** more dense, less bm25 (hybrid weight 0.5 → 0.3).
 
 **Config diff:**
 ```
+HYBRID_BM25_WEIGHT: 0.5 -> 0.3
 ```
 
-**Result** *(committed after running)*:
+**Result** *(committed after running)*: `hybrid (BM25 0.3 + dense 0.7), depth 10 per retriever`, 348 chunks.
 
 | | Baseline | This | Delta | Bigger than noise? |
 |---|---:|---:|---:|---|
-| recall@5 (all) | | | | |
-| MRR (all) | | | | |
-| Latency / query | | | | |
-| Cost / query | | | | |
+| recall@5 (all) | 0.917 | 0.917 | +0.000 | no (identical) |
+| MRR (all) | 0.612 | 0.685 | +0.073 | yes |
+| recall@1 (all) | 0.417 | 0.533 | +0.117 | yes |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 0.6 / 0.9 ms | | – |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
 
-Categories that moved by more than the noise floor:
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
 
-| Category | Baseline R@5 | This R@5 |
-|---|---:|---:|
-| | | |
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 1.00 | 0.64 | 0.78 |
+| table | 4 | 1.00 | 1.00 | 0.83 | 0.80 |
+| keyword | 4 | 1.00 | 1.00 | 0.71 | 0.88 |
+| version | 5 | 1.00 | 1.00 | 0.80 | 0.85 |
+| draft | 4 | 1.00 | 0.75 | 0.45 | 0.30 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.68 |
+| ambiguous | 3 | 1.00 | 1.00 | 0.67 | 0.83 |
+| long_doc | 4 | 1.00 | 1.00 | 0.83 | 0.88 |
+| cross_lingual | 4 | 0.25 | 0.25 | 0.06 | 0.08 |
+| follow_up | 4 | 1.00 | 1.00 | 0.52 | 0.75 |
+| personalized | 4 | 0.75 | 0.75 | 0.31 | 0.46 |
 
-**Hypothesis confirmed?** Yes / No / Partly — and what I learned:
+Questions in/out of the top 5: n08 lost, 17 gained.
 
->
+**Hypothesis confirmed?** **Partly.**
+- **Right:** #17 came back (multi_part 0.75 → 1.00) and recall@5 held overall.
+- **Wrong about keyword:** its MRR *rose* (0.71 → 0.88). The exact-code questions are just as well
+  served by dense once the context line ("Rover Error Codes 2026 › Error codes") is in the vector.
+- **Missed entirely:** MRR rose across the board (+0.073; recall@1 +0.117). Lowering BM25's weight
+  mostly removes the noise of word-overlap matches from chatty documents.
+- **The cost I didn't predict:** `draft` lost n08 ("Is Northwind switching to flexible time off?",
+  R@5 1.00 → 0.75). Dense ranks newsletters and the PTO policy above the FTO draft, whose words BM25
+  matched exactly.
 
-**Decision:** keep / revert / follow up with EXP-__
+**Decision:** follow up. The direction is right, and EXP-08 combines it with the levers that don't
+cost a question.
+
+---
+
+### EXP-02 — Dense only (no BM25)
+
+**Hypothesis** *(committed before running)*: If I drop BM25 entirely, then retrieval gets **worse**: **keyword** loses at least one question at recall@5 (error and part codes are exact strings a 384-dimension MiniLM vector can't distinguish: 4380 vs 4830), **table** and **version** MRR fall (IDs like FIN-POL-002 in the context line match by BM25 today), and overall MRR drops by ≥ 0.05. #17 comes back (BM25 caused it). cross_lingual doesn't change (the dense model is English-only anyway).
+
+**The one change:** dense only (no bm25).
+
+**Config diff:**
+```
+HYBRID_BM25_WEIGHT: 0.5 -> 0.0
+```
+
+**Result** *(committed after running)*: `dense only, depth 10 per retriever`, 348 chunks.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.900 | -0.017 | yes |
+| MRR (all) | 0.612 | 0.752 | +0.140 | yes |
+| recall@1 (all) | 0.417 | 0.633 | +0.217 | yes |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 0.2 / 0.3 ms | | – |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 1.00 | 0.64 | 0.78 |
+| table | 4 | 1.00 | 0.75 | 0.83 | 0.75 |
+| keyword | 4 | 1.00 | 1.00 | 0.71 | 0.75 |
+| version | 5 | 1.00 | 1.00 | 0.80 | 0.90 |
+| draft | 4 | 1.00 | 0.75 | 0.45 | 0.59 |
+| multi_hop | 4 | 1.00 | 1.00 | 0.65 | 0.71 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.88 |
+| ambiguous | 3 | 1.00 | 1.00 | 0.67 | 0.83 |
+| long_doc | 4 | 1.00 | 1.00 | 0.83 | 0.88 |
+| cross_lingual | 4 | 0.25 | 0.25 | 0.06 | 0.25 |
+| follow_up | 4 | 1.00 | 1.00 | 0.52 | 0.88 |
+| personalized | 4 | 0.75 | 0.75 | 0.31 | 0.75 |
+
+Questions in/out of the top 5: n02 lost, n08 lost, 17 gained.
+
+**Hypothesis confirmed?** **Partly. Recall@5 got worse, as predicted, but by one question, not "at
+least one keyword", and MRR went *up* a lot, the opposite of what I predicted.**
+- **The losses:** n02 (the 5G module's price: `table` 1.00 → 0.75, the parts-catalog row only BM25
+  finds) and n08 (the FTO draft question).
+- **The gains:** dense alone ranks the right document first far more often (MRR 0.612 → 0.752,
+  recall@1 0.417 → 0.633). BM25's equal vote was pulling chatty, word-sharing chunks up.
+- **What I learned:** in this corpus BM25 is a *recall* safety net for exact strings and rare words,
+  not a ranking signal. It should keep a small weight, not zero: EXP-01's 0.3 kept n02. This is also
+  the one experiment whose average hides a trade-off. MRR says "big win", recall@5 says "lost a
+  question", and the question lost is a price lookup a user would care about.
+
+**Decision:** revert (don't drop BM25). Keep its weight as a lever for EXP-08.
+
+---
+
+### EXP-03 — No contextual chunk header
+
+**Hypothesis** *(committed before running)*: If I stop prepending `<title> [<id> v<version> · <status> · effective <date>] › <section>` to every chunk (Task 3), then retrieval gets **worse**, mostly in MRR (≥ 0.05 overall): **version / draft / conflict** (the header carries the document ID, version and status that distinguish PTO v2, v3 and the draft), **table** and **keyword** (a table row like "Tier: B | …" no longer says it is the Travel & Per Diem Policy), **long_doc** (a manual chunk no longer says "R3 Operator Manual › 14. Floors, ramps"). Recall@5 drops by at least one question.
+
+**The one change:** no contextual chunk header.
+
+**Config diff:**
+```
+CHUNK_CONTEXT_HEADER: true -> false   (own index)
+```
+
+**Result** *(committed after running)*: `hybrid (BM25 + dense), depth 10 per retriever`, 344 chunks, index rebuilt in 6.35 s.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.883 | -0.033 | yes |
+| MRR (all) | 0.612 | 0.580 | -0.031 | yes |
+| recall@1 (all) | 0.417 | 0.400 | -0.017 | yes |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 4.5 / 8.1 ms | | – |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 1.00 | 0.64 | 0.63 |
+| keyword | 4 | 1.00 | 1.00 | 0.71 | 0.52 |
+| version | 5 | 1.00 | 1.00 | 0.80 | 0.74 |
+| conflict | 3 | 1.00 | 1.00 | 0.56 | 0.75 |
+| draft | 4 | 1.00 | 1.00 | 0.45 | 0.43 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.56 |
+| long_doc | 4 | 1.00 | 0.75 | 0.83 | 0.61 |
+| cross_lingual | 4 | 0.25 | 0.00 | 0.06 | 0.02 |
+| follow_up | 4 | 1.00 | 0.75 | 0.52 | 0.48 |
+| personalized | 4 | 0.75 | 0.75 | 0.31 | 0.30 |
+
+Questions in/out of the top 5: 17 gained, n12 lost, n17 lost, 36 lost.
+
+**Hypothesis confirmed?** **Yes. This is the experiment that made things worse, and for the reason
+predicted, but not equally everywhere.**
+- **Lost questions:** recall@5 −0.033 (two net) and MRR −0.031. Four questions changed:
+  - n12 (R3 battery storage, `long_doc` 1.00 → 0.75): the manual chunk no longer says "Warehouse
+    Rover R3 - Operator Manual › 10. Battery care".
+  - n17 (Eid al-Fitr, `cross_lingual` → 0.00): without the header, the CSV row is bare Arabic.
+  - #36 (the standard plan, `follow_up`): the SLA's table rows no longer say "Customer Support
+    Service Levels".
+  - #17 returned, because meeting notes lost their "Leadership sync…" titles too.
+- **Biggest MRR drop:** `keyword` 0.71 → 0.52. An error-code row without "Rover Error Codes 2026"
+  competes with every other row that says "Restart the rover".
+- **The surprise:** `conflict` MRR *rose* (0.56 → 0.75). The header puts "Password Policy" and
+  "IT-STD-003" on equal terms, and without it the policy's own text wins.
+
+**What I learned:** the Task 3 context line is earning its place. It's the cheapest lever in the
+index, and removing it hurt most where the chunk is a fragment (table rows, manual sections).
+
+**Decision:** revert (keep the header).
+
+---
+
+### EXP-04 — Smaller chunks (800/100 → 400/50)
+
+**Hypothesis** *(committed before running)*: If I halve the chunk size, then **long_doc and factual MRR improve slightly** (a needle sentence dominates a smaller chunk's vector) but **multi_part and multi_hop get worse** (the answer's parts, e.g. referral amount + timing, password length + MFA + rotation, are split across chunks, so the top 5 holds fewer of them), and BM25's per-chunk statistics shift. Net overall recall@5 within ±0.02 and MRR within ±0.03, i.e. no clear win, at roughly 1.6× the chunks.
+
+**The one change:** smaller chunks (800/100 → 400/50).
+
+**Config diff:**
+```
+CHUNK_SIZE: 800 -> 400, CHUNK_OVERLAP: 100 -> 50   (own index)
+```
+
+**Result** *(committed after running)*: `hybrid (BM25 + dense), depth 10 per retriever`, 588 chunks, index rebuilt in 6.24 s.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.933 | +0.017 | no |
+| MRR (all) | 0.612 | 0.639 | +0.027 | yes |
+| recall@1 (all) | 0.417 | 0.417 | +0.000 | no (identical) |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 1.0 / 1.5 ms | | – |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 1.00 | 0.64 | 0.50 |
+| table | 4 | 1.00 | 1.00 | 0.83 | 1.00 |
+| keyword | 4 | 1.00 | 1.00 | 0.71 | 0.69 |
+| conflict | 3 | 1.00 | 1.00 | 0.56 | 0.78 |
+| draft | 4 | 1.00 | 1.00 | 0.45 | 0.68 |
+| multi_hop | 4 | 1.00 | 1.00 | 0.65 | 0.67 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.56 |
+| ambiguous | 3 | 1.00 | 1.00 | 0.67 | 0.50 |
+| long_doc | 4 | 1.00 | 1.00 | 0.83 | 1.00 |
+| follow_up | 4 | 1.00 | 1.00 | 0.52 | 0.58 |
+| personalized | 4 | 0.75 | 0.75 | 0.31 | 0.38 |
+
+Questions in/out of the top 5: 17 gained.
+
+**Hypothesis confirmed?** **No: "no clear win" was too pessimistic, and the losers aren't the ones I
+named.**
+- **Gains:** recall@5 +0.017 (#17 returned) and MRR +0.027.
+  - `table`, `long_doc` and `draft`/`conflict` MRR rose (0.83 → 1.00, 0.83 → 1.00, 0.45 → 0.68,
+    0.56 → 0.78): a smaller chunk is dominated by its one fact.
+- **Losses:** `factual` and `ambiguous` MRR fell (0.64 → 0.50, 0.67 → 0.50).
+  - Smaller wiki and handbook chunks let several fragments of the same stale legacy page outrank the
+    policy.
+  - `multi_part`/`multi_hop`, which I expected to suffer, held: the context line keeps each half
+    findable.
+- **Cost:** 1.7× the chunks (348 → 588), so 1.7× the embedding and index size, and more, shorter
+  passages for `grade_documents` to read.
+
+**Decision:** follow up. A modest net gain with a real cost in grading calls. It goes into EXP-08 only
+if it still adds on top of the cheaper levers.
+
+---
+
+### EXP-05 — Multilingual embedding model
+
+**Hypothesis** *(committed before running)*: If I replace all-MiniLM-L6-v2 with paraphrase-multilingual-MiniLM-L12-v2 (same 384 dimensions, trained to map translations to the same vector), then **cross_lingual rises from 0.25 to ≥ 0.75** at recall@5 (the Arabic Cairo pages finally land near English questions). English categories lose a little MRR (−0.02 to −0.05: a 12-layer multilingual model spreads its capacity over 50 languages), and recall@5 holds because BM25 still anchors exact terms. The index costs about 2× to build (12 layers vs 6).
+
+**The one change:** multilingual embedding model.
+
+**Config diff:**
+```
+HF_EMBED_MODEL: sentence-transformers/all-MiniLM-L6-v2 -> sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2   (own index)
+```
+
+**Result** *(committed after running)*: `hybrid (BM25 + dense), depth 10 per retriever`, 348 chunks, index rebuilt in 6.32 s.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.833 | -0.083 | yes |
+| MRR (all) | 0.612 | 0.556 | -0.055 | yes |
+| recall@1 (all) | 0.417 | 0.383 | -0.033 | yes |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 5.9 / 9.5 ms | | – |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 0.60 | 0.64 | 0.36 |
+| table | 4 | 1.00 | 1.00 | 0.83 | 1.00 |
+| keyword | 4 | 1.00 | 1.00 | 0.71 | 0.68 |
+| version | 5 | 1.00 | 0.80 | 0.80 | 0.73 |
+| conflict | 3 | 1.00 | 1.00 | 0.56 | 0.58 |
+| draft | 4 | 1.00 | 1.00 | 0.45 | 0.40 |
+| multi_hop | 4 | 1.00 | 1.00 | 0.65 | 0.62 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.69 |
+| ambiguous | 3 | 1.00 | 1.00 | 0.67 | 0.34 |
+| long_doc | 4 | 1.00 | 0.75 | 0.83 | 0.60 |
+| cross_lingual | 4 | 0.25 | 0.75 | 0.06 | 0.24 |
+| follow_up | 4 | 1.00 | 0.75 | 0.52 | 0.44 |
+| personalized | 4 | 0.75 | 0.50 | 0.31 | 0.42 |
+
+Questions in/out of the top 5: 19 lost, 24 lost, 4 lost, 6 lost, 3 lost, 17 gained, n12 lost, n16 gained, s25 gained, 36 lost, n25 lost.
+
+**Hypothesis confirmed?** **Half. cross_lingual rose as predicted (0.25 → 0.75: n16 and s25 now
+found), but the cost to English was far bigger than "a little MRR".**
+- **The cost:** recall@5 **−0.083** (net five questions lost) and MRR −0.055. Nine English questions
+  dropped out of the top 5:
+  - `factual` 1.00 → 0.60: sick days, doctor's note, phone, R2 outdoors.
+  - `version`: 60-day wait. `long_doc`: battery storage. `follow_up`: standard plan.
+    `personalized`: n25.
+- **Why:** paraphrase-multilingual-MiniLM-L12-v2 is a paraphrase model distilled for cross-language
+  similarity. On English question → English passage retrieval it is clearly weaker than the
+  English-only MiniLM. One model can't serve 4 Arabic questions without costing 9 English ones.
+- **Also:** the Arabic pages are 3 of 190 documents.
+
+**What I learned:** the trap in the brief ("averages hide trade-offs") ran the other way here. The
+category the change was *for* improved, and the average shows the price. The right fix for Arabic is
+not a global model swap. Options:
+- Translate the 4 Cairo documents at ingest (store an English rendering next to the Arabic).
+- Route Arabic-script chunks to a multilingual model in a second index.
+
+Both are Task 5/RFC material.
+
+**Decision:** revert.
+
+---
+
+### EXP-06 — Cross-encoder re-ranker over the top 20
+
+**Hypothesis** *(committed before running)*: If I re-rank the hybrid's top 20 candidates per retriever with cross-encoder/ms-marco-MiniLM-L-6-v2, then **MRR rises by ≥ 0.05** and recall@1 by ≥ 0.10 (a cross-encoder reads question and passage together, so it should put the policy above the meeting note that merely shares words: #17 returns). But **cross_lingual drops to 0** (an English-only cross-encoder scores Arabic passages as irrelevant and pushes the one CSV row we find today out of the top 5). Latency: +20–60 ms per query on the GPU, **+150–400 ms on CPU** (the container), against ~1 ms for retrieval today.
+
+**The one change:** cross-encoder re-ranker over the top 20.
+
+**Config diff:**
+```
+RERANKER_MODEL: (none) -> cross-encoder/ms-marco-MiniLM-L-6-v2, RERANK_TOP_N: 20
+```
+
+**Result** *(committed after running)*: `hybrid (BM25 + dense), re-ranked by cross-encoder/ms-marco-MiniLM-L-6-v2 (top 20), depth 10 per retriever`, 348 chunks.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.917 | +0.000 | no (identical) |
+| MRR (all) | 0.612 | 0.748 | +0.136 | yes |
+| recall@1 (all) | 0.417 | 0.633 | +0.217 | yes |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 57.3 / 67.9 ms | | yes: +57 ms GPU, +488 ms CPU (EXP-06-cpu) |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 1.00 | 0.64 | 0.83 |
+| table | 4 | 1.00 | 1.00 | 0.83 | 0.88 |
+| keyword | 4 | 1.00 | 1.00 | 0.71 | 0.88 |
+| version | 5 | 1.00 | 1.00 | 0.80 | 0.72 |
+| conflict | 3 | 1.00 | 1.00 | 0.56 | 0.58 |
+| draft | 4 | 1.00 | 1.00 | 0.45 | 1.00 |
+| multi_hop | 4 | 1.00 | 1.00 | 0.65 | 0.88 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.75 |
+| ambiguous | 3 | 1.00 | 1.00 | 0.67 | 0.78 |
+| long_doc | 4 | 1.00 | 1.00 | 0.83 | 1.00 |
+| cross_lingual | 4 | 0.25 | 0.00 | 0.06 | 0.00 |
+| follow_up | 4 | 1.00 | 1.00 | 0.52 | 0.71 |
+| personalized | 4 | 0.75 | 0.75 | 0.31 | 0.38 |
+
+Questions in/out of the top 5: 17 gained, n17 lost.
+
+**Hypothesis confirmed?** **Yes on quality, and on cross_lingual (→ 0.00, n17 pushed out), but I
+under-estimated the CPU latency.**
+- **Quality:** MRR **+0.136**, recall@1 **+0.217** (0.417 → 0.633), recall@5 unchanged net (#17 in,
+  n17 out).
+  - `draft` MRR 0.45 → 1.00: the cross-encoder puts the DRAFT above the policies when the question is
+    about the proposal.
+  - `multi_hop` 0.65 → 0.88, `factual` 0.64 → 0.83.
+  - `version` MRR *fell* (0.80 → 0.72): the cross-encoder can't tell v2 from v3 and sometimes prefers
+    the older, wordier text. That's a reminder that relevance isn't currency (Task 5).
+- **Latency:** **+57 ms per query on the GPU** (I predicted 20–60), **+488 ms (p95 572 ms) on CPU**
+  (I predicted 150–400), for 20–40 passages through a 6-layer cross-encoder. That's 500× today's
+  retrieval (≈ 1 ms) and roughly 8% of a 6 s answer. The graph retrieves up to 3 times per question
+  (rewrites), so up to ~1.5 s on the container's CPU.
+- **Deployment:** sentence-transformers is already in the full image, so no new package. The model is
+  ~90 MB. The slim image has no torch, so it would need fastembed's cross-encoder (not measured).
+
+**Decision:** follow up. It's the strongest single ranking lever, but too slow on CPU to adopt without
+checking whether it makes the *graph* cheaper (EXP-09: fewer passages to grade).
+
+---
+
+### EXP-07 — Source prior: down-weight meeting notes and newsletters
+
+**Hypothesis** *(committed before running)*: If I multiply the fused score of chunks from `meetings/` and `newsletters/` by 0.5, then **#17 returns** (multi_part 0.75 → 1.00) and **MRR rises slightly** (+0.01 to +0.03) on policy questions where chatter competes ("carry over" in 35 meeting notes, "PTO" in 53). **No dev question loses**, because no dev gold document is a meeting note or a newsletter, which is also this experiment's risk: it bakes in a judgment (chatter is less authoritative) that the holdout could punish if it asks about something only a meeting note says.
+
+**The one change:** source prior: down-weight meeting notes and newsletters.
+
+**Config diff:**
+```
+SOURCE_PRIOR: (none) -> meetings/:0.5,newsletters/:0.5
+```
+
+**Result** *(committed after running)*: `hybrid (BM25 + dense), source prior meetings/:0.5,newsletters/:0.5, depth 10 per retriever`, 348 chunks.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.933 | +0.017 | no |
+| MRR (all) | 0.612 | 0.643 | +0.031 | yes |
+| recall@1 (all) | 0.417 | 0.450 | +0.033 | yes |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 0.6 / 0.9 ms | | – |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 1.00 | 0.64 | 0.67 |
+| draft | 4 | 1.00 | 1.00 | 0.45 | 0.46 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.58 |
+| long_doc | 4 | 1.00 | 1.00 | 0.83 | 0.88 |
+| follow_up | 4 | 1.00 | 1.00 | 0.52 | 0.56 |
+| personalized | 4 | 0.75 | 0.75 | 0.31 | 0.58 |
+
+Questions in/out of the top 5: 17 gained.
+
+**Hypothesis confirmed?** **Yes, exactly as predicted.**
+- **Gains:** #17 returned (multi_part 1.00), MRR +0.031, recall@1 +0.033, no dev question lost, and
+  latency unchanged (it's a multiplication).
+- **Biggest MRR gain:** `personalized` (0.31 → 0.58): PTO-entitlement questions no longer see
+  "Karim is on PTO next week" notes above HR-POL-004.
+
+**The risk is unchanged:** it's a judgment baked into ranking. On dev no gold document is a meeting
+note or a newsletter, so the prior can't lose there by construction. A holdout question that only a
+meeting note answers (who owns an action item, what was decided on 2026-05-08) would be pushed down,
+not removed: 0.5 is a demotion, not a filter.
+
+**Decision:** keep, as part of EXP-08.
+
+---
+
+### EXP-08 — Combine the cheap levers: BM25 0.3 + source prior
+
+**Hypothesis** *(committed before running)*: If I apply EXP-01 (BM25 0.3) and EXP-07 (meetings and
+newsletters × 0.5) together, the gains overlap rather than add. Both recovered #17, so recall@5 stays
+**0.917** (#17 in, n08 still out because of the lower BM25 weight). **MRR ≈ 0.69–0.71**, above either
+alone (0.685, 0.643), because the prior removes the chatter that dense still lets through
+(`personalized`, `follow_up`). Latency unchanged, cost 0. Relative to EXP-01, this is one change: the prior.
+
+**The one change:** add `SOURCE_PRIOR` on top of EXP-01.
+
+**Config diff (vs baseline):**
+```
+HYBRID_BM25_WEIGHT: 0.5 -> 0.3
+SOURCE_PRIOR: (none) -> meetings/:0.5,newsletters/:0.5
+```
+
+**Result** *(committed after running)*: `hybrid (BM25 0.3 + dense 0.7), source prior meetings/:0.5,newsletters/:0.5, depth 10 per retriever`, 348 chunks.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.933 | +0.017 | no |
+| MRR (all) | 0.612 | 0.723 | +0.111 | yes |
+| recall@1 (all) | 0.417 | 0.583 | +0.167 | yes |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 0.5 / 0.8 ms | | – |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 1.00 | 0.64 | 0.80 |
+| table | 4 | 1.00 | 1.00 | 0.83 | 0.80 |
+| keyword | 4 | 1.00 | 1.00 | 0.71 | 0.88 |
+| version | 5 | 1.00 | 1.00 | 0.80 | 0.85 |
+| draft | 4 | 1.00 | 1.00 | 0.45 | 0.33 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.75 |
+| ambiguous | 3 | 1.00 | 1.00 | 0.67 | 0.83 |
+| long_doc | 4 | 1.00 | 1.00 | 0.83 | 1.00 |
+| cross_lingual | 4 | 0.25 | 0.25 | 0.06 | 0.08 |
+| follow_up | 4 | 1.00 | 1.00 | 0.52 | 0.88 |
+| personalized | 4 | 0.75 | 0.75 | 0.31 | 0.62 |
+
+Questions in/out of the top 5: 17 gained.
+
+**Hypothesis confirmed?** **Better than predicted.**
+- **MRR 0.723**, above both parts (EXP-01 0.685, EXP-07 0.643), within my 0.69–0.71 range plus a bit.
+- **recall@5 0.933, not 0.917:** I expected n08 (the FTO draft question) to stay lost, as in EXP-01.
+  The prior pushes the newsletters that outranked the draft back down, so it returns.
+- **Interaction:** the two levers fix *different* noise. Lower BM25 weight removes word-overlap
+  matches, and the prior removes chatter that is semantically close (newsletter PTO reminders).
+- **Cost:** none, no latency.
+
+**Decision:** keep. The base for EXP-09 and EXP-10.
+
+---
+
+### EXP-09 — EXP-08 + smaller chunks (400/50)
+
+**Hypothesis** *(committed before running)*: If I add EXP-04's 400/50 chunks on top of EXP-08, then
+`table`/`long_doc`/`draft` MRR improve again (as in EXP-04), and the `factual` loss EXP-04 showed
+(stale legacy fragments outranking the policy) is partly absorbed by the dense weighting and the
+prior. Net MRR +0.01 to +0.03 over EXP-08, recall@5 unchanged, at 1.7× the chunks. If the gain is
+under 0.02 MRR I won't keep it: more, shorter chunks mean more `grade_documents` calls per answer.
+
+**The one change:** CHUNK_SIZE / CHUNK_OVERLAP on top of EXP-08.
+
+**Config diff (vs EXP-08):**
+```
+CHUNK_SIZE: 800 -> 400, CHUNK_OVERLAP: 100 -> 50   (own index)
+```
+
+**Result** *(committed after running)*: `hybrid (BM25 0.3 + dense 0.7), source prior meetings/:0.5,newsletters/:0.5, depth 10 per retriever`, 588 chunks.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.933 | +0.017 | no |
+| MRR (all) | 0.612 | 0.793 | +0.181 | yes |
+| recall@1 (all) | 0.417 | 0.683 | +0.267 | yes |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 0.7 / 1.2 ms | | – |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 1.00 | 0.64 | 0.73 |
+| table | 4 | 1.00 | 1.00 | 0.83 | 1.00 |
+| keyword | 4 | 1.00 | 1.00 | 0.71 | 0.83 |
+| version | 5 | 1.00 | 1.00 | 0.80 | 0.90 |
+| conflict | 3 | 1.00 | 1.00 | 0.56 | 0.78 |
+| draft | 4 | 1.00 | 1.00 | 0.45 | 0.81 |
+| multi_hop | 4 | 1.00 | 1.00 | 0.65 | 0.71 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.88 |
+| ambiguous | 3 | 1.00 | 1.00 | 0.67 | 0.83 |
+| long_doc | 4 | 1.00 | 1.00 | 0.83 | 1.00 |
+| cross_lingual | 4 | 0.25 | 0.25 | 0.06 | 0.12 |
+| follow_up | 4 | 1.00 | 1.00 | 0.52 | 0.88 |
+| personalized | 4 | 0.75 | 0.75 | 0.31 | 0.75 |
+
+Questions in/out of the top 5: 17 gained.
+
+**Hypothesis confirmed?** **No. The gain is much bigger than the +0.01–0.03 I predicted: MRR +0.070
+over EXP-08 (0.723 → 0.793), recall@1 0.583 → 0.683.**
+- **EXP-04's `factual` loss is gone:** with dense weighting and the prior, the smaller legacy
+  fragments no longer win.
+- **The small-chunk gains remain:** `table`, `long_doc`, `draft`.
+- **The levers compound:** smaller chunks make each vector more specific, and the prior and dense
+  weighting stop the extra fragments from crowding the top. EXP-04 alone (+0.027) understated what
+  chunk size is worth once the noise is controlled.
+- **Cost:** 588 chunks instead of 348 (1.7×). Index build 6 s → ~7 s on the GPU (local embeddings,
+  $0; ≈ $0.0006 hosted), index size ~1.7×, retrieval latency +0.2 ms. Shorter passages also mean
+  shorter `grade_documents` prompts. Whether the graph ends up cheaper or dearer is measured on the
+  generation side.
+
+**Decision:** keep. **This is the winner on dev.**
+
+---
+
+### EXP-10 — EXP-08 + cross-encoder re-ranker
+
+**Hypothesis** *(committed before running)*: If I re-rank EXP-08's candidates with the cross-encoder,
+MRR reaches **≥ 0.75**. The re-ranker overrides most of the fusion order, so the gain over EXP-08 is
+smaller than EXP-06's +0.136 over the baseline. The costs are the same: cross_lingual R@5 → 0
+(n17 out), +~57 ms GPU / ~490 ms CPU per query. Whether it's worth it is decided by the generation
+side, not here.
+
+**The one change:** RERANKER_MODEL on top of EXP-08.
+
+**Config diff (vs EXP-08):**
+```
+RERANKER_MODEL: (none) -> cross-encoder/ms-marco-MiniLM-L-6-v2, RERANK_TOP_N: 20
+```
+
+**Result** *(committed after running)*: `hybrid (BM25 0.3 + dense 0.7), source prior meetings/:0.5,newsletters/:0.5, re-ranked by cross-encoder/ms-marco-MiniLM-L-6-v2 (top 20), depth 10 per retriever`, 348 chunks.
+
+| | Baseline | This | Delta | Bigger than noise? |
+|---|---:|---:|---:|---|
+| recall@5 (all) | 0.917 | 0.917 | +0.000 | no (identical) |
+| MRR (all) | 0.612 | 0.748 | +0.136 | yes |
+| recall@1 (all) | 0.417 | 0.633 | +0.217 | yes |
+| Latency / query (p50 / p95) | 0.6 / 0.9 ms | 51.2 / 58.5 ms | | yes: +51 ms GPU (≈ +490 ms CPU, as EXP-06-cpu) |
+| Cost / query | $0 local (≈ 12 query tokens = $0.0000002 hosted) | same | 0 | – |
+
+Categories that moved (any recall@5 change, or MRR by more than 0.008):
+
+| Category | n | Baseline R@5 | This R@5 | Baseline MRR | This MRR |
+|---|---:|---:|---:|---:|---:|
+| factual | 10 | 1.00 | 1.00 | 0.64 | 0.83 |
+| table | 4 | 1.00 | 1.00 | 0.83 | 0.88 |
+| keyword | 4 | 1.00 | 1.00 | 0.71 | 0.88 |
+| version | 5 | 1.00 | 1.00 | 0.80 | 0.72 |
+| conflict | 3 | 1.00 | 1.00 | 0.56 | 0.58 |
+| draft | 4 | 1.00 | 1.00 | 0.45 | 1.00 |
+| multi_hop | 4 | 1.00 | 1.00 | 0.65 | 0.88 |
+| multi_part | 4 | 0.75 | 1.00 | 0.54 | 0.75 |
+| ambiguous | 3 | 1.00 | 1.00 | 0.67 | 0.78 |
+| long_doc | 4 | 1.00 | 1.00 | 0.83 | 1.00 |
+| cross_lingual | 4 | 0.25 | 0.00 | 0.06 | 0.00 |
+| follow_up | 4 | 1.00 | 1.00 | 0.52 | 0.71 |
+| personalized | 4 | 0.75 | 0.75 | 0.31 | 0.38 |
+
+Questions in/out of the top 5: 17 gained, n17 lost.
+
+**Hypothesis confirmed?** **Yes on direction, no on size.**
+- **Quality:** MRR 0.748 (≥ 0.75 predicted, essentially reached). It still loses n17 (`cross_lingual`
+  → 0) and costs 51 ms GPU / ~490 ms CPU per query.
+- **Against EXP-09:** it's *below* EXP-09 (0.793) on MRR and recall@1, and a question worse on
+  recall@5. On this corpus, after Task 3's clean chunks and EXP-08's noise control, the cross-encoder
+  mostly re-orders what the fusion already ranks well. It also brings two penalties: it prefers
+  wordier older versions (`version` MRR down, as in EXP-06), and it can't read Arabic.
+
+**What I learned:** a re-ranker is the obvious lever, but the cheap levers got further for free. At
+500 ms per query on the container's CPU, ~90 MB of model, and no torch in the slim image, it doesn't
+earn its place here. That's a reason to reject it, written down rather than tuned around.
+
+**Decision:** revert. Rejected: no quality gain over EXP-09, at a large CPU latency cost.
+
+---
+
+### EXP-11 — Generation side: grade 3 passages instead of 6, on the winner
+
+**Hypothesis** *(committed before running)*: With the EXP-09 retriever, cutting `MAX_DOCS_TO_GRADE` from
+6 to 3 makes the graph **cheaper without losing answers**. `grade_documents` is the most expensive
+node: one LLM call per graded passage, 56% of spend in Task 1. Halving its calls per search should
+take LLM calls per question down ~25% (≈ 13 → ≈ 10) and cost per question down 15–20%. The
+deterministic pass rate stays within ±2 questions of the winner at 6, because the winner's
+**recall@3 (0.917) equals the old retriever's recall@5**: the gold passage is in the top 3 as often as
+it used to be in the top 5. Week 2's version of this (`MAX_DOCS_TO_GRADE=2` on the old retriever)
+cost 0.14 correctness. The difference is the ranking, and this experiment tests exactly that.
+Measured on the full pipeline, dev (70), same judge, against the winner at 6.
+
+**The one change:** MAX_DOCS_TO_GRADE on top of EXP-09.
+
+**Config diff (vs EXP-09):**
+```
+MAX_DOCS_TO_GRADE: 6 -> 3
+```
+
+**Result** *(committed after running)*: full pipeline, dev (70), judge gemma3:4b. Cost from the same runs
+and from `make cost` on the seed set ([`cost_seed_*.md`](task_04_retrieval_experiments/evidence/)).
+
+| | Baseline (Task 3) | EXP-09 (winner, grade 6) | EXP-11 (winner, grade 3) |
+|---|---:|---:|---:|
+| Deterministic (dev) | 0.743 | 0.686 | **0.614** |
+| Correctness (dev, judge) | 0.500 | 0.400 | 0.429 |
+| Groundedness (dev) | 0.986 | 0.971 | 0.986 |
+| Refused (of 70) | 15 | 17 | 20 |
+| LLM calls / question (dev) | 13.9 | 14.7 | **10.0** |
+| Cost / question (dev, gpt-4o-mini prices) | $0.000698 | $0.000606 | **$0.000449** |
+| Mean latency (dev) | 5.7 s | 5.2 s | 4.3 s |
+
+**Hypothesis confirmed?** **No.**
+- **Right about cost:** −26% against the winner at 6 graded passages, LLM calls 14.7 → 10.0,
+  `grade_documents` 9.4 → 4.7 calls per question on the seed set.
+- **Wrong about "no answers lost":** deterministic fell by 5 more questions (0.686 → 0.614). Losses in
+  `version` (0.6 → 0.4), `personalized` (0.75 → 0.25), `multi_hop` (0.25 → 0) and `cross_lingual`.
+- **Why:** recall@3 is measured at depth 10 per retriever, per *document*. The graph sees the
+  production retriever (4 per retriever) and grades *passages*. With 400-character chunks, the top 3
+  passages often hold the right document but not the sentence with the answer. Version questions need
+  both v2 and v3 passages, and personalized ones need the tenure table and the user's band.
+  Document-level recall@3 promised more than passage-level grading could deliver.
+
+**The bigger finding, from the same runs:** EXP-09 itself, the retrieval winner, **made answers worse**
+than the Task 3 baseline (deterministic 0.743 → 0.686, −4 questions), although its MRR is +0.18.
+- **The losses are not retrieval misses.** The gold document is in the top 5 for all of them. The
+  answers come out wrong because 400-character chunks split the facts:
+  - PTO v3's "reduced to 60 days" lands apart from the accrual text, so #3 answers v2's 90 days.
+  - The draft's "NOT APPROVED" banner sits in another chunk from the 15-day minimum, so n09 presents
+    the proposal as policy.
+  - Manual fragments push the R2 data sheet out of the graph's top 4, so #24 is refused.
+- **Retrieval metrics can't see this:** they score documents, and a smaller chunk is still "the right
+  document".
+
+**Decision:** revert (keep grading 6). And **the chunk-size part of EXP-09 can't ship on the strength of
+recall alone**. EXP-12 tests the same retriever levers without it.
+
+
+
+---
+
+### EXP-12 — Generation check of EXP-08 (BM25 0.3 + source prior, 800/100 chunks)
+
+**Hypothesis** *(committed before running)*: The generation regression of EXP-09 comes from the 400/50
+chunks, not from the fusion changes. So EXP-08, the same BM25 0.3 and source prior on the Task 3
+800/100 chunks (retrieval: MRR 0.723, recall@5 0.933), answers **at least as well as the Task 3
+baseline**: deterministic ≥ 0.729 (baseline 0.743, minus one question), gaining #17 (password rules,
+now retrieved) and losing nothing structural. Cost per question at or below the baseline's $0.000698:
+better ranking means fewer rewrite loops.
+
+**The one change (vs EXP-09):** chunks back to 800/100 (= EXP-08's config, on the generation side).
+
+**Config diff (vs Task 3 baseline):**
+```
+HYBRID_BM25_WEIGHT: 0.5 -> 0.3
+SOURCE_PRIOR: (none) -> meetings/:0.5,newsletters/:0.5
+```
+
+**Result** *(committed after running)*: full pipeline, dev (70), judge gemma3:4b.
+
+| | Baseline (Task 3) | EXP-12 (= EXP-08 retriever) | EXP-09 (winner) |
+|---|---:|---:|---:|
+| Retrieval recall@5 / MRR (dev) | 0.917 / 0.612 | 0.933 / 0.723 | 0.933 / 0.793 |
+| **Deterministic (dev)** | **0.743** | 0.714 | 0.686 |
+| Correctness / groundedness | 0.500 / 0.986 | 0.457 / 0.943 | 0.400 / 0.971 |
+| Refused / rewrite loop fired (of 70) | 15 / 20 | 16 / 21 | 17 / 24 |
+| Cost / question (dev) | $0.000698 | $0.000720 | $0.000606 |
+
+**Hypothesis confirmed?** **No.** With 800/100 chunks the fragmentation losses are gone, but EXP-12
+still answers two fewer questions than the baseline:
+- s07 ("daily meal allowance in Cairo"): refused after a rewrite.
+- #32 ("rules for booking business travel"): answered from the expense policy instead of the travel
+  policy.
+
+Both gold documents are retrieved, so those are grader and generator decisions on a differently
+ordered context. #17, which the retriever now finds, was already answered correctly at baseline from
+the wiki mirror.
+
+**What I learned:** these runs are deterministic, so the −2 is real *for these configurations*. But the
+generation stage is chaotic around small context changes: a different passage order flips borderline
+answers both ways. Better document ranking (MRR +0.11 to +0.18) does not buy better answers here,
+because on this system the answers are limited downstream: 4B relevance grading, the fact-check, and
+the generator picking among versions (Task 5). A retrieval metric is necessary, not sufficient.
+
+**Decision:** revert. No retrieval change ships in Task 4 (see the decision under the summary).
+
+
 
 ---
 
@@ -144,8 +814,26 @@ Categories that moved by more than the noise floor:
 
 | ID | Change | R@5 Δ | MRR Δ | Latency Δ | Decision |
 |---|---|---:|---:|---:|---|
-| EXP-01 | | | | | |
-| EXP-02 | | | | | |
-| EXP-03 | | | | | |
-| EXP-04 | | | | | |
-| EXP-05 | | | | | |
+| EXP-01 | BM25 weight 0.5 → 0.3 | 0.000 | +0.073 | 0 | follow up (EXP-08) |
+| EXP-02 | dense only | **−0.017** | +0.140 | −0.4 ms | revert: lost a price lookup BM25 finds |
+| EXP-03 | no context header | **−0.033** | **−0.031** | 0 | revert: **made it worse**, as predicted (the header earns its place) |
+| EXP-04 | chunks 800 → 400 | +0.017 | +0.027 | +0.4 ms | follow up (EXP-09) |
+| EXP-05 | multilingual embeddings | **−0.083** | **−0.055** | 0 (index 2× slower) | revert: **made it worse**: +2 Arabic, −9 English |
+| EXP-06 | cross-encoder re-ranker | 0.000 | +0.136 | **+57 ms GPU / +488 ms CPU** | follow up (EXP-10) |
+| EXP-07 | source prior (chatter ×0.5) | +0.017 | +0.031 | 0 | keep → EXP-08 |
+| EXP-08 | EXP-01 + EXP-07 | +0.017 | +0.111 | 0 | retrieval: keep; generation: see EXP-12 |
+| EXP-09 | EXP-08 + 400/50 chunks | +0.017 | **+0.181** | +0.1 ms | **retrieval winner on dev**, confirmed on test; not shipped (EXP-11, EXP-12) |
+| EXP-10 | EXP-08 + re-ranker | 0.000 | +0.136 | +51 ms GPU / ~+490 ms CPU | revert: below EXP-09, too slow on CPU |
+| EXP-11 | EXP-09 + grade 3 passages (generation) | – | – | −1.0 s end-to-end | revert: −26% cost, −5 answers |
+| EXP-12 | EXP-08 on the generation side | – | – | 0 | revert: −2 answers vs baseline |
+
+**Winner and decision.**
+- **Retrieval winner on dev:** **EXP-09** (BM25 0.3, meetings and newsletters × 0.5, 400/50 chunks):
+  recall@5 0.933, MRR 0.793. **Confirmed once on test:** recall@5 0.885 → 0.923, MRR 0.603 → 0.740.
+  That's the same direction and a similar size to dev.
+- **Shipped:** nothing. Measured end to end on dev, EXP-09 answers 4 fewer questions than the baseline
+  (deterministic 0.743 → 0.686) and EXP-08 two fewer (0.714). The cause is passage fragmentation (EXP-11)
+  and downstream sensitivity (EXP-12), not retrieval. A config that ranks better and answers worse isn't
+  an improvement for users, so the production defaults stay the Task 3 baseline.
+- **What stays:** every lever is now a setting (`HYBRID_BM25_WEIGHT`, `SOURCE_PRIOR`, `RERANKER_MODEL`,
+  `CHUNK_*`, `CHUNK_CONTEXT_HEADER`), ready for Task 5, where ranking by version and status should matter more.

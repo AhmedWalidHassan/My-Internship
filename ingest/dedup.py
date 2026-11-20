@@ -33,8 +33,10 @@ CONTAIN = 0.75
 AUTHORITY = ["policy-portal", "drive", "wiki", "intranet", "intranet-legacy", "scanned-archive"]
 
 
-def body(text: str) -> str:
-    """The chunk without its first line (the context header every chunk starts with)."""
+def body(text: str, header: str | None = None) -> str:
+    """The chunk without its context header (its first line), when it has one."""
+    if header is not None and not (header and text.startswith(header)):
+        return text
     return text.split("\n", 1)[1] if "\n" in text else text
 
 
@@ -61,7 +63,7 @@ def find_duplicates(chunks: list) -> dict:
     exact, seen = [], {}
     for path, cs in by_doc.items():
         for c in cs:
-            n = re.sub(r"\s+", " ", body(c.page_content).lower()).strip()
+            n = re.sub(r"\s+", " ", body(c.page_content, c.metadata.get("context")).lower()).strip()
             if len(n) < 60:
                 continue
             h = hashlib.sha1(n.encode()).hexdigest()
@@ -69,7 +71,8 @@ def find_duplicates(chunks: list) -> dict:
                 exact.append({"a": seen[h][1], "b": c})
             seen.setdefault(h, (path, c))
 
-    docs = {p: {"meta": cs[0].metadata, "sh": shingles(" ".join(body(c.page_content) for c in cs))}
+    docs = {p: {"meta": cs[0].metadata,
+                "sh": shingles(" ".join(body(c.page_content, c.metadata.get("context")) for c in cs))}
             for p, cs in by_doc.items()}
     ids = {}
     for p, d in docs.items():

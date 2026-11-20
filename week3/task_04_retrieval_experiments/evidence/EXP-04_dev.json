@@ -1,0 +1,1293 @@
+{
+ "meta": {
+  "date": "2026-11-18T11:47:17+00:00",
+  "git_sha": "7b62d9ded319f0b9a8c7d9f95cb9105bf8bb8330",
+  "dataset": "week3/eval/eval_v3.jsonl",
+  "dataset_name": "northwind-eval-v3",
+  "dataset_version": "5d9544921fd6",
+  "split": "dev",
+  "mode": "retrieval",
+  "n": 70,
+  "data_dir": "/mnt/games/coding/My-Internship/week3/corpus",
+  "retriever_k": 4,
+  "max_docs_to_grade": 6,
+  "chunking": "400/50",
+  "embeddings": "ollama/sentence-transformers",
+  "runner": "Linux x86_64 py3.14.10",
+  "wall_clock_s": 10.74
+ },
+ "retrieval": {
+  "overall": {
+   "n": 60,
+   "recall@1": 0.4167,
+   "recall@3": 0.85,
+   "recall@5": 0.9333,
+   "recall@10": 0.9333,
+   "mrr": 0.6386
+  },
+  "by_category": {
+   "factual": {
+    "n": 10,
+    "recall@1": 0.1,
+    "recall@3": 0.9,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5033
+   },
+   "table": {
+    "n": 4,
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0
+   },
+   "keyword": {
+    "n": 4,
+    "recall@1": 0.5,
+    "recall@3": 0.75,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.6875
+   },
+   "version": {
+    "n": 5,
+    "recall@1": 0.6,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.8
+   },
+   "conflict": {
+    "n": 3,
+    "recall@1": 0.6667,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.7778
+   },
+   "draft": {
+    "n": 4,
+    "recall@1": 0.5,
+    "recall@3": 0.75,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.675
+   },
+   "multi_hop": {
+    "n": 4,
+    "recall@1": 0.5,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.6667
+   },
+   "multi_part": {
+    "n": 4,
+    "recall@1": 0.25,
+    "recall@3": 0.75,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5625
+   },
+   "ambiguous": {
+    "n": 3,
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5
+   },
+   "long_doc": {
+    "n": 4,
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0
+   },
+   "cross_lingual": {
+    "n": 4,
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.25,
+    "recall@10": 0.25,
+    "mrr": 0.0625
+   },
+   "follow_up": {
+    "n": 4,
+    "recall@1": 0.25,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5833
+   },
+   "personalized": {
+    "n": 4,
+    "recall@1": 0.0,
+    "recall@3": 0.75,
+    "recall@5": 0.75,
+    "recall@10": 0.75,
+    "mrr": 0.375
+   },
+   "access": {
+    "n": 3,
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0
+   }
+  },
+  "per_example": {
+   "11": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "wiki/teams/Team_Supply_Chain.html",
+     "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "wiki/teams/Team_Security.html",
+     "legacy_intranet/hr_policies.md",
+     "wiki/teams/Team_Sales_Engineering.html",
+     "policies/finance/FIN-POL-001_expense_reimbursement.pdf",
+     "wiki/teams/Team_Quality.html",
+     "policies/hr/HR-POL-001_code_of_conduct.pdf",
+     "wiki/teams/Team_Product_Management.html",
+     "cairo/بدل_الانتقالات.md"
+    ]
+   },
+   "12": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.3333333333333333,
+    "ranked_docs": [
+     "wiki/finance/How_to_submit_expenses.html",
+     "legacy_intranet/it_faq.md",
+     "policies/finance/FIN-POL-001_expense_reimbursement.pdf",
+     "legacy_intranet/hr_policies.md",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "policies/it/IT-STD-009_lost_or_stolen_devices.pdf",
+     "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "product/Support_SLA_2026.pdf",
+     "policies/hr/HR-POL-004_PTO_v2.pdf"
+    ]
+   },
+   "19": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "policies/it/IT-STD-007_remote_access.pdf",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "policies/finance/FIN-POL-001_expense_reimbursement.pdf",
+     "policies/it/IT-STD-003_password_and_authentication.pdf",
+     "meetings/2026-01-27_firmware_048.txt",
+     "meetings/2026-03-16_legal_003.txt",
+     "wiki/teams/Team_Perception.html",
+     "wiki/it/Password_Policy.html",
+     "wiki/teams/Team_Sales_Engineering.html"
+    ]
+   },
+   "20": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-08-14_facilities_office_ops_201.txt",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "policies/hr/HR-POL-011_work_from_abroad.pdf",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "policies/hr/HR-POL-010_remote_work.pdf",
+     "meetings/2026-03-16_legal_003.txt",
+     "meetings/2026-06-02_quality_015.txt",
+     "wiki/sales/Sales_IT_Tips.html"
+    ]
+   },
+   "24": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+     "legacy_intranet/employee_handbook.md",
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "policies/finance/FIN-POL-001_expense_reimbursement.pdf",
+     "legacy_intranet/product_specs.md",
+     "newsletters/Northwind_Dispatch_2026-02.html",
+     "policies/hr/HR-POL-004_PTO_v2.pdf",
+     "policies/hr/HR-POL-011_work_from_abroad.pdf",
+     "hr_restricted/Project_Juniper_Workforce_Plan.md"
+    ]
+   },
+   "4": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "policies/hr/HR-POL-004_PTO_v2.pdf",
+     "newsletters/Northwind_Dispatch_2026-02.html",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-08-14_facilities_office_ops_201.txt",
+     "wiki/finance/How_to_submit_expenses.html",
+     "legacy_intranet/employee_handbook.md",
+     "product/Support_SLA_2026.pdf",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt"
+    ]
+   },
+   "5": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "legacy_intranet/employee_handbook.md",
+     "policies/hr/HR-POL-005_sick_leave.pdf",
+     "wiki/people/Benefits_Overview.html",
+     "wiki/finance/How_to_submit_expenses.html",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "policies/hr/HR-POL-004_PTO_v2.pdf",
+     "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "wiki/people/US_Holidays_2026.html"
+    ]
+   },
+   "6": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.2,
+    "ranked_docs": [
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "legacy_intranet/it_faq.md",
+     "hr_restricted/Salary_Bands_2026.xlsx",
+     "policies/hr/HR-POL-005_sick_leave.pdf",
+     "wiki/eng/Robotics_Lab_Safety.html",
+     "meetings/2026-03-16_legal_003.txt",
+     "meetings/2026-01-27_firmware_048.txt",
+     "meetings/2026-08-14_facilities_office_ops_201.txt",
+     "wiki/sales/Sales_IT_Tips.html"
+    ]
+   },
+   "7": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "legacy_intranet/employee_handbook.md",
+     "policies/hr/HR-POL-010_remote_work.pdf",
+     "newsletters/Northwind_Dispatch_2026-04.html",
+     "policies/hr/HR-POL-011_work_from_abroad.pdf",
+     "legacy_intranet/it_faq.md",
+     "wiki/eng/On_Call.html",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "wiki/it/VPN_Setup_Guide.html"
+    ]
+   },
+   "s29": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "policies/it/IT-STD-009_lost_or_stolen_devices.pdf",
+     "wiki/finance/How_to_submit_expenses.html",
+     "wiki/sales/Sales_IT_Tips.html",
+     "policies/it/IT-STD-011_hardware_refresh.pdf",
+     "product/Rover_Error_Codes_2026.xlsx",
+     "hr_restricted/Disciplinary_Procedure.pdf",
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "product/Support_SLA_2026.pdf"
+    ]
+   },
+   "10": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "legacy_intranet/hr_policies.md",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "wiki/eng/New_Engineer_Onboarding.html",
+     "legacy_intranet/it_faq.md",
+     "policies/hr/HR-POL-014_referral_bonus.pdf",
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "policies/hr/HR-POL-011_work_from_abroad.pdf",
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "wiki/it/VPN_Setup_Guide.html"
+    ]
+   },
+   "n01": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "legacy_intranet/it_faq.md",
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/employee_handbook.md",
+     "wiki/people/Benefits_Overview.html",
+     "meetings/2026-09-16_perception_008.txt",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "policies/hr/HR-POL-004_PTO_v2.pdf",
+     "cairo/الإجازات_الرسمية_2026.csv"
+    ]
+   },
+   "n02": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "product/Spare_Parts_Catalog_2026.pdf",
+     "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "hr_restricted/Salary_Bands_2026.xlsx",
+     "legacy_intranet/product_specs.md",
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/hr_policies.md",
+     "wiki/finance/How_to_submit_expenses.html"
+    ]
+   },
+   "s06": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "legacy_intranet/it_faq.md",
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/employee_handbook.md",
+     "wiki/people/Benefits_Overview.html",
+     "meetings/2026-09-16_supply_chain_002.txt",
+     "policies/hr/HR-POL-004_PTO_v2.pdf",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "newsletters/Northwind_Dispatch_2025-10.html"
+    ]
+   },
+   "37": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "product/fleet_manager/release_notes_4.3.md",
+     "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+     "product/fleet_manager/release_notes_5.0.md",
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "product/R2/R2_End_of_Life_Notice.md",
+     "product/Rover_Error_Codes_2026.xlsx",
+     "wiki/teams/Team_Fleet_Software.html",
+     "legacy_intranet/product_specs.md",
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-07-13_fleet_software_073.txt"
+    ]
+   },
+   "38": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.25,
+    "ranked_docs": [
+     "product/Rover_Error_Codes_2026.xlsx",
+     "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+     "product/Spare_Parts_Catalog_2026.pdf",
+     "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+     "product/fleet_manager/release_notes_5.0.md",
+     "meetings/2026-05-18_hardware_sustaining_012.txt",
+     "product/R2/R2_End_of_Life_Notice.md",
+     "meetings/2026-09-07_field_service_027.txt",
+     "meetings/2026-03-16_legal_003.txt"
+    ]
+   },
+   "n04": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "product/Rover_Error_Codes_2026.xlsx",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "wiki/finance/How_to_submit_expenses.html",
+     "meetings/2026-09-22_leadership_sync_202.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-09-20_motion_planning_059.txt"
+    ]
+   },
+   "s34": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "product/Rover_Error_Codes_2026.xlsx",
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/employee_handbook.md",
+     "policies/hr/HR-POL-005_sick_leave.pdf",
+     "policies/hr/HR-POL-016_learning_development.pdf",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-06-13_hardware_sustaining_060.txt",
+     "meetings/2026-09-20_motion_planning_059.txt"
+    ]
+   },
+   "15": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "legacy_intranet/hr_policies.md",
+     "policies/hr/HR-POL-016_learning_development.pdf",
+     "meetings/2026-03-16_legal_003.txt",
+     "meetings/2026-05-25_fleet_software_069.txt",
+     "legacy_intranet/it_faq.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-09-07_hardware_sustaining_091.txt",
+     "wiki/people/Benefits_Overview.html",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "hr_restricted/Comp_Review_2026_Guidance.md"
+    ]
+   },
+   "3": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "policies/hr/HR-POL-004_PTO_v2.pdf",
+     "legacy_intranet/employee_handbook.md",
+     "legacy_intranet/it_faq.md",
+     "wiki/eng/New_Engineer_Onboarding.html"
+    ]
+   },
+   "8": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "policies/hr/HR-POL-010_remote_work.pdf",
+     "legacy_intranet/it_faq.md",
+     "wiki/eng/On_Call.html",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-03-17_people_operations_085.txt",
+     "wiki/people/Benefits_Overview.html",
+     "policies/hr/HR-POL-016_learning_development.pdf",
+     "policies/hr/HR-POL-014_referral_bonus.pdf",
+     "meetings/2026-09-19_hardware_sustaining_014.txt",
+     "meetings/2026-08-14_facilities_office_ops_201.txt"
+    ]
+   },
+   "9": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "policies/hr/HR-POL-006_parental_leave.pdf",
+     "legacy_intranet/employee_handbook.md",
+     "policies/hr/HR-POL-005_sick_leave.pdf",
+     "wiki/people/Benefits_Overview.html",
+     "legacy_intranet/it_faq.md",
+     "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "wiki/it/Password_Policy.html",
+     "policies/hr/HR-POL-004_PTO_v2.pdf",
+     "policies/it/IT-STD-003_password_and_authentication.pdf"
+    ]
+   },
+   "s32": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "policies/hr/HR-POL-011_work_from_abroad.pdf",
+     "newsletters/Northwind_Dispatch_2026-04.html",
+     "policies/hr/HR-POL-010_remote_work.pdf",
+     "wiki/it/VPN_Setup_Guide.html",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/employee_handbook.md",
+     "policies/hr/HR-POL-006_parental_leave.pdf"
+    ]
+   },
+   "18": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.3333333333333333,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "wiki/it/VPN_Setup_Guide.html",
+     "policies/it/IT-STD-007_remote_access.pdf",
+     "meetings/2026-07-13_fleet_software_073.txt",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "wiki/eng/New_Engineer_Onboarding.html",
+     "meetings/2026-07-16_marketing_051.txt",
+     "meetings/2026-03-28_legal_071.txt",
+     "meetings/2026-07-26_legal_083.txt",
+     "meetings/2026-03-16_legal_003.txt"
+    ]
+   },
+   "n06": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "policies/it/IT-STD-003_password_and_authentication.pdf",
+     "wiki/sales/Sales_IT_Tips.html",
+     "wiki/it/Password_Policy.html",
+     "legacy_intranet/it_faq.md",
+     "policies/hr/HR-POL-014_referral_bonus.pdf",
+     "legacy_intranet/hr_policies.md",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "legacy_intranet/employee_handbook.md",
+     "meetings/2026-09-27_data_platform_019.txt",
+     "policies/finance/FIN-POL-001_expense_reimbursement.pdf"
+    ]
+   },
+   "n07": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "policies/hr/HR-POL-010_remote_work.pdf",
+     "legacy_intranet/employee_handbook.md",
+     "newsletters/Northwind_Dispatch_2026-04.html",
+     "policies/hr/HR-POL-011_work_from_abroad.pdf",
+     "legacy_intranet/it_faq.md",
+     "policies/hr/HR-POL-004_PTO_v2.pdf",
+     "wiki/eng/On_Call.html"
+    ]
+   },
+   "n08": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.2,
+    "ranked_docs": [
+     "legacy_intranet/employee_handbook.md",
+     "newsletters/Northwind_Dispatch_2026-05.html",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "policies/hr/HR-POL-004_PTO_v2.pdf",
+     "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "policies/it/IT-STD-007_remote_access.pdf",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "product/Support_SLA_2026.pdf",
+     "legacy_intranet/product_specs.md",
+     "newsletters/Northwind_Dispatch_2026-04.html"
+    ]
+   },
+   "n09": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "policies/hr/HR-POL-004_PTO_v2.pdf",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "legacy_intranet/employee_handbook.md",
+     "newsletters/Northwind_Dispatch_2026-05.html",
+     "legacy_intranet/it_faq.md",
+     "newsletters/Northwind_Dispatch_2026-06.html",
+     "newsletters/Northwind_Dispatch_2025-09.html"
+    ]
+   },
+   "n10": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "policies/hr/HR-POL-004_PTO_v2.pdf",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "legacy_intranet/it_faq.md",
+     "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "legacy_intranet/employee_handbook.md",
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "meetings/2026-03-07_customer_success_092.txt",
+     "meetings/2026-08-26_firmware_004.txt",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "newsletters/Northwind_Dispatch_2026-05.html"
+    ]
+   },
+   "n11": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "newsletters/Northwind_Dispatch_2026-02.html",
+     "policies/hr/HR-POL-004_PTO_v2.pdf",
+     "legacy_intranet/employee_handbook.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-01-27_firmware_048.txt",
+     "meetings/2026-07-15_security_061.txt",
+     "meetings/2026-06-28_people_operations_054.txt",
+     "meetings/2026-09-28_security_082.txt",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt"
+    ]
+   },
+   "29": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.3333333333333333,
+    "ranked_docs": [
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/it_faq.md",
+     "policies/hr/HR-POL-014_referral_bonus.pdf",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "policies/hr/HR-POL-004_PTO_v2.pdf",
+     "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "wiki/sales/Sales_IT_Tips.html",
+     "legacy_intranet/employee_handbook.md"
+    ]
+   },
+   "30": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.3333333333333333,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "wiki/it/VPN_Setup_Guide.html",
+     "policies/it/IT-STD-007_remote_access.pdf",
+     "newsletters/Northwind_Dispatch_2026-04.html",
+     "policies/hr/HR-POL-010_remote_work.pdf",
+     "legacy_intranet/employee_handbook.md",
+     "wiki/eng/New_Engineer_Onboarding.html",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "policies/hr/HR-POL-006_parental_leave.pdf"
+    ]
+   },
+   "n23": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "product/Rover_Error_Codes_2026.xlsx",
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/hr_policies.md",
+     "policies/hr/HR-POL-016_learning_development.pdf",
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "newsletters/Northwind_Dispatch_2026-02.html",
+     "policies/hr/HR-POL-011_work_from_abroad.pdf",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt"
+    ]
+   },
+   "s07": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "legacy_intranet/it_faq.md",
+     "policies/hr/HR-POL-016_learning_development.pdf",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "wiki/eng/New_Engineer_Onboarding.html",
+     "policies/hr/HR-POL-005_sick_leave.pdf",
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "wiki/facilities/Offices.html",
+     "policies/hr/HR-POL-011_work_from_abroad.pdf",
+     "legacy_intranet/hr_policies.md"
+    ]
+   },
+   "13": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "policies/hr/HR-POL-014_referral_bonus.pdf",
+     "legacy_intranet/it_faq.md",
+     "legacy_intranet/hr_policies.md",
+     "wiki/it/VPN_Setup_Guide.html",
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "wiki/people/Benefits_Overview.html",
+     "hr_restricted/Comp_Review_2026_Guidance.md",
+     "wiki/eng/On_Call.html",
+     "hr_restricted/Salary_Bands_2026.xlsx",
+     "newsletters/Northwind_Dispatch_2026-02.html"
+    ]
+   },
+   "16": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "policies/it/IT-STD-009_lost_or_stolen_devices.pdf",
+     "wiki/sales/Sales_IT_Tips.html",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "wiki/eng/New_Engineer_Onboarding.html",
+     "wiki/it/Password_Policy.html",
+     "product/Spare_Parts_Catalog_2026.pdf",
+     "policies/it/IT-STD-003_password_and_authentication.pdf",
+     "meetings/2026-09-22_leadership_sync_202.txt",
+     "meetings/2026-02-11_firmware_023.txt"
+    ]
+   },
+   "17": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.25,
+    "ranked_docs": [
+     "meetings/2026-07-18_people_operations_021.txt",
+     "meetings/2026-06-28_people_operations_054.txt",
+     "legacy_intranet/it_faq.md",
+     "policies/it/IT-STD-003_password_and_authentication.pdf",
+     "meetings/2026-03-23_it_operations_049.txt",
+     "wiki/it/Password_Policy.html",
+     "meetings/2026-02-22_data_platform_028.txt",
+     "meetings/2026-09-27_data_platform_019.txt",
+     "wiki/sales/Sales_IT_Tips.html",
+     "meetings/2026-07-02_legal_070.txt"
+    ]
+   },
+   "32": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "wiki/sales/Demo_Rover_Booking.html",
+     "legacy_intranet/hr_policies.md",
+     "wiki/teams/Team_People_Operations.html",
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "wiki/teams/Team_Field_Service.html",
+     "wiki/it/Password_Policy.html",
+     "wiki/teams/Team_Quality.html",
+     "wiki/teams/Team_Supply_Chain.html"
+    ]
+   },
+   "n20": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "product/Spare_Parts_Catalog_2026.pdf",
+     "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+     "legacy_intranet/hr_policies.md",
+     "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+     "policies/hr/HR-POL-016_learning_development.pdf",
+     "meetings/2026-08-22_people_operations_053.txt",
+     "legacy_intranet/product_specs.md",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-09-28_security_082.txt"
+    ]
+   },
+   "n21": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "product/Rover_Error_Codes_2026.xlsx",
+     "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+     "product/fleet_manager/release_notes_5.0.md",
+     "product/R2/R2_End_of_Life_Notice.md",
+     "legacy_intranet/it_faq.md",
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "legacy_intranet/product_specs.md",
+     "meetings/2026-02-25_fleet_software_024.txt",
+     "product/fleet_manager/release_notes_4.3.md"
+    ]
+   },
+   "s12": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+     "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "legacy_intranet/product_specs.md",
+     "newsletters/Northwind_Dispatch_2025-06.html",
+     "meetings/2026-07-18_people_operations_021.txt",
+     "newsletters/Northwind_Dispatch_2026-08.html",
+     "meetings/2026-04-24_data_platform_086.txt"
+    ]
+   },
+   "n12": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "legacy_intranet/it_faq.md",
+     "policies/hr/HR-POL-001_code_of_conduct.pdf",
+     "policies/it/IT-STD-007_remote_access.pdf",
+     "wiki/sales/Demo_Rover_Booking.html",
+     "product/R2/R2_End_of_Life_Notice.md",
+     "wiki/finance/How_to_submit_expenses.html",
+     "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+     "policies/finance/FIN-POL-001_expense_reimbursement.pdf",
+     "newsletters/Northwind_Dispatch_2026-03.html"
+    ]
+   },
+   "n13": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "meetings/2026-04-24_data_platform_086.txt",
+     "product/Rover_Error_Codes_2026.xlsx",
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-07-07_finance_036.txt",
+     "meetings/2026-02-25_motion_planning_041.txt",
+     "meetings/2026-07-15_security_061.txt",
+     "meetings/2026-07-18_people_operations_021.txt",
+     "meetings/2026-03-25_it_operations_065.txt",
+     "meetings/2026-06-27_legal_030.txt"
+    ]
+   },
+   "n14": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+     "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+     "wiki/eng/Robotics_Lab_Safety.html",
+     "meetings/2026-07-02_legal_070.txt",
+     "meetings/2026-04-13_hardware_sustaining_055.txt",
+     "meetings/2026-07-13_fleet_software_073.txt",
+     "legacy_intranet/product_specs.md",
+     "meetings/2026-04-02_sales_engineering_078.txt",
+     "meetings/2026-03-25_it_operations_065.txt"
+    ]
+   },
+   "s10": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "legacy_intranet/product_specs.md",
+     "meetings/2026-04-24_data_platform_086.txt",
+     "meetings/2026-03-17_people_operations_085.txt",
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-07-18_people_operations_021.txt",
+     "meetings/2026-09-28_people_operations_095.txt",
+     "meetings/2026-02-25_motion_planning_041.txt",
+     "meetings/2026-08-22_people_operations_053.txt",
+     "meetings/2026-08-11_perception_096.txt"
+    ]
+   },
+   "n15": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "wiki/facilities/Offices.html",
+     "policies/hr/HR-POL-005_sick_leave.pdf",
+     "meetings/2026-07-09_sales_engineering_001.txt",
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-07-13_fleet_software_073.txt",
+     "meetings/2026-03-16_legal_003.txt",
+     "meetings/2026-09-14_product_management_075.txt",
+     "cairo/الإجازات_الرسمية_2026.csv",
+     "meetings/2026-04-02_sales_engineering_078.txt"
+    ]
+   },
+   "n16": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "policies/hr/HR-POL-005_sick_leave.pdf",
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-03-16_legal_003.txt",
+     "policies/it/IT-STD-009_lost_or_stolen_devices.pdf",
+     "wiki/facilities/Offices.html",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "meetings/2026-07-09_sales_engineering_001.txt",
+     "policies/it/IT-STD-007_remote_access.pdf",
+     "policies/hr/HR-POL-001_code_of_conduct.pdf",
+     "newsletters/Northwind_Dispatch_2026-04.html"
+    ]
+   },
+   "n17": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.25,
+    "ranked_docs": [
+     "scanned_archive/PTO_Policy_2017_scan.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "wiki/finance/How_to_submit_expenses.html",
+     "cairo/الإجازات_الرسمية_2026.csv",
+     "policies/hr/HR-POL-005_sick_leave.pdf",
+     "meetings/2026-07-09_sales_engineering_001.txt",
+     "meetings/2026-05-18_hardware_sustaining_012.txt",
+     "meetings/2026-03-16_legal_003.txt",
+     "meetings/2026-04-02_sales_engineering_078.txt",
+     "legacy_intranet/it_faq.md"
+    ]
+   },
+   "s25": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "policies/hr/HR-POL-005_sick_leave.pdf",
+     "wiki/facilities/Offices.html",
+     "legacy_intranet/employee_handbook.md",
+     "policies/hr/HR-POL-010_remote_work.pdf",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "newsletters/Northwind_Dispatch_2026-04.html",
+     "wiki/eng/Robotics_Lab_Safety.html",
+     "cairo/الإجازات_الرسمية_2026.csv",
+     "meetings/2026-09-22_leadership_sync_202.txt",
+     "wiki/people/US_Holidays_2026.html"
+    ]
+   },
+   "36": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.3333333333333333,
+    "ranked_docs": [
+     "legacy_intranet/hr_policies.md",
+     "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+     "product/Support_SLA_2026.pdf",
+     "policies/hr/HR-POL-016_learning_development.pdf",
+     "product/Spare_Parts_Catalog_2026.pdf",
+     "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "meetings/2026-04-25_marketing_042.txt",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "newsletters/Northwind_Dispatch_2026-03.html",
+     "legacy_intranet/employee_handbook.md"
+    ]
+   },
+   "n22": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "wiki/it/VPN_Setup_Guide.html",
+     "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+     "meetings/2026-07-15_security_061.txt",
+     "policies/hr/HR-POL-005_sick_leave.pdf",
+     "meetings/2026-04-13_hardware_sustaining_055.txt",
+     "meetings/2026-08-14_facilities_office_ops_201.txt",
+     "meetings/2026-04-24_data_platform_086.txt",
+     "policies/hr/HR-POL-016_learning_development.pdf"
+    ]
+   },
+   "s26": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "policies/hr/HR-POL-004_PTO_v2.pdf",
+     "legacy_intranet/employee_handbook.md",
+     "wiki/people/Benefits_Overview.html",
+     "legacy_intranet/it_faq.md",
+     "newsletters/Northwind_Dispatch_2026-02.html",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+    ]
+   },
+   "s27": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "legacy_intranet/it_faq.md",
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "cairo/الإجازات_الرسمية_2026.csv",
+     "meetings/2026-09-28_product_management_032.txt",
+     "meetings/2026-04-24_data_platform_086.txt",
+     "meetings/2026-03-16_legal_003.txt",
+     "legacy_intranet/hr_policies.md",
+     "meetings/2026-04-25_marketing_042.txt",
+     "meetings/2026-04-02_sales_engineering_078.txt"
+    ]
+   },
+   "n24": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "legacy_intranet/employee_handbook.md",
+     "legacy_intranet/it_faq.md",
+     "newsletters/Northwind_Dispatch_2026-02.html",
+     "policies/hr/HR-POL-004_PTO_v2.pdf",
+     "wiki/finance/How_to_submit_expenses.html",
+     "newsletters/Northwind_Dispatch_2026-04.html",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+    ]
+   },
+   "n25": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "legacy_intranet/it_faq.md",
+     "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "policies/hr/HR-POL-004_PTO_v2.pdf",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "wiki/people/Benefits_Overview.html",
+     "newsletters/Northwind_Dispatch_2026-02.html",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "wiki/finance/How_to_submit_expenses.html",
+     "legacy_intranet/employee_handbook.md",
+     "legacy_intranet/hr_policies.md"
+    ]
+   },
+   "n26": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "recall@10": 0.0,
+    "mrr": 0.0,
+    "ranked_docs": [
+     "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/it_faq.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "scanned_archive/Expense_Policy_2019_scan.txt",
+     "hr_restricted/Salary_Bands_2026.xlsx",
+     "policies/hr/HR-POL-011_work_from_abroad.pdf",
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "scanned_archive/Travel_Policy_2018_scan.txt",
+     "policies/it/IT-STD-009_lost_or_stolen_devices.pdf"
+    ]
+   },
+   "s28": {
+    "recall@1": 0.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 0.5,
+    "ranked_docs": [
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "legacy_intranet/employee_handbook.md",
+     "legacy_intranet/it_faq.md",
+     "wiki/finance/How_to_submit_expenses.html",
+     "policies/hr/HR-POL-004_PTO_v2.pdf",
+     "newsletters/Northwind_Dispatch_2026-04.html",
+     "newsletters/Northwind_Dispatch_2025-11.html",
+     "newsletters/Northwind_Dispatch_2026-02.html",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+    ]
+   },
+   "n32": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "hr_restricted/Disciplinary_Procedure.pdf",
+     "policies/hr/HR-POL-020_performance_reviews.pdf",
+     "legacy_intranet/hr_policies.md",
+     "legacy_intranet/it_faq.md",
+     "hr_restricted/Performance_Calibration_Guide_2026.md",
+     "newsletters/Northwind_Dispatch_2026-02.html",
+     "meetings/2026-07-13_fleet_software_073.txt",
+     "wiki/finance/How_to_submit_expenses.html",
+     "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "hr_restricted/Comp_Review_2026_Guidance.md"
+    ]
+   },
+   "s19": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "hr_restricted/Salary_Bands_2026.xlsx",
+     "product/Support_SLA_2026.pdf",
+     "product/R3/R3_Operator_Manual_RevC.pdf",
+     "legacy_intranet/it_faq.md",
+     "wiki/it/Password_Policy.html",
+     "policies/hr/HR-POL-016_learning_development.pdf",
+     "hr_restricted/Project_Juniper_Workforce_Plan.md"
+    ]
+   },
+   "s21": {
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "mrr": 1.0,
+    "ranked_docs": [
+     "hr_restricted/Performance_Calibration_Guide_2026.md",
+     "policies/hr/HR-POL-020_performance_reviews.pdf",
+     "legacy_intranet/hr_policies.md",
+     "hr_restricted/Disciplinary_Procedure.pdf",
+     "hr_restricted/Comp_Review_2026_Guidance.md",
+     "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+     "meetings/2026-02-25_motion_planning_041.txt",
+     "legacy_intranet/it_faq.md",
+     "wiki/teams/Team_IT_Operations.html",
+     "meetings/2026-08-10_firmware_088.txt"
+    ]
+   }
+  },
+  "retriever": "hybrid (BM25 + dense), depth 10 per retriever",
+  "load_s": 10.59,
+  "index": {
+   "chunks": 588,
+   "rebuilt": true,
+   "seconds": 6.24,
+   "embedded_chunks": 588
+  },
+  "settings": {
+   "hybrid_bm25_weight": 0.5,
+   "source_prior": null,
+   "reranker_model": null,
+   "rerank_top_n": 20,
+   "chunk_size": 400,
+   "chunk_overlap": 50,
+   "chunk_context_header": true,
+   "hf_embed_model": "sentence-transformers/all-MiniLM-L6-v2",
+   "local_embeddings_backend": "sentence-transformers"
+  },
+  "query_s": 0.06,
+  "n_queries": 60,
+  "latency_ms_p50": 1.0,
+  "latency_ms_p95": 1.5,
+  "query_embedding_tokens": 731
+ },
+ "experiment": {
+  "id": "EXP-04",
+  "changes": {
+   "CHUNK_SIZE": "400",
+   "CHUNK_OVERLAP": "50"
+  },
+  "cpu": false,
+  "process_wall_s": 12.6
+ }
+}

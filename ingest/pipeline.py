@@ -73,10 +73,11 @@ def _split(text: str, size: int, overlap: int) -> list[str]:
     return RecursiveCharacterTextSplitter(chunk_size=size, chunk_overlap=overlap).split_text(text)
 
 
-def build_chunks(path: Path, rel: str, row: dict, chunk_size: int, chunk_overlap: int) -> tuple[list[Document], dict]:
+def build_chunks(path: Path, rel: str, row: dict, chunk_size: int, chunk_overlap: int,
+                 context_header: bool = True) -> tuple[list[Document], dict]:
     parsed = load(Path(path), row.get("source_system", ""))
     context = _context(parsed)
-    budget = max(chunk_size - len(context) - 40, 200)
+    budget = max(chunk_size - len(context) - 40, 200) if context_header else chunk_size
     pieces: list[tuple[str, str]] = []                    # (section label, body)
     pack_heads, pack = [], []
 
@@ -110,9 +111,11 @@ def build_chunks(path: Path, rel: str, row: dict, chunk_size: int, chunk_overlap
             **{k: v for k, v in parsed.meta.items() if k in META_FIELDS and v}}
     docs = []
     for i, (section, body) in enumerate(pieces):
-        text = f"{context}{' › ' + section if section else ''}\n{body}"
+        header = f"{context}{' › ' + section if section else ''}"
+        text = f"{header}\n{body}" if context_header else body
         docs.append(Document(page_content=text,
-                             metadata={**base, "section": section, "chunk": i, "language": language(body)}))
+                             metadata={**base, "section": section, "chunk": i, "language": language(body),
+                                       "context": header if context_header else ""}))
     report = {"path": rel, "format": base["format"], "source_system": base["source_system"], "status": "loaded",
               "title": parsed.title, "chunks": len(docs), "chars": len(parsed.text()),
               "language": language(parsed.text()),

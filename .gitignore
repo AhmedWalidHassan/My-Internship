@@ -36,3 +36,7 @@ node_modules/
 # Task 7: local eval-gate outputs (CI uploads them as artifacts)
 eval_results.json
 regression_report.md
+
+# Week 3 Task 4: one index per index-changing experiment
+week3/task_04_retrieval_experiments/indexes/
+.fastembed_cache/

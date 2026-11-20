@@ -1,5 +1,7 @@
 # Week 2 Task 7 — CI: two gates with very different economics.
 #   fast-checks  every PR and push: ruff + the fast tests. No secrets, no model, < 60 s.
+#   retrieval-gate every PR and push (Week 3 Task 4): recall@5 / MRR on dev with a local ONNX
+#                embedding model. No secrets, no LLM; red when retrieval drops beyond the tolerance.
 #   eval-gate    nightly, on demand, and on PRs labelled `run-eval`: the dev split of the Week 3 eval
 #                (70 examples, dataset v3) on the real model (qwen3.5:4b on Ollama, judged by gemma3:4b, on a
 #                self-hosted GPU runner), compared with the committed baseline; red on a regression beyond
@@ -58,6 +60,54 @@ jobs:
         # slow gate stops being a gate.
         timeout-minutes: 1
         run: .venv/bin/python -m pytest -m "not live" -q --durations=5
+
+  # ===========================================================================
+  # Every PR (Week 3 Task 4). The retrieval gate: recall@5 / MRR on the dev split, with NO LLM
+  # and NO key. The local embedding model runs on ONNX (fastembed), which gives the same rankings
+  # as the PyTorch baseline for all 60 dev questions (measured: week3/EXPERIMENTS.md, noise floor),
+  # so the baseline's tolerance (one question) holds here too. Costs ~1-2 min of free runner time
+  # per PR (install, model download cached, parse + embed the corpus), and catches a retrieval
+  # regression BEFORE merge, not the next night.
+  # ===========================================================================
+  retrieval-gate:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      EMBEDDING_PROVIDER: ollama               # = the local HF_EMBED_MODEL, no API
+      LOCAL_EMBEDDINGS_BACKEND: fastembed
+      FASTEMBED_CACHE_PATH: .fastembed_cache          # workspace-relative (an env value is not shell-expanded)
+      CACHE_ENABLED: "false"
+      LANGSMITH_TRACING: "false"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-dependency-glob: |
+            week2/task_04_containerize/constraints.txt
+            week2/task_04_containerize/requirements-api-slim.txt
+
+      - name: "Install the service (slim: ONNX embeddings, no torch)"
+        run: |
+          uv venv
+          uv pip install -c "$CONSTRAINTS" -r week2/task_04_containerize/requirements-api-slim.txt
+
+      - name: Cache the embedding model
+        uses: actions/cache@v4
+        with:
+          path: .fastembed_cache
+          key: fastembed-all-MiniLM-L6-v2
+
+      - name: Retrieval eval (dev, no LLM)
+        env:
+          INDEX_PATH: ${{ runner.temp }}/faiss_index
+        run: .venv/bin/python week2/task_07_eval_gate/scripts/run_eval.py --retrieval-only --split dev --out retrieval_results.json
+
+      - name: Compare with the retrieval baseline
+        run: .venv/bin/python week2/task_07_eval_gate/scripts/check_baseline.py --retrieval-only --retrieval-results retrieval_results.json --report retrieval_report.md
 
   # ===========================================================================
   # Nightly, on demand, or on a PR labelled `run-eval`. Runs the real model, so it
@@ -144,11 +194,17 @@ jobs:
           EMBEDDING_CACHE_PATH: ${{ runner.temp }}/embedding_cache
         run: .venv/bin/python week2/task_07_eval_gate/scripts/run_eval.py --split dev --out eval_results.json --no-cache
 
+      - name: Retrieval eval (dev, no LLM)
+        env:
+          INDEX_PATH: ${{ runner.temp }}/faiss_index
+          EMBEDDING_CACHE_PATH: ${{ runner.temp }}/embedding_cache
+        run: .venv/bin/python week2/task_07_eval_gate/scripts/run_eval.py --retrieval-only --split dev --out retrieval_results.json
+
       - name: Compare against baseline
         id: gate
         # eval_baseline.json = dataset v3, dev split (Week 3 Task 2). The Week 2 one is archived as
         # eval_baseline_w2.json and the gate refuses it.
-        run: .venv/bin/python week2/task_07_eval_gate/scripts/check_baseline.py --results eval_results.json --report regression_report.md
+        run: .venv/bin/python week2/task_07_eval_gate/scripts/check_baseline.py --results eval_results.json --retrieval-results retrieval_results.json --report regression_report.md
 
       - name: Post regression report on the PR
         if: always() && github.event_name == 'pull_request' && hashFiles('regression_report.md') != ''

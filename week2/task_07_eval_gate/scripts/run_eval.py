@@ -234,7 +234,7 @@ def run_retrieval(examples: list[dict], settings, depth: int = max(RETRIEVAL_KS)
 
     cap = load_capstone()
     t0 = time.perf_counter()
-    store, _ = cap.ingest(get_embeddings(), settings.data_dir)
+    store, index_stats = cap.ingest(get_embeddings(), settings.data_dir)
     retriever, name = cap.build_retriever(store, k=depth)      # the production hybrid retriever, deeper
     load_s = time.perf_counter() - t0
     by_name = corpus_paths(settings.data_dir)
@@ -261,6 +261,12 @@ def run_retrieval(examples: list[dict], settings, depth: int = max(RETRIEVAL_KS)
         q_tokens = None
     timings.sort()
     return {**scored, "retriever": f"{name}, depth {depth} per retriever", "load_s": round(load_s, 2),
+            "index": {"chunks": index_stats.get("chunks"), "rebuilt": index_stats.get("rebuilt"),
+                      "seconds": index_stats.get("seconds"), "embedded_chunks": index_stats.get("embedded_chunks")},
+            "settings": {k: getattr(settings, k) for k in ("hybrid_bm25_weight", "source_prior", "reranker_model",
+                                                          "rerank_top_n", "chunk_size", "chunk_overlap",
+                                                          "chunk_context_header", "hf_embed_model",
+                                                          "local_embeddings_backend")},
             "query_s": round(query_s, 2), "n_queries": len(queries),
             "latency_ms_p50": round(1000 * timings[len(timings) // 2], 1) if timings else None,
             "latency_ms_p95": round(1000 * timings[int(len(timings) * 0.95)], 1) if timings else None,

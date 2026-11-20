@@ -57,6 +57,9 @@ chunking, index path, API host and port. Switching provider is an `.env` edit; s
 
 **CI** ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)):
 - `fast-checks` (lint + fast tests, ~20 s) runs on every PR.
+- `retrieval-gate` (Week 3 Task 4) runs on every PR: recall@5 / MRR on the dev split with a local ONNX
+  embedding model, no key and no LLM. Red if retrieval drops by more than one question
+  ([tolerance](week3/task_04_retrieval_experiments/tolerance_justification.md)).
 - `eval-gate` (the 38-example eval vs the committed baseline, ~5.5 min) runs nightly, on demand,
   and on PRs labelled **`run-eval`**: add that label to PRs that touch prompts, retrieval or the
   graph. It runs on a self-hosted runner on the maintainer's laptop GPU, and only for the owner's

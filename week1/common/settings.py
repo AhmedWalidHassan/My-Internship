@@ -74,6 +74,20 @@ class Settings(BaseSettings):
     retriever_k: int = Field(4, ge=1, le=50, description="passages per retriever (BM25 and dense)")
     max_docs_to_grade: int = Field(6, ge=1, le=50, description="retrieved passages the relevance "
                                    "grader checks per search (one LLM call each)")
+    # Week 3 Task 4: every retrieval lever is a setting, so an experiment is a config diff.
+    # Defaults = the Week 2 / Task 3 retriever. BM25 0.3 + demoting chatter ranked better (EXP-08,
+    # MRR +0.11) but answered two fewer dev questions end to end (EXP-12): not shipped, kept as levers.
+    hybrid_bm25_weight: float = Field(0.5, ge=0.0, le=1.0, description="BM25 share of the hybrid fusion "
+                                      "(0 = dense only, 1 = BM25 only)")
+    source_prior: str | None = Field(None, description="score multipliers by path prefix or source system, "
+                                     "e.g. 'meetings/:0.5,newsletters/:0.5' (unset = none)")
+    reranker_model: str | None = Field(None, description="cross-encoder that re-ranks the top RERANK_TOP_N "
+                                       "candidates (unset = no re-ranking)")
+    rerank_top_n: int = Field(20, ge=1, le=100, description="candidates per retriever fed to the re-ranker")
+    chunk_context_header: bool = Field(True, description="start every chunk with '<title> [<id> v<ver> ...] › "
+                                       "<section>' (Week 3 Task 3); part of the index signature")
+    # Week 3 Task 4 (week3/EXPERIMENTS.md): 400/50 won on retrieval (EXP-09) but answered worse
+    # end to end (EXP-11), so the default stays 800/100.
     chunk_size: int = Field(800, ge=100, le=8000)
     chunk_overlap: int = Field(100, ge=0)
     # Week 3 Task 2: the system under test is the Week 3 corpus. It gets its OWN index path: pointing
@@ -152,7 +166,7 @@ class Settings(BaseSettings):
         return v.strip().upper() if isinstance(v, str) else v
 
     @field_validator("openai_base_url", "groq_base_url", "ollama_base_url", "openai_reasoning_effort",
-                     mode="before")
+                     "source_prior", "reranker_model", mode="before")
     @classmethod
     def _blank_is_unset(cls, v):
         # `OPENAI_BASE_URL=` in a .env means "use the default", not "use the empty string"
