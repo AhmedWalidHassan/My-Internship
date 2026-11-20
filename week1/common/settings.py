@@ -24,6 +24,7 @@ Run `python week1/common/settings.py` to print the resolved settings.
 
 from __future__ import annotations
 
+from datetime import date
 from functools import lru_cache
 from pathlib import Path
 from typing import Literal
@@ -84,6 +85,9 @@ class Settings(BaseSettings):
     reranker_model: str | None = Field(None, description="cross-encoder that re-ranks the top RERANK_TOP_N "
                                        "candidates (unset = no re-ranking)")
     rerank_top_n: int = Field(20, ge=1, le=100, description="candidates per retriever fed to the re-ranker")
+    # Week 3 Task 5: "current" depends on the date. A version whose effective date is after AS_OF_DATE
+    # is not in force yet. Default: the corpus snapshot date.
+    as_of_date: date = Field(date(2026, 10, 1), description="the date policies are evaluated at (YYYY-MM-DD)")
     chunk_context_header: bool = Field(True, description="start every chunk with '<title> [<id> v<ver> ...] › "
                                        "<section>' (Week 3 Task 3); part of the index signature")
     # Week 3 Task 4 (week3/EXPERIMENTS.md): 400/50 won on retrieval (EXP-09) but answered worse

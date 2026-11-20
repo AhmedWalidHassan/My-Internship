@@ -1,0 +1,4638 @@
+{
+ "meta": {
+  "date": "2026-11-20T10:10:21+00:00",
+  "git_sha": "e3185f2e035296e2006e081b29806a4c1ef78091",
+  "dataset": "week3/eval/eval_v3.jsonl",
+  "dataset_name": "northwind-eval-v3",
+  "dataset_version": "5d9544921fd6",
+  "split": "dev",
+  "mode": "full",
+  "n": 70,
+  "data_dir": "/mnt/games/coding/My-Internship/week3/corpus",
+  "retriever_k": 4,
+  "max_docs_to_grade": 6,
+  "chunking": "800/100",
+  "embeddings": "ollama/sentence-transformers",
+  "runner": "Linux x86_64 py3.14.10",
+  "model": "ollama:qwen3.5:4b",
+  "judge": "ollama:gemma3:4b",
+  "wall_clock_s": 666.5,
+  "pipeline_s": 401.6
+ },
+ "scores": {
+  "correctness": 0.5286,
+  "groundedness": 0.9714,
+  "deterministic": 0.7429
+ },
+ "by_category": {
+  "factual": {
+   "n": 10,
+   "correctness": 0.7,
+   "groundedness": 1.0,
+   "deterministic": 0.8
+  },
+  "table": {
+   "n": 4,
+   "correctness": 0.75,
+   "groundedness": 1.0,
+   "deterministic": 1.0
+  },
+  "keyword": {
+   "n": 4,
+   "correctness": 0.75,
+   "groundedness": 1.0,
+   "deterministic": 1.0
+  },
+  "version": {
+   "n": 5,
+   "correctness": 0.6,
+   "groundedness": 1.0,
+   "deterministic": 1.0
+  },
+  "conflict": {
+   "n": 3,
+   "correctness": 0.3333,
+   "groundedness": 0.3333,
+   "deterministic": 0.6667
+  },
+  "draft": {
+   "n": 4,
+   "correctness": 0.25,
+   "groundedness": 1.0,
+   "deterministic": 0.75
+  },
+  "multi_hop": {
+   "n": 4,
+   "correctness": 0.25,
+   "groundedness": 1.0,
+   "deterministic": 0.25
+  },
+  "multi_part": {
+   "n": 4,
+   "correctness": 0.75,
+   "groundedness": 1.0,
+   "deterministic": 1.0
+  },
+  "ambiguous": {
+   "n": 3,
+   "correctness": 1.0,
+   "groundedness": 1.0,
+   "deterministic": 1.0
+  },
+  "long_doc": {
+   "n": 4,
+   "correctness": 0.5,
+   "groundedness": 1.0,
+   "deterministic": 0.75
+  },
+  "cross_lingual": {
+   "n": 4,
+   "correctness": 0.0,
+   "groundedness": 1.0,
+   "deterministic": 0.0
+  },
+  "follow_up": {
+   "n": 4,
+   "correctness": 0.25,
+   "groundedness": 1.0,
+   "deterministic": 0.75
+  },
+  "personalized": {
+   "n": 4,
+   "correctness": 0.25,
+   "groundedness": 1.0,
+   "deterministic": 0.75
+  },
+  "access": {
+   "n": 7,
+   "correctness": 0.2857,
+   "groundedness": 1.0,
+   "deterministic": 0.4286
+  },
+  "out_of_scope": {
+   "n": 6,
+   "correctness": 1.0,
+   "groundedness": 1.0,
+   "deterministic": 1.0
+  }
+ },
+ "cost": {
+  "mean_cost_usd": 0.0007548,
+  "mean_llm_calls": 13.7,
+  "mean_latency_s": 5.6249
+ },
+ "examples": [
+  {
+   "id": "11",
+   "category": "factual",
+   "question": "Is alcohol reimbursable?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "answer": "No, alcohol is not reimbursable under the Travel & Per Diem Policy.",
+   "standalone": "Is alcohol reimbursable?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "title": "Travel & Per Diem Policy",
+     "doc_id": "FIN-POL-002",
+     "version": "4.0",
+     "effective_date": "2026-01-15",
+     "section": "3. Meals; 4. Ground transport",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 2.41,
+   "llm_calls": 10,
+   "tokens_in": 2188,
+   "tokens_out": 70,
+   "cost_usd": 0.00037,
+   "retrieved_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+    "wiki/teams/Team_Supply_Chain.html",
+    "wiki/teams/Team_Security.html",
+    "wiki/teams/Team_Sales_Engineering.html",
+    "cairo/بدل_الانتقالات.md",
+    "wiki/teams/Team_Quality.html",
+    "legacy_intranet/hr_policies.md",
+    "scanned_archive/Expense_Policy_2019_scan.txt"
+   ],
+   "kept_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "12",
+   "category": "factual",
+   "question": "How long do I have to file an expense report?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/finance/FIN-POL-001_expense_reimbursement.pdf"
+   ],
+   "answer": "You must submit business expenses within 30 days of being incurred via the Finance portal. Expenses submitted more than 90 days after being incurred will not be reimbursed. Claims older than 90 days are rejected automatically.",
+   "standalone": "How long do I have to file an expense report?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/finance/FIN-POL-001_expense_reimbursement.pdf",
+     "title": "Expense Reimbursement Policy",
+     "doc_id": "FIN-POL-001",
+     "version": "3.1",
+     "effective_date": "2025-04-01",
+     "section": null,
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 3.52,
+   "llm_calls": 10,
+   "tokens_in": 2820,
+   "tokens_out": 143,
+   "cost_usd": 0.000509,
+   "retrieved_docs": [
+    "policies/finance/FIN-POL-001_expense_reimbursement.pdf",
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf",
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "wiki/finance/How_to_submit_expenses.html",
+    "legacy_intranet/it_faq.md",
+    "scanned_archive/Expense_Policy_2019_scan.txt"
+   ],
+   "kept_docs": [
+    "policies/finance/FIN-POL-001_expense_reimbursement.pdf",
+    "wiki/finance/How_to_submit_expenses.html"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "19",
+   "category": "factual",
+   "question": "Can I open our source code on my personal phone?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/it/IT-STD-007_remote_access.pdf"
+   ],
+   "answer": "No. Access to source code from personal devices is prohibited. Personal devices may access email and calendar only, provided they have device encryption and a screen lock enabled.",
+   "standalone": "Can I open our source code on my personal phone?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 1,
+   "sources": [
+    {
+     "path": "legacy_intranet/it_faq.md",
+     "title": "Northwind Robotics — IT Help Desk FAQ",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": "VPN & Security; Software",
+     "status": "OUTDATED"
+    }
+   ],
+   "refused": false,
+   "latency_s": 4.29,
+   "llm_calls": 17,
+   "tokens_in": 4050,
+   "tokens_out": 145,
+   "cost_usd": 0.000694,
+   "retrieved_docs": [
+    "policies/it/IT-STD-007_remote_access.pdf",
+    "policies/finance/FIN-POL-001_expense_reimbursement.pdf",
+    "wiki/it/VPN_Setup_Guide.html",
+    "wiki/it/Password_Policy.html",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "legacy_intranet/it_faq.md",
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf",
+    "policies/it/IT-STD-011_hardware_refresh.pdf",
+    "policies/it/IT-STD-003_password_and_authentication.pdf",
+    "newsletters/Northwind_Dispatch_2026-02.html"
+   ],
+   "kept_docs": [
+    "legacy_intranet/it_faq.md"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "20",
+   "category": "factual",
+   "question": "Do I need approval for a Figma license?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "legacy_intranet/it_faq.md"
+   ],
+   "answer": "You do not automatically need approval for a Figma license if the cost is under $50/month, as these licenses are auto-approved. If the license costs more than $50/month, you require manager sign-off. You must request the license through the IT portal's Software Catalog.",
+   "standalone": "Do I need approval for a Figma license?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "legacy_intranet/it_faq.md",
+     "title": "Northwind Robotics — IT Help Desk FAQ",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": "VPN & Security; Software",
+     "status": "OUTDATED"
+    }
+   ],
+   "refused": false,
+   "latency_s": 4.42,
+   "llm_calls": 10,
+   "tokens_in": 2687,
+   "tokens_out": 205,
+   "cost_usd": 0.000526,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "meetings/2026-09-14_product_management_075.txt",
+    "legacy_intranet/it_faq.md",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "kept_docs": [
+    "legacy_intranet/it_faq.md"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "24",
+   "category": "factual",
+   "question": "Can the R2 be used outdoors?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf"
+   ],
+   "answer": "No, the Warehouse Rover R2 cannot be used outdoors because it is not rated for outdoor or wet environments.",
+   "standalone": "Can the R2 be used outdoors?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 2,
+   "sources": [
+    {
+     "path": "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+     "title": "Warehouse Rover R2 - Data Sheet",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 4.57,
+   "llm_calls": 23,
+   "tokens_in": 6208,
+   "tokens_out": 146,
+   "cost_usd": 0.001019,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "policies/finance/FIN-POL-001_expense_reimbursement.pdf",
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "newsletters/Northwind_Dispatch_2026-03.html",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "legacy_intranet/product_specs.md",
+    "hr_restricted/Performance_Calibration_Guide_2026.md",
+    "product/Spare_Parts_Catalog_2026.pdf"
+   ],
+   "kept_docs": [
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+    "hr_restricted/Performance_Calibration_Guide_2026.md",
+    "product/R3/R3_Operator_Manual_RevC.pdf"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": "missing: 'IP54|indoor'"
+   }
+  },
+  {
+   "id": "4",
+   "category": "factual",
+   "question": "How far ahead do I have to ask for PTO?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "answer": "You must submit PTO requests at least 5 business days in advance through the HR portal. Requests exceeding 10 consecutive business days require director approval.",
+   "standalone": "How far ahead do I have to ask for PTO?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "title": "Paid Time Off Policy",
+     "doc_id": "HR-POL-004",
+     "version": "3.0",
+     "effective_date": "2026-03-01",
+     "section": "3. Carry-over; 4. Requesting PTO",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 3.29,
+   "llm_calls": 10,
+   "tokens_in": 2820,
+   "tokens_out": 128,
+   "cost_usd": 0.0005,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "wiki/finance/How_to_submit_expenses.html",
+    "legacy_intranet/it_faq.md",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "5",
+   "category": "factual",
+   "question": "How many sick days are there per year?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/HR-POL-005_sick_leave.pdf"
+   ],
+   "answer": "Employees receive 10 paid sick days per calendar year. Sick leave does not carry over. Employees in the Cairo office are additionally covered by the sick leave provisions of Egyptian labour law, where the statutory provision is more generous.",
+   "standalone": "How many sick days are there per year?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/HR-POL-005_sick_leave.pdf",
+     "title": "Sick Leave Policy",
+     "doc_id": "HR-POL-005",
+     "version": "1.1",
+     "effective_date": "2025-01-01",
+     "section": "Entitlement; Evidence; Cairo office",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 3.92,
+   "llm_calls": 9,
+   "tokens_in": 3427,
+   "tokens_out": 153,
+   "cost_usd": 0.000606,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-005_sick_leave.pdf",
+    "wiki/people/Benefits_Overview.html",
+    "wiki/finance/How_to_submit_expenses.html",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-005_sick_leave.pdf",
+    "wiki/people/Benefits_Overview.html",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "6",
+   "category": "factual",
+   "question": "When do I need a doctor's note?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/HR-POL-005_sick_leave.pdf"
+   ],
+   "answer": "You need a doctor's note for absences longer than 3 consecutive working days.",
+   "standalone": "When do I need a doctor's note?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/HR-POL-005_sick_leave.pdf",
+     "title": "Sick Leave Policy",
+     "doc_id": "HR-POL-005",
+     "version": "1.1",
+     "effective_date": "2025-01-01",
+     "section": "Entitlement; Evidence; Cairo office",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 2.78,
+   "llm_calls": 10,
+   "tokens_in": 2359,
+   "tokens_out": 107,
+   "cost_usd": 0.000418,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-005_sick_leave.pdf",
+    "hr_restricted/Salary_Bands_2026.xlsx",
+    "wiki/eng/Robotics_Lab_Safety.html",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-005_sick_leave.pdf"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "7",
+   "category": "factual",
+   "question": "How many days a week can I work from home?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/HR-POL-010_remote_work.pdf"
+   ],
+   "answer": "Under HR-POL-010 v2.0, effective 2026-01-01, employees may work remotely up to 3 days per week by default. Fully remote arrangements require director approval and a signed remote-work agreement. The employee handbook excerpt is out of date as it has been superseded by the policy portal.",
+   "standalone": "How many days a week can I work from home?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/HR-POL-010_remote_work.pdf",
+     "title": "Remote Work Policy",
+     "doc_id": "HR-POL-010",
+     "version": "2.0",
+     "effective_date": "2026-01-01",
+     "section": "Hybrid default; Home-office stipend; Core hours; Working from another country",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 4.66,
+   "llm_calls": 10,
+   "tokens_in": 3169,
+   "tokens_out": 210,
+   "cost_usd": 0.000601,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-010_remote_work.pdf",
+    "policies/hr/HR-POL-011_work_from_abroad.pdf",
+    "newsletters/Northwind_Dispatch_2026-04.html",
+    "legacy_intranet/it_faq.md",
+    "legacy_intranet/employee_handbook.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-010_remote_work.pdf",
+    "legacy_intranet/employee_handbook.md"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "s29",
+   "category": "factual",
+   "question": "How quickly do I have to report a lost laptop?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf"
+   ],
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How quickly do I have to report a lost laptop?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 12.57,
+   "llm_calls": 24,
+   "tokens_in": 7372,
+   "tokens_out": 678,
+   "cost_usd": 0.001513,
+   "retrieved_docs": [
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf",
+    "policies/it/IT-STD-011_hardware_refresh.pdf",
+    "wiki/sales/Sales_IT_Tips.html",
+    "legacy_intranet/it_faq.md",
+    "policies/hr/HR-POL-011_work_from_abroad.pdf",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "kept_docs": [
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf",
+    "wiki/sales/Sales_IT_Tips.html"
+   ],
+   "rejected_attempts": [
+    "You must report a lost company laptop to the Security team within 1 hour of noticing it, and file an IT ticket marked URGENT. Do not wait until the next business day. The lower-authority wiki passage ",
+    "You must report a lost company laptop to the Security team within 1 hour of noticing it, and file an IT ticket marked URGENT. Do not wait until the next business day. The lower-authority wiki passage ",
+    "You must report a lost company laptop to the Security team within 1 hour of noticing it, and file an IT ticket marked URGENT. Do not wait until the next business day. The lower-authority wiki passage "
+   ],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: You must report a lost company laptop to the Security team within 1 hour of noticing it, and file an IT ticket marked URGENT. Do not wait until the next business day. The lower-authority wiki passage  | fact-check said: You must report a lost company laptop to the Security team within 1 hour of noticing it, and file an IT ticket marked URGENT. The ",
+    "groundedness": "refusal: no claims to support",
+    "deterministic": "missing: '1 hour|one hour|within an hour'; refused an answerable question"
+   }
+  },
+  {
+   "id": "10",
+   "category": "table",
+   "question": "What is the daily meal limit when travelling abroad?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "answer": "Under FIN-POL-002 v4.0, effective 2026-01-15, the daily meal allowance depends on the destination tier: $90 for Tier A (United States, United Kingdom, Germany, Switzerland, Japan, Singapore), $70 for Tier C (all other countries), and $55 for Tier B (Egypt, India, Brazil, Mexico, Turkey, Vietnam). Alcohol is not reimbursable. Meal allowances are reimbursed against itemised receipts up to the daily tier amount. On the day of departure and the day of return, 75% of the daily meal allowance applies. Hotel bookings above the tier cap require VP approval before booking. The 2019 policy stating $80/day for international travel is out of date.",
+   "standalone": "What is the daily meal limit when travelling abroad?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "title": "Travel & Per Diem Policy",
+     "doc_id": "FIN-POL-002",
+     "version": "4.0",
+     "effective_date": "2026-01-15",
+     "section": "3. Meals; 4. Ground transport",
+     "status": "CURRENT"
+    },
+    {
+     "path": "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "title": "Travel & Per Diem Policy",
+     "doc_id": "FIN-POL-002",
+     "version": "4.0",
+     "effective_date": "2026-01-15",
+     "section": "2. Destination tiers",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 10.58,
+   "llm_calls": 10,
+   "tokens_in": 3427,
+   "tokens_out": 591,
+   "cost_usd": 0.000869,
+   "retrieved_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+    "wiki/it/VPN_Setup_Guide.html",
+    "legacy_intranet/it_faq.md",
+    "scanned_archive/Expense_Policy_2019_scan.txt",
+    "scanned_archive/Travel_Policy_2018_scan.txt"
+   ],
+   "kept_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+    "scanned_archive/Expense_Policy_2019_scan.txt"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "n01",
+   "category": "table",
+   "question": "What is the hotel cap per night for a business trip to India?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "answer": "Under FIN-POL-002 v4.0, effective 2026-01-15, India is classified as Tier B, which has a hotel cap of $150 per night. Hotel bookings exceeding this cap require VP approval before booking. The 2018 policy stating a $180/night limit is superseded by the current version.",
+   "standalone": "What is the hotel cap per night for a business trip to India?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "title": "Travel & Per Diem Policy",
+     "doc_id": "FIN-POL-002",
+     "version": "4.0",
+     "effective_date": "2026-01-15",
+     "section": "2. Destination tiers",
+     "status": "CURRENT"
+    },
+    {
+     "path": "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "title": "Travel & Per Diem Policy",
+     "doc_id": "FIN-POL-002",
+     "version": "4.0",
+     "effective_date": "2026-01-15",
+     "section": "1. Booking",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 5.67,
+   "llm_calls": 10,
+   "tokens_in": 3187,
+   "tokens_out": 272,
+   "cost_usd": 0.000641,
+   "retrieved_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+    "legacy_intranet/it_faq.md",
+    "scanned_archive/Travel_Policy_2018_scan.txt",
+    "legacy_intranet/employee_handbook.md"
+   ],
+   "kept_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+    "scanned_archive/Travel_Policy_2018_scan.txt"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "n02",
+   "category": "table",
+   "question": "How much does the 5G connectivity module cost?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "product/Spare_Parts_Catalog_2026.pdf"
+   ],
+   "answer": "The 5G connectivity module (Part number: NW-5G-0003) has a list price of $310. Prices exclude tax and shipping.",
+   "standalone": "How much does the 5G connectivity module cost?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "product/Spare_Parts_Catalog_2026.pdf",
+     "title": "Spare Parts Catalog 2026",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 3.38,
+   "llm_calls": 10,
+   "tokens_in": 2827,
+   "tokens_out": 130,
+   "cost_usd": 0.000502,
+   "retrieved_docs": [
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "hr_restricted/Salary_Bands_2026.xlsx",
+    "product/Spare_Parts_Catalog_2026.pdf",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "kept_docs": [
+    "product/Spare_Parts_Catalog_2026.pdf"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "s06",
+   "category": "table",
+   "question": "What is the hotel cap per night for a business trip to Germany?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "answer": "Under FIN-POL-002 v4.0, effective 2026-01-15, Germany is classified as Tier A, which has a hotel cap of $260 per night. Hotel bookings exceeding this cap require VP approval before booking. The 2018 policy stating a $180/night cap is out of date.",
+   "standalone": "What is the hotel cap per night for a business trip to Germany?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "title": "Travel & Per Diem Policy",
+     "doc_id": "FIN-POL-002",
+     "version": "4.0",
+     "effective_date": "2026-01-15",
+     "section": "2. Destination tiers",
+     "status": "CURRENT"
+    },
+    {
+     "path": "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "title": "Travel & Per Diem Policy",
+     "doc_id": "FIN-POL-002",
+     "version": "4.0",
+     "effective_date": "2026-01-15",
+     "section": "1. Booking",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 5.37,
+   "llm_calls": 10,
+   "tokens_in": 3181,
+   "tokens_out": 254,
+   "cost_usd": 0.00063,
+   "retrieved_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+    "legacy_intranet/it_faq.md",
+    "scanned_archive/Travel_Policy_2018_scan.txt",
+    "legacy_intranet/employee_handbook.md"
+   ],
+   "kept_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+    "scanned_archive/Travel_Policy_2018_scan.txt"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "37",
+   "category": "keyword",
+   "question": "What did Fleet Manager 4.3 add?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "product/fleet_manager/release_notes_4.3.md"
+   ],
+   "answer": "Fleet Manager 4.3 added a REST API endpoint `/missions/bulk` and introduced a new traffic rule for one-way aisles. It also updated battery-aware scheduling to consider dock queue length.",
+   "standalone": "What did Fleet Manager 4.3 add?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "product/fleet_manager/release_notes_4.3.md",
+     "title": "Fleet Manager 4.3 — Release Notes (November 2025)",
+     "doc_id": null,
+     "version": "4.3",
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 3.99,
+   "llm_calls": 10,
+   "tokens_in": 3042,
+   "tokens_out": 167,
+   "cost_usd": 0.000556,
+   "retrieved_docs": [
+    "product/fleet_manager/release_notes_4.3.md",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+    "product/fleet_manager/release_notes_5.0.md",
+    "product/R2/R2_End_of_Life_Notice.md",
+    "product/Rover_Error_Codes_2026.xlsx",
+    "wiki/teams/Team_Fleet_Software.html"
+   ],
+   "kept_docs": [
+    "product/fleet_manager/release_notes_4.3.md",
+    "product/R2/R2_End_of_Life_Notice.md",
+    "product/Rover_Error_Codes_2026.xlsx"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "38",
+   "category": "keyword",
+   "question": "Does the R2 support 5G?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf"
+   ],
+   "answer": "Yes, the Warehouse Rover R2 supports an optional 5G module.",
+   "standalone": "Does the R2 support 5G?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+     "title": "Warehouse Rover R2 - Data Sheet",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 2.83,
+   "llm_calls": 10,
+   "tokens_in": 2837,
+   "tokens_out": 95,
+   "cost_usd": 0.000483,
+   "retrieved_docs": [
+    "product/Rover_Error_Codes_2026.xlsx",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+    "product/fleet_manager/release_notes_5.0.md",
+    "meetings/2026-05-18_hardware_sustaining_012.txt"
+   ],
+   "kept_docs": [
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "n04",
+   "category": "keyword",
+   "question": "How do I fix error E-301?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "product/Rover_Error_Codes_2026.xlsx"
+   ],
+   "answer": "To fix error E-301, renew the site certificate in Fleet Manager > Settings > Security. This applies to R2 and R3 units.",
+   "standalone": "How do I fix error E-301?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "product/Rover_Error_Codes_2026.xlsx",
+     "title": "Rover Error Codes 2026",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": "Error codes",
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 2.71,
+   "llm_calls": 10,
+   "tokens_in": 2054,
+   "tokens_out": 113,
+   "cost_usd": 0.000376,
+   "retrieved_docs": [
+    "product/Rover_Error_Codes_2026.xlsx",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "product/Rover_Error_Codes_2026.xlsx"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "s34",
+   "category": "keyword",
+   "question": "What does error E-271 indicate?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "product/Rover_Error_Codes_2026.xlsx"
+   ],
+   "answer": "Error code E-271 indicates that the LiDAR heartbeat has been lost. This is a critical error specific to the Rover R3 model, which causes the rover to stop automatically. The operator should check the LiDAR cable at connector J4; if the fault persists after a restart, they must open a Premium support ticket.",
+   "standalone": "What does error E-271 indicate?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "product/Rover_Error_Codes_2026.xlsx",
+     "title": "Rover Error Codes 2026",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": "Error codes",
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 4.34,
+   "llm_calls": 10,
+   "tokens_in": 2143,
+   "tokens_out": 216,
+   "cost_usd": 0.000451,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-016_learning_development.pdf",
+    "policies/hr/HR-POL-005_sick_leave.pdf",
+    "product/Rover_Error_Codes_2026.xlsx",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "product/Rover_Error_Codes_2026.xlsx"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "15",
+   "category": "version",
+   "question": "What is my annual learning budget?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/HR-POL-016_learning_development.pdf"
+   ],
+   "answer": "Under HR-POL-016 v2.0, effective 2026-01-01, your annual learning budget is $2,000 for courses, books, certifications, and conferences. Requests are approved by your direct manager, and unused budget does not carry over to the next year. Conference travel is paid from the travel budget, not the learning budget; only the conference ticket counts against the learning budget. The lower-authority Benefits Overview wiki (2025-05-07) stating a $1,500 budget is out of date.",
+   "standalone": "What is my annual learning budget?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/HR-POL-016_learning_development.pdf",
+     "title": "Learning & Development Budget",
+     "doc_id": "HR-POL-016",
+     "version": "2.0",
+     "effective_date": "2026-01-01",
+     "section": null,
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 5.77,
+   "llm_calls": 9,
+   "tokens_in": 2950,
+   "tokens_out": 289,
+   "cost_usd": 0.000616,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-016_learning_development.pdf",
+    "wiki/people/Benefits_Overview.html",
+    "meetings/2026-09-07_hardware_sustaining_091.txt",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-016_learning_development.pdf",
+    "wiki/people/Benefits_Overview.html",
+    "meetings/2026-09-07_hardware_sustaining_091.txt"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "3",
+   "category": "version",
+   "question": "Can I take time off in my first months?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "answer": "Yes, you can accrue PTO starting from your first day of employment for part-time employees. However, full-time employees are subject to a waiting period; the 90-day waiting period found in version 2.0 has been reduced to 60 days under the current policy.",
+   "standalone": "Can I take time off in my first months?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "title": "Paid Time Off Policy",
+     "doc_id": "HR-POL-004",
+     "version": "3.0",
+     "effective_date": "2026-03-01",
+     "section": "1. Purpose",
+     "status": "CURRENT"
+    },
+    {
+     "path": "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "title": "Paid Time Off Policy",
+     "doc_id": "HR-POL-004",
+     "version": "3.0",
+     "effective_date": "2026-03-01",
+     "section": "2. Accrual",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 3.79,
+   "llm_calls": 9,
+   "tokens_in": 2817,
+   "tokens_out": 163,
+   "cost_usd": 0.00052,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "legacy_intranet/it_faq.md",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "8",
+   "category": "version",
+   "question": "What is the home-office stipend?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/HR-POL-010_remote_work.pdf"
+   ],
+   "answer": "The home-office stipend is $600 per year, reimbursed through the Finance portal against receipts. This amount was increased from $500 in 2026. The lower-authority Benefits Overview wiki (dated 2025-05-07) stating a $500 stipend is out of date.",
+   "standalone": "What is the home-office stipend?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/HR-POL-010_remote_work.pdf",
+     "title": "Remote Work Policy",
+     "doc_id": "HR-POL-010",
+     "version": "2.0",
+     "effective_date": "2026-01-01",
+     "section": "Hybrid default; Home-office stipend; Core hours; Working from another country",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 5.94,
+   "llm_calls": 10,
+   "tokens_in": 3332,
+   "tokens_out": 291,
+   "cost_usd": 0.000674,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-010_remote_work.pdf",
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "wiki/eng/On_Call.html",
+    "wiki/people/Benefits_Overview.html",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-010_remote_work.pdf",
+    "wiki/eng/On_Call.html",
+    "wiki/people/Benefits_Overview.html"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "9",
+   "category": "version",
+   "question": "How long is paid leave for an adoptive parent?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/HR-POL-006_parental_leave.pdf"
+   ],
+   "answer": "Non-birth and adoptive parents receive 12 weeks of fully paid leave, to be taken within 12 months of the birth or placement.",
+   "standalone": "How long is paid leave for an adoptive parent?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/HR-POL-006_parental_leave.pdf",
+     "title": "Parental Leave Policy",
+     "doc_id": "HR-POL-006",
+     "version": "2.0",
+     "effective_date": "2025-07-01",
+     "section": "Birth parent; Non-birth and adoptive parents; Phased return",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 2.76,
+   "llm_calls": 10,
+   "tokens_in": 2708,
+   "tokens_out": 98,
+   "cost_usd": 0.000465,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-006_parental_leave.pdf",
+    "policies/hr/HR-POL-005_sick_leave.pdf",
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "wiki/people/Benefits_Overview.html",
+    "legacy_intranet/it_faq.md",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-006_parental_leave.pdf"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "s32",
+   "category": "version",
+   "question": "Can I work from another country for a few weeks?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/HR-POL-011_work_from_abroad.pdf"
+   ],
+   "answer": "Yes, you may work from a country other than your country of employment for up to 30 calendar days per calendar year, in at most two separate periods. This requires approval from both your manager and People Operations, requested at least 15 business days before travel through the HR portal. People Operations checks tax and immigration implications before approving. Work from abroad is not permitted in countries on the company's restricted-country list (maintained by Legal), and is not available to employees handling export-controlled technical data. Company laptops must connect through Northwind Access at all times while abroad.",
+   "standalone": "Can I work from another country for a few weeks?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/HR-POL-011_work_from_abroad.pdf",
+     "title": "Work From Abroad Policy",
+     "doc_id": "HR-POL-011",
+     "version": "1.0",
+     "effective_date": "2026-04-01",
+     "section": "Allowance; Approval; Restrictions",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 5.61,
+   "llm_calls": 9,
+   "tokens_in": 3447,
+   "tokens_out": 271,
+   "cost_usd": 0.00068,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-010_remote_work.pdf",
+    "policies/hr/HR-POL-011_work_from_abroad.pdf",
+    "wiki/it/VPN_Setup_Guide.html",
+    "newsletters/Northwind_Dispatch_2026-04.html",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-010_remote_work.pdf",
+    "policies/hr/HR-POL-011_work_from_abroad.pdf",
+    "newsletters/Northwind_Dispatch_2026-04.html"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "18",
+   "category": "conflict",
+   "question": "How do I get on the VPN from home?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/it/IT-STD-007_remote_access.pdf"
+   ],
+   "answer": "Under IT-STD-007 v3.0, effective 2026-06-30, the GlobalConnect VPN client is retired as of June 30, 2026, and it can no longer be used for remote access. All remote access now uses Northwind Access, which connects automatically when an internal resource is requested; there is no separate VPN connection step. Personal devices cannot run Northwind Access and may only access email and calendar via the browser. The older instruction to install GlobalConnect from the Self-Service app catalog and enter vpn.northwind.example is outdated.",
+   "standalone": "How do I get on the VPN from home?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 1,
+   "sources": [
+    {
+     "path": "policies/it/IT-STD-007_remote_access.pdf",
+     "title": "Remote Access Standard",
+     "doc_id": "IT-STD-007",
+     "version": "3.0",
+     "effective_date": "2026-06-30",
+     "section": "Northwind Access; Device requirements; Personal devices",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 11.35,
+   "llm_calls": 18,
+   "tokens_in": 5862,
+   "tokens_out": 582,
+   "cost_usd": 0.001228,
+   "retrieved_docs": [
+    "policies/it/IT-STD-007_remote_access.pdf",
+    "policies/hr/HR-POL-010_remote_work.pdf",
+    "wiki/it/VPN_Setup_Guide.html",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "legacy_intranet/it_faq.md",
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf",
+    "wiki/eng/New_Engineer_Onboarding.html"
+   ],
+   "kept_docs": [
+    "policies/it/IT-STD-007_remote_access.pdf",
+    "wiki/it/VPN_Setup_Guide.html",
+    "wiki/eng/New_Engineer_Onboarding.html"
+   ],
+   "rejected_attempts": [
+    "Based on the provided documents, you cannot get on the VPN from home because the GlobalConnect VPN client has been retired as of June 30, 2026. Remote access now uses Northwind Access instead. The old"
+   ],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "n06",
+   "category": "conflict",
+   "question": "The sales IT tips say passwords need 12 characters and must be changed every 90 days. Is that right?",
+   "user_id": "u1003",
+   "split": "dev",
+   "gold_docs": [
+    "policies/it/IT-STD-003_password_and_authentication.pdf"
+   ],
+   "answer": "No, the sales IT tips are outdated and incorrect according to the current policy. Under IT-STD-003 v2.0, effective 2026-02-01, corporate passwords must be at least 16 characters long and are no longer rotated on a schedule; they must only be changed immediately if compromise is suspected. The sales tips stating 12 characters and a 90-day rotation requirement are out of date.",
+   "standalone": "The sales IT tips say passwords need 12 characters and must be changed every 90 days. Is that right?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/it/IT-STD-003_password_and_authentication.pdf",
+     "title": "Password & Authentication Standard",
+     "doc_id": "IT-STD-003",
+     "version": "2.0",
+     "effective_date": "2026-02-01",
+     "section": "Passwords; Multi-factor authentication; Lockout",
+     "status": "CURRENT"
+    },
+    {
+     "path": "wiki/sales/Sales_IT_Tips.html",
+     "title": "IT tips for the sales team",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "LOWER_AUTHORITY"
+    }
+   ],
+   "refused": false,
+   "latency_s": 5.19,
+   "llm_calls": 7,
+   "tokens_in": 2424,
+   "tokens_out": 270,
+   "cost_usd": 0.000526,
+   "retrieved_docs": [
+    "policies/it/IT-STD-003_password_and_authentication.pdf",
+    "wiki/sales/Sales_IT_Tips.html",
+    "wiki/it/Password_Policy.html"
+   ],
+   "kept_docs": [
+    "policies/it/IT-STD-003_password_and_authentication.pdf",
+    "wiki/sales/Sales_IT_Tips.html"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 0,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: NO",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "n07",
+   "category": "conflict",
+   "question": "How many days a week can I work remotely during Ramadan?",
+   "user_id": "u1002",
+   "split": "dev",
+   "gold_docs": [
+    "cairo/ساعات_العمل_في_رمضان.md",
+    "policies/hr/HR-POL-010_remote_work.pdf"
+   ],
+   "answer": "Based on the provided documents, there is no specific rule regarding working remotely during Ramadan. The Remote Work Policy (HR-POL-010 v2.0) states that employees may work remotely up to 3 days per week by default, but it does not mention any exceptions for religious observances like Ramadan.",
+   "standalone": "How many days a week can I work remotely during Ramadan?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 2,
+   "sources": [
+    {
+     "path": "policies/hr/HR-POL-010_remote_work.pdf",
+     "title": "Remote Work Policy",
+     "doc_id": "HR-POL-010",
+     "version": "2.0",
+     "effective_date": "2026-01-01",
+     "section": "Hybrid default; Home-office stipend; Core hours; Working from another country",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 5.68,
+   "llm_calls": 23,
+   "tokens_in": 6297,
+   "tokens_out": 214,
+   "cost_usd": 0.001073,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-010_remote_work.pdf",
+    "policies/hr/HR-POL-011_work_from_abroad.pdf",
+    "wiki/eng/On_Call.html",
+    "newsletters/Northwind_Dispatch_2026-04.html",
+    "legacy_intranet/it_faq.md",
+    "legacy_intranet/employee_handbook.md",
+    "policies/hr/HR-POL-006_parental_leave.pdf",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "hr_restricted/Performance_Calibration_Guide_2026.md",
+    "wiki/people/US_Holidays_2026.html"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-010_remote_work.pdf",
+    "policies/hr/HR-POL-011_work_from_abroad.pdf",
+    "hr_restricted/Performance_Calibration_Guide_2026.md"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 0,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: NO",
+    "deterministic": "missing: '4|four'"
+   }
+  },
+  {
+   "id": "n08",
+   "category": "draft",
+   "question": "Is Northwind switching to flexible time off?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "answer": "Northwind Robotics is currently operating on a flexible schedule with core collaboration hours from 10:00–16:00 local time, but there is a draft proposal (not approved) for HR-POL-004 v4.0 that would change the policy effective 2027-01-01 if leadership approves it.",
+   "standalone": "Is Northwind switching to flexible time off?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "title": "Paid Time Off Policy",
+     "doc_id": "HR-POL-004",
+     "version": "3.0",
+     "effective_date": "2026-03-01",
+     "section": "1. Purpose",
+     "status": "CURRENT"
+    },
+    {
+     "path": "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "title": "DRAFT — Flexible Time Off (proposed HR-POL-004 v4.0)",
+     "doc_id": "HR-POL-004",
+     "version": "4.0",
+     "effective_date": null,
+     "section": "Proposed effective date",
+     "status": "DRAFT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 6.19,
+   "llm_calls": 9,
+   "tokens_in": 2825,
+   "tokens_out": 321,
+   "cost_usd": 0.000616,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "policies/it/IT-STD-007_remote_access.pdf",
+    "newsletters/Northwind_Dispatch_2026-05.html",
+    "legacy_intranet/employee_handbook.md",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "legacy_intranet/employee_handbook.md",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "n09",
+   "category": "draft",
+   "question": "What is the minimum amount of time off I must take under the flexible time off policy?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "answer": "Under the proposed HR-POL-004 v4.0 (DRAFT), there is no fixed annual entitlement, but every employee is expected to take a minimum of 15 days per year with manager approval. There is also an open question regarding whether this minimum should be 20 days instead.",
+   "standalone": "What is the minimum amount of time off I must take under the flexible time off policy?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "title": "DRAFT — Flexible Time Off (proposed HR-POL-004 v4.0)",
+     "doc_id": "HR-POL-004",
+     "version": "4.0",
+     "effective_date": null,
+     "section": "Proposal; Carry-over; Open questions",
+     "status": "DRAFT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 3.88,
+   "llm_calls": 8,
+   "tokens_in": 2499,
+   "tokens_out": 182,
+   "cost_usd": 0.000484,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "kept_docs": [
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "n10",
+   "category": "draft",
+   "question": "By when can I send comments on the flexible time off proposal?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "answer": "You must send your comments to people-ops@northwind.example by October 31, 2026.",
+   "standalone": "By when can I send comments on the flexible time off proposal?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+     "title": "DRAFT — Flexible Time Off (proposed HR-POL-004 v4.0)",
+     "doc_id": "HR-POL-004",
+     "version": "4.0",
+     "effective_date": null,
+     "section": "Proposal; Carry-over; Open questions",
+     "status": "DRAFT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 2.88,
+   "llm_calls": 10,
+   "tokens_in": 2792,
+   "tokens_out": 104,
+   "cost_usd": 0.000481,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "legacy_intranet/it_faq.md",
+    "legacy_intranet/employee_handbook.md",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "kept_docs": [
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "n11",
+   "category": "draft",
+   "question": "Has PTO carry-over been abolished?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Has PTO carry-over been abolished?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 15.99,
+   "llm_calls": 21,
+   "tokens_in": 8232,
+   "tokens_out": 858,
+   "cost_usd": 0.00175,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "newsletters/Northwind_Dispatch_2026-02.html",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "newsletters/Northwind_Dispatch_2026-02.html"
+   ],
+   "rejected_attempts": [
+    "No, PTO carry-over has not been abolished. Under HR-POL-004 v3.0 (effective 2026-03-01), unused PTO of up to 3 days may be carried into the next calendar year; any balance above 3 days is forfeited on",
+    "No, PTO carry-over has not been abolished; under HR-POL-004 v3.0 effective 2026-03-01, employees can carry over up to 3 days of accrued PTO, which must be used by March 31. The newsletter from Februar",
+    "No, PTO carry-over has not been abolished; under HR-POL-004 v3.0 effective 2026-03-01, employees can carry over up to 3 days of accrued PTO, which must be used by March 31. The newsletter from Februar"
+   ],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: No, PTO carry-over has not been abolished; under HR-POL-004 v3.0 effective 2026-03-01, employees can carry over up to 3 days of accrued PTO, which must be used by March 31. The newsletter from Februar | fact-check said: The first sentence claims the policy effective date and carry-over rules, which are explicitly stated in the context document HR-P",
+    "groundedness": "refusal: no claims to support",
+    "deterministic": "missing: '3 days|three days|up to 3'; refused an answerable question"
+   }
+  },
+  {
+   "id": "29",
+   "category": "multi_hop",
+   "question": "I just referred a friend who got hired. When do I get my referral bonus, and when will my friend be allowed to use their PTO?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/HR-POL-014_referral_bonus.pdf",
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "I just referred a friend who got hired. When do I get my referral bonus, and when will my friend be allowed to use their PTO?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 10.08,
+   "llm_calls": 23,
+   "tokens_in": 7210,
+   "tokens_out": 500,
+   "cost_usd": 0.001381,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-014_referral_bonus.pdf",
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "legacy_intranet/it_faq.md",
+    "legacy_intranet/employee_handbook.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-014_referral_bonus.pdf"
+   ],
+   "rejected_attempts": [
+    "You will receive your referral bonus in two equal instalments: 50% after the new hire completes 90 days and 50% after 12 months, provided you are still employed at each payout. The context does not st",
+    "You will receive your referral bonus in two equal instalments: 50% after the new hire completes 90 days and 50% after 12 months, provided you are still employed at each payout. The context does not st",
+    "You will receive your referral bonus in two equal instalments: 50% after the new hire completes 90 days and 50% after 12 months, provided you are still employed at each payout. The context does not st"
+   ],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: You will receive your referral bonus in two equal instalments: 50% after the new hire completes 90 days and 50% after 12 months, provided you are still employed at each payout. The context does not st | fact-check said: You will receive your referral bonus in two equal instalments: 50% after the new hire completes 90 days and 50% after 12 months, p",
+    "groundedness": "refusal: no claims to support",
+    "deterministic": "missing: '90 days'; missing: '12 months'; missing: '60'; refused an answerable question"
+   }
+  },
+  {
+   "id": "30",
+   "category": "multi_hop",
+   "question": "I want to work fully remote. What do I need to get approved, and how do I reach internal systems from home?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/HR-POL-010_remote_work.pdf",
+    "policies/it/IT-STD-007_remote_access.pdf"
+   ],
+   "answer": "To be approved for a fully remote arrangement, you must obtain director approval and sign a remote-work agreement. To reach internal systems from home, you must use the GlobalConnect VPN by installing it from the Self-Service app catalog, entering the portal address vpn.northwind.example, signing in with SSO, and approving the MFA push.",
+   "standalone": "I want to work fully remote. What do I need to get approved, and how do I reach internal systems from home?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/HR-POL-010_remote_work.pdf",
+     "title": "Remote Work Policy",
+     "doc_id": "HR-POL-010",
+     "version": "2.0",
+     "effective_date": "2026-01-01",
+     "section": "Hybrid default; Home-office stipend; Core hours; Working from another country",
+     "status": "CURRENT"
+    },
+    {
+     "path": "wiki/it/VPN_Setup_Guide.html",
+     "title": "VPN Setup Guide",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "LOWER_AUTHORITY"
+    }
+   ],
+   "refused": false,
+   "latency_s": 5.31,
+   "llm_calls": 10,
+   "tokens_in": 3856,
+   "tokens_out": 238,
+   "cost_usd": 0.000721,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-010_remote_work.pdf",
+    "wiki/it/VPN_Setup_Guide.html",
+    "wiki/eng/New_Engineer_Onboarding.html",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-010_remote_work.pdf",
+    "wiki/it/VPN_Setup_Guide.html",
+    "legacy_intranet/it_faq.md"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": "missing: 'Northwind Access'"
+   }
+  },
+  {
+   "id": "n23",
+   "category": "multi_hop",
+   "question": "My rover has shown E-217 three times today. Which part should be replaced, and what does it cost?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "product/Rover_Error_Codes_2026.xlsx",
+    "product/Spare_Parts_Catalog_2026.pdf"
+   ],
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "My rover has shown E-217 three times today. Which part should be replaced, and what does it cost?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 11.39,
+   "llm_calls": 30,
+   "tokens_in": 7287,
+   "tokens_out": 561,
+   "cost_usd": 0.00143,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-016_learning_development.pdf",
+    "product/Rover_Error_Codes_2026.xlsx",
+    "legacy_intranet/it_faq.md",
+    "wiki/eng/New_Engineer_Onboarding.html",
+    "product/R2/R2_End_of_Life_Notice.md"
+   ],
+   "kept_docs": [
+    "product/Rover_Error_Codes_2026.xlsx"
+   ],
+   "rejected_attempts": [
+    "R2: Replace the motor controller NW-MC-2210 if E-217 recurs 3 times within 24 hours; the context does not state the cost. R3: Replace the motor controller NW-MC-2210 if E-217 recurs 3 times within 24 ",
+    "R2: Replace the motor controller NW-MC-2210 if E-217 recurs 3 times within 24 hours; the context does not state the cost. R3: Replace the motor controller NW-MC-2210 if E-217 recurs 3 times within 24 ",
+    "R2: Replace the motor controller NW-MC-2210 if E-217 recurs 3 times within 24 hours; the context does not state the cost. R3: Replace the motor controller NW-MC-2210 if E-217 recurs 3 times within 24 "
+   ],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: R2: Replace the motor controller NW-MC-2210 if E-217 recurs 3 times within 24 hours; the context does not state the cost. R3: Replace the motor controller NW-MC-2210 if E-217 recurs 3 times within 24  | fact-check said: The first sentence claims the context states to replace the motor controller NW-MC-2210 under specific conditions, which is fully ",
+    "groundedness": "refusal: no claims to support",
+    "deterministic": "missing: 'NW-MC-2210'; missing: '640'; refused an answerable question"
+   }
+  },
+  {
+   "id": "s07",
+   "category": "multi_hop",
+   "question": "What is the daily meal allowance when I travel to Cairo?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "answer": "Cairo is located in Egypt, which falls under Tier B of the destination tiers. The daily meal allowance for Tier B is $55.",
+   "standalone": "What is the daily meal allowance when I travel to Cairo?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "title": "Travel & Per Diem Policy",
+     "doc_id": "FIN-POL-002",
+     "version": "4.0",
+     "effective_date": "2026-01-15",
+     "section": "3. Meals; 4. Ground transport",
+     "status": "CURRENT"
+    },
+    {
+     "path": "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "title": "Travel & Per Diem Policy",
+     "doc_id": "FIN-POL-002",
+     "version": "4.0",
+     "effective_date": "2026-01-15",
+     "section": "2. Destination tiers",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 3.82,
+   "llm_calls": 10,
+   "tokens_in": 3036,
+   "tokens_out": 154,
+   "cost_usd": 0.000548,
+   "retrieved_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+    "policies/hr/HR-POL-005_sick_leave.pdf",
+    "policies/hr/HR-POL-016_learning_development.pdf",
+    "legacy_intranet/it_faq.md",
+    "scanned_archive/Expense_Policy_2019_scan.txt"
+   ],
+   "kept_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "13",
+   "category": "multi_part",
+   "question": "How much is the referral bonus and when is it paid?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/HR-POL-014_referral_bonus.pdf"
+   ],
+   "answer": "The referral bonus amount depends on the role family of the new hire: $4,000 for Engineering (software, robotics, hardware) roles and $3,000 for all other roles. The bonus is paid in two equal instalments: 50% after the new hire completes 90 days and 50% after 12 months, provided the referrer is still employed at each payout.",
+   "standalone": "How much is the referral bonus and when is it paid?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/HR-POL-014_referral_bonus.pdf",
+     "title": "Employee Referral Programme",
+     "doc_id": "HR-POL-014",
+     "version": "2.0",
+     "effective_date": "2026-02-01",
+     "section": "Bonus amounts; Payout; Limits",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 3.74,
+   "llm_calls": 10,
+   "tokens_in": 2684,
+   "tokens_out": 161,
+   "cost_usd": 0.000499,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-014_referral_bonus.pdf",
+    "policies/it/IT-STD-007_remote_access.pdf",
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "hr_restricted/Comp_Review_2026_Guidance.md",
+    "wiki/it/VPN_Setup_Guide.html",
+    "wiki/people/Benefits_Overview.html"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-014_referral_bonus.pdf"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "16",
+   "category": "multi_part",
+   "question": "My laptop got stolen, what do I do?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf"
+   ],
+   "answer": "If your company laptop is lost or stolen, report it to the Security team at security@northwind.example within 1 hour of noticing and file an IT ticket marked URGENT. Do not wait until the next business day. Security will remotely wipe the device. If the device contained Restricted data, Security will also open a data-incident review.",
+   "standalone": "My laptop got stolen, what do I do?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/it/IT-STD-009_lost_or_stolen_devices.pdf",
+     "title": "Lost or Stolen Devices",
+     "doc_id": "IT-STD-009",
+     "version": "1.0",
+     "effective_date": "2025-10-01",
+     "section": null,
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 4.6,
+   "llm_calls": 9,
+   "tokens_in": 3090,
+   "tokens_out": 208,
+   "cost_usd": 0.000588,
+   "retrieved_docs": [
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf",
+    "policies/it/IT-STD-003_password_and_authentication.pdf",
+    "wiki/sales/Sales_IT_Tips.html",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf",
+    "policies/it/IT-STD-003_password_and_authentication.pdf",
+    "wiki/sales/Sales_IT_Tips.html"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "17",
+   "category": "multi_part",
+   "question": "What are the password rules?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/it/IT-STD-003_password_and_authentication.pdf"
+   ],
+   "answer": "Under IT-STD-003 v2.0, effective 2026-02-01 (CURRENT), corporate passwords must be at least 16 characters long; passphrases are encouraged. Passwords are no longer rotated on a schedule and must be changed immediately if compromise is suspected. Multi-factor authentication (MFA) is mandatory for all corporate accounts, with hardware security keys required for administrators and anyone with production access; SMS codes are not an accepted second factor. After 5 failed sign-in attempts, the account locks for 30 minutes. Self-service reset is available at https://reset.northwind.example.\n\nThe lower-authority wiki (Password_Policy.html) mirrors these rules but is out of date compared to the authoritative policy portal. The outdated IT tips (Sales_IT_Tips.html) incorrectly state passwords need only 12 characters and must be changed every 90 days, which does not apply. Meeting notes from 2026-03-23 indicate users are experiencing lockouts but do not change the established rules.",
+   "standalone": "What are the password rules?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/it/IT-STD-003_password_and_authentication.pdf",
+     "title": "Password & Authentication Standard",
+     "doc_id": "IT-STD-003",
+     "version": "2.0",
+     "effective_date": "2026-02-01",
+     "section": "Passwords; Multi-factor authentication; Lockout",
+     "status": "CURRENT"
+    },
+    {
+     "path": "wiki/it/Password_Policy.html",
+     "title": "Password Policy",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "LOWER_AUTHORITY"
+    }
+   ],
+   "refused": false,
+   "latency_s": 13.27,
+   "llm_calls": 10,
+   "tokens_in": 3925,
+   "tokens_out": 754,
+   "cost_usd": 0.001041,
+   "retrieved_docs": [
+    "policies/it/IT-STD-003_password_and_authentication.pdf",
+    "wiki/it/Password_Policy.html",
+    "wiki/sales/Sales_IT_Tips.html",
+    "meetings/2026-03-23_it_operations_049.txt",
+    "meetings/2026-02-22_data_platform_028.txt",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "policies/it/IT-STD-003_password_and_authentication.pdf",
+    "wiki/it/Password_Policy.html",
+    "wiki/sales/Sales_IT_Tips.html",
+    "meetings/2026-03-23_it_operations_049.txt"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "32",
+   "category": "multi_part",
+   "question": "What are the rules for booking business travel?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "answer": "Under FIN-POL-002 v4.0, effective 2026-01-15, all travel must be booked through Navan. Economy class is standard for flights under 6 hours; premium economy is permitted for flights of 6 hours or more. Business class requires CFO approval. Car rental requires manager approval and is limited to the compact class. Alcohol is not reimbursable. On the day of departure and return, 75% of the daily meal allowance applies. Meal allowances are reimbursed against itemised receipts up to the daily tier amount. Use public transport or ride-hailing for ground transport. The 2018 policy stating all flights must be economy class is out of date.",
+   "standalone": "What are the rules for booking business travel?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "title": "Travel & Per Diem Policy",
+     "doc_id": "FIN-POL-002",
+     "version": "4.0",
+     "effective_date": "2026-01-15",
+     "section": "1. Booking",
+     "status": "CURRENT"
+    },
+    {
+     "path": "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+     "title": "Travel & Per Diem Policy",
+     "doc_id": "FIN-POL-002",
+     "version": "4.0",
+     "effective_date": "2026-01-15",
+     "section": "3. Meals; 4. Ground transport",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 8.01,
+   "llm_calls": 10,
+   "tokens_in": 2922,
+   "tokens_out": 438,
+   "cost_usd": 0.000701,
+   "retrieved_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+    "wiki/sales/Demo_Rover_Booking.html",
+    "wiki/teams/Team_Field_Service.html",
+    "legacy_intranet/it_faq.md",
+    "scanned_archive/Travel_Policy_2018_scan.txt"
+   ],
+   "kept_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+    "scanned_archive/Travel_Policy_2018_scan.txt"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "n20",
+   "category": "ambiguous",
+   "question": "Which battery pack does the rover use?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "product/Spare_Parts_Catalog_2026.pdf",
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf"
+   ],
+   "answer": "R2: The rover uses a 48V 30Ah LiFePO4 battery (part number NW-BAT-4380) with an approximate continuous operation time of 8 hours.\nR3: The rover uses a 48V 40Ah LiFePO4 battery (part number NW-BAT-4830) with an approximate continuous operation time of 10 hours.",
+   "standalone": "Which battery pack does the rover use?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+     "title": "Warehouse Rover R2 - Data Sheet",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    },
+    {
+     "path": "product/Spare_Parts_Catalog_2026.pdf",
+     "title": "Spare Parts Catalog 2026",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    },
+    {
+     "path": "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+     "title": "Warehouse Rover R3 - Data Sheet",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 5.21,
+   "llm_calls": 10,
+   "tokens_in": 4059,
+   "tokens_out": 223,
+   "cost_usd": 0.000743,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-016_learning_development.pdf",
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+    "product/Spare_Parts_Catalog_2026.pdf",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf"
+   ],
+   "kept_docs": [
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+    "product/Spare_Parts_Catalog_2026.pdf",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "n21",
+   "category": "ambiguous",
+   "question": "Which Fleet Manager version do I need for the rover?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+    "product/R2/R2_End_of_Life_Notice.md"
+   ],
+   "answer": "For the **R2**, you need **Fleet Manager 4.3** (or earlier), as it is not supported by Fleet Manager 5.x and requires a separate instance if mixed with R3 units. For the **R3**, you need **Fleet Manager 5.0 or later**; it is not supported by Fleet Manager 4.x.",
+   "standalone": "Which Fleet Manager version do I need for the rover?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 2,
+   "sources": [
+    {
+     "path": "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+     "title": "Warehouse Rover R3 - Data Sheet",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    },
+    {
+     "path": "product/Rover_Error_Codes_2026.xlsx",
+     "title": "Rover Error Codes 2026",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": "Error codes",
+     "status": "AUTHORITATIVE"
+    },
+    {
+     "path": "product/fleet_manager/release_notes_5.0.md",
+     "title": "Fleet Manager 5.0 — Release Notes (May 2026)",
+     "doc_id": null,
+     "version": "5.0",
+     "effective_date": null,
+     "section": "Highlights; Breaking changes",
+     "status": "AUTHORITATIVE"
+    },
+    {
+     "path": "product/R2/R2_End_of_Life_Notice.md",
+     "title": "Warehouse Rover R2 — End-of-Life Notice",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 22.71,
+   "llm_calls": 28,
+   "tokens_in": 11261,
+   "tokens_out": 1196,
+   "cost_usd": 0.002407,
+   "retrieved_docs": [
+    "product/fleet_manager/release_notes_5.0.md",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+    "product/Rover_Error_Codes_2026.xlsx",
+    "product/R2/R2_End_of_Life_Notice.md",
+    "legacy_intranet/it_faq.md",
+    "policies/it/IT-STD-007_remote_access.pdf",
+    "product/fleet_manager/release_notes_4.3.md",
+    "wiki/eng/On_Call.html"
+   ],
+   "kept_docs": [
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+    "product/Rover_Error_Codes_2026.xlsx",
+    "product/fleet_manager/release_notes_5.0.md",
+    "product/R2/R2_End_of_Life_Notice.md"
+   ],
+   "rejected_attempts": [
+    "R2: You need Fleet Manager 4.3 or earlier; Fleet Manager 5.x does not support R2. There is a draft proposal (not approved) to change this in an upcoming release, but it is not yet effective. The curre",
+    "R2: You must use Fleet Manager 4.3 (or earlier) because Fleet Manager 5.x does not support the R2. There is a draft proposal (not approved) to allow mixed fleets, but currently, customers running mixe"
+   ],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "s12",
+   "category": "ambiguous",
+   "question": "What is the payload capacity of the rover?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf"
+   ],
+   "answer": "R2: The payload capacity is 80 kg.\nR3: The payload capacity is 120 kg.",
+   "standalone": "What is the payload capacity of the rover?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+     "title": "Warehouse Rover R2 - Data Sheet",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    },
+    {
+     "path": "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+     "title": "Warehouse Rover R3 - Data Sheet",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 3.23,
+   "llm_calls": 10,
+   "tokens_in": 3380,
+   "tokens_out": 107,
+   "cost_usd": 0.000571,
+   "retrieved_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+    "product/Rover_Error_Codes_2026.xlsx",
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+    "product/Rover_Error_Codes_2026.xlsx"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "n12",
+   "category": "long_doc",
+   "question": "How should I prepare an R3 for storage of more than a month?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "product/R3/R3_Operator_Manual_RevC.pdf"
+   ],
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How should I prepare an R3 for storage of more than a month?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 6.91,
+   "llm_calls": 23,
+   "tokens_in": 5962,
+   "tokens_out": 289,
+   "cost_usd": 0.001068,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-001_code_of_conduct.pdf",
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+    "product/R2/R2_End_of_Life_Notice.md",
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+    "wiki/finance/How_to_submit_expenses.html",
+    "legacy_intranet/it_faq.md",
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "policies/finance/FIN-POL-001_expense_reimbursement.pdf",
+    "wiki/people/Benefits_Overview.html",
+    "wiki/it/Password_Policy.html",
+    "newsletters/Northwind_Dispatch_2026-02.html",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "wiki/sales/Demo_Rover_Booking.html",
+    "meetings/2026-09-27_data_platform_019.txt"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "wiki/sales/Demo_Rover_Booking.html"
+   ],
+   "rejected_attempts": [
+    "Based on the provided documents, there is no specific instruction for preparing an R3 for storage of more than a month. The Operator Manual specifies routine maintenance intervals (drive wheels every "
+   ],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: Based on the provided documents, there is no specific instruction for preparing an R3 for storage of more than a month. The Operator Manual specifies routine maintenance intervals (drive wheels every  | fact-check said: The first sentence claims there is no specific instruction for preparing an R3 for storage of more than a month, which is not expl",
+    "groundedness": "refusal: no claims to support",
+    "deterministic": "missing: '50'; missing: '60'; missing: '3 months|three months'; refused an answerable question"
+   }
+  },
+  {
+   "id": "n13",
+   "category": "long_doc",
+   "question": "How high a threshold can the R3 cross?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "product/R3/R3_Operator_Manual_RevC.pdf"
+   ],
+   "answer": "The R3 can cross thresholds up to 2 cm high at reduced speed.",
+   "standalone": "How high a threshold can the R3 cross?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "product/R3/R3_Operator_Manual_RevC.pdf",
+     "title": "Warehouse Rover R3 - Operator Manual",
+     "doc_id": null,
+     "version": "Rev C",
+     "effective_date": null,
+     "section": "14. Floors, ramps and thresholds; 15. Outdoor loading docks",
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 2.78,
+   "llm_calls": 10,
+   "tokens_in": 3570,
+   "tokens_out": 73,
+   "cost_usd": 0.000579,
+   "retrieved_docs": [
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "product/Rover_Error_Codes_2026.xlsx",
+    "wiki/finance/How_to_submit_expenses.html",
+    "newsletters/Northwind_Dispatch_2026-03.html",
+    "meetings/2026-04-24_data_platform_086.txt",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "product/Rover_Error_Codes_2026.xlsx",
+    "newsletters/Northwind_Dispatch_2026-03.html",
+    "meetings/2026-04-24_data_platform_086.txt"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "n14",
+   "category": "long_doc",
+   "question": "Can the R3 work on an outdoor loading dock in hot weather?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "product/R3/R3_Operator_Manual_RevC.pdf"
+   ],
+   "answer": "Based on the provided documents, the R3 can operate on outdoor loading docks only under specific weather conditions, including temperatures between 0 and 40 degrees Celsius. Operations must be suspended if standing water is present. While the datasheet notes that the rover has IP65 ingress protection approved for covered outdoor loading docks, the operator manual explicitly restricts outdoor dock operation to light rain and temperatures within the 0–40°C range.",
+   "standalone": "Can the R3 work on an outdoor loading dock in hot weather?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "product/R3/R3_Operator_Manual_RevC.pdf",
+     "title": "Warehouse Rover R3 - Operator Manual",
+     "doc_id": null,
+     "version": "Rev C",
+     "effective_date": null,
+     "section": "14. Floors, ramps and thresholds; 15. Outdoor loading docks",
+     "status": "AUTHORITATIVE"
+    },
+    {
+     "path": "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+     "title": "Warehouse Rover R3 - Data Sheet",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    },
+    {
+     "path": "product/R3/R3_Operator_Manual_RevC.pdf",
+     "title": "Warehouse Rover R3 - Operator Manual",
+     "doc_id": null,
+     "version": "Rev C",
+     "effective_date": null,
+     "section": "1. Safety overview",
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 4.93,
+   "llm_calls": 10,
+   "tokens_in": 3491,
+   "tokens_out": 214,
+   "cost_usd": 0.000652,
+   "retrieved_docs": [
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+    "wiki/eng/Robotics_Lab_Safety.html",
+    "legacy_intranet/product_specs.md"
+   ],
+   "kept_docs": [
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "s10",
+   "category": "long_doc",
+   "question": "What is the maximum ramp incline for a loaded R3?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "product/R3/R3_Operator_Manual_RevC.pdf"
+   ],
+   "answer": "The maximum ramp incline for a loaded Warehouse Rover R3 is 5 degrees.",
+   "standalone": "What is the maximum ramp incline for a loaded R3?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "product/R3/R3_Operator_Manual_RevC.pdf",
+     "title": "Warehouse Rover R3 - Operator Manual",
+     "doc_id": null,
+     "version": "Rev C",
+     "effective_date": null,
+     "section": "14. Floors, ramps and thresholds; 15. Outdoor loading docks",
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 2.92,
+   "llm_calls": 10,
+   "tokens_in": 2940,
+   "tokens_out": 109,
+   "cost_usd": 0.000506,
+   "retrieved_docs": [
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+    "meetings/2026-04-24_data_platform_086.txt",
+    "legacy_intranet/product_specs.md",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "legacy_intranet/product_specs.md"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "n15",
+   "category": "cross_lingual",
+   "question": "What are the Cairo office's opening hours?",
+   "user_id": "u1002",
+   "split": "dev",
+   "gold_docs": [
+    "cairo/دليل_مكتب_القاهرة.md"
+   ],
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What are the Cairo office's opening hours?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.24,
+   "llm_calls": 22,
+   "tokens_in": 5568,
+   "tokens_out": 140,
+   "cost_usd": 0.000919,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-005_sick_leave.pdf",
+    "wiki/facilities/Offices.html",
+    "cairo/الإجازات_الرسمية_2026.csv",
+    "legacy_intranet/it_faq.md",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "product/Support_SLA_2026.pdf",
+    "wiki/teams/Team_Firmware.html",
+    "legacy_intranet/employee_handbook.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-005_sick_leave.pdf",
+    "product/Support_SLA_2026.pdf",
+    "wiki/facilities/Offices.html"
+   ],
+   "rejected_attempts": [
+    "The provided context does not state the specific opening hours for the Cairo office. It only mentions that local office guides and policies are maintained by the Cairo team in Arabic."
+   ],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: The provided context does not state the specific opening hours for the Cairo office. It only mentions that local office guides and policies are maintained by the Cairo team in Arabic. | fact-check said: The provided context does not state the specific opening hours for the Cairo office. The context only mentions that local office guides and policie",
+    "groundedness": "refusal: no claims to support",
+    "deterministic": "missing: '8:00|8 am|8am|08:00|8 a.m'; missing: '7:00|7 pm|7pm|19:00|7 p.m'; refused an answerable question"
+   }
+  },
+  {
+   "id": "n16",
+   "category": "cross_lingual",
+   "question": "How much does it cost to replace a lost access badge at the Cairo office?",
+   "user_id": "u1002",
+   "split": "dev",
+   "gold_docs": [
+    "cairo/دليل_مكتب_القاهرة.md"
+   ],
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How much does it cost to replace a lost access badge at the Cairo office?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.27,
+   "llm_calls": 23,
+   "tokens_in": 6331,
+   "tokens_out": 115,
+   "cost_usd": 0.001019,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-005_sick_leave.pdf",
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf",
+    "wiki/facilities/Offices.html",
+    "meetings/2026-07-13_fleet_software_073.txt",
+    "meetings/2026-07-26_manufacturing_058.txt",
+    "legacy_intranet/it_faq.md",
+    "newsletters/Northwind_Dispatch_2026-02.html",
+    "meetings/2026-09-07_field_service_027.txt",
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-005_sick_leave.pdf",
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "wiki/facilities/Offices.html"
+   ],
+   "rejected_attempts": [
+    "I don't know based on the provided documents.\n\nSources:"
+   ],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents.\n\nSources: | fact-check said: The answer states \"I don't know,\" which is not supported by the context because the documents clearly provide specific details about sick leave and PTO policies.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "deterministic": "missing: '200'; refused an answerable question"
+   }
+  },
+  {
+   "id": "n17",
+   "category": "cross_lingual",
+   "question": "How many days off is Eid al-Fitr in 2026 for the Cairo office?",
+   "user_id": "u1002",
+   "split": "dev",
+   "gold_docs": [
+    "cairo/الإجازات_الرسمية_2026.csv"
+   ],
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How many days off is Eid al-Fitr in 2026 for the Cairo office?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.49,
+   "llm_calls": 23,
+   "tokens_in": 6541,
+   "tokens_out": 141,
+   "cost_usd": 0.001066,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-005_sick_leave.pdf",
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "cairo/الإجازات_الرسمية_2026.csv",
+    "wiki/finance/How_to_submit_expenses.html",
+    "scanned_archive/PTO_Policy_2017_scan.txt",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "wiki/people/Benefits_Overview.html",
+    "wiki/facilities/Offices.html",
+    "wiki/people/US_Holidays_2026.html"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-005_sick_leave.pdf",
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "rejected_attempts": [
+    "I don't know based on the provided documents.\n\nSources:"
+   ],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents.\n\nSources: | fact-check said: The answer states \"I don't know,\" which is not supported by the context because the documents clearly provide specific details about sick leave and PTO policies.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "deterministic": "missing: '3 days|three days|3-day|three-day'; refused an answerable question"
+   }
+  },
+  {
+   "id": "s25",
+   "category": "cross_lingual",
+   "question": "Which days make up the work week in the Cairo office?",
+   "user_id": "u1002",
+   "split": "dev",
+   "gold_docs": [
+    "cairo/ساعات_العمل_في_رمضان.md",
+    "cairo/دليل_مكتب_القاهرة.md"
+   ],
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Which days make up the work week in the Cairo office?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.07,
+   "llm_calls": 22,
+   "tokens_in": 6360,
+   "tokens_out": 116,
+   "cost_usd": 0.001024,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-005_sick_leave.pdf",
+    "policies/hr/HR-POL-010_remote_work.pdf",
+    "wiki/facilities/Offices.html",
+    "wiki/eng/Robotics_Lab_Safety.html",
+    "cairo/الإجازات_الرسمية_2026.csv",
+    "newsletters/Northwind_Dispatch_2026-04.html",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "policies/hr/HR-POL-011_work_from_abroad.pdf",
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-005_sick_leave.pdf",
+    "policies/hr/HR-POL-010_remote_work.pdf",
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "rejected_attempts": [
+    "I don't know based on the provided documents.\n\nSources:"
+   ],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: I don't know based on the provided documents.\n\nSources: | fact-check said: The answer states \"I don't know,\" which is not supported because the context explicitly provides details about sick leave, remote work, and PTO policies.\nANSWER: NO",
+    "groundedness": "refusal: no claims to support",
+    "deterministic": "missing: 'Sunday'; missing: 'Thursday'; refused an answerable question"
+   }
+  },
+  {
+   "id": "36",
+   "category": "follow_up",
+   "question": "And what does the standard plan cover?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "product/Support_SLA_2026.pdf"
+   ],
+   "answer": "The Standard plan covers business hours (Monday to Friday, 09:00–17:00 customer local time) and has a first response time of 4 hours for Severity 1 tickets; Severity 2–4 tickets have twice the stated response time.",
+   "standalone": "And what does the standard plan cover?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "product/Support_SLA_2026.pdf",
+     "title": "Customer Support Service Levels - 2026",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 4.19,
+   "llm_calls": 11,
+   "tokens_in": 2968,
+   "tokens_out": 178,
+   "cost_usd": 0.000552,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-016_learning_development.pdf",
+    "policies/it/IT-STD-001_data_classification.pdf",
+    "product/Support_SLA_2026.pdf",
+    "newsletters/Northwind_Dispatch_2025-09.html",
+    "newsletters/Northwind_Dispatch_2026-06.html",
+    "meetings/2026-09-28_product_management_032.txt",
+    "meetings/2026-09-26_hardware_sustaining_011.txt",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-016_learning_development.pdf",
+    "product/Support_SLA_2026.pdf"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "n22",
+   "category": "follow_up",
+   "question": "And how fast does it go when it's loaded?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf"
+   ],
+   "answer": "The Warehouse Rover R3 has a maximum speed of 2.0 m/s when loaded.",
+   "standalone": "And how fast does the Warehouse Rover R3 go when it is loaded?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+     "title": "Warehouse Rover R3 - Data Sheet",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 3.22,
+   "llm_calls": 11,
+   "tokens_in": 3778,
+   "tokens_out": 96,
+   "cost_usd": 0.000624,
+   "retrieved_docs": [
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+    "wiki/it/VPN_Setup_Guide.html",
+    "meetings/2026-08-14_facilities_office_ops_201.txt"
+   ],
+   "kept_docs": [
+    "product/R3/Warehouse_Rover_R3_datasheet.pdf",
+    "product/R2/Warehouse_Rover_R2_datasheet.pdf",
+    "product/R3/R3_Operator_Manual_RevC.pdf"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "s26",
+   "category": "follow_up",
+   "question": "And how many of them can I carry over?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "answer": "Unused PTO of up to 3 days may be carried into the next calendar year. Carried-over days must be used by March 31 of that year; any carried-over days not used by March 31 are forfeited. Any unused balance above 3 days is forfeited on December 31. Transition rule for 2026 only: balances carried from 2025 under version 2.0 (up to 5 days) are honoured in full but must also be used by March 31, 2026.",
+   "standalone": "And how many of the PTO days can I carry over?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "title": "Paid Time Off Policy",
+     "doc_id": "HR-POL-004",
+     "version": "3.0",
+     "effective_date": "2026-03-01",
+     "section": "3. Carry-over; 4. Requesting PTO",
+     "status": "CURRENT"
+    },
+    {
+     "path": "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "title": "Paid Time Off Policy",
+     "doc_id": "HR-POL-004",
+     "version": "3.0",
+     "effective_date": "2026-03-01",
+     "section": "2. Accrual",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 6.4,
+   "llm_calls": 9,
+   "tokens_in": 4283,
+   "tokens_out": 296,
+   "cost_usd": 0.00082,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "s27",
+   "category": "follow_up",
+   "question": "What about Egypt?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What about Egypt?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 10.63,
+   "llm_calls": 28,
+   "tokens_in": 7053,
+   "tokens_out": 518,
+   "cost_usd": 0.001369,
+   "retrieved_docs": [
+    "cairo/الإجازات_الرسمية_2026.csv",
+    "wiki/facilities/Offices.html",
+    "meetings/2026-02-15_field_service_035.txt",
+    "meetings/2026-09-16_perception_008.txt",
+    "legacy_intranet/it_faq.md",
+    "policies/hr/HR-POL-016_learning_development.pdf",
+    "policies/hr/HR-POL-011_work_from_abroad.pdf",
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+    "policies/hr/HR-POL-005_sick_leave.pdf",
+    "policies/hr/HR-POL-010_remote_work.pdf",
+    "newsletters/Northwind_Dispatch_2026-02.html",
+    "newsletters/Northwind_Dispatch_2026-04.html",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-005_sick_leave.pdf"
+   ],
+   "rejected_attempts": [
+    "Northwind Robotics has an office in Cairo, Egypt, located in New Cairo. The local office guide and policies for this location are maintained by the Cairo team in Arabic. Visitors to this office must b",
+    "Employees in the Cairo office are additionally covered by the sick leave provisions of Egyptian labour law. Where the Egyptian statutory provision is more generous than the policy's 10 paid days per y",
+    "Employees in the Cairo office are additionally covered by the sick leave provisions of Egyptian labour law. Where the Egyptian statutory provision is more generous than the policy's 10 paid days per y"
+   ],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: Employees in the Cairo office are additionally covered by the sick leave provisions of Egyptian labour law. Where the Egyptian statutory provision is more generous than the policy's 10 paid days per y | fact-check said: The first sentence of the answer is fully supported by the context.\nThe second sentence adds specific details about the policy's 1",
+    "groundedness": "refusal: no claims to support",
+    "deterministic": "missing: '150'; refused an answerable question"
+   }
+  },
+  {
+   "id": "n24",
+   "category": "personalized",
+   "question": "How many PTO days do I get this year?",
+   "user_id": "u3001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "answer": "To determine your annual Paid Time Off (PTO) entitlement, the number of completed years of service as of January 1 of the current calendar year is required. The specific entitlement depends on your tenure category:\n\n*   **0 – 2 years** of completed service: 20 days\n*   **3 – 5 years** of completed service: 23 days\n*   **6 years or more**: 25 days\n\nPart-time employees accrue PTO pro rata to their contracted hours, beginning on the first day of employment. The 90-day waiting period from version 2.0 has been reduced to 60 days.",
+   "standalone": "How many PTO days do I get this year?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "title": "Paid Time Off Policy",
+     "doc_id": "HR-POL-004",
+     "version": "3.0",
+     "effective_date": "2026-03-01",
+     "section": "2. Accrual",
+     "status": "CURRENT"
+    },
+    {
+     "path": "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "title": "Paid Time Off Policy",
+     "doc_id": "HR-POL-004",
+     "version": "3.0",
+     "effective_date": "2026-03-01",
+     "section": "3. Carry-over; 4. Requesting PTO",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 6.4,
+   "llm_calls": 10,
+   "tokens_in": 3954,
+   "tokens_out": 303,
+   "cost_usd": 0.000775,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "wiki/finance/How_to_submit_expenses.html",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "n25",
+   "category": "personalized",
+   "question": "How much annual PTO am I entitled to?",
+   "user_id": "u1003",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "answer": "Your annual PTO entitlement depends on your completed years of service as of January 1 of the calendar year, measured under HR-POL-004 v3.0 effective 2026-03-01:\n- **0–2 years**: 20 days (1.67 days/month)\n- **3–5 years**: 23 days (1.92 days/month)\n- **6+ years**: 25 days (2.08 days/month)\n\nPart-time employees accrue pro rata to their contracted hours, starting on the first day of employment. The 90-day waiting period from version 2.0 is reduced to 60 days under this policy.",
+   "standalone": "How much annual PTO am I entitled to?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "title": "Paid Time Off Policy",
+     "doc_id": "HR-POL-004",
+     "version": "3.0",
+     "effective_date": "2026-03-01",
+     "section": "2. Accrual",
+     "status": "CURRENT"
+    },
+    {
+     "path": "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "title": "Paid Time Off Policy",
+     "doc_id": "HR-POL-004",
+     "version": "3.0",
+     "effective_date": "2026-03-01",
+     "section": "3. Carry-over; 4. Requesting PTO",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 6.73,
+   "llm_calls": 10,
+   "tokens_in": 4274,
+   "tokens_out": 332,
+   "cost_usd": 0.00084,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "wiki/people/Benefits_Overview.html",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "legacy_intranet/it_faq.md",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "wiki/people/Benefits_Overview.html",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "n26",
+   "category": "personalized",
+   "question": "Do I get the monthly transport allowance?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "cairo/بدل_الانتقالات.md"
+   ],
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "Do I get the monthly transport allowance?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 7.45,
+   "llm_calls": 24,
+   "tokens_in": 6075,
+   "tokens_out": 303,
+   "cost_usd": 0.001093,
+   "retrieved_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "scanned_archive/Expense_Policy_2019_scan.txt",
+    "legacy_intranet/it_faq.md",
+    "legacy_intranet/hr_policies.md",
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "wiki/people/Benefits_Overview.html",
+    "newsletters/Northwind_Dispatch_2026-02.html",
+    "legacy_intranet/employee_handbook.md",
+    "policies/hr/HR-POL-014_referral_bonus.pdf"
+   ],
+   "kept_docs": [
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+    "policies/hr/HR-POL-014_referral_bonus.pdf",
+    "wiki/people/Benefits_Overview.html"
+   ],
+   "rejected_attempts": [
+    "Based on the provided context, there is no mention of a \"monthly\" transport allowance. The policy states that ground transport reimbursement requires itemised receipts and is limited to public transpo"
+   ],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "refused an answerable question | rejected answer: Based on the provided context, there is no mention of a \"monthly\" transport allowance. The policy states that ground transport reimbursement requires itemised receipts and is limited to public transpo | fact-check said: The context does not mention a \"monthly\" transport allowance, so the claim that there is no mention of it is supported by the abse",
+    "groundedness": "refusal: no claims to support",
+    "deterministic": "missing: 'Cairo'; refused an answerable question"
+   }
+  },
+  {
+   "id": "s28",
+   "category": "personalized",
+   "question": "How many PTO days am I entitled to this year?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "answer": "Your annual PTO entitlement depends on your completed years of service as of January 1 of the current calendar year:\n- **0–2 years**: 20 days (1.67 days/month)\n- **3–5 years**: 23 days (1.92 days/month)\n- **6+ years**: 25 days (2.08 days/month)\n\nPart-time employees accrue pro rata to their contracted hours, starting from the first day of employment. The 90-day waiting period from version 2.0 is reduced to 60 days under this policy.",
+   "standalone": "How many PTO days am I entitled to this year?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "title": "Paid Time Off Policy",
+     "doc_id": "HR-POL-004",
+     "version": "3.0",
+     "effective_date": "2026-03-01",
+     "section": "2. Accrual",
+     "status": "CURRENT"
+    },
+    {
+     "path": "policies/hr/HR-POL-004_PTO_v3.pdf",
+     "title": "Paid Time Off Policy",
+     "doc_id": "HR-POL-004",
+     "version": "3.0",
+     "effective_date": "2026-03-01",
+     "section": "3. Carry-over; 4. Requesting PTO",
+     "status": "CURRENT"
+    }
+   ],
+   "refused": false,
+   "latency_s": 6.09,
+   "llm_calls": 10,
+   "tokens_in": 3945,
+   "tokens_out": 302,
+   "cost_usd": 0.000773,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "wiki/finance/How_to_submit_expenses.html",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "n28",
+   "category": "access",
+   "question": "What is the merit budget for the 2026 compensation review?",
+   "user_id": "u1002",
+   "split": "dev",
+   "gold_docs": [],
+   "answer": "The merit budget for the 2026 compensation review is 3.5% of base salary across the company, allocated by managers within their team pool.",
+   "standalone": "What is the merit budget for the 2026 compensation review?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "hr_restricted/Comp_Review_2026_Guidance.md",
+     "title": "Compensation Review 2026 — HR Guidance (RESTRICTED)",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 2.83,
+   "llm_calls": 10,
+   "tokens_in": 2429,
+   "tokens_out": 100,
+   "cost_usd": 0.000424,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-016_learning_development.pdf",
+    "policies/hr/HR-POL-020_performance_reviews.pdf",
+    "hr_restricted/Comp_Review_2026_Guidance.md",
+    "meetings/2026-03-16_legal_003.txt",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "hr_restricted/Comp_Review_2026_Guidance.md"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "answered an out-of-scope question",
+    "groundedness": "judge: YES",
+    "deterministic": "forbidden content present: '3.5%'; expected a refusal"
+   }
+  },
+  {
+   "id": "n32",
+   "category": "access",
+   "question": "How long is a performance improvement plan?",
+   "user_id": "u2001",
+   "split": "dev",
+   "gold_docs": [
+    "hr_restricted/Disciplinary_Procedure.pdf"
+   ],
+   "answer": "A performance improvement plan (PIP) lasts for 60 days.",
+   "standalone": "How long is a performance improvement plan?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "hr_restricted/Disciplinary_Procedure.pdf",
+     "title": "Disciplinary Procedure (Managers' Guide)",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 2.16,
+   "llm_calls": 10,
+   "tokens_in": 2238,
+   "tokens_out": 67,
+   "cost_usd": 0.000376,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-020_performance_reviews.pdf",
+    "hr_restricted/Disciplinary_Procedure.pdf",
+    "hr_restricted/Performance_Calibration_Guide_2026.md",
+    "newsletters/Northwind_Dispatch_2026-02.html",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "hr_restricted/Disciplinary_Procedure.pdf"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "s18",
+   "category": "access",
+   "question": "What is the salary range for an L4 engineer in Austin?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [],
+   "answer": "The salary range for an L4 engineer in Austin is $142,000 to $178,000 USD.",
+   "standalone": "What is the salary range for an L4 engineer in Austin?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "hr_restricted/Salary_Bands_2026.xlsx",
+     "title": "Salary Bands 2026",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": "Bands",
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 2.84,
+   "llm_calls": 10,
+   "tokens_in": 2451,
+   "tokens_out": 102,
+   "cost_usd": 0.000429,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-016_learning_development.pdf",
+    "policies/it/IT-STD-007_remote_access.pdf",
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "hr_restricted/Salary_Bands_2026.xlsx"
+   ],
+   "kept_docs": [
+    "hr_restricted/Salary_Bands_2026.xlsx"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "answered an out-of-scope question",
+    "groundedness": "judge: YES",
+    "deterministic": "forbidden content present: '142,000'; forbidden content present: '178,000'; expected a refusal"
+   }
+  },
+  {
+   "id": "s19",
+   "category": "access",
+   "question": "What is the salary range for an L4 engineer in Austin?",
+   "user_id": "u3001",
+   "split": "dev",
+   "gold_docs": [
+    "hr_restricted/Salary_Bands_2026.xlsx"
+   ],
+   "answer": "The salary range for an L4 engineer in Austin is $142,000 to $178,000 USD.",
+   "standalone": "What is the salary range for an L4 engineer in Austin?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "hr_restricted/Salary_Bands_2026.xlsx",
+     "title": "Salary Bands 2026",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": "Bands",
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 1.93,
+   "llm_calls": 10,
+   "tokens_in": 2451,
+   "tokens_out": 102,
+   "cost_usd": 0.000429,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-016_learning_development.pdf",
+    "policies/it/IT-STD-007_remote_access.pdf",
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "hr_restricted/Salary_Bands_2026.xlsx"
+   ],
+   "kept_docs": [
+    "hr_restricted/Salary_Bands_2026.xlsx"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: INCORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "s20",
+   "category": "access",
+   "question": "What is Project Juniper?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [],
+   "answer": "Based on the provided documents, Project Juniper is a workforce plan involving the reduction of 18 roles within the Austin hardware sustaining team following the R2 end of sale. The affected employees are to be informed on November 12, 2026.",
+   "standalone": "What is Project Juniper?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "hr_restricted/Project_Juniper_Workforce_Plan.md",
+     "title": "Project Juniper workforce plan — STRICTLY RESTRICTED (HR leadership)",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 3.59,
+   "llm_calls": 10,
+   "tokens_in": 2606,
+   "tokens_out": 153,
+   "cost_usd": 0.000483,
+   "retrieved_docs": [
+    "hr_restricted/Project_Juniper_Workforce_Plan.md",
+    "product/fleet_manager/release_notes_5.0.md",
+    "wiki/teams/Team_Product_Management.html",
+    "wiki/teams/Team_Sales_Engineering.html",
+    "meetings/2026-09-22_leadership_sync_202.txt",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "hr_restricted/Project_Juniper_Workforce_Plan.md",
+    "meetings/2026-09-22_leadership_sync_202.txt"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "answered an out-of-scope question",
+    "groundedness": "judge: YES",
+    "deterministic": "forbidden content present: '18 roles'; forbidden content present: 'November 12'; expected a refusal"
+   }
+  },
+  {
+   "id": "s21",
+   "category": "access",
+   "question": "What target rating distribution should I use in performance calibration?",
+   "user_id": "u2001",
+   "split": "dev",
+   "gold_docs": [
+    "hr_restricted/Performance_Calibration_Guide_2026.md"
+   ],
+   "answer": "The target rating distribution is 15% Exceeds, 70% Meets, and 15% Below. Departments may deviate by up to 5 points with VP approval. Calibration sessions are held per department in the week before review meetings.",
+   "standalone": "What target rating distribution should I use in performance calibration?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "hr_restricted/Performance_Calibration_Guide_2026.md",
+     "title": "Performance Calibration Guide 2026 (managers only)",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 3.4,
+   "llm_calls": 10,
+   "tokens_in": 2261,
+   "tokens_out": 141,
+   "cost_usd": 0.000424,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-020_performance_reviews.pdf",
+    "hr_restricted/Performance_Calibration_Guide_2026.md",
+    "hr_restricted/Comp_Review_2026_Guidance.md",
+    "hr_restricted/Disciplinary_Procedure.pdf",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "hr_restricted/Performance_Calibration_Guide_2026.md"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "judge: CORRECT",
+    "groundedness": "judge: YES",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "s22",
+   "category": "access",
+   "question": "How long is a performance improvement plan?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [],
+   "answer": "A performance improvement plan (PIP) lasts for 60 days.",
+   "standalone": "How long is a performance improvement plan?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation"
+   ],
+   "retries": 0,
+   "sources": [
+    {
+     "path": "hr_restricted/Disciplinary_Procedure.pdf",
+     "title": "Disciplinary Procedure (Managers' Guide)",
+     "doc_id": null,
+     "version": null,
+     "effective_date": null,
+     "section": null,
+     "status": "AUTHORITATIVE"
+    }
+   ],
+   "refused": false,
+   "latency_s": 1.7,
+   "llm_calls": 10,
+   "tokens_in": 2238,
+   "tokens_out": 67,
+   "cost_usd": 0.000376,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-020_performance_reviews.pdf",
+    "hr_restricted/Disciplinary_Procedure.pdf",
+    "hr_restricted/Performance_Calibration_Guide_2026.md",
+    "newsletters/Northwind_Dispatch_2026-02.html",
+    "legacy_intranet/it_faq.md"
+   ],
+   "kept_docs": [
+    "hr_restricted/Disciplinary_Procedure.pdf"
+   ],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 0,
+    "groundedness": 1,
+    "deterministic": 0
+   },
+   "comments": {
+    "correctness": "answered an out-of-scope question",
+    "groundedness": "judge: YES",
+    "deterministic": "forbidden content present: '60 day'; expected a refusal"
+   }
+  },
+  {
+   "id": "25",
+   "category": "out_of_scope",
+   "question": "What is the capital of France?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [],
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the capital of France?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "direct_answer"
+   ],
+   "retries": 0,
+   "sources": [],
+   "refused": true,
+   "latency_s": 0.23,
+   "llm_calls": 2,
+   "tokens_in": 210,
+   "tokens_out": 4,
+   "cost_usd": 3.4e-05,
+   "retrieved_docs": [],
+   "kept_docs": [],
+   "rejected_attempts": [],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "26",
+   "category": "out_of_scope",
+   "question": "What is the CEO's home address?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [],
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the CEO's home address?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 13.45,
+   "llm_calls": 23,
+   "tokens_in": 5189,
+   "tokens_out": 708,
+   "cost_usd": 0.001203,
+   "retrieved_docs": [
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "wiki/it/VPN_Setup_Guide.html",
+    "meetings/2026-03-23_it_operations_049.txt",
+    "meetings/2026-03-23_sales_engineering_029.txt",
+    "meetings/2026-07-20_marketing_039.txt",
+    "meetings/2026-04-25_sales_engineering_067.txt",
+    "legacy_intranet/it_faq.md",
+    "policies/hr/HR-POL-001_code_of_conduct.pdf",
+    "policies/finance/FIN-POL-001_expense_reimbursement.pdf",
+    "wiki/facilities/Offices.html",
+    "meetings/2026-08-14_facilities_office_ops_201.txt",
+    "product/Rover_Error_Codes_2026.xlsx",
+    "wiki/people/US_Holidays_2026.html",
+    "wiki/teams/Team_People_Operations.html"
+   ],
+   "kept_docs": [
+    "product/Rover_Error_Codes_2026.xlsx",
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "wiki/it/VPN_Setup_Guide.html"
+   ],
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "27",
+   "category": "out_of_scope",
+   "question": "What dental insurance plan does Northwind offer?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [],
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What dental insurance plan does Northwind offer?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.64,
+   "llm_calls": 23,
+   "tokens_in": 5821,
+   "tokens_out": 119,
+   "cost_usd": 0.000945,
+   "retrieved_docs": [
+    "newsletters/Northwind_Dispatch_2026-05.html",
+    "newsletters/Northwind_Dispatch_2026-07.html",
+    "newsletters/Northwind_Dispatch_2025-07.html",
+    "legacy_intranet/it_faq.md",
+    "legacy_intranet/hr_policies.md",
+    "legacy_intranet/employee_handbook.md",
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "policies/it/IT-STD-007_remote_access.pdf",
+    "newsletters/Northwind_Dispatch_2026-02.html",
+    "scanned_archive/Handbook_2016_cover_scan.txt",
+    "hr_restricted/Disciplinary_Procedure.pdf",
+    "legacy_intranet/product_specs.md",
+    "scanned_archive/PTO_Policy_2017_scan.txt"
+   ],
+   "kept_docs": [
+    "policies/it/IT-STD-007_remote_access.pdf",
+    "hr_restricted/Disciplinary_Procedure.pdf",
+    "legacy_intranet/hr_policies.md"
+   ],
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "33",
+   "category": "out_of_scope",
+   "question": "How many days of bereavement leave do I get?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [],
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "How many days of bereavement leave do I get?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.5,
+   "llm_calls": 21,
+   "tokens_in": 5671,
+   "tokens_out": 116,
+   "cost_usd": 0.00092,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-006_parental_leave.pdf",
+    "policies/hr/HR-POL-005_sick_leave.pdf",
+    "wiki/people/Benefits_Overview.html",
+    "meetings/2026-03-05_people_ops_allhands_qa_203.txt",
+    "legacy_intranet/it_faq.md",
+    "policies/hr/HR-POL-004_PTO_v3.pdf",
+    "policies/hr/DRAFT_HR-POL-004_PTO_v4_flexible_time_off.md",
+    "policies/hr/HR-POL-014_referral_bonus.pdf"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-004_PTO_v3.pdf"
+   ],
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "s15",
+   "category": "out_of_scope",
+   "question": "What is the company policy on bringing dogs to the office?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [],
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is the company policy on bringing dogs to the office?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 10.75,
+   "llm_calls": 25,
+   "tokens_in": 7058,
+   "tokens_out": 498,
+   "cost_usd": 0.001357,
+   "retrieved_docs": [
+    "policies/hr/HR-POL-001_code_of_conduct.pdf",
+    "policies/it/IT-STD-009_lost_or_stolen_devices.pdf",
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf",
+    "newsletters/Northwind_Dispatch_2026-02.html",
+    "meetings/2026-08-14_facilities_office_ops_201.txt",
+    "legacy_intranet/it_faq.md",
+    "policies/hr/HR-POL-011_work_from_abroad.pdf",
+    "policies/it/IT-STD-001_data_classification.pdf",
+    "policies/hr/HR-POL-020_performance_reviews.pdf",
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "hr_restricted/Comp_Review_2026_Guidance.md",
+    "product/Rover_Error_Codes_2026.xlsx",
+    "wiki/it/Password_Policy.html"
+   ],
+   "kept_docs": [
+    "policies/hr/HR-POL-011_work_from_abroad.pdf",
+    "policies/it/IT-STD-001_data_classification.pdf",
+    "policies/finance/FIN-POL-002_travel_and_per_diem.pdf"
+   ],
+   "rejected_attempts": [
+    "Based on the provided context, there is no established company policy regarding bringing dogs to the office. A meeting note from August 14, 2026, indicates that employees cannot currently bring dogs t",
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "deterministic": ""
+   }
+  },
+  {
+   "id": "s40",
+   "category": "out_of_scope",
+   "question": "What is Northwind Robotics' current share price?",
+   "user_id": "u1001",
+   "split": "dev",
+   "gold_docs": [],
+   "answer": "I don't know based on the provided documents.",
+   "standalone": "What is Northwind Robotics' current share price?",
+   "node_path": [
+    "contextualize",
+    "route_question",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "rewrite_query",
+    "retrieve",
+    "grade_documents",
+    "generate",
+    "grade_generation",
+    "refuse"
+   ],
+   "retries": 2,
+   "sources": [],
+   "refused": true,
+   "latency_s": 4.3,
+   "llm_calls": 23,
+   "tokens_in": 4463,
+   "tokens_out": 133,
+   "cost_usd": 0.000749,
+   "retrieved_docs": [
+    "policies/it/IT-STD-007_remote_access.pdf",
+    "hr_restricted/Salary_Bands_2026.xlsx",
+    "product/R3/R3_Operator_Manual_RevC.pdf",
+    "newsletters/Northwind_Dispatch_2025-10.html",
+    "newsletters/Northwind_Dispatch_2025-06.html",
+    "newsletters/Northwind_Dispatch_2026-01.html",
+    "newsletters/Northwind_Dispatch_2025-09.html",
+    "legacy_intranet/it_faq.md",
+    "newsletters/Northwind_Dispatch_2026-08.html",
+    "newsletters/Northwind_Dispatch_2025-08.html",
+    "scanned_archive/Handbook_2016_cover_scan.txt",
+    "legacy_intranet/employee_handbook.md",
+    "legacy_intranet/product_specs.md"
+   ],
+   "kept_docs": [
+    "hr_restricted/Salary_Bands_2026.xlsx",
+    "newsletters/Northwind_Dispatch_2025-10.html",
+    "newsletters/Northwind_Dispatch_2026-08.html"
+   ],
+   "rejected_attempts": [
+    "I don't know based on the provided documents. Sources:"
+   ],
+   "scores": {
+    "correctness": 1,
+    "groundedness": 1,
+    "deterministic": 1
+   },
+   "comments": {
+    "correctness": "refused as expected",
+    "groundedness": "refusal: no claims to support",
+    "deterministic": ""
+   }
+  }
+ ]
+}

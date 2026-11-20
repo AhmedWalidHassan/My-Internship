@@ -19,6 +19,7 @@ records both.
 | 2026-11-18 | Task 2: 3 full dev runs (210 questions, ~3,760 pipeline LLM calls + ~420 judge calls), 2 judge replays on run 1 (~280 judge calls), synthetic generation (33 LLM calls, 65 candidates), retrieval-only runs | **$0 actual** (≈ $0.15 pipeline + ≈ $0.08 judge at gpt-4o-mini prices) | $0 (≈ $0.40) | $25.00 |
 | 2026-11-18 | Task 3: 2 full dev runs (140 questions, ~1,950 pipeline LLM calls + ~280 judge calls), retrieval-only runs, live tier (9 tests), 4 full + 2 incremental re-ingests, 2 image builds + Docker smoke test | **$0 actual** (≈ $0.10 pipeline + ≈ $0.04 judge at gpt-4o-mini prices; embeddings ≈ $0.003) | $0 (≈ $0.54) | $25.00 |
 | 2026-11-18 | Task 4: 18 retrieval-only runs (dev ×16, test ×2; no LLM), 4 full dev runs (280 questions, ~3,900 pipeline LLM calls + ~560 judge calls), 4 `make cost` runs (160 questions), 7 index builds, 1 image build + Docker smoke test | **$0 actual** (≈ $0.21 pipeline + ≈ $0.08 judge at gpt-4o-mini prices; retrieval runs ≈ $0.0003 of query embeddings) | $0 (≈ $0.83) | $25.00 |
+| 2026-11-20 | Task 5: 2 full dev runs (TT-01, TT-02: 140 questions, ~1,920 pipeline LLM calls + ~280 judge calls), 2 `make cost` runs (80 questions, ~1,100 calls), live checks (~10 questions), `make check-live` ×1 | **$0 actual** (≈ $0.17 pipeline + ≈ $0.04 judge at gpt-4o-mini prices) | $0 (≈ $1.04) | $25.00 |
 
 ---
 
@@ -161,10 +162,33 @@ Week 3 = the seed set on the Week 3 corpus):
 
 ## Task 5 — Time and truth
 
+Measured 2026-11-20. Before = the Task 3/4 system; after = what ships (TT-01). Seed set (40) from
+Week 2's `make cost`, same questions both times, local `qwen3.5:4b` priced at gpt-4o-mini rates
+([before](task_04_retrieval_experiments/evidence/cost_seed_baseline.md),
+[after](task_05_time_and_truth/evidence/cost_seed_after.md)); dev (70) from the full eval runs.
+
 | | Before | After |
 |---|---:|---:|
-| LLM calls per question | | |
-| Cost per question | | |
+| LLM calls per question | 14.1 (dev 13.9) | 14.1 (dev 13.7) |
+| Cost per question | $0.000729 (dev $0.000698) | $0.000794 (dev $0.000755), **+8–9%** |
+| Input / output tokens per question (seed) | 3,780 / 269 | 4,094 / 300 |
+| `generate` input tokens per question (seed) | 673 | 967 (+44%) |
+| End-to-end latency p50 (seed) | 4.57 s | 4.54 s |
+| Curation (`curate()` in `retrieve`, dev, CPU) | – | 0.7 ms p50, 1.0 ms p95. Catalog build at startup: 0.04 ms (348 chunks) |
+| Projected monthly cost @ 1,000 questions/day | $21.86 | $23.81 (+$1.95) |
+
+**What Task 5 added per question: no LLM call, about 300 input tokens (+$0.00006).**
+- **No new LLM call.** Supersession, drafts, authority and the rover ambiguity are decided from
+  metadata in the `retrieve` node, in under 1 ms.
+- **The cost is prompt length.** Every passage now carries a status line (`HR-POL-004 v3.0, effective
+  2026-03-01: CURRENT approved version as of 2026-10-01`), and `GENERATE_PROMPT` gained rules 5–9.
+  Those tokens land in `generate` (share of spend 21% → 26%) and `grade_generation`. `grade_documents`
+  sees the bare passage and didn't change (2,079 → 2,048 tokens). It is still the most expensive
+  node (40%).
+- **Swapped-in current versions** add at most 2 passages, only when a superseded version was retrieved
+  alone.
+- **The reverted TT-02** cost about the same ($0.000761 seed, $0.000797 dev). It was reverted for
+  quality, not cost (EXPERIMENTS.md).
 
 ## Task 6 — Access control
 
@@ -185,7 +209,7 @@ Week 3 = the seed set on the Week 3 corpus):
 | (this PR) | Task 2 eval | per question on the Week 3 corpus: 5.4 s mean (17.9 LLM calls). The loader change (118 of 190 documents instead of 1) is what moved it: 4.05 s in Task 1 → 5.4 s, because now some answers get generated and fact-checked instead of all ending in a refusal. Index build: 139 chunks in 1.0 s | $0.000687 per question at gpt-4o-mini prices (Task 1 as shipped: $0.000795). Eval: retrieval-only $0 and 7.5 s; full dev run ≈ $0.07 and ~9 min | judge is now `gemma3:4b`; all runs local, $0 actual |
 | (this PR) | Task 3 ingestion | per question 5.4 → 5.9 s mean (more real context per call; fewer calls). Full re-ingest 8.8 s GPU / 22 s CPU; one changed file 0.04 s. Warm container start loads the index in 0.2 s (startup 11 s) | $0.000687 → $0.000698 per question (+1.7%; LLM calls 17.9 → 13.9). Full re-embed $0.00062, one file $0.0000034 at text-embedding-3-small | image +285 MB (PyMuPDF 2.1 + onnxruntime); all local, $0 actual |
 | (this PR) | Task 4 experiments | none shipped: production keeps the Task 3 retriever (same rankings, re-implemented as weighted RRF). New per-PR `retrieval-gate` CI job: ~1–2 min of free runner time | none at runtime. Measured for the rejected winner: −19% per question; re-ranker +488 ms/query on CPU | 12 experiments, all local, $0 actual; image +11 KB |
-| | Task 5 time and truth | | | |
+| (this PR) | Task 5 time and truth | none measurable: curation 0.7 ms p50 per question, no LLM call; end-to-end p50 4.57 → 4.54 s (seed) | $0.000729 → $0.000794 per question (+9%, seed; dev +8%): ~300 more input tokens from status labels and generator rules, LLM calls unchanged (14.1) | API change: `sources` are objects; all runs local, $0 actual |
 | | Task 6 access | | | |
 
 ---

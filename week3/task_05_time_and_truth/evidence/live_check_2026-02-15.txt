@@ -1,0 +1,7 @@
+{"event": "ingest", "level": "info", "ts": "2026-11-20T10:49:15.811Z", "corpus": "/mnt/games/coding/My-Internship/week3/corpus", "snapshot": "2026-10-01", "documents_loaded": 190, "documents_skipped": 0, "chunks": 348, "duplicates": 1, "added": 0, "changed": 0, "removed": 0, "reused": 190, "rebuilt": false, "embedding_calls": 0, "duration_s": 0.05, "corpus_version": "d2a735e0ebf4e2bf"}
+AS_OF_DATE: 2026-02-15
+
+Q: How many PTO days can I carry over into next year?
+A: Under HR-POL-004 v2.0, effective 2025-01-01, unused PTO of up to 5 days may be carried into the next calendar year; any balance above 5 days is forfeited on December 31. However, under the new policy (HR-POL-004 v3.0), effective 2026-03-01, unused PTO of up to 3 days may be carried into the next calendar year; any balance above 3 days is forfeited on December 31. There is a transition rule for 2026 only: balances carried from 2025 under version 2.0 (up to 5 days) are honoured in full but must also be used by March 31, 2026.
+Sources: ['Paid Time Off Policy (HR-POL-004 v2.0, effective 2025-01-01) › 1. Purpose; 2. Accrual; 3. Carry-over', 'Paid Time Off Policy (HR-POL-004 v3.0, effective 2026-03-01) › 3. Carry-over; 4. Requesting PTO']
+Cited: ['HR-POL-004 v2.0', 'HR-POL-004 v3.0']  path: contextualize -> route_question -> retrieve -> grade_documents -> generate -> grade_generation

@@ -96,9 +96,27 @@ if st.session_state.get("session_id") != session_id:      # new browser session,
         pass                                               # the sidebar reports the API status
 
 
+def source_label(s) -> str:
+    """'Paid Time Off Policy (HR-POL-004 v3.0, effective 2026-03-01) › 3. Carry-over'. The API returns
+    structured sources since Week 3 Task 5; a plain string (an older API) is shown as is."""
+    if isinstance(s, str):
+        return s
+    name = s.get("title") or s.get("path", "?").rsplit("/", 1)[-1]
+    tags = []
+    if s.get("doc_id"):
+        tags.append(f"{s['doc_id']} v{s['version']}" if s.get("version") else s["doc_id"])
+    elif s.get("version"):
+        tags.append(s["version"])
+    if s.get("effective_date"):
+        tags.append(f"effective {s['effective_date']}")
+    if (s.get("status") or "").upper() == "DRAFT":
+        tags.append("DRAFT, not approved")
+    return name + (f" ({', '.join(tags)})" if tags else "") + (f" › {s['section']}" if s.get("section") else "")
+
+
 def render_meta(msg: dict) -> None:
     if msg.get("sources"):
-        st.caption("📎 Sources: " + " · ".join(msg["sources"]))
+        st.caption("📎 Sources: " + " · ".join(source_label(s) for s in msg["sources"]))
     if msg.get("node_path"):
         with st.expander("How this answer was produced"):
             st.code(" → ".join(msg["node_path"]))

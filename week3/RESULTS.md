@@ -597,28 +597,96 @@ committed in `week3/eval/runs/test/`.
 
 ## Task 5 — Time and truth
 
+Full pipeline + judge (`gemma3:4b`), dev (70). Before = the Task 3/4 system
+([`dev_full_after.json`](task_03_ingestion/evidence/dev_full_after.json)); after = what ships, TT-01
+([`dev_full_after.json`](task_05_time_and_truth/evidence/dev_full_after.json)). Cells are
+**deterministic** · correctness · groundedness. How it works: [TRUTH.md](task_05_time_and_truth/TRUTH.md).
+The experiments, including the reverted TT-02: [EXPERIMENTS.md](EXPERIMENTS.md#task-5--tt-01-answer-from-the-current-approved-source).
+
 | Category | Before (dev) | After (dev) |
 |---|---:|---:|
-| version | | |
-| conflict | | |
-| draft | | |
-| ambiguous | | |
+| version (5) | **0.80** · 0.40 · 1.00 | **1.00** · 0.60 · 1.00 |
+| conflict (3) | **0.33** · 0.33 · 1.00 | **0.67** · 0.33 · 0.33 |
+| draft (4) | **0.75** · 0.00 · 1.00 | **0.75** · 0.25 · 1.00 |
+| ambiguous (3) | **1.00** · 1.00 · 1.00 | **1.00** · 1.00 · 1.00 |
+| *All 70* | *0.743 · 0.500 · 0.986* | *0.743 · 0.529 · 0.971* |
 
-**Time-travel test:** `tests/___::___` — with `AS_OF_DATE=2026-02-15`: ___ days.
-With the default date: ___ days.
+- **version, 4/5 → 5/5:** #9 (adoptive and non-birth parents, 12 weeks) was refused and now answers.
+- **conflict, 1/3 → 2/3:** n06 now says the Sales IT tips are wrong ("Under IT-STD-003 v2.0 … at
+  least 16 characters, no scheduled rotation"). n07 (the Cairo Ramadan page allows 4 remote days, the
+  policy 3) is still refused: the more specific local rule can't be settled by authority alone (it
+  needs the asker's office, Task 6).
+- **conflict groundedness fell 1.00 → 0.33.** The answers now say "the wiki page is out of date". The
+  judge, like the fact-check, finds no passage that literally says so: the claim comes from the label.
+  TT-02 tried to fix that and was reverted (below).
+- **draft stays 3/4, but a different 3.** n08 ("Is Northwind switching to flexible time off?") now
+  says "there is a draft proposal (not approved) … proposed 2027-01-01" instead of presenting v3.0's
+  March change as the switch. n11 was lost: the generator's draft was correct ("carry-over not
+  abolished, up to 3 days under HR-POL-004 v3.0"), and the fact-check rejected it three times.
+- **ambiguous stays 3/3,** now by policy instead of by luck (below).
+- **Elsewhere:**
+  - `factual` −1 net. Gained #19. Lost s29 (a correct draft rejected by the fact-check) and #24 (same
+    answer as before, without the keyword "indoor").
+  - `cross_lingual` −1 (n17, Arabic, refused).
+  - These are within the generation-stage noise seen in Task 4 (EXP-12).
+- **Overall unchanged (0.743), correctness +0.029.** Refusals 15 → 17. The fact-check rejecting
+  correct drafts is now the main limit, not version handling.
+- **TT-02 (reverted):** a fact-check that reads the labels. It fixed `draft` (4/4) but refused four
+  others (#3, #18, n21, n24): deterministic 0.714. It also loosened the eval's groundedness judge,
+  which shares the prompt.
 
-**Source authority order** (highest first, with one sentence of justification each):
+**Time-travel test:**
+`tests/test_truth.py::test_time_travel_carry_over_is_5_days_before_march_2026_and_3_days_after`
+- With `AS_OF_DATE=2026-02-15`: **5 days** (HR-POL-004 v2.0; v3.0 is labelled NOT YET IN EFFECT).
+- With the default date (2026-10-01): **3 days** (HR-POL-004 v3.0; v2.0 and the legacy copy aren't
+  shown).
+- Fast tier, fixture documents: the whole `test_truth.py` (10 tests) runs in 0.5 s. `make check`:
+  163 passed, pytest 4.5–4.8 s warm (under the 5 s budget; one cold first run took 5.9 s).
 
-1.
-2.
-3.
-4.
-5.
-6.
+Live, real model ([evidence](task_05_time_and_truth/evidence/)):
+- Default date: "Under HR-POL-004 v3.0, effective 2026-03-01, unused PTO of up to 3 days may be
+  carried …", citing `HR-POL-004 v3.0 › 3. Carry-over`.
+- `AS_OF_DATE=2026-02-15`: "Under HR-POL-004 v2.0, effective 2025-01-01, … up to 5 days …. However,
+  under the new policy (HR-POL-004 v3.0), effective 2026-03-01, … up to 3".
+
+**Source authority order** (highest first, with one sentence of justification each). It decides
+conflicts between *different* documents; between versions of one document, the effective date and
+`AS_OF_DATE` decide. Drafts are never the rule, at any level.
+
+1. **Approved policies** (`policies/`). The controlled, versioned system of record: every document has
+   an ID, a version, an effective date and an approval status.
+2. **Product and owner documentation** (`product/`, `hr_restricted/`). Written by the team that owns
+   the thing it describes, but not versioned by the policy process.
+3. **Wiki** (`wiki/`, `cairo/`). Maintained but unversioned and editable by anyone, so it lags policy
+   changes (VPN Setup Guide, Sales IT tips).
+4. **Newsletters** (`newsletters/`). Dated announcements that are accurate on the day and never
+   updated.
+5. **Meeting notes** (`meetings/`). Mention rules in passing, without authority or follow-up.
+6. **Legacy intranet and scanned archive** (`legacy_intranet/`, `scanned_archive/`). The 2024 intranet
+   migrated as-is and 2016–2019 OCR scans, superseded wherever the policy portal covers the topic.
 
 **Ambiguity policy** (clarify, or answer every reading?), and the test that pins it:
 
->
+> **Answer every reading, labelled; never pick one silently; don't ask back.**
+> - Here the readings are few and short ("R2: 80 kg. R3: 120 kg."). Answering both costs a few tokens.
+>   A clarifying question costs the user a round trip, and `/chat` is a one-shot API.
+> - "The rover" with no R2/R3 named, while the passages cover both, is detected without an LLM
+>   (`truth.ambiguity_note`). The note tells the generator to answer for both.
+> - Other ambiguities (parental leave: birth vs adoptive) are covered by generator rule 9.
+> - Pinned by `tests/test_truth.py::test_ambiguity_policy_answers_every_reading_never_one_silently`:
+>   - Asked about "the rover" with R2 and R3 passages, the generator gets the "answer for BOTH,
+>     labelled 'R2:' and 'R3:'" note.
+>   - Naming the R3 gives no note.
+>   - `GENERATE_PROMPT` carries the "never pick one silently" rule.
+> - Dev `ambiguous` 3/3. Live: "What is the payload capacity of the rover?" → "R2: The payload capacity
+>   is 80 kg. R3: The payload capacity is 120 kg."
+
+**Structured citations:** `ChatResponse.sources` and the stream's `done.sources` are now objects:
+`{path, title, doc_id, version, effective_date, section, status}`.
+- **This breaks** API clients that read them as strings.
+- The Streamlit UI shows "Paid Time Off Policy (HR-POL-004 v3.0, effective 2026-03-01) › 3. Carry-over".
+- The request log line gains `cited_versions` (`["HR-POL-004 v3.0"]`).
+- Week 2 tests were updated (`test_api.py`, `test_golden_path.py`).
 
 ---
 

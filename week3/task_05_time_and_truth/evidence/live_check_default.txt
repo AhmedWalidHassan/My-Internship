@@ -1,0 +1,28 @@
+{"event": "ingest", "level": "info", "ts": "2026-11-20T10:48:35.585Z", "corpus": "/mnt/games/coding/My-Internship/week3/corpus", "snapshot": "2026-10-01", "documents_loaded": 190, "documents_skipped": 0, "chunks": 348, "duplicates": 1, "added": 0, "changed": 0, "removed": 0, "reused": 190, "rebuilt": false, "embedding_calls": 0, "duration_s": 0.07, "corpus_version": "d2a735e0ebf4e2bf"}
+AS_OF_DATE: 2026-10-01
+
+Q: How many PTO days can I carry over into next year?
+A: Under HR-POL-004 v3.0, effective 2026-03-01, unused PTO of up to 3 days may be carried into the next calendar year; any unused balance above 3 days is forfeited on December 31. For the transition rule in 2026 only, balances carried from 2025 under version 2.0 (up to 5 days) are honoured in full but must also be used by March 31, 2026. The All-hands Q&A note stating that 2 days would be lost is out of date.
+Sources: ['Paid Time Off Policy (HR-POL-004 v3.0, effective 2026-03-01) › 3. Carry-over; 4. Requesting PTO', 'Paid Time Off Policy (HR-POL-004 v3.0, effective 2026-03-01) › 2. Accrual']
+Cited: ['HR-POL-004 v3.0', 'HR-POL-004 v3.0']  path: contextualize -> route_question -> retrieve -> grade_documents -> generate -> grade_generation
+
+Q: Is Northwind switching to flexible time off?
+A: No, Northwind Robotics is not switching to flexible time off based on the current policy. The current Paid Time Off Policy (HR-POL-004 v3.0) does not mention a switch to flexible time off; it only describes accrual and usage rules for full-time employees. There is a draft proposal (not approved) to HR-POL-004 v4.0 that proposes an effective date of 2027-01-01, but this has not been adopted as the rule yet.
+Sources: ['Paid Time Off Policy (HR-POL-004 v3.0, effective 2026-03-01) › 1. Purpose']
+Cited: ['HR-POL-004 v3.0']  path: contextualize -> route_question -> retrieve -> grade_documents -> generate -> grade_generation
+
+Q: How do I get on the VPN from home?
+A: Under IT-STD-007 v3.0, effective 2026-06-30, the GlobalConnect VPN client is retired as of June 30, 2026, and it can no longer be used for remote access. All remote access now uses Northwind Access, which connects automatically when an internal resource is requested; there is no separate VPN connection step. Personal devices cannot run Northwind Access and may only access email and calendar via the browser. The older instruction to install GlobalConnect from the Self-Service app catalog and enter vpn.northwind.example is outdated.
+Sources: ['Remote Access Standard (IT-STD-007 v3.0, effective 2026-06-30) › Northwind Access; Device requirements; Personal devices']
+Cited: ['IT-STD-007 v3.0']  path: contextualize -> route_question -> retrieve -> grade_documents -> generate -> grade_generation -> rewrite_query -> retrieve -> grade_documents -> generate -> grade_generation
+
+Q: The sales IT tips say passwords need 12 characters and must be changed every 90 days. Is that right?
+A: No, the sales IT tips are outdated and incorrect according to the current policy. The rule states that corporate passwords must be at least 16 characters long and are no longer rotated on a schedule; they must be changed immediately if compromise is suspected. The tip claiming a 12-character minimum and 90-day rotation requirement is out of date.
+Sources: ['Password & Authentication Standard (IT-STD-003 v2.0, effective 2026-02-01) › Passwords; Multi-factor authentication; Lockout', 'IT tips for the sales team']
+Cited: ['IT-STD-003 v2.0', 'wiki/sales/Sales_IT_Tips.html']  path: contextualize -> route_question -> retrieve -> grade_documents -> generate -> grade_generation
+
+Q: What is the payload capacity of the rover?
+A: R2: The payload capacity is 80 kg.
+R3: The payload capacity is 120 kg.
+Sources: ['Warehouse Rover R2 - Data Sheet', 'Warehouse Rover R3 - Data Sheet']
+Cited: ['product/R2/Warehouse_Rover_R2_datasheet.pdf', 'product/R3/Warehouse_Rover_R3_datasheet.pdf']  path: contextualize -> route_question -> retrieve -> grade_documents -> generate -> grade_generation

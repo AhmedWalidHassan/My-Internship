@@ -1,0 +1,11 @@
+AS_OF_DATE: 2026-10-01
+
+Q: The sales IT tips say passwords need 12 characters and must be changed every 90 days. Is that right?
+A: No, the sales IT tips are outdated and incorrect according to the current policy. Under IT-STD-003 v2.0, effective 2026-02-01, corporate passwords must be at least 16 characters long and are no longer rotated on a schedule; they must be changed immediately if compromise is suspected. The sales tips stating that passwords need at least 12 characters and must be changed every 90 days are out of date.
+Sources: ['Password & Authentication Standard (IT-STD-003 v2.0, effective 2026-02-01) › Passwords; Multi-factor authentication; Lockout', 'IT tips for the sales team']
+Cited: ['IT-STD-003 v2.0', 'wiki/sales/Sales_IT_Tips.html']  path: contextualize -> route_question -> retrieve -> grade_documents -> generate -> grade_generation
+
+Q: I lost my laptop at a trade show. Is it OK to email IT the next morning?
+A: I don't know based on the provided documents.
+Sources: []
+Cited: []  path: contextualize -> route_question -> retrieve -> grade_documents -> generate -> grade_generation -> rewrite_query -> retrieve -> grade_documents -> generate -> grade_generation -> rewrite_query -> retrieve -> grade_documents -> generate -> grade_generation -> refuse

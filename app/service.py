@@ -18,6 +18,7 @@ from app.capstone import CAPSTONE_PATH, load_capstone
 from app.config import get_settings
 from app.observability import Observer, RunTelemetry
 from common.resilience import ProviderUnavailable, RequestBudget
+from common.truth import cited_versions
 from app.schemas import (
     ChatResponse,
     DoneEvent,
@@ -96,6 +97,7 @@ class ChatService:
             "latency_ms": latency_ms, "tokens_in": 0, "tokens_out": 0, "estimated_cost_usd": 0.0,
             "refused": hit.refused, "cache_hit": True, "llm_calls": 0, "model": get_settings().llm_label,
             "per_node": {}, "retrieved_ids": [], "kept_ids": [], "cached_from_trace_id": hit.trace_id,
+            "cited_versions": cited_versions(hit.sources),
             "cache_age_s": round(time.time() - hit.created, 1)})
 
     # -- the one place the graph runs ---------------------------------------------
@@ -203,6 +205,7 @@ class ChatService:
             "cache_hit": False,                 # Task 6 turns this on; logged from day one
             "llm_calls": usage["llm_calls"], "model": settings.llm_label,
             "per_node": telemetry.nodes(),
+            "cited_versions": (final or {}).get("cited_versions", []),   # Task 5: "HR-POL-004 v3.0"
             "retrieved_ids": (final or {}).get("retrieved_ids", []),
             "kept_ids": (final or {}).get("kept_ids", []),
             "degraded": (final or {}).get("degraded", []),

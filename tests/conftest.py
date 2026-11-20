@@ -86,7 +86,7 @@ class FakeLLM:
     """Stands in for a chat model.
 
     The capstone sends plain-string prompts and reads `.content`. `rules` maps the
-    start of a prompt to the reply, so one fake can play router, grader, writer and
+    start of a prompt to the reply (a string, or a function of the prompt), so one fake can play router, grader, writer and
     fact-checker in the same run. Anything unmatched gets `text`.
 
         llm = FakeLLM(text="fallback", rules={"You route messages": "RETRIEVE"})
@@ -109,7 +109,7 @@ class FakeLLM:
             return self._schema(**self._schema_kwargs)
         for prefix, reply in self.rules.items():
             if prompt.startswith(prefix):
-                return FakeMessage(reply)
+                return FakeMessage(reply(prompt) if callable(reply) else reply)   # callable: reads the prompt
         return FakeMessage(self.text)
 
     def calls_to(self, prefix):

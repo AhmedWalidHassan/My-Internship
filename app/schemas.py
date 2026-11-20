@@ -45,10 +45,22 @@ class FeedbackRequest(BaseModel):
 # ---------------------------------------------------------------------------
 # Responses
 # ---------------------------------------------------------------------------
+class Source(BaseModel):
+    """One cited passage (Week 3 Task 5; was a 'file.md › Section' string until then)."""
+    path: str = Field(description="Document path in the corpus, e.g. 'policies/hr/HR-POL-004_PTO_v3.pdf'.")
+    title: str | None = Field(None, description="Document title.")
+    doc_id: str | None = Field(None, description="Policy/standard ID, e.g. 'HR-POL-004', when it has one.")
+    version: str | None = Field(None, description="Version, e.g. '3.0', when the document has one.")
+    effective_date: str | None = Field(None, description="Effective date (YYYY-MM-DD), when the document has one.")
+    section: str | None = Field(None, description="Section heading(s) of the cited passage.")
+    status: str | None = Field(None, description="CURRENT / NOT_YET_IN_EFFECT / DRAFT / AUTHORITATIVE / "
+                                                 "LOWER_AUTHORITY / OUTDATED, as of the server's AS_OF_DATE.")
+
+
 class ChatResponse(BaseModel):
     answer: str
-    sources: list[str] = Field(description="'file.md › Section' for the passages the answer used. "
-                                           "Empty for a refusal.")
+    sources: list[Source] = Field(description="The documents (with version and section) the answer used. "
+                                              "Empty for a refusal.")
     node_path: list[str] = Field(description="Every graph node that ran, in order.")
     session_id: str
     trace_id: str = Field(description="LangSmith root-run id. Pass it to /feedback.")
