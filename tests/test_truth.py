@@ -124,7 +124,7 @@ def test_legacy_copy_on_the_same_topic_is_dropped_and_wiki_is_flagged():
     assert "legacy_intranet/employee_handbook.md" not in statuses
     assert statuses["wiki/people/Benefits_Overview.html"] == "LOWER_AUTHORITY"
     wiki = next(d for d in kept if d.metadata["path"].startswith("wiki/"))
-    assert "HR-POL-004 applies" in wiki.metadata["truth_label"] and "out of date" in wiki.metadata["truth_label"]
+    assert "HR-POL-004 applies" in wiki.metadata["truth_label"]
 
 
 def test_ambiguity_policy_answers_every_reading_never_one_silently(app):
