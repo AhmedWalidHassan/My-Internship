@@ -8,6 +8,10 @@ It imports no graph, index or model code: everything goes through POST /chat/str
 GET/DELETE /session/{id}, POST /feedback and GET /readyz. The session id is kept in
 the page URL (?session=...), so refreshing the page continues the same conversation:
 the API remembers it, and the UI redraws it from GET /session/{id}.
+
+Week 3 Task 6: every call carries a `user_id` (here: picked in the sidebar, kept in the URL as
+?user=..., standing in for the SSO login a real deployment would have). Switching user starts a
+new conversation: sessions belong to the user who started them.
 """
 
 from __future__ import annotations
@@ -81,13 +85,14 @@ st.caption("Ask about HR policies, IT procedures, and product specs.")
 if "session" not in st.query_params:
     st.query_params["session"] = str(uuid.uuid4())
 session_id = st.query_params["session"]
+user_id = st.query_params.get("user", os.getenv("UI_USER_ID", "u1001"))
 
 if st.session_state.get("session_id") != session_id:      # new browser session, or a refresh
     st.session_state.session_id = session_id
     st.session_state.messages = []
     st.session_state.rated = {}
     try:
-        resp = api("GET", f"/session/{session_id}")
+        resp = api("GET", f"/session/{session_id}", params={"user_id": user_id})
         if resp.status_code == 200:
             for turn in resp.json()["turns"]:
                 st.session_state.messages += [{"role": "user", "content": turn["question"]},
@@ -137,10 +142,15 @@ def render_meta(msg: dict) -> None:
 
 
 with st.sidebar:
+    new_user = st.text_input("User ID (stands in for SSO)", value=user_id).strip()
+    if new_user and new_user != user_id:                   # another person: another conversation
+        st.query_params["user"] = new_user
+        st.query_params["session"] = str(uuid.uuid4())
+        st.rerun()
     st.write(f"Session: `{session_id[:8]}`")
     if st.button("🔄 Reset conversation"):
         try:
-            api("DELETE", f"/session/{session_id}")
+            api("DELETE", f"/session/{session_id}", params={"user_id": user_id})
         except httpx.HTTPError:
             pass
         st.query_params["session"] = str(uuid.uuid4())
@@ -178,7 +188,8 @@ if prompt := st.chat_input("Ask a question about company policies…"):
         try:
             with httpx.Client(base_url=API_URL, timeout=TIMEOUT) as client:
                 with client.stream("POST", "/chat/stream",
-                                   json={"question": prompt, "session_id": session_id}) as resp:
+                                   json={"question": prompt, "session_id": session_id,
+                                         "user_id": user_id}) as resp:
                     if resp.status_code != 200:
                         resp.read()
                         raise RuntimeError(error_text(resp))

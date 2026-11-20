@@ -106,7 +106,7 @@ def build_chunks(path: Path, rel: str, row: dict, chunk_size: int, chunk_overlap
     flush()
 
     base = {"source": Path(rel).name, "path": rel, "title": parsed.title, "format": Path(rel).suffix.lstrip("."),
-            "source_system": row.get("source_system", ""), "acl_groups": row.get("acl_groups", "all"),
+            "source_system": row.get("source_system", ""), "acl_groups": (row.get("acl_groups") or "").strip(),   # none -> visible to no one
             "owner_team": row.get("owner_team", ""), "last_modified": row.get("last_modified", ""),
             **{k: v for k, v in parsed.meta.items() if k in META_FIELDS and v}}
     docs = []

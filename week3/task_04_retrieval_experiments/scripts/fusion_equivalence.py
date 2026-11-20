@@ -32,6 +32,9 @@ for k in (4, 10):
     bm25.k = k
     old = EnsembleRetriever(retrievers=[bm25, store.as_retriever(search_kwargs={"k": k})], weights=[0.5, 0.5])
     new, name = build(store, k, settings)
+    # Week 3 Task 6: the production retriever only searches through an access scope. A scope holding every
+    # group in the index sees every chunk, which is what the Week 2 retriever searched.
+    new = new.for_scope({g for d in docs for g in str(d.metadata.get("acl_groups", "")).split(";") if g})
     diffs = []
     for ex in examples:
         q = run_eval.retrieval_query(ex)

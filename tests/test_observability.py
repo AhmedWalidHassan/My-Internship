@@ -73,7 +73,7 @@ def request_lines(logs):
 
 def test_one_request_produces_one_log_line_with_every_field(api):
     with capture_logs() as logs:
-        r = api.post("/chat", json={"question": "How much PTO do I get?", "session_id": "s-1"},
+        r = api.post("/chat", json={"user_id": "u1001", "question": "How much PTO do I get?", "session_id": "s-1"},
                      headers={"X-Request-ID": "req-abc-123"})
     assert r.status_code == 200, r.text
     [line] = request_lines(logs)
@@ -100,7 +100,7 @@ def test_one_request_produces_one_log_line_with_every_field(api):
 def test_llm_calls_and_tokens_are_attributed_to_the_right_node(api, app):
     """Cross-check the telemetry against the prompts the model actually received."""
     with capture_logs() as logs:
-        api.post("/chat", json={"question": "How much PTO do I get?"})
+        api.post("/chat", json={"user_id": "u1001", "question": "How much PTO do I get?"})
     [line] = request_lines(logs)
     per_node, calls = line["per_node"], api.llm.calls
 
@@ -127,7 +127,7 @@ def test_llm_calls_and_tokens_are_attributed_to_the_right_node(api, app):
 
 def test_streaming_request_logs_one_line_with_time_to_first_token(api):
     with capture_logs() as logs:
-        with api.stream("POST", "/chat/stream", json={"question": "How much PTO do I get?"}) as r:
+        with api.stream("POST", "/chat/stream", json={"user_id": "u1001", "question": "How much PTO do I get?"}) as r:
             events = sse(r)
     [line] = request_lines(logs)
     done = events[-1][1]
@@ -141,7 +141,7 @@ def test_refusal_on_the_direct_route_is_logged_as_such(start_api, make_backend, 
     llm = usage_llm(app, **{prefix(app.ROUTE_PROMPT): "DIRECT", prefix(app.SMALLTALK_PROMPT): "NO"})
     client = start_api(lambda: make_backend(llm))
     with capture_logs() as logs:
-        client.post("/chat", json={"question": "What is the capital of France?"})
+        client.post("/chat", json={"user_id": "u1001", "question": "What is the capital of France?"})
     [line] = request_lines(logs)
     assert line["route"] == "direct" and line["refused"] is True
     assert line["node_path"] == ["contextualize", "route_question", "direct_answer"]
@@ -155,7 +155,7 @@ def test_failed_request_still_logs_exactly_one_line(api):
 
     api.backend.assistant.stream = broken_stream
     with capture_logs() as logs:
-        r = api.post("/chat", json={"question": "How much PTO?"}, headers={"X-Request-ID": "req-err"})
+        r = api.post("/chat", json={"user_id": "u1001", "question": "How much PTO?"}, headers={"X-Request-ID": "req-err"})
     assert r.status_code == 500
     [line] = request_lines(logs)
     assert line["status"] == "error" and line["log_level"] == "warning"
@@ -175,7 +175,7 @@ def test_langsmith_run_is_tagged_with_request_and_session_id(api):
 
     graph.stream = spy
     with capture_logs() as logs:
-        api.post("/chat", json={"question": "How much PTO?", "session_id": "s-9"},
+        api.post("/chat", json={"user_id": "u1001", "question": "How much PTO?", "session_id": "s-9"},
                  headers={"X-Request-ID": "req-777"})
     [line] = request_lines(logs)
     assert seen["metadata"]["request_id"] == line["request_id"] == "req-777"
@@ -199,10 +199,10 @@ def test_metrics_endpoint_returns_live_counters(start_api, make_backend, app):
     assert before.status_code == 200 and before.headers["content-type"].startswith("text/plain")
     assert metric(before.text, "northwind_requests_total", '{endpoint="chat",status="ok"}') is None
 
-    client.post("/chat", json={"question": "How much PTO do I get?"})
-    client.post("/chat", json={"question": "How much PTO do I get?"})
+    client.post("/chat", json={"user_id": "u1001", "question": "How much PTO do I get?"})
+    client.post("/chat", json={"user_id": "u1001", "question": "How much PTO do I get?"})
     llm.rules[prefix(app.ROUTE_PROMPT)] = "DIRECT"                 # third one is refused
-    client.post("/chat", json={"question": "What is the capital of France?"})
+    client.post("/chat", json={"user_id": "u1001", "question": "What is the capital of France?"})
     calls_before_scrape = len(llm.calls)
 
     text = client.get("/metrics").text

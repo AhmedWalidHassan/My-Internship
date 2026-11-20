@@ -46,6 +46,7 @@ sys.path.append(str(Path(__file__).resolve().parents[2]))   # repo root: the ing
 
 from common.resilience import ProviderUnavailable, RetrievalUnavailable, VerificationUnavailable  # noqa: E402
 from common.settings import get_settings  # noqa: E402  (needs the sys.path line above)
+from common.access import PUBLIC, can_see, is_restricted  # noqa: E402  (Week 3 Task 6)
 from common.truth import cited_versions  # noqa: E402
 from langchain_core.documents import Document
 from langgraph.graph import END, START, StateGraph
@@ -179,8 +180,11 @@ def chunk_file(path: Path, rel: str | None = None) -> list:
         if not _meaningful(piece.page_content):
             continue
         section = piece.metadata.get("section") or piece.metadata.get("title") or ""
+        # A plain folder (Week 1 corpus) has no ACL source: everything in it is for every employee, and it
+        # says so explicitly. A chunk WITHOUT acl_groups is visible to no one (common/access.py).
         chunks.append(Document(page_content=piece.page_content,
-                               metadata={"source": path.name, "path": rel or path.name, "section": section}))
+                               metadata={"source": path.name, "path": rel or path.name, "section": section,
+                                         "acl_groups": "all"}))
     return chunks
 
 
@@ -207,6 +211,8 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
     export = (Path(data_dir) / "_metadata.csv").exists()
     rows = {}
     signature = f"{CHUNK_SIZE}/{CHUNK_OVERLAP}/{_embedding_id(embeddings)}"
+    if not export:
+        signature += "/acl"          # Week 3 Task 6: plain-folder chunks carry acl_groups (older indexes rebuild)
     if export:
         from ingest import LOADER_VERSION, build_chunks, read_metadata
         rows = read_metadata(data_dir)
@@ -234,6 +240,8 @@ def ingest(embeddings, data_dir: Path, force: bool = False):
     # new / changed / unchanged files
     for name, path in current.items():
         h = _file_hash(path)
+        if export:   # Task 6: a changed _metadata.csv row (e.g. new acl_groups) re-indexes the document
+            h += ":" + hashlib.sha256(json.dumps(rows.get(name, {}), sort_keys=True).encode()).hexdigest()[:16]
         old = manifest["files"].get(name)
         if old and old["hash"] == h:
             stats["reused"].append(name)
@@ -368,7 +376,8 @@ def build_retriever(store, k: int = TOP_K):
         return build(store, k, SETTINGS)
     except ImportError as e:   # e.g. rank_bm25 missing
         log.warning("Hybrid retriever unavailable (%s); using dense only.", e)
-        return store.as_retriever(search_kwargs={"k": k}), "dense only"
+        from common.retrievers import HybridRetriever
+        return HybridRetriever(bm25_weight=0.0, k=k, store=store, depth=k, scoped_only=True), "dense only"
 
 
 # ===========================================================================
@@ -390,6 +399,7 @@ class GraphState(TypedDict, total=False):
     degraded: Annotated[list, operator.add]   # what was skipped because the provider failed (Task 8)
     curation: list                    # what Week 3 curation changed in the last search (Task 5)
     ambiguity: str                    # "answer for both R2 and R3" note, when the question is ambiguous
+    access: frozenset                 # the asker's groups, from the directory (Week 3 Task 6). Never from the chat
 
 
 # Only these placeholders are template variables: {history} {question} {document}
@@ -606,8 +616,13 @@ def build_graph(retriever, llm, curate=None):
         return {**update, "route": "direct" if (m and m.group(1) == "DIRECT") else "retrieve"}
 
     def retrieve(state: GraphState):
+        # Week 3 Task 6: search ONLY what the asker may see. The scoped retriever filters inside BM25 and
+        # the dense search (common/retrievers.py); the can_see() pass below is defence in depth (and the
+        # only filter for a test double without for_scope). No access scope -> the public one.
+        groups = state.get("access") or PUBLIC
         try:
-            docs = retriever.invoke(state["rewritten_question"])
+            scoped = retriever.for_scope(groups) if hasattr(retriever, "for_scope") else retriever
+            docs = [d for d in scoped.invoke(state["rewritten_question"]) if can_see(d.metadata, groups)]
         except ProviderUnavailable:
             raise
         except Exception as e:                   # index, embeddings or BM25 failed
@@ -615,6 +630,8 @@ def build_graph(retriever, llm, curate=None):
         if curate is None:
             return {"documents": docs, "path": ["retrieve"]}
         docs, notes, ambiguity = curate(docs, state["question"])
+        # curation can ADD passages (the current version of a superseded one, a draft): same check again
+        docs = [d for d in docs if can_see(d.metadata, groups)]
         return {"documents": docs, "path": ["retrieve"], "curation": notes, "ambiguity": ambiguity}
 
     def grade_documents(state: GraphState):
@@ -834,6 +851,24 @@ def describe_step(node: str, upd: dict) -> str:
     return f"✓ {label}"
 
 
+def _untraced_unless(traced: bool, steps):
+    """Iterate a graph stream; with traced=False every step runs with LangSmith tracing OFF.
+    The context is entered and left inside each step, never across a `yield`: a streaming response
+    resumes this generator in a different worker thread (with a copied context) for every event."""
+    if traced:
+        yield from steps
+        return
+    from langsmith import tracing_context
+    it = iter(steps)
+    while True:
+        with tracing_context(enabled=False):
+            try:
+                step = next(it)
+            except StopIteration:
+                return
+        yield step
+
+
 class Assistant:
     """The graph + per-session memory. Sessions never see each other's history."""
 
@@ -855,7 +890,8 @@ class Assistant:
         del turns[:-20]                                  # keep memory bounded
 
     def stream(self, question: str, session_id: str, *, run_id=None, tokens: bool = False,
-               metadata: dict = None, callbacks: list = None, llm_budget=None) -> Iterator[dict]:
+               metadata: dict = None, callbacks: list = None, llm_budget=None,
+               groups=PUBLIC) -> Iterator[dict]:
         """Yield {"event": "node", ...} per graph step, then one {"event": "final", ...}.
 
         tokens=True also yields {"event": "token", "text": ...} for every token the
@@ -866,8 +902,16 @@ class Assistant:
         run_id becomes the id of the LangSmith root run, so a caller can attach
         feedback to the trace without searching for it. `callbacks` are LangChain
         callback handlers for this run only (the API's per-node cost/latency telemetry).
+
+        `groups` (Week 3 Task 6): the asker's access groups, from the directory. Retrieval only sees
+        chunks they may see. Default: the public scope (the CLI and UI have no logged-in user).
+        A run whose scope reaches beyond the public one is NOT traced to LangSmith: its passages and
+        answer may be restricted content, and the trace store is a third party (ACCESS.md).
         """
-        inputs = {"raw_question": question, "history": self.history(session_id), "path": [], "degraded": []}
+        groups = frozenset(groups)
+        traced = groups <= PUBLIC
+        inputs = {"raw_question": question, "history": self.history(session_id), "path": [], "degraded": [],
+                  "access": groups}
         config = {
             "recursion_limit": 25,                       # safety net on top of MAX_RETRIES
             "run_name": "northwind_assistant",
@@ -884,7 +928,7 @@ class Assistant:
         standalone, retries = question, 0
 
         modes = ["updates", "messages"] if tokens else ["updates"]
-        for mode, step in self.graph.stream(inputs, config=config, stream_mode=modes):
+        for mode, step in _untraced_unless(traced, self.graph.stream(inputs, config=config, stream_mode=modes)):
             if mode == "messages":                       # (message chunk, metadata) from an LLM call
                 chunk, meta = step
                 text = getattr(chunk, "content", "")
@@ -913,7 +957,9 @@ class Assistant:
                 yield {"event": "node", "node": node, "update": upd}
 
         answer, cited = split_sources(generation)
-        answered = bool(path) and path[-1] not in ("refuse", "direct_answer")
+        # a refusal written by `generate` ("I don't know based on...") cites nothing either (the API contract:
+        # sources are empty for a refusal), and was not "answered from" any passage
+        answered = bool(path) and path[-1] not in ("refuse", "direct_answer") and not is_refusal(answer)
         sources = pick_sources(docs, cited) if answered else []
 
         self.remember(session_id, question, answer)
@@ -934,6 +980,9 @@ class Assistant:
             "retrieved_ids": [_chunk_id(d) for d in retrieved],
             "kept_ids": [_chunk_id(d) for d in docs],
             "degraded": degraded,                     # steps skipped because the provider failed (Task 8)
+            # Task 6: the answer was written from at least one passage not open to every employee
+            "restricted_used": answered and any(is_restricted(d.metadata) for d in docs),
+            "traced": traced,
         }
 
     def ask(self, question: str, session_id: str) -> dict:
@@ -961,6 +1010,13 @@ class Backend:
 
     def refresh(self, force: bool = False) -> None:
         self.store, self.ingest_stats = ingest(self.embeddings, self.data_dir, force=force)
+        from common.access import chunk_groups
+        no_acl = sorted({d.metadata.get("path", "?") for d in self.store.docstore._dict.values()
+                         if chunk_groups(d.metadata) is None})
+        self.ingest_stats["no_acl"] = no_acl
+        if no_acl:   # fail closed: visible to no one, and said loudly (Week 3 Task 6)
+            log.warning("%d documents have NO acl_groups and are hidden from every user: %s", len(no_acl),
+                        ", ".join(no_acl[:10]))
         self.retriever, self.retriever_name = build_retriever(self.store)
         # keep chats when docs change
         sessions = self.assistant.sessions if self.assistant else self._initial_sessions

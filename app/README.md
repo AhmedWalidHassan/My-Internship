@@ -46,7 +46,8 @@ Settings come from the environment or `week1/.env`, through the typed settings o
 | `LLM_TIMEOUT_SECONDS` / `LLM_MAX_RETRIES` | `30` / `2` | hard timeout per model call; transport retries (transient errors only, exponential backoff) |
 | `REQUEST_TIMEOUT_SECONDS` / `MAX_LLM_CALLS_PER_REQUEST` | `60` / `40` | deadline and attempt budget for **all** model calls of one request |
 | `CIRCUIT_FAILURE_THRESHOLD` / `CIRCUIT_COOLDOWN_SECONDS` | `5` / `30` | after N consecutive provider failures, refuse fast for this long |
-| `RATE_LIMIT_PER_MINUTE` | `20` | per `session_id` (per client IP without one) on `/chat` and `/chat/stream` |
+| `RATE_LIMIT_PER_MINUTE` | `20` | per `user_id` (per client IP without one) on `/chat` and `/chat/stream` (Week 3 Task 6; was per `session_id`) |
+| `DIRECTORY_PATH` | `DATA_DIR/_directory.csv` | the user directory: `user_id` → groups. Missing or unreadable = 503 for everyone |
 | `INJECTION_GUARD_ENABLED` | `true` | reject obvious prompt-injection phrasing with a 400 |
 
 Model and LangSmith settings are unchanged: `week1/.env` (see the capstone README).
@@ -55,13 +56,13 @@ Model and LangSmith settings are unchanged: `week1/.env` (see the capstone READM
 
 | Method | Path | Returns |
 |---|---|---|
-| `POST` | `/chat` | `{question, session_id?}` → `{answer, sources, node_path, session_id, trace_id, standalone_question, retries, elapsed_ms}` |
+| `POST` | `/chat` | `{question, session_id?, user_id}` → `{answer, sources, node_path, session_id, trace_id, standalone_question, retries, elapsed_ms}` |
 | `POST` | `/chat/stream` | same input → Server-Sent Events (below) |
 | `GET` | `/healthz` | `{"status": "ok"}`. Liveness. Touches nothing: no model, no index |
 | `GET` | `/readyz` | 200 `{graph_compiled, index: built\|loaded, chunks, documents, ...}` or 503 |
 | `POST` | `/feedback` | `{trace_id, rating: -1\|0\|1, comment?}` → LangSmith feedback `user_rating` on that trace |
-| `GET` | `/session/{session_id}` | the turns this session remembers (lets the UI redraw after a refresh) |
-| `DELETE` | `/session/{session_id}` | `{session_id, cleared}`. Idempotent: an unknown session is still 200 |
+| `GET` | `/session/{session_id}?user_id=` | the turns this session remembers (lets the UI redraw after a refresh). Only for the user who started it |
+| `DELETE` | `/session/{session_id}?user_id=` | `{session_id, cleared}`. Idempotent: an unknown session is still 200. Only for the user who started it |
 | `GET` | `/metrics` | Prometheus text: requests by endpoint/status, refusals, retries, cache hits, LLM calls by node, tokens, estimated cost, time per node, latency histogram, and rolling p50/p95, refusal rate, mean retries, cache-hit rate; errors by code, degraded steps, rejected requests (rate limit, injection), circuit state. Never calls the model |
 
 `/chat` and `done` also report what the answer cost: `llm_calls`, `tokens_in`, `tokens_out`,
@@ -81,6 +82,19 @@ the passage's standing as of the server's `AS_OF_DATE`: `CURRENT`, `NOT_YET_IN_E
 client that joined or printed the strings breaks and must read the fields. The bundled UI renders
 them as "Paid Time Off Policy (HR-POL-004 v3.0, effective 2026-03-01) › 3. Carry-over".
 
+**Who's asking (Week 3 Task 6, breaking change).** Every `/chat`, `/chat/stream` and `/session/...`
+call carries a `user_id` (in the body, or `?user_id=` on the session endpoints). It stands in for a
+verified SSO token. The server looks up the user's groups in `_directory.csv`; the client never sends
+groups or a role.
+- Missing or unknown `user_id`: **401** `unauthorized`. There is no default user.
+- Another user's `session_id`: **403** `session_forbidden`, checked before anything runs.
+- Retrieval sees only the chunks whose `acl_groups` intersect the user's groups. Anything else gets the
+  standard refusal, the same as a question the documents can't answer.
+- **What breaks:** a client that sends no `user_id` (every Week 2 client) now gets a 401, and one that
+  reads `/session/{id}` without `?user_id=` gets a 401. The bundled UI sends one (sidebar, `?user=`).
+- Design, the authority of each layer and the degradation rows:
+  [`week3/task_06_who_is_asking/ACCESS.md`](../week3/task_06_who_is_asking/ACCESS.md).
+
 **Resilience** (Task 8): `degraded` lists the steps that were skipped because the model provider
 failed (e.g. `"route_question: searched by default (llm_unavailable)"`). An answer with a non-empty
 `degraded` is still fact-checked, but it is never cached. If the fact-check itself can't run, there is
@@ -88,7 +102,8 @@ no answer: 503 `verification_unavailable`. Policy and reasons:
 [`week2/task_08_resilience/RESILIENCE.md`](../week2/task_08_resilience/RESILIENCE.md).
 
 **Answer cache** ([`cache.py`](cache.py), Task 6): a session's *first* question is looked up by
-normalised text + corpus version + config fingerprint. A hit returns `cache_hit: true`,
+normalised text + corpus version + config fingerprint + access scope (Week 3 Task 6: a hash of the
+asker's groups, so an answer is only reused by someone who can see the same documents). A hit returns `cache_hit: true`,
 `node_path: ["cache"]`, `llm_calls: 0` and `cached_from_trace_id`, in under 1 ms. Follow-ups always
 run the graph. Adding or changing a document invalidates every entry. Refusals expire after 5 min.
 `CACHE_ENABLED=false` turns it off. Design and numbers: [`week2/task_06_caching/CACHING.md`](../week2/task_06_caching/CACHING.md).
@@ -106,6 +121,11 @@ Every request (ok, error, or a stream the client abandoned) writes **one** JSON 
   drift from generation drift.
 - **Cited versions** (Week 3 Task 5): `cited_versions`, e.g. `["HR-POL-004 v3.0"]` (a path for a document
   without an ID), so an operator can see which version of a policy an answer relied on.
+- **Who asked** (Week 3 Task 6): `user_id`, `access_scope` (a 12-character hash of the user's group set,
+  never the group names) and `restricted_docs_used` (the answer was written from at least one passage
+  not open to every employee). An audit of who saw restricted content needs only these lines.
+  `traced: false` means the run was not sent to LangSmith (a scope beyond the public one); its
+  `trace_url` is null.
 
 `trace_id` is the LangSmith root-run id and `trace_url` links straight to it. The trace also
 carries `request_id` and `session_id` as metadata. The per-node figures come from a LangChain
@@ -119,9 +139,9 @@ next time. `trace_id` is the id of the LangSmith root run of that answer, so
 
 ```bash
 curl -s localhost:8000/chat -H 'content-type: application/json' \
-     -d '{"question": "How many sick days do I get?", "session_id": "me"}'
+     -d '{"question": "How many sick days do I get?", "session_id": "me", "user_id": "u1001"}'
 curl -N localhost:8000/chat/stream -H 'content-type: application/json' \
-     -d '{"question": "When do I need a doctor'"'"'s note for it?", "session_id": "me"}'
+     -d '{"question": "When do I need a doctor'"'"'s note for it?", "session_id": "me", "user_id": "u1001"}'
 ```
 
 ### Streaming protocol (`POST /chat/stream`)
@@ -158,11 +178,14 @@ Every error, from any endpoint, has one shape, and never contains a stack trace:
 | Status | `error` | Meaning |
 |---|---|---|
 | 422 | `validation_error` | bad input: empty, whitespace-only or too long (the input itself is not echoed back) |
-| 400 | `input_rejected` | the question looks like a prompt-injection attempt (`INJECTION_GUARD_ENABLED`) |
-| 429 | `rate_limited` (+ `Retry-After`) | more than `RATE_LIMIT_PER_MINUTE` requests in this session |
+| 400 | `input_rejected` | the question looks like a prompt-injection attempt, or claims access ("I'm in HR") (`INJECTION_GUARD_ENABLED`) |
+| 401 | `unauthorized` | no `user_id`, or one that isn't in the directory (Week 3 Task 6) |
+| 403 | `session_forbidden` | the `session_id` belongs to another user |
+| 429 | `rate_limited` (+ `Retry-After`) | more than `RATE_LIMIT_PER_MINUTE` requests from this user |
 | 404 / 405 | `not_found` / `method_not_allowed` | no such route / method |
 | 503 | `not_ready` (+ `Retry-After`) | still loading the index and models |
 | 503 | `startup_failed` | loading failed. `detail` says why; the process stays up so you can read it |
+| 503 | `directory_unavailable` (+ `Retry-After`) | the user directory is missing, unreadable or malformed: nobody can be identified, so nobody is answered |
 | 503 | `feedback_unavailable` | no LangSmith key configured |
 | 503 | `llm_unavailable` (+ `Retry-After`) | the model provider kept failing after retries |
 | 503 | `llm_circuit_open` (+ `Retry-After`) | the provider failed repeatedly, so calls are paused (refused in ms) |

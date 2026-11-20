@@ -195,16 +195,16 @@ def sample_docs():
         Document(
             page_content="Full-time employees accrue 20 days of PTO per year, "
                          "at 1.67 days per month. Up to 5 days carry over.",
-            metadata={"source": "employee_handbook.md", "section": "2. Paid Time Off (PTO)"},
+            metadata={"acl_groups": "all", "source": "employee_handbook.md", "section": "2. Paid Time Off (PTO)"},
         ),
         Document(
             page_content="If your laptop is lost or stolen, immediately report "
                          "it to the Security team and file a ticket marked URGENT.",
-            metadata={"source": "it_faq.md"},
+            metadata={"acl_groups": "all", "source": "it_faq.md"},
         ),
         Document(
             page_content="The Warehouse Rover R2 has a maximum payload of 80 kg.",
-            metadata={"source": "product_specs.md"},
+            metadata={"acl_groups": "all", "source": "product_specs.md"},
         ),
     ]
 
@@ -321,7 +321,7 @@ def wait_until_ready(client, timeout=5.0):
         r = client.get("/readyz")
         if r.status_code == 200:
             return r
-        time.sleep(0.01)
+        time.sleep(0.001)          # startup is ~1 ms with a prebuilt backend
     raise AssertionError(f"service never became ready: {r.json()}")
 
 

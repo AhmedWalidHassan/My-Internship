@@ -4,7 +4,7 @@ Exact-match answer cache (Week 2, Task 6, layer 1).
 THE KEY is the hard part. A cached answer may only be reused when the same question
 would get the same answer, so the key is:
 
-    sha256( config fingerprint | corpus version | normalised question )
+    sha256( config fingerprint | corpus version | access scope | normalised question )
 
 * normalised question: NFKC, lowercase, collapsed whitespace, trailing punctuation
   stripped, so "How much PTO do I get?" == "how much pto do i get".
@@ -13,6 +13,9 @@ would get the same answer, so the key is:
   The cache is also emptied when it changes, to free the memory.
 * config fingerprint: the model, embeddings, k, chunking, grading limit AND the
   capstone source (prompts + graph). A new prompt or model never serves old answers.
+* access scope (Week 3 Task 6): a hash of the asker's group set. An answer is reused only by
+  users who can see exactly the same documents, so an HR answer is never served to an
+  employee, and an employee's refusal is never served to HR.
 
 What is deliberately NOT cacheable: a turn with conversation history. "Can I carry it
 over?" means something different in every conversation, and resolving it needs the
@@ -57,6 +60,7 @@ class CachedAnswer:
     tokens_in: int
     tokens_out: int
     llm_calls: int
+    restricted_used: bool = False   # written from passages not open to every employee (Task 6)
     created: float = field(default_factory=time.time)
 
 
@@ -72,8 +76,8 @@ class AnswerCache:
         self.invalidations = 0
 
     @staticmethod
-    def key(question: str, *, corpus_version: str, fingerprint: str) -> str:
-        raw = f"{fingerprint}|{corpus_version}|{normalize(question)}"
+    def key(question: str, *, corpus_version: str, fingerprint: str, scope: str) -> str:
+        raw = f"{fingerprint}|{corpus_version}|{scope}|{normalize(question)}"
         return hashlib.sha256(raw.encode()).hexdigest()
 
     def sync_corpus(self, version: str) -> bool:
