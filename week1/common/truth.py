@@ -264,3 +264,8 @@ def cited_label(s: dict) -> str:
     if s.get("doc_id"):
         return f"{s['doc_id']} v{s['version']}" if s.get("version") else s["doc_id"]
     return s["path"]
+
+
+def cited_versions(sources) -> list[str]:
+    """The distinct cited versions, in citation order (two sections of one version count once)."""
+    return list(dict.fromkeys(cited_label(s) for s in sources if isinstance(s, dict)))

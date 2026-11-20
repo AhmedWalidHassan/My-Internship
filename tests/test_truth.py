@@ -176,3 +176,11 @@ def test_the_grader_cannot_keep_a_wiki_page_and_drop_the_policy_it_contradicts()
     assert kept[0] is policy and notes, "the policy comes back, first"
     kept, notes = restore_anchors([unrelated], [policy, unrelated])
     assert kept == [unrelated] and not notes, "an unrelated page doesn't pull a policy in"
+
+
+def test_cited_versions_name_each_version_once_in_citation_order():
+    from common.truth import cited_versions
+    v3 = {"path": "policies/hr/HR-POL-004_PTO_v3.pdf", "doc_id": "HR-POL-004", "version": "3.0"}
+    wiki = {"path": "wiki/people/Benefits_Overview.html", "doc_id": None, "version": None}
+    assert cited_versions([dict(v3, section="2. Accrual"), wiki, dict(v3, section="3. Carry-over")]) == \
+        ["HR-POL-004 v3.0", "wiki/people/Benefits_Overview.html"]

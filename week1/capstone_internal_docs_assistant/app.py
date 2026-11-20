@@ -46,7 +46,7 @@ sys.path.append(str(Path(__file__).resolve().parents[2]))   # repo root: the ing
 
 from common.resilience import ProviderUnavailable, RetrievalUnavailable, VerificationUnavailable  # noqa: E402
 from common.settings import get_settings  # noqa: E402  (needs the sys.path line above)
-from common.truth import cited_label  # noqa: E402
+from common.truth import cited_versions  # noqa: E402
 from langchain_core.documents import Document
 from langgraph.graph import END, START, StateGraph
 
@@ -922,7 +922,7 @@ class Assistant:
             "event": "final",
             "answer": answer,
             "sources": sources,
-            "cited_versions": [cited_label(s) for s in sources],   # "HR-POL-004 v3.0" (Task 5)
+            "cited_versions": cited_versions(sources),   # "HR-POL-004 v3.0" (Task 5)
             "path": path,
             "retries": retries,
             "standalone": standalone,

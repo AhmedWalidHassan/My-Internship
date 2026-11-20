@@ -18,6 +18,7 @@ from app.capstone import CAPSTONE_PATH, load_capstone
 from app.config import get_settings
 from app.observability import Observer, RunTelemetry
 from common.resilience import ProviderUnavailable, RequestBudget
+from common.truth import cited_versions
 from app.schemas import (
     ChatResponse,
     DoneEvent,
@@ -96,8 +97,7 @@ class ChatService:
             "latency_ms": latency_ms, "tokens_in": 0, "tokens_out": 0, "estimated_cost_usd": 0.0,
             "refused": hit.refused, "cache_hit": True, "llm_calls": 0, "model": get_settings().llm_label,
             "per_node": {}, "retrieved_ids": [], "kept_ids": [], "cached_from_trace_id": hit.trace_id,
-            "cited_versions": [s.get("doc_id", "") + (f" v{s['version']}" if s.get("version") else "")
-                               if s.get("doc_id") else s.get("path", "") for s in hit.sources if isinstance(s, dict)],
+            "cited_versions": cited_versions(hit.sources),
             "cache_age_s": round(time.time() - hit.created, 1)})
 
     # -- the one place the graph runs ---------------------------------------------

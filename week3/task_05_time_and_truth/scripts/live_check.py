@@ -1,12 +1,12 @@
 """Task 5 — a few questions through the real system (real model), printed with their sources.
 
-    AS_OF_DATE=2026-02-15 python week3/task_05_time_and_truth/scripts_live_check.py
+    AS_OF_DATE=2026-02-15 python week3/task_05_time_and_truth/scripts/live_check.py
 """
 import sys
 import uuid
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 from app.capstone import load_capstone  # noqa: E402
 
 QUESTIONS = sys.argv[1:] or [
