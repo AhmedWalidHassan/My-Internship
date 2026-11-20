@@ -34,8 +34,8 @@ def main() -> int:
     from fastapi.testclient import TestClient
     from structlog.testing import capture_logs
 
+    from app.main import create_app       # puts week1/ on sys.path (app.config)
     import common.settings as settings_mod
-    from app.main import create_app
 
     restricted = {p for p, g in acl().items() if g != "all"}
     backend_holder = {}

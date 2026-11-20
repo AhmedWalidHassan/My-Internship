@@ -20,6 +20,7 @@ records both.
 | 2026-11-18 | Task 3: 2 full dev runs (140 questions, ~1,950 pipeline LLM calls + ~280 judge calls), retrieval-only runs, live tier (9 tests), 4 full + 2 incremental re-ingests, 2 image builds + Docker smoke test | **$0 actual** (≈ $0.10 pipeline + ≈ $0.04 judge at gpt-4o-mini prices; embeddings ≈ $0.003) | $0 (≈ $0.54) | $25.00 |
 | 2026-11-18 | Task 4: 18 retrieval-only runs (dev ×16, test ×2; no LLM), 4 full dev runs (280 questions, ~3,900 pipeline LLM calls + ~560 judge calls), 4 `make cost` runs (160 questions), 7 index builds, 1 image build + Docker smoke test | **$0 actual** (≈ $0.21 pipeline + ≈ $0.08 judge at gpt-4o-mini prices; retrieval runs ≈ $0.0003 of query embeddings) | $0 (≈ $0.83) | $25.00 |
 | 2026-11-20 | Task 5: 2 full dev runs (TT-01, TT-02: 140 questions, ~1,920 pipeline LLM calls + ~280 judge calls), 2 `make cost` runs (80 questions, ~1,100 calls), live checks (~10 questions), `make check-live` ×1 | **$0 actual** (≈ $0.17 pipeline + ≈ $0.04 judge at gpt-4o-mini prices) | $0 (≈ $1.04) | $25.00 |
+| 2026-11-20 | Task 6: 1 full dev run (70 questions, ~1,000 pipeline LLM calls + ~140 judge calls), `make cost` (40), 2 cache workloads (240 requests, ~93 misses ≈ 1,300 calls), live attack check (~10 questions), retrieval-only runs (no LLM) | **$0 actual** (≈ $0.17 pipeline + ≈ $0.02 judge at gpt-4o-mini prices) | $0 (≈ $1.23) | $25.00 |
 
 ---
 
@@ -192,12 +193,43 @@ Week 2's `make cost`, same questions both times, local `qwen3.5:4b` priced at gp
 
 ## Task 6 — Access control
 
+Measured 2026-11-20 on the laptop.
+- **Retrieval latency:** the 70 dev queries ×3, each searched as its own user, compared with a scope
+  that sees every chunk. That scope ranks exactly like the Week 2 retriever
+  (`fusion_equivalence.py`).
+- **Cache hit rate:** Week 2's own workload (`cache_benchmark.py workload`, 120 requests, `--seed 7`),
+  same questions, asked by one employee vs. by the six directory users. Real model.
+- **Cost:** `make cost` on the seed set (40).
+- Evidence: [`task_06_who_is_asking/evidence/`](task_06_who_is_asking/evidence/).
+
 | | Before | After |
 |---|---:|---:|
-| Retrieval latency p50 | | |
-| Cache hit rate on the Week 2 workload | | |
+| Retrieval latency p50 | 0.53 ms (p95 0.74) | 0.53 ms (p95 0.75), plus **5–9 ms once per access scope per process** (building its BM25 index) |
+| Cache hit rate on the Week 2 workload | **70%** (84/120: one user, one scope) | **52%** (63/120: six users, four scopes) |
+| LLM calls / cost per question (seed set) | 14.1 / $0.000794 | 14.95 / $0.000829 (+4%) |
+| … the 35 seed questions outside `access` | 14.7 / $0.000846 | 14.6 / $0.000841 (unchanged) |
+| Projected monthly @ 1,000 questions/day | $23.81 | $24.87 |
 
 *(A drop in hit rate is expected: answers are now cached per access scope.)*
+
+- **The 18-point drop is exactly the new miss reason:** 20 requests (17%) were "first time this
+  question was asked *in this access scope*". The three plain employees share one scope, so most
+  traffic still shares entries.
+- In a real company almost everyone is in the `all`-only scope, so the drop there would be smaller
+  than with this directory, where half the users are managers or HR.
+- Cost without the cache, for the same workload: $0.094. With it: $0.045 (was $0.031 with one scope).
+- **Per question, access control adds no LLM call and no measurable retrieval time.** Filtering
+  happens inside the searches, which were already sub-millisecond.
+- **The +4% on the seed set is entirely the `access` questions.** The three unauthorised ones are now
+  refused instead of answered from the salary bands, and a refusal runs the whole rewrite loop
+  (10 → 23 LLM calls each). Leaking was cheaper.
+- **Memory:** one BM25 index per access scope (4 here, each over at most 348 chunks).
+  - At 40,000 documents it is still one index per *distinct group set*, not per user. That stays
+    small as long as groups are coarse.
+  - With per-user ACLs it would not, and the answer then is a filtered inverted index (one BM25 with
+    an ID filter, like the FAISS side) rather than a copy per scope.
+- **One-off:** the first start after this change re-indexed every document (18 s), because a
+  document's hash now includes its `_metadata.csv` row (an ACL change must reach the index).
 
 ---
 
@@ -210,7 +242,7 @@ Week 2's `make cost`, same questions both times, local `qwen3.5:4b` priced at gp
 | (this PR) | Task 3 ingestion | per question 5.4 → 5.9 s mean (more real context per call; fewer calls). Full re-ingest 8.8 s GPU / 22 s CPU; one changed file 0.04 s. Warm container start loads the index in 0.2 s (startup 11 s) | $0.000687 → $0.000698 per question (+1.7%; LLM calls 17.9 → 13.9). Full re-embed $0.00062, one file $0.0000034 at text-embedding-3-small | image +285 MB (PyMuPDF 2.1 + onnxruntime); all local, $0 actual |
 | (this PR) | Task 4 experiments | none shipped: production keeps the Task 3 retriever (same rankings, re-implemented as weighted RRF). New per-PR `retrieval-gate` CI job: ~1–2 min of free runner time | none at runtime. Measured for the rejected winner: −19% per question; re-ranker +488 ms/query on CPU | 12 experiments, all local, $0 actual; image +11 KB |
 | (this PR) | Task 5 time and truth | none measurable: curation 0.7 ms p50 per question, no LLM call; end-to-end p50 4.57 → 4.54 s (seed) | $0.000729 → $0.000794 per question (+9%, seed; dev +8%): ~300 more input tokens from status labels and generator rules, LLM calls unchanged (14.1) | API change: `sources` are objects; all runs local, $0 actual |
-| | Task 6 access | | | |
+| (this PR) | Task 6 access | retrieval unchanged (0.53 ms p50, filtering inside the searches) + 5–9 ms once per access scope per process; one-off full re-index (18 s) | no LLM call added. Seed: $0.000794 → $0.000829 (+4%), all from 3 access questions now refused (10 → 23 calls); the other 35 unchanged. Cache hit rate on the Week 2 workload 70% → 52% with 6 users (per-scope keys) | API change: `user_id` required (401), sessions bound (403); all runs local, $0 actual |
 
 ---
 
