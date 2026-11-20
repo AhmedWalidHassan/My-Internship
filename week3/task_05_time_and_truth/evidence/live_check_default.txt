@@ -1,0 +1,27 @@
+AS_OF_DATE: 2026-10-01
+
+Q: How many PTO days can I carry over into next year?
+A: Under HR-POL-004 v3.0, effective 2026-03-01, unused PTO of up to 3 days may be carried into the next calendar year; any unused balance above 3 days is forfeited on December 31. There is a transition rule for 2026 only: balances carried from 2025 under version 2.0 (up to 5 days) are honoured in full but must also be used by March 31, 2026. The Benefits Overview wiki stating "up to 5 days carry over" is out of date.
+Sources: ['Paid Time Off Policy (HR-POL-004 v3.0, effective 2026-03-01) › 3. Carry-over; 4. Requesting PTO']
+Cited: ['HR-POL-004 v3.0']  path: contextualize -> route_question -> retrieve -> grade_documents -> generate -> grade_generation -> rewrite_query -> retrieve -> grade_documents -> generate -> grade_generation
+
+Q: Is Northwind switching to flexible time off?
+A: Northwind Robotics is currently operating under a flexible schedule where employees may start any time between 07:00 and 10:00, but there is no confirmed policy change yet. There is a draft proposal (not approved) to HR-POL-004 v4.0 that proposes switching to flexible time off with an effective date of 2027-01-01, subject to leadership approval.
+Sources: ['Northwind Robotics — Employee Handbook (Excerpt) › 1. Working Hours & Flexibility', 'DRAFT — Flexible Time Off (proposed HR-POL-004 v4.0) (HR-POL-004 v4.0, DRAFT, not approved) › Proposed effective date']
+Cited: ['legacy_intranet/employee_handbook.md', 'HR-POL-004 v4.0']  path: contextualize -> route_question -> retrieve -> grade_documents -> generate -> grade_generation
+
+Q: How do I get on the VPN from home?
+A: Under IT-STD-007 v3.0, effective 2026-06-30, the GlobalConnect VPN client is retired as of June 30, 2026, and it can no longer be used for remote access. All remote access now uses Northwind Access, which connects automatically when an internal resource is requested; there is no separate VPN connection step. Personal devices cannot run Northwind Access and may only access email and calendar via the browser. The older instruction to install GlobalConnect from the Self-Service app catalog and enter vpn.northwind.example is outdated.
+Sources: ['Remote Access Standard (IT-STD-007 v3.0, effective 2026-06-30) › Northwind Access; Device requirements; Personal devices']
+Cited: ['IT-STD-007 v3.0']  path: contextualize -> route_question -> retrieve -> grade_documents -> generate -> grade_generation -> rewrite_query -> retrieve -> grade_documents -> generate -> grade_generation
+
+Q: The sales IT tips say passwords need 12 characters and must be changed every 90 days. Is that right?
+A: Yes, according to the current policy, passwords for the sales team must be at least 12 characters long and changed every 90 days.
+Sources: ['IT tips for the sales team']
+Cited: ['wiki/sales/Sales_IT_Tips.html']  path: contextualize -> route_question -> retrieve -> grade_documents -> generate -> grade_generation
+
+Q: What is the payload capacity of the rover?
+A: R2: The payload capacity is 80 kg.
+R3: The payload capacity is 120 kg.
+Sources: ['Warehouse Rover R2 - Data Sheet', 'Warehouse Rover R3 - Data Sheet']
+Cited: ['product/R2/Warehouse_Rover_R2_datasheet.pdf', 'product/R3/Warehouse_Rover_R3_datasheet.pdf']  path: contextualize -> route_question -> retrieve -> grade_documents -> generate -> grade_generation

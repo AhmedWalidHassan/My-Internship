@@ -34,7 +34,7 @@ def ask(backend, question, session=None):
 
 
 def cited_files(result):
-    return {label.split(" › ")[0] for label in result["sources"]}
+    return {s["path"].rsplit("/", 1)[-1] for s in result["sources"]}   # structured since Week 3 Task 5
 
 
 # ===========================================================================

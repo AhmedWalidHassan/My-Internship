@@ -46,6 +46,7 @@ sys.path.append(str(Path(__file__).resolve().parents[2]))   # repo root: the ing
 
 from common.resilience import ProviderUnavailable, RetrievalUnavailable, VerificationUnavailable  # noqa: E402
 from common.settings import get_settings  # noqa: E402  (needs the sys.path line above)
+from common.truth import cited_label  # noqa: E402
 from langchain_core.documents import Document
 from langgraph.graph import END, START, StateGraph
 
@@ -387,6 +388,8 @@ class GraphState(TypedDict, total=False):
     fallback: bool                    # True if grading rejected everything and we used the top passages anyway
     path: Annotated[list, operator.add]   # reducer: nodes append their name
     degraded: Annotated[list, operator.add]   # what was skipped because the provider failed (Task 8)
+    curation: list                    # what Week 3 curation changed in the last search (Task 5)
+    ambiguity: str                    # "answer for both R2 and R3" note, when the question is ambiguous
 
 
 # Only these placeholders are template variables: {history} {question} {document}
@@ -449,7 +452,19 @@ GENERATE_PROMPT = (
     "Do not list any sources in that case.\n"
     "4. Otherwise, end with one line in this format: Sources: followed by the names "
     "of the context files you used, separated by commas. Use the file names shown in "
-    "square brackets in the context.\n\n"
+    "square brackets in the context.\n"
+    "5. Some passages carry a status after the file name (Week 3). Take the rule from "
+    "CURRENT and authoritative passages. When it comes from a versioned policy, start "
+    "with 'Under <ID> v<version>, effective <date>, ...'.\n"
+    "6. A DRAFT is never the rule. Mention it only as 'there is a draft proposal (not "
+    "approved) to ...', and only if it is relevant to the question.\n"
+    "7. A NOT YET IN EFFECT version is not the rule yet: you may add that it will change "
+    "on its effective date. OUTDATED passages are not the rule.\n"
+    "8. If a lower-authority passage (wiki, newsletter, meeting note) disagrees with a "
+    "CURRENT one, answer with the CURRENT one and say in one sentence that the other "
+    "source is out of date.\n"
+    "9. If the question can mean several things that the context treats differently "
+    "(for example two products), answer each reading separately. Never pick one silently.\n\n"
     "Context:\n{context}\n\n"
     "Question: {question}"
 )
@@ -506,9 +521,12 @@ def _yes_no(llm, prompt: str, default: bool) -> bool:
 
 
 def format_docs(docs) -> str:
-    return "\n\n".join(
-        f"[{Path(d.metadata.get('source', 'unknown')).name}] {d.page_content}" for d in docs
-    )
+    """'[file] passage', or '[file | status] passage' once Week 3 curation has labelled it."""
+    def head(d):
+        name = Path(d.metadata.get("source", "unknown")).name
+        label = d.metadata.get("truth_label")
+        return f"[{name} | {label}]" if label else f"[{name}]"
+    return "\n\n".join(f"{head(d)} {d.page_content}" for d in docs)
 
 
 def _verdict_text(llm, prompt: str, pattern: str, tries: int = 2):
@@ -541,7 +559,10 @@ def addresses_question(llm, question: str, answer: str) -> bool:
     return _yes_no(llm, ADDRESSES_PROMPT.format(question=question, answer=answer), default=False)
 
 
-def build_graph(retriever, llm):
+def build_graph(retriever, llm, curate=None):
+    # `curate(docs, question) -> (docs, notes, ambiguity_note)`: Week 3 Task 5, metadata only, no LLM.
+    # Labels each passage CURRENT / SUPERSEDED / DRAFT / ..., swaps in current versions, drops
+    # superseded ones (common/truth.py). None = the Week 2 behaviour (a plain-folder corpus).
     # DEGRADATION POLICY (Week 2 Task 8) -- what happens when the provider fails after the
     # transport retries in common/resilience.py (ProviderUnavailable). Only provider failures
     # degrade; any other exception is a bug and surfaces as one.
@@ -591,7 +612,10 @@ def build_graph(retriever, llm):
             raise
         except Exception as e:                   # index, embeddings or BM25 failed
             raise RetrievalUnavailable(f"search failed: {type(e).__name__}: {str(e)[:150]}") from e
-        return {"documents": docs, "path": ["retrieve"]}
+        if curate is None:
+            return {"documents": docs, "path": ["retrieve"]}
+        docs, notes, ambiguity = curate(docs, state["question"])
+        return {"documents": docs, "path": ["retrieve"], "curation": notes, "ambiguity": ambiguity}
 
     def grade_documents(state: GraphState):
         candidates = state["documents"][:MAX_DOCS_TO_GRADE]
@@ -614,6 +638,11 @@ def build_graph(retriever, llm):
         update = {"path": ["grade_documents"]}
         if degraded:
             update["degraded"] = degraded
+        if curate is not None and kept:              # Task 5: never keep the wiki and drop the policy it contradicts
+            from common.truth import restore_anchors
+            kept, restored = restore_anchors(kept, candidates)
+            if restored:
+                update["curation"] = restored
         if not kept and state["retries"] >= MAX_RETRIES and candidates:
             # Out of rewrites and the grader rejected everything. A small grader can be wrong,
             # so let the top passages through: generate + the fact-check still decide whether
@@ -635,7 +664,10 @@ def build_graph(retriever, llm):
         return {**update, "rewritten_question": new_query or state["question"]}
 
     def generate(state: GraphState):
-        prompt = GENERATE_PROMPT.format(context=format_docs(state["documents"]), question=state["question"])
+        context = format_docs(state["documents"])
+        if state.get("ambiguity"):                   # Task 5: answer every reading, never pick one silently
+            context = f"{state['ambiguity']}\n\n{context}"
+        prompt = GENERATE_PROMPT.format(context=context, question=state["question"])
         return {"generation": _ask(llm, prompt), "path": ["generate"]}
 
     def grade_generation(state: GraphState):
@@ -740,15 +772,34 @@ def _chunk_id(d: Document) -> str:
 
 
 def pick_sources(docs, cited: list) -> list:
-    """Citation labels ('file.md › Section') for the docs the answer actually used."""
+    """Structured citations for the docs the answer actually used (Week 3 Task 5):
+    {path, title, doc_id, version, effective_date, section, status}, one per (document, section).
+    A passage marked DRAFT or OUTDATED is still listed if the answer used it (e.g. "there is a draft
+    proposal ..."); its `status` says so."""
+    from common.truth import source
+
     chosen = [d for d in docs if d.metadata.get("source") in cited] if cited else list(docs)
     chosen = chosen or list(docs)
-    labels = []
+    out, seen = [], set()
     for d in chosen:
-        lab = _section_label(d)
-        if lab not in labels:
-            labels.append(lab)
-    return labels
+        s = source(d)
+        key = (s["path"], s["section"])
+        if key not in seen:
+            seen.add(key)
+            out.append(s)
+    return out
+
+
+def source_label(s: dict) -> str:
+    """'Paid Time Off Policy (HR-POL-004 v3.0, effective 2026-03-01) › 3. Carry-over' for people."""
+    name = s.get("title") or Path(s["path"]).name
+    tags = [f"{s['doc_id']} v{s['version']}" if s.get("doc_id") and s.get("version") else (s.get("doc_id") or "")]
+    if s.get("effective_date"):
+        tags.append(f"effective {s['effective_date']}")
+    if s.get("status") in ("DRAFT", "draft"):
+        tags.append("DRAFT, not approved")
+    tags = [x for x in tags if x]
+    return name + (f" ({', '.join(tags)})" if tags else "") + (f" › {s['section']}" if s.get("section") else "")
 
 
 NODE_LABELS = {
@@ -786,8 +837,8 @@ def describe_step(node: str, upd: dict) -> str:
 class Assistant:
     """The graph + per-session memory. Sessions never see each other's history."""
 
-    def __init__(self, retriever, llm, sessions: dict = None):
-        self.graph = build_graph(retriever, llm)
+    def __init__(self, retriever, llm, sessions: dict = None, curate=None):
+        self.graph = build_graph(retriever, llm, curate=curate)
         self.sessions = sessions if sessions is not None else {}
 
     def history(self, session_id: str) -> list:
@@ -871,6 +922,7 @@ class Assistant:
             "event": "final",
             "answer": answer,
             "sources": sources,
+            "cited_versions": [cited_label(s) for s in sources],   # "HR-POL-004 v3.0" (Task 5)
             "path": path,
             "retries": retries,
             "standalone": standalone,
@@ -912,7 +964,22 @@ class Backend:
         self.retriever, self.retriever_name = build_retriever(self.store)
         # keep chats when docs change
         sessions = self.assistant.sessions if self.assistant else self._initial_sessions
-        self.assistant = Assistant(self.retriever, self.llm, sessions)
+        self.assistant = Assistant(self.retriever, self.llm, sessions, curate=self._curator())
+
+    def _curator(self):
+        """Week 3 Task 5: query-time curation for a corpus with versioned documents (a corpus export).
+        None for a plain folder (Week 1): the graph then behaves exactly as in Week 2."""
+        from common.truth import Catalog, ambiguity_note, curate
+
+        docs = list(self.store.docstore._dict.values())
+        if not any(d.metadata.get("doc_id") or d.metadata.get("source_system") for d in docs):
+            return None
+        catalog, as_of = Catalog(docs), SETTINGS.as_of_date
+
+        def run(found, question):
+            kept, notes = curate(found, question, catalog, as_of)
+            return kept, notes, ambiguity_note(question, kept)
+        return run
 
     @property
     def n_chunks(self) -> int:

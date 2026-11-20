@@ -67,6 +67,20 @@ Model and LangSmith settings are unchanged: `week1/.env` (see the capstone READM
 `/chat` and `done` also report what the answer cost: `llm_calls`, `tokens_in`, `tokens_out`,
 `estimated_cost_usd` (tokens × `COST_PER_1K_*_TOKENS`).
 
+**Sources are structured objects (Week 3 Task 5, breaking change).** Until then `sources` was a list of
+strings like `"employee_handbook.md › 2. Paid Time Off (PTO)"`. It is now a list of:
+
+```json
+{"path": "policies/hr/HR-POL-004_PTO_v3.pdf", "title": "Paid Time Off Policy", "doc_id": "HR-POL-004",
+ "version": "3.0", "effective_date": "2026-03-01", "section": "3. Carry-over", "status": "CURRENT"}
+```
+
+`doc_id`, `version`, `effective_date` and `section` are `null` when the document has none. `status` is
+the passage's standing as of the server's `AS_OF_DATE`: `CURRENT`, `NOT_YET_IN_EFFECT`, `DRAFT`,
+`AUTHORITATIVE`, `LOWER_AUTHORITY` or `OUTDATED`. The same objects are in the stream's `done` event. A
+client that joined or printed the strings breaks and must read the fields. The bundled UI renders
+them as "Paid Time Off Policy (HR-POL-004 v3.0, effective 2026-03-01) › 3. Carry-over".
+
 **Resilience** (Task 8): `degraded` lists the steps that were skipped because the model provider
 failed (e.g. `"route_question: searched by default (llm_unavailable)"`). An answer with a non-empty
 `degraded` is still fact-checked, but it is never cached. If the fact-check itself can't run, there is
@@ -90,6 +104,8 @@ Every request (ok, error, or a stream the client abandoned) writes **one** JSON 
 - **Per node:** `per_node` (runs, ms, LLM calls, LLM ms and tokens for each graph node).
 - **Retrieval:** `retrieved_ids` and `kept_ids`, the chunk ids (`file.md::3`), to tell retrieval
   drift from generation drift.
+- **Cited versions** (Week 3 Task 5): `cited_versions`, e.g. `["HR-POL-004 v3.0"]` (a path for a document
+  without an ID), so an operator can see which version of a policy an answer relied on.
 
 `trace_id` is the LangSmith root-run id and `trace_url` links straight to it. The trace also
 carries `request_id` and `session_id` as metadata. The per-node figures come from a LangChain

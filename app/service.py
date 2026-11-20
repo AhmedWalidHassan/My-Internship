@@ -96,6 +96,8 @@ class ChatService:
             "latency_ms": latency_ms, "tokens_in": 0, "tokens_out": 0, "estimated_cost_usd": 0.0,
             "refused": hit.refused, "cache_hit": True, "llm_calls": 0, "model": get_settings().llm_label,
             "per_node": {}, "retrieved_ids": [], "kept_ids": [], "cached_from_trace_id": hit.trace_id,
+            "cited_versions": [s.get("doc_id", "") + (f" v{s['version']}" if s.get("version") else "")
+                               if s.get("doc_id") else s.get("path", "") for s in hit.sources if isinstance(s, dict)],
             "cache_age_s": round(time.time() - hit.created, 1)})
 
     # -- the one place the graph runs ---------------------------------------------
@@ -203,6 +205,7 @@ class ChatService:
             "cache_hit": False,                 # Task 6 turns this on; logged from day one
             "llm_calls": usage["llm_calls"], "model": settings.llm_label,
             "per_node": telemetry.nodes(),
+            "cited_versions": (final or {}).get("cited_versions", []),   # Task 5: "HR-POL-004 v3.0"
             "retrieved_ids": (final or {}).get("retrieved_ids", []),
             "kept_ids": (final or {}).get("kept_ids", []),
             "degraded": (final or {}).get("degraded", []),

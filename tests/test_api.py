@@ -199,7 +199,10 @@ def test_chat_returns_answer_sources_and_node_path(api):
     assert r.status_code == 200, r.text
     body = r.json()
     assert body["answer"] == "Full-time employees get 20 days of PTO per year."
-    assert body["sources"] and all(s.startswith("employee_handbook.md") for s in body["sources"])
+    # Week 3 Task 5: sources are structured objects (were 'file.md › Section' strings)
+    assert body["sources"] and all(s["path"] == "employee_handbook.md" for s in body["sources"])
+    assert set(body["sources"][0]) == {"path", "title", "doc_id", "version", "effective_date", "section", "status"}
+    assert body["sources"][0]["section"]
     assert body["node_path"] == ["contextualize", "route_question", "retrieve", "grade_documents",
                                  "generate", "grade_generation"]
     uuid.UUID(body["trace_id"])
@@ -296,7 +299,7 @@ def test_stream_sends_status_then_tokens_then_done(start_api, make_backend, app)
     done = events[-1][1]
     assert done["answer"] == "Full-time employees get 20 days of PTO per year."
     assert done["node_path"] == status_nodes
-    assert any(s.startswith("employee_handbook.md") for s in done["sources"])
+    assert any(s["path"] == "employee_handbook.md" and s["section"] for s in done["sources"])
     uuid.UUID(done["trace_id"])
 
 
@@ -473,7 +476,7 @@ def test_live_stream_delivers_real_model_tokens():
     done = events[-1][1]
     assert re.search(r"\b10\b|\bten\b", done["answer"], re.I), done["answer"]
     source = corpus_facts()["sick_days_source"]           # depends on the corpus (Week 3 Task 1 triage)
-    assert any(s.startswith(source) for s in done["sources"]), done["sources"]
+    assert any(s["path"].rsplit("/", 1)[-1] == source for s in done["sources"]), done["sources"]
 
 
 # ===========================================================================

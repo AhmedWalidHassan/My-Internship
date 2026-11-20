@@ -141,6 +141,54 @@ Other categories: within ±2 questions (the generation stage is sensitive to con
 Cost: **+0 LLM calls**; input tokens per `generate` and `grade_generation` call rise by the label lines
 (~5–10%).
 
+**Result** *(committed after running)*: full pipeline, dev (70), judge gemma3:4b,
+[`dev_full_after.json`](task_05_time_and_truth/evidence/dev_full_after.json).
+
+| Category (deterministic) | Before | After | Predicted |
+|---|---:|---:|---|
+| version | 0.80 (4/5) | **1.00** (5/5) | ≥ 4/5 ✓ |
+| conflict | 0.33 (1/3) | **0.67** (2/3) | ≥ 2/3 ✓ |
+| draft | 0.75 (3/4) | 0.75 (3/4) | 4/4 ✗ |
+| ambiguous | 1.00 | 1.00 | 3/3 ✓ |
+| **All** | 0.743 | 0.743 | other categories ±2 |
+| Correctness / groundedness (all) | 0.500 / 0.986 | 0.529 / 0.971 | – |
+| LLM calls / question | 13.9 | 13.7 | +0 ✓ |
+| Cost / question (dev) | $0.000698 | $0.000755 (+8%) | input tokens +5–10% |
+
+**Hypothesis confirmed?** **Mostly.**
+- **Gains:** #9 (12 weeks), n06 (Sales tips vs IT-STD-003), n08 (the draft named as a proposal) and #19.
+- **Losses:** n11 and s29 (and n17, #24). n11 and s29 are the interesting ones. The generator wrote
+  **correct** drafts: "carry-over not abolished, up to 3 days under HR-POL-004 v3.0", "report within
+  1 hour". **The fact-check rejected each one three times.** Both drafts add the sentence rule 8 asks
+  for ("the lower-authority … is out of date", "the FTO draft is not approved"), and the 4B fact-check
+  finds no passage that literally says so. The labels say "lower authority", not "out of date".
+- **The same cause** explains `conflict` groundedness 1.00 → 0.33: the judge uses the same groundedness
+  prompt and flags the conflict sentence.
+
+**Decision:** keep, and follow up with TT-02. The curation works; the fact-check doesn't know that
+statements about a source's standing come from the labels.
+
+
+
+---
+
+## Task 5 — TT-02: let the fact-check read the labels
+
+**Hypothesis** *(committed before running)*: If (a) the labels state literally what an answer may say
+about a source ("… lower authority than the policy portal, may be out of date", "SUPERSEDED", "a
+proposal that is NOT approved"), and (b) the grounding prompt counts statements about a source's
+standing as supported when the bracketed label states it, then the fact-check stops rejecting correct
+answers that mention a conflict or a draft:
+- n11 and s29 come back: `draft` 3/4 → 4/4, `factual` +1.
+- `conflict` groundedness returns to ≥ 0.67.
+- Overall deterministic ≥ 0.757 (+1 net or better).
+- Still +0 LLM calls.
+- Risk: a more permissive fact-check could pass an answer it should reject; groundedness shouldn't fall
+  below 0.95 overall.
+
+**The one change:** label wording and one sentence in `GROUNDED_PROMPT` (the fact-check and the eval's
+groundedness judge share it).
+
 **Result** *(committed after running)*: *(pending)*
 
 ---

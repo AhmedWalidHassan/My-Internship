@@ -1,0 +1,135 @@
+Loading index and models (llm=ollama:qwen3.5:4b base_url=http://172.17.0.1:11434 embeddings=ollama k=4 chunks=800/100 index=/mnt/games/coding/My-Internship/week1/capstone_internal_docs_assistant/faiss_index_w3) ...
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 4649.40it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+{"event": "ingest", "level": "info", "ts": "2026-11-20T10:21:45.076Z", "corpus": "/mnt/games/coding/My-Internship/week3/corpus", "snapshot": "2026-10-01", "documents_loaded": 190, "documents_skipped": 0, "chunks": 348, "duplicates": 1, "added": 0, "changed": 0, "removed": 0, "reused": 190, "rebuilt": false, "embedding_calls": 0, "duration_s": 0.14, "corpus_version": "d2a735e0ebf4e2bf"}
+2026-11-20 12:21:45,076 INFO northwind: Index LOADED from /mnt/games/coding/My-Internship/week1/capstone_internal_docs_assistant/faiss_index_w3 in 0.14s: 348 chunks from 190 files, 0 chunks embedded
+Warm-up (not counted) ...
+   1.   3.2s   8 calls  2,540 tok  How many paid sick days do employees get per year?
+   2.   7.6s  10 calls  4,391 tok  How many PTO days can I carry over into next year?
+   3.   4.7s  10 calls  3,073 tok  How long is parental leave for an adoptive parent?
+   4.   4.0s  10 calls  3,400 tok  What is the minimum length for a corporate password?
+   5.  26.7s  26 calls 10,430 tok  How do I connect to the VPN from home?
+   6.   5.4s  10 calls  3,435 tok  What is the hotel cap per night for a business trip to Germany?
+   7.   3.8s  10 calls  3,190 tok  What is the daily meal allowance when I travel to Cairo?
+   8.   4.3s  10 calls  2,616 tok  What does error code E-217 mean?
+   9.   6.1s  24 calls  7,624 tok  Is part NW-BAT-4830 compatible with the R2?
+  10.   3.1s  10 calls  3,049 tok  What is the maximum ramp incline for a loaded R3?
+  11.   3.4s  10 calls  2,861 tok  How do I reset the emergency stop on an R3?
+  12.   3.2s  10 calls  3,487 tok  What is the payload capacity of the rover?
+  13.  10.9s  10 calls  4,082 tok  What are the password requirements?
+  14.   3.7s  10 calls  2,845 tok  How much is the referral bonus and when is it paid?
+  15.  10.3s  25 calls  7,533 tok  What is the company policy on bringing dogs to the office?
+  16.  13.3s  23 calls  5,897 tok  What is the CEO's home address?
+  17.   8.1s  10 calls  3,802 tok  Do we have unlimited PTO?
+  18.   2.8s  10 calls  2,553 tok  What is the salary range for an L4 engineer in Austin?
+  19.   2.0s  10 calls  2,553 tok  What is the salary range for an L4 engineer in Austin?
+  20.   3.6s  10 calls  2,759 tok  What is Project Juniper?
+  21.   3.3s  10 calls  2,402 tok  What target rating distribution should I use in performance calibration?
+  22.   2.1s  10 calls  2,305 tok  How long is a performance improvement plan?
+  23.   4.3s  23 calls  5,802 tok  What are the Cairo office working hours during Ramadan?
+  24.   5.4s  23 calls  6,601 tok  How much is the monthly transport allowance for Cairo employees?
+  25.   4.2s  22 calls  6,478 tok  Which days make up the work week in the Cairo office?
+  26.  14.9s  25 calls  8,843 tok  And how many of them can I carry over?
+  27.  10.7s  27 calls  7,448 tok  What about Egypt?
+  28.   7.0s  10 calls  4,285 tok  How many PTO days am I entitled to this year?
+  29.  12.4s  24 calls  8,050 tok  How quickly do I have to report a lost laptop?
+  30.   5.0s   9 calls  3,469 tok  What is the annual learning budget per employee?
+  31.   5.9s  10 calls  3,567 tok  How much is the home-office stipend?
+  32.   5.6s   9 calls  3,718 tok  Can I work from another country for a few weeks?
+  33.   2.1s  10 calls  2,498 tok  How much is the primary on-call stipend?
+  34.   3.8s  10 calls  2,320 tok  What does error E-271 indicate?
+  35.   3.9s  10 calls  2,857 tok  What is the first response time on the Premium Plus support plan?
+  36.  11.2s  25 calls  9,057 tok  Can an R2 be managed by Fleet Manager 5.0?
+  37.   3.1s   9 calls  2,432 tok  When will Fleet Manager REST API v1 be removed?
+  38.   4.9s   9 calls  3,123 tok  Do I need to change my password every 90 days?
+  39.   7.7s  10 calls  3,781 tok  How much are meals reimbursed per day on international trips?
+  40.   4.2s  23 calls  4,596 tok  What is Northwind Robotics' current share price?
+
+Model: ollama:qwen3.5:4b   pricing: $0.00015/1K in, $0.0006/1K out   k=4   MAX_DOCS_TO_GRADE=6
+40 questions (6 out-of-scope), 40 ok, 0 errors, wall clock 252 s
+
+## 1. Per question
+
+| # | Question | Latency | LLM calls | Tokens in / out | Cost | Path len | Rewrites | Refused |
+|---:|---|---:|---:|---:|---:|---:|---:|---|
+| 1 | How many paid sick days do employees get per … | 3.2 s | 8 | 2,397 / 143 | $0.000445 | 6 | 0 |  |
+| 2 | How many PTO days can I carry over into next … | 7.6 s | 10 | 4,008 / 383 | $0.000831 | 6 | 0 |  |
+| 3 | How long is parental leave for an adoptive pa… | 4.7 s | 10 | 2,844 / 229 | $0.000564 | 6 | 0 |  |
+| 4 | What is the minimum length for a corporate pa… | 4.0 s | 10 | 3,233 / 167 | $0.000585 | 6 | 0 |  |
+| 5 | How do I connect to the VPN from home? | 26.7 s | 26 | 8,882 / 1,548 | $0.002261 | 17 | 2 | yes |
+| 6 | What is the hotel cap per night for a busines… | 5.4 s | 10 | 3,181 / 254 | $0.000630 | 6 | 0 |  |
+| 7 | What is the daily meal allowance when I trave… | 3.8 s | 10 | 3,036 / 154 | $0.000548 | 6 | 0 |  |
+| 8 | What does error code E-217 mean? | 4.3 s | 10 | 2,408 / 208 | $0.000486 | 6 | 0 |  |
+| 9 | Is part NW-BAT-4830 compatible with the R2? | 6.1 s | 24 | 7,411 / 213 | $0.001239 | 12 | 2 |  |
+| 10 | What is the maximum ramp incline for a loaded… | 3.1 s | 10 | 2,940 / 109 | $0.000506 | 6 | 0 |  |
+| 11 | How do I reset the emergency stop on an R3? | 3.4 s | 10 | 2,725 / 136 | $0.000490 | 6 | 0 |  |
+| 12 | What is the payload capacity of the rover? | 3.2 s | 10 | 3,380 / 107 | $0.000571 | 6 | 0 |  |
+| 13 | What are the password requirements? | 10.9 s | 10 | 3,469 / 613 | $0.000888 | 6 | 0 |  |
+| 14 | How much is the referral bonus and when is it… | 3.7 s | 10 | 2,684 / 161 | $0.000499 | 6 | 0 |  |
+| 15 | What is the company policy on bringing dogs t… | 10.3 s | 25 | 7,055 / 478 | $0.001345 | 15 | 2 | yes |
+| 16 | What is the CEO's home address? | 13.3 s | 23 | 5,189 / 708 | $0.001203 | 13 | 2 | yes |
+| 17 | Do we have unlimited PTO? | 8.1 s | 10 | 3,372 / 430 | $0.000764 | 6 | 0 |  |
+| 18 | What is the salary range for an L4 engineer i… | 2.8 s | 10 | 2,451 / 102 | $0.000429 | 6 | 0 |  |
+| 19 | What is the salary range for an L4 engineer i… | 2.0 s | 10 | 2,451 / 102 | $0.000429 | 6 | 0 |  |
+| 20 | What is Project Juniper? | 3.6 s | 10 | 2,606 / 153 | $0.000483 | 6 | 0 |  |
+| 21 | What target rating distribution should I use … | 3.3 s | 10 | 2,261 / 141 | $0.000424 | 6 | 0 |  |
+| 22 | How long is a performance improvement plan? | 2.1 s | 10 | 2,238 / 67 | $0.000376 | 6 | 0 |  |
+| 23 | What are the Cairo office working hours durin… | 4.3 s | 23 | 5,684 / 118 | $0.000923 | 13 | 2 | yes |
+| 24 | How much is the monthly transport allowance f… | 5.4 s | 23 | 6,427 / 174 | $0.001068 | 13 | 2 | yes |
+| 25 | Which days make up the work week in the Cairo… | 4.2 s | 22 | 6,359 / 119 | $0.001025 | 13 | 2 | yes |
+| 26 | And how many of them can I carry over? | 14.9 s | 25 | 8,087 / 756 | $0.001667 | 17 | 2 | yes |
+| 27 | What about Egypt? | 10.7 s | 27 | 6,917 / 531 | $0.001356 | 17 | 2 | yes |
+| 28 | How many PTO days am I entitled to this year? | 7.0 s | 10 | 3,945 / 340 | $0.000796 | 6 | 0 |  |
+| 29 | How quickly do I have to report a lost laptop? | 12.4 s | 24 | 7,372 / 678 | $0.001513 | 17 | 2 | yes |
+| 30 | What is the annual learning budget per employee? | 5.0 s | 9 | 3,241 / 228 | $0.000623 | 6 | 0 |  |
+| 31 | How much is the home-office stipend? | 5.9 s | 10 | 3,282 / 285 | $0.000663 | 6 | 0 |  |
+| 32 | Can I work from another country for a few weeks? | 5.6 s | 9 | 3,447 / 271 | $0.000680 | 6 | 0 |  |
+| 33 | How much is the primary on-call stipend? | 2.1 s | 10 | 2,435 / 63 | $0.000403 | 6 | 0 |  |
+| 34 | What does error E-271 indicate? | 3.8 s | 10 | 2,143 / 177 | $0.000428 | 6 | 0 |  |
+| 35 | What is the first response time on the Premiu… | 3.9 s | 10 | 2,685 / 172 | $0.000506 | 6 | 0 |  |
+| 36 | Can an R2 be managed by Fleet Manager 5.0? | 11.2 s | 25 | 8,489 / 568 | $0.001614 | 17 | 2 | yes |
+| 37 | When will Fleet Manager REST API v1 be removed? | 3.1 s | 9 | 2,304 / 128 | $0.000422 | 6 | 0 |  |
+| 38 | Do I need to change my password every 90 days? | 4.9 s | 9 | 2,888 / 235 | $0.000574 | 6 | 0 |  |
+| 39 | How much are meals reimbursed per day on inte… | 7.7 s | 10 | 3,382 / 399 | $0.000747 | 6 | 0 |  |
+| 40 | What is Northwind Robotics' current share price? | 4.2 s | 23 | 4,463 / 133 | $0.000749 | 13 | 2 | yes |
+
+## 2. Aggregate
+
+| Metric | Value |
+|---|---:|
+| Mean latency per question | 6.30 s |
+| p95 latency per question | 13.43 s |
+| Mean LLM calls per question | 14.1 (p95 25, max 27) |
+| Mean tokens per question (in / out) | 4,094 / 300 |
+| Mean cost per question | $0.000794 |
+| **Projected monthly cost @ 1,000 questions/day** | **$23.81** |
+| Refusal rate / mean rewrites | 28% / 0.60 |
+
+## 3. Per node (sorted by cost)
+
+| Node | LLM calls / question | Tokens in / out per question | Cost / question | % of spend | Time / question | % of time |
+|---|---:|---:|---:|---:|---:|---:|
+| `grade_documents` | 9.12 | 2,048 / 18 | $0.000318 | 40.1% | 1.21 s | 19.3% |
+| `grade_generation` | 2.10 | 865 / 161 | $0.000226 | 28.5% | 2.84 s | 45.1% |
+| `generate` | 1.27 | 967 / 104 | $0.000208 | 26.2% | 1.84 s | 29.3% |
+| `route_question` | 1.00 | 149 / 5 | $0.000025 | 3.2% | 0.17 s | 2.7% |
+| `rewrite_query` | 0.60 | 66 / 11 | $0.000016 | 2.1% | 0.21 s | 3.3% |
+| `contextualize` | 0.00 | 0 / 0 | $0.000000 | 0.0% | 0.00 s | 0.0% |
+| `retrieve` | 0.00 | 0 / 0 | $0.000000 | 0.0% | 0.02 s | 0.3% |
+| `refuse` | 0.00 | 0 / 0 | $0.000000 | 0.0% | 0.00 s | 0.0% |
+
+## 4. Node-path distribution
+
+| Path | Count | % |
+|---|---:|---:|
+| route → retrieve → grade → generate → check → END (answered) | 28 | 70% |
+| …with 2 rewrite loops (refused) | 11 | 28% |
+| …with 2 rewrite loops (answered) | 1 | 2% |
+
+Rewrite loop fired on **12 of 40** questions (30%), 24 rewrites in total. What triggered them:
+- doc grader rejected every passage: 13
+- fact-check rejected the answer: 11
+
+This run: 40 questions, 564 LLM calls, 175,752 tokens, estimated $0.03 at the configured price (ollama:qwen3.5:4b actually ran it).
+wrote week3/task_05_time_and_truth/evidence/cost_seed_after.md
+wrote week3/task_05_time_and_truth/evidence/cost_seed_after.json
