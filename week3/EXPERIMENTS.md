@@ -114,6 +114,37 @@ against a predicted ≥ 0.60, MRR 0.61 against ≥ 0.45. Lessons:
 
 ---
 
+## Task 5 — TT-01: answer from the current, approved source
+
+**Hypothesis** *(committed before any code, 2026-11-20)*: If I curate the retrieved passages with
+document metadata at query time, then the four Task 5 categories improve on dev with **no extra LLM
+call**. Curation happens in the `retrieve` node and uses no model. The rules:
+- Label every passage CURRENT, SUPERSEDED, NOT YET IN EFFECT (against `AS_OF_DATE`), DRAFT or LOWER
+  AUTHORITY, using a written source-authority order.
+- Swap in the current version when only an old one was retrieved.
+- Drop superseded versions, and legacy or scanned copies on the same topic as a current policy.
+- Order the rest by authority, and add an explicit both-readings note when "the rover" could be the R2
+  or the R3.
+- Generator rules: answer from CURRENT, name the version, mention drafts only as proposals, mention
+  conflicts with lower-authority sources.
+
+Predictions (deterministic, dev; baseline = the Task 3/4 system):
+
+| Category | Before | Expected | Why |
+|---|---:|---:|---|
+| version | 4/5 | ≥ 4/5 | already mostly right because v3 outranks v2; the labels stop "it depends on the version" hedging (#3) |
+| conflict | 1/3 | ≥ 2/3 | n06: the Sales IT tips page gets labelled lower authority and conflicting with IT-STD-003 (16 characters, no rotation). n07 (Cairo Ramadan, 4 days) may still be refused |
+| draft | 3/4 | 4/4 | n08 ("Is Northwind switching to flexible time off?") answered PTO v3's March change instead of "there is a draft proposal, not approved" |
+| ambiguous | 3/3 | 3/3 | already answers both rovers; the rule makes it a policy instead of luck |
+
+Other categories: within ±2 questions (the generation stage is sensitive to context order, EXP-12).
+Cost: **+0 LLM calls**; input tokens per `generate` and `grade_generation` call rise by the label lines
+(~5–10%).
+
+**Result** *(committed after running)*: *(pending)*
+
+---
+
 ## Experiments
 
 Every experiment is the baseline (the noise-floor config) plus ONE change, run with
